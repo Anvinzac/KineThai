@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useLayoutEffect } from "react";
+import { getHanTokens, isLikelyChineseText } from "../lib/text-language";
 import { getWords } from "../lib/words";
 
 export const FULL_CANVAS_MAX_HEIGHT = 764;
@@ -18,12 +19,14 @@ export const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /**
- * Compute previewfitfloor.
+ * Compute previewfitfloor. Han pages count per-character tokens, not whitespace words —
+ * a whole Chinese sentence is one whitespace token, and a 1-word floor would pin its
+ * packed lines far too large to fit the canvas.
  * @param text - text argument
  * @returns Computed value
  */
 export function getPreviewFitFloor(text: string): number {
-  const words = getWords(text).length;
+  const words = isLikelyChineseText(text) ? getHanTokens(text).length : getWords(text).length;
   if (words <= 8) return 0.74;
   if (words <= 14) return 0.62;
   if (words <= 22) return 0.52;

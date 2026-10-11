@@ -18,11 +18,14 @@ import {
   getDataEmphasisWordSpans,
   getEmphasisPhraseKeysForLayout,
   getEmphasizedRunPhraseKeys,
+  getHanLayoutMetrics,
+  getHanTokens,
   getKineticTextLayoutMode,
   getLoopAnimation,
   getVietnameseLayoutMetrics,
   getWords,
   hasVisibleStickerAccent,
+  isLikelyChineseText,
   isLikelyVietnameseText,
   type EmphasisVariant,
 } from "@/features/kinetic-text";
@@ -100,11 +103,20 @@ export function WordSequenceText({
   secondaryEmphasis,
   allowFrameEmphasis = true,
 }: WordSequenceTextProps): ReactElement {
+  // A Han page tokenizes per character before anything else: a whole Chinese sample
+  // sentence is one whitespace token, and as one token it rendered as a single
+  // shrunken line. Split per glyph, it earns the Vietnamese treatment exactly —
+  // packed staggered lines, same font size band, same scene filled with words.
+  const isHan = !fitAsUnit && isLikelyChineseText(spec.text);
   const words = useMemo(
-    () => (fitAsUnit ? [spec.text.trim()] : getWords(spec.text)),
-    [fitAsUnit, spec.text],
+    () => (fitAsUnit ? [spec.text.trim()] : isHan ? getHanTokens(spec.text) : getWords(spec.text)),
+    [fitAsUnit, isHan, spec.text],
   );
-  const isVietnamese = words.length > 1 && isLikelyVietnameseText(spec.text);
+  const isVietnamese = !isHan && words.length > 1 && isLikelyVietnameseText(spec.text);
+  // Vietnamese syllables and Han glyphs share every downstream decision that is not
+  // about glyph width: packed unbreakable lines, left anchor, tight leading, and the
+  // packed-page fit floor. `fitAsUnit` pages (solo reveals) always stay one line.
+  const isPackedLines = isVietnamese || isHan;
   const emphasized = useMemo(
     () => getEmphasizedWordIndexes(words, dataEmphasis),
     [words, dataEmphasis],
@@ -139,17 +151,19 @@ export function WordSequenceText({
   const isSolo = words.length <= 1;
   const visualScaleGuard = Math.max(
     hasEmphasis && !isSolo ? EMPHASIS_SCALE_FIT_GUARD : 1,
-    isVietnamese ? VIETNAMESE_SCALE_FIT_GUARD : 1,
+    isPackedLines ? VIETNAMESE_SCALE_FIT_GUARD : 1,
   );
-  const vietnameseLayout = useMemo(
+  const packedLayout = useMemo(
     () =>
-      isVietnamese
-        ? getVietnameseLayoutMetrics(words, canvasWidth, spec.size, visualScaleGuard, phraseKeys)
+      isPackedLines
+        ? isHan
+          ? getHanLayoutMetrics(words, canvasWidth, spec.size, visualScaleGuard, phraseKeys)
+          : getVietnameseLayoutMetrics(words, canvasWidth, spec.size, visualScaleGuard, phraseKeys)
         : { lines: [], suggestedFitScale: 1 },
-    [isVietnamese, words, canvasWidth, spec.size, visualScaleGuard, phraseKeys],
+    [isPackedLines, isHan, words, canvasWidth, spec.size, visualScaleGuard, phraseKeys],
   );
   const entranceStyle = getEntranceStyle(entranceSeed ?? spec.text, spec.rhythm);
-  const layoutMode = getKineticTextLayoutMode(spec.text, isVietnamese, words.length, emphasized);
+  const layoutMode = getKineticTextLayoutMode(spec.text, isPackedLines, words.length, emphasized);
   const leftAnchoredText = layoutMode !== "center";
   const spotlightEmphasis = layoutMode === "left-spotlight";
   const soloInitialFit = isSolo
@@ -165,8 +179,8 @@ export function WordSequenceText({
     : 1;
   const initialFit = isSolo
     ? soloInitialFit
-    : isVietnamese && !disableFit
-      ? vietnameseLayout.suggestedFitScale
+    : isPackedLines && !disableFit
+      ? packedLayout.suggestedFitScale
       : 1;
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -180,7 +194,7 @@ export function WordSequenceText({
     disableFit: disableFit && !isSolo,
     onFitScale,
     isSolo,
-    isVietnamese,
+    isPackedLines,
     leftAnchoredText,
     visualScaleGuard,
     wrapperRef,
@@ -214,7 +228,7 @@ export function WordSequenceText({
         ref={textRef}
         key={`${playKey}-${staticRender ? "revealed" : "animated"}`}
         className={
-          isVietnamese
+          isPackedLines
             ? "flex flex-col items-stretch"
             : leftAnchoredText
               ? "flex flex-wrap items-baseline justify-start"
@@ -227,14 +241,14 @@ export function WordSequenceText({
           // A solo page is one unbreakable span, so it cannot wrap anyway; naming the
           // intent keeps the single-line answer from depending on that accident.
           flexWrap: isSolo ? "nowrap" : undefined,
-          columnGap: isVietnamese ? undefined : "0.34em",
-          rowGap: isVietnamese ? undefined : `${0.08 * lineSpacingScale}em`,
+          columnGap: isPackedLines ? undefined : "0.34em",
+          rowGap: isPackedLines ? undefined : `${0.08 * lineSpacingScale}em`,
           fontFamily: spec.font,
           fontSize,
           color: textColor,
           fontWeight: spec.weight,
           letterSpacing: `${spec.letterSpacing}em`,
-          lineHeight: (isVietnamese ? 1.04 : 0.9) * lineSpacingScale,
+          lineHeight: (isPackedLines ? 1.04 : 0.9) * lineSpacingScale,
           textAlign: leftAnchoredText ? "left" : "center",
           textShadow: photoTextShadow ?? "0 4px 40px rgba(0,0,0,0.45)",
           transform: `rotate(${spec.rotation}deg)`,
@@ -244,9 +258,9 @@ export function WordSequenceText({
         }}
       >
         <WordSequenceLines
-          isVietnamese={isVietnamese}
+          isVietnamese={isPackedLines}
           lineSpacingScale={lineSpacingScale}
-          vietnameseLines={vietnameseLayout.lines}
+          vietnameseLines={packedLayout.lines}
           words={words}
           emphasized={emphasized}
           phraseKeys={phraseKeys}

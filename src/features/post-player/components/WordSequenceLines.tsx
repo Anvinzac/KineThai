@@ -1,5 +1,5 @@
 /**
- * Vietnamese / English word-line layout for WordSequenceText.
+ * Packed (Vietnamese / Han) / English word-line layout for WordSequenceText.
  *
  * Exports: WordSequenceLines
  * Depends on: WordSequenceWord, kinetic-text vietnamese line metrics
@@ -24,6 +24,11 @@ import { WordSequenceWord } from "./WordSequenceWord";
 type VietnameseLines = ReturnType<typeof getVietnameseLayoutMetrics>["lines"];
 
 export type WordSequenceLinesProps = {
+  /**
+   * Page arrives pre-packed into staggered lines — Vietnamese syllables or Han
+   * characters. The packed branch renders `vietnameseLines` (a WordSequenceLines
+   * line is language-agnostic: segments of word tokens plus an em indent).
+   */
   isVietnamese: boolean;
   /** Multiplier on the inter-line advance, forwarded from WordSequenceText. */
   lineSpacingScale?: number;

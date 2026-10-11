@@ -1,8 +1,8 @@
 /**
- * Text-language public API — page limits, Vietnamese detection, layout, bound phrases.
+ * Text-language public API — page limits, Vietnamese/Han detection, layout, bound phrases.
  *
- * Exports: getTextPageWordLimit, isLikelyVietnameseText, layout + phrase helpers
- * Depends on: text-language/page-metrics, text-language/vietnamese-phrases
+ * Exports: getTextPageWordLimit, isLikelyVietnameseText, isLikelyChineseText, layout + phrase helpers
+ * Depends on: text-language/page-metrics, text-language/vietnamese-phrases, text-language/han-lines
  */
 
 import { isLikelyVietnameseText } from "./vietnamese-phrases";
@@ -20,11 +20,15 @@ export type {
 } from "./types";
 
 export {
+  getHanCharBudgetForLine,
+  getHanLayoutMetrics,
   getVietnameseCanvasInnerWidth,
   getVietnameseCharBudgetForLine,
   getVietnameseLayoutMetrics,
   getVietnameseWordLines,
 } from "./page-metrics";
+
+export { getHanTokens, isLikelyChineseText } from "./han-lines";
 
 export {
   expandEmphasisToBoundPhrases,

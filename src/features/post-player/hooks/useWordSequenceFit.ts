@@ -31,7 +31,8 @@ export type UseWordSequenceFitArgs = {
   disableFit: boolean;
   onFitScale?: (scale: number) => void;
   isSolo: boolean;
-  isVietnamese: boolean;
+  /** Page pre-packed into unbreakable staggered lines (Vietnamese syllables or Han glyphs). */
+  isPackedLines: boolean;
   leftAnchoredText: boolean;
   visualScaleGuard: number;
   wrapperRef: RefObject<HTMLDivElement | null>;
@@ -60,7 +61,7 @@ export function useWordSequenceFit({
   disableFit,
   onFitScale,
   isSolo,
-  isVietnamese,
+  isPackedLines,
   leftAnchoredText,
   visualScaleGuard,
   wrapperRef,
@@ -137,7 +138,7 @@ export function useWordSequenceFit({
       fitScale,
       soloInlineScale,
       isSolo,
-      isVietnamese,
+      isPackedLines,
       leftAnchoredText,
       visualScaleGuard,
       specSize: spec.size,
@@ -189,7 +190,7 @@ export function useWordSequenceFit({
     spec.text,
     spec.weight,
     spec.y,
-    isVietnamese,
+    isPackedLines,
     leftAnchoredText,
     visualScaleGuard,
     soloInlineScale,

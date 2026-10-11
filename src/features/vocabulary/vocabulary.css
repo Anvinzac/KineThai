@@ -3728,6 +3728,36 @@
     text-shadow: 0 0 0 transparent;
   }
 }
+/* ── CJK stroke coda ─────────────────────────────────────────────────────────
+   Hanzi Writer renders one SVG per character into each .vocab-stroke-char. The
+   overlay mirrors .vocab-spelling so a Han answer holds the same centred coda
+   slot; the label reuses .vocab-spelling-label. Motion is driven in JS (Hanzi
+   Writer + the reducedMotion prop), not CSS, so no transition lives here. */
+.vocab-stroke {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 0 24px;
+  pointer-events: none;
+}
+.vocab-stroke-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.vocab-stroke-char {
+  line-height: 0;
+}
+.vocab-stroke-char svg {
+  display: block;
+}
 /* ── Prose inside the meaning panel ───────────────────────────────────────────
    Deck emphasis becomes an accent underline (the text stays the audited ink, so its
    contrast is untouched) and the answer filled into the example becomes an accent

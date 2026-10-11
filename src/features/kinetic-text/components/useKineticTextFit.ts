@@ -1,5 +1,5 @@
 /**
- * Canvas scale, Vietnamese layout metrics, and text-fit for KineticText preview.
+ * Canvas scale, Vietnamese/Han layout metrics, and text-fit for KineticText preview.
  *
  * Exports: useKineticTextFit
  * Depends on: kinetic layout/text-language, preview-fit helpers
@@ -7,7 +7,11 @@
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { getMeasuredTextWidth } from "../lib/layout";
-import { getVietnameseLayoutMetrics, type WordLine } from "../lib/text-language";
+import {
+  getHanLayoutMetrics,
+  getVietnameseLayoutMetrics,
+  type WordLine,
+} from "../lib/text-language";
 import {
   FULL_CANVAS_MAX_HEIGHT,
   FULL_CANVAS_REFERENCE_WIDTH,
@@ -24,6 +28,7 @@ import {
 export function useKineticTextFit({
   scaleToCanvas,
   isVietnamese,
+  isHan,
   words,
   visualScaleGuard,
   leftAnchoredText,
@@ -32,6 +37,8 @@ export function useKineticTextFit({
 }: {
   scaleToCanvas: boolean;
   isVietnamese: boolean;
+  /** Han pages pack through the same staggered lines with per-character capacity. */
+  isHan: boolean;
   words: string[];
   visualScaleGuard: number;
   leftAnchoredText: boolean;
@@ -53,26 +60,46 @@ export function useKineticTextFit({
   canvasScale: number;
   fitScale: number;
   previewSize: number;
-  vietnameseLines: WordLine[];
+  packedLines: WordLine[];
 } {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const [canvasScale, setCanvasScale] = useState(scaleToCanvas ? 0.4 : 1);
   const [canvasWidth, setCanvasWidth] = useState(FULL_CANVAS_REFERENCE_WIDTH);
-  const vietnameseLayout = useMemo(
+  // Vietnamese syllables and Han characters pack through the same line machinery; only
+  // the per-line capacity curve (glyph widths differ) chooses a different metrics call.
+  const isPackedLines = isVietnamese || isHan;
+  const packedLayout = useMemo(
     () =>
-      isVietnamese
-        ? getVietnameseLayoutMetrics(
-            words,
-            canvasWidth,
-            spec.size * canvasScale,
-            visualScaleGuard,
-            phraseKeys,
-          )
+      isPackedLines
+        ? isHan
+          ? getHanLayoutMetrics(
+              words,
+              canvasWidth,
+              spec.size * canvasScale,
+              visualScaleGuard,
+              phraseKeys,
+            )
+          : getVietnameseLayoutMetrics(
+              words,
+              canvasWidth,
+              spec.size * canvasScale,
+              visualScaleGuard,
+              phraseKeys,
+            )
         : { lines: [], suggestedFitScale: 1 },
-    [isVietnamese, words, canvasWidth, spec.size, canvasScale, visualScaleGuard, phraseKeys],
+    [
+      isPackedLines,
+      isHan,
+      words,
+      canvasWidth,
+      spec.size,
+      canvasScale,
+      visualScaleGuard,
+      phraseKeys,
+    ],
   );
-  const [fitScale, setFitScale] = useState(isVietnamese ? vietnameseLayout.suggestedFitScale : 1);
+  const [fitScale, setFitScale] = useState(isPackedLines ? packedLayout.suggestedFitScale : 1);
   const previewSize = Math.max(10, spec.size * canvasScale * fitScale);
 
   useEffect(() => {
@@ -106,12 +133,12 @@ export function useKineticTextFit({
   }, [scaleToCanvas]);
 
   useIsomorphicLayoutEffect(() => {
-    setFitScale(isVietnamese ? vietnameseLayout.suggestedFitScale : 1);
+    setFitScale(isPackedLines ? packedLayout.suggestedFitScale : 1);
   }, [
     canvasScale,
     canvasWidth,
-    isVietnamese,
-    vietnameseLayout.suggestedFitScale,
+    isPackedLines,
+    packedLayout.suggestedFitScale,
     spec.text,
     spec.size,
     spec.font,
@@ -152,7 +179,7 @@ export function useKineticTextFit({
     spec.letterSpacing,
     spec.entrance,
     spec.y,
-    isVietnamese,
+    isPackedLines,
     leftAnchoredText,
     visualScaleGuard,
   ]);
@@ -163,6 +190,6 @@ export function useKineticTextFit({
     canvasScale,
     fitScale,
     previewSize,
-    vietnameseLines: isVietnamese ? vietnameseLayout.lines : [],
+    packedLines: isPackedLines ? packedLayout.lines : [],
   };
 }

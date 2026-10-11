@@ -9,8 +9,11 @@ import {
 } from "@/features/canvas";
 import { getRelativeLuminance } from "@/features/canvas/contrast/color-math";
 import {
+  getHanLayoutMetrics,
+  getHanTokens,
   getVietnameseLayoutMetrics,
   getWords,
+  isLikelyChineseText,
   isLikelyVietnameseText,
 } from "@/features/kinetic-text";
 import { getTextSafeInsets } from "@/features/post-player/lib/playback-timing";
@@ -216,10 +219,16 @@ export function fitVocabularyTextSize(
   const availableHeight = Math.max(100, height - chrome);
   const availableWidth = Math.max(180, width * 0.84);
   const vietnamese = isLikelyVietnameseText(text);
+  // A Han deck's usage sentence packs through the same staggered-line renderer as
+  // Vietnamese, so its size must be solved against the same packed line count.
+  const han = !vietnamese && isLikelyChineseText(text);
+  const tokens = han ? getHanTokens(text) : words;
   for (let size = baseSize; size >= 28; size -= 2) {
     let lines = 1;
-    if (vietnamese) {
-      lines = getVietnameseLayoutMetrics(words, width, size, 1.24).lines.length;
+    if (vietnamese || han) {
+      lines = han
+        ? getHanLayoutMetrics(tokens, width, size, 1.24).lines.length
+        : getVietnameseLayoutMetrics(tokens, width, size, 1.24).lines.length;
     } else {
       let used = 0;
       for (const word of words) {

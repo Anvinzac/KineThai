@@ -1,5 +1,7 @@
-/** One independent vocabulary learning card; clue navigation and heart/bookmark reactions stay on-device, and the reveal is followed by a letter-by-letter spelling coda. Exports: VocabularyCard. Depends on: presets, playback, VocabularyStage, SpellingAnimation, reactions. */
+/** One independent vocabulary learning card; clue navigation and heart/bookmark reactions stay on-device, and the reveal is followed by a spelling coda (letter-by-letter for Latin, stroke-by-stroke for Han). Exports: VocabularyCard. Depends on: presets, playback, VocabularyStage, SpellingAnimation, HanziStrokeSpelling, reactions. */
 import {
+  lazy,
+  Suspense,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -31,6 +33,7 @@ import { getExportStageBox, type CardExportLayout } from "../lib/export-layout";
 import { hasReportedWord } from "../lib/reported-words";
 import { sceneSkipLimiter } from "../lib/skip-limiter";
 import { getSpellingDurationMs, pickSpellingVariant } from "../lib/spelling";
+import { getStrokeSpellingDurationMs, isHanAnswer } from "../lib/hanzi";
 import {
   REACTIONS_EVENT,
   REACTIONS_KEY,
@@ -49,6 +52,15 @@ import { EmojiBurst } from "./EmojiBurst";
 import { SpellingAnimation } from "./SpellingAnimation";
 import { VocabularyStage } from "./VocabularyStage";
 import { WordReportButton, WordReportPanel } from "./WordReportControl";
+
+/**
+ * The CJK stroke coda is lazy: Hanzi Writer plus the vendored stroke dataset load only
+ * when a Han answer actually reaches its coda, so the English feed chunk never carries
+ * them. The named export is re-exposed as a default for React.lazy.
+ */
+const HanziStrokeSpelling = lazy(() =>
+  import("./HanziStrokeSpelling").then((module) => ({ default: module.HanziStrokeSpelling })),
+);
 
 /** Matches the report panel's exit keyframes (--dur-quick) in vocabulary.css. */
 const REPORT_EXIT_MS = 180;
@@ -187,10 +199,22 @@ export function VocabularyCard({
     () => pickSpellingVariant(entry.occurrenceId),
     [entry.occurrenceId],
   );
+  // A Han answer draws stroke-by-stroke instead of popping letters. The branch is decided
+  // by pure script detection (lib/hanzi imports no stroke data), so this card chunk stays
+  // lean for the English feed and the coda duration needs only the character count.
+  const isHan = isHanAnswer(entry.word.word);
   const spellingDuration = useMemo(
-    () => getSpellingDurationMs(entry.word.word, spellingVariant, reducedMotion),
-    [entry.word.word, spellingVariant, reducedMotion],
+    () =>
+      isHan
+        ? getStrokeSpellingDurationMs(entry.word.word, reducedMotion)
+        : getSpellingDurationMs(entry.word.word, spellingVariant, reducedMotion),
+    [isHan, entry.word.word, spellingVariant, reducedMotion],
   );
+  // Warm the lazy stroke chunk as soon as a Han card mounts, so the coda never waits on a
+  // dynamic import mid-animation; the clue pages give it ample time to arrive.
+  useEffect(() => {
+    if (isHan) void import("./HanziStrokeSpelling");
+  }, [isHan]);
   const revealPage = stages.length - 1;
   const pageCount = stages.length + 1;
   /** Progress-bar keys: one per clue stage plus the trailing spelling coda. */
@@ -679,11 +703,17 @@ export function VocabularyCard({
         </div>
       </div>
       {isSpelling ? (
-        <SpellingAnimation
-          word={entry.word.word}
-          variant={spellingVariant}
-          reducedMotion={reducedMotion}
-        />
+        isHan ? (
+          <Suspense fallback={null}>
+            <HanziStrokeSpelling word={entry.word.word} reducedMotion={reducedMotion} />
+          </Suspense>
+        ) : (
+          <SpellingAnimation
+            word={entry.word.word}
+            variant={spellingVariant}
+            reducedMotion={reducedMotion}
+          />
+        )
       ) : (
         <VocabularyStage
           stage={stage}

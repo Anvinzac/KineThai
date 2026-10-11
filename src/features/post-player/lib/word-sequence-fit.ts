@@ -35,7 +35,8 @@ export type WordSequenceFitInput = {
   fitScale: number;
   soloInlineScale: number;
   isSolo: boolean;
-  isVietnamese: boolean;
+  /** Page pre-packed into unbreakable staggered lines (Vietnamese syllables or Han glyphs). */
+  isPackedLines: boolean;
   leftAnchoredText: boolean;
   visualScaleGuard: number;
   specSize: number;
@@ -96,7 +97,7 @@ export function computeWordSequenceFit(input: WordSequenceFitInput): WordSequenc
     canvasWidth,
     fitScale,
     isSolo,
-    isVietnamese,
+    isPackedLines,
     leftAnchoredText,
     visualScaleGuard,
     specSize,
@@ -121,7 +122,7 @@ export function computeWordSequenceFit(input: WordSequenceFitInput): WordSequenc
   // Reveal words use proportional font sizing with no minimum scale or horizontal distortion.
   const finalSizeFloor = Math.min(1, MIN_FONT_SIZE / Math.max(specSize, 1));
   const floor = Math.max(
-    isVietnamese ? MIN_TEXT_FIT_SCALE : MIN_ENGLISH_TEXT_FIT_SCALE,
+    isPackedLines ? MIN_TEXT_FIT_SCALE : MIN_ENGLISH_TEXT_FIT_SCALE,
     finalSizeFloor,
   );
   const widthFit = Math.min(1, fitScale * widthRatio * 0.98);
@@ -159,12 +160,13 @@ export function computeWordSequenceFit(input: WordSequenceFitInput): WordSequenc
         floorFit: Math.max(floor, Math.min(1, widthFit, heightFit)),
         fitScale,
         // The widest thing that cannot break. On a wrapping page that is a word; on a
-        // Vietnamese page the lines are packed ahead of time and never wrap, so it is
-        // a whole line. Without this a line holding an enlarged emphasised phrase ran
-        // off the right edge whenever the legibility floor refused to shrink the page.
+        // packed page (Vietnamese or Han) the lines are packed ahead of time and never
+        // wrap, so it is a whole line. Without this a line holding an enlarged
+        // emphasised phrase ran off the right edge whenever the legibility floor
+        // refused to shrink the page.
         // A line already includes its own indent, so it is expressed in the same
         // gutter-reserved terms as a word by adding the two edge gaps back.
-        widestWordWidth: isVietnamese
+        widestWordWidth: isPackedLines
           ? Math.max(
               getWidestWordWidth(text),
               getWidestLineWidth(text) - TEXT_SAFE_MIN_EDGE_GAP_PX * 2,

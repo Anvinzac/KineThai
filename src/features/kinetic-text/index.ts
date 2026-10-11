@@ -1,7 +1,7 @@
 /**
  * Public barrel re-exports for this feature module.
  *
- * Exports: KineticText, DEFAULT_TEXT_PAGE_WORD_LIMIT, VIETNAMESE_TEXT_PAGE_WORD_LIMIT, expandEmphasisToBoundPhrases, getBoundPhraseEmphasisSeed, getBoundPhraseStartIndex, getSpecialPoeticWordIndexes, getTextPageWordLimit, getVietnameseCanvasInnerWidth, getVietnameseCharBudgetForLine, getVietnameseLayoutMetrics, getVietnameseWordLines, isLikelyVietnameseText, repairSplitCompoundEmphasis, VietnameseLayoutMetrics, ...
+ * Exports: KineticText, DEFAULT_TEXT_PAGE_WORD_LIMIT, VIETNAMESE_TEXT_PAGE_WORD_LIMIT, expandEmphasisToBoundPhrases, getBoundPhraseEmphasisSeed, getBoundPhraseStartIndex, getHanTokens, getSpecialPoeticWordIndexes, getTextPageWordLimit, getHanLayoutMetrics, getVietnameseCanvasInnerWidth, getVietnameseCharBudgetForLine, getVietnameseLayoutMetrics, getVietnameseWordLines, isLikelyChineseText, isLikelyVietnameseText, repairSplitCompoundEmphasis, VietnameseLayoutMetrics, ...
  * Depends on: ./components/KineticText, ./lib/text-language, ./lib/text-language
  */
 
@@ -17,12 +17,16 @@ export {
   getDataEmphasisWordSpans,
   getEmphasisPhraseKeysForLayout,
   getEmphasizedRunPhraseKeys,
+  getHanCharBudgetForLine,
+  getHanLayoutMetrics,
+  getHanTokens,
   getSpecialPoeticWordIndexes,
   getTextPageWordLimit,
   getVietnameseCanvasInnerWidth,
   getVietnameseCharBudgetForLine,
   getVietnameseLayoutMetrics,
   getVietnameseWordLines,
+  isLikelyChineseText,
   isLikelyVietnameseText,
   repairSplitCompoundEmphasis,
   SHORT_SENTENCE_MAX_WORDS,

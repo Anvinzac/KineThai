@@ -1,6 +1,7 @@
-/** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, kinetic-text emphasis types. */
+/** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, hanzi script detection, kinetic-text emphasis types. */
 import type { EmphasisVariant } from "@/features/kinetic-text";
 import { answerPattern, type NarrativeStyle, type VocabularyWord } from "./schema";
+import { isHanAnswer } from "./hanzi";
 import { paginateText } from "@/features/post-player";
 
 /**
@@ -16,7 +17,7 @@ export type LearningStage = {
   label: string;
   text: string;
   secondary?: string;
-  lang: "vi" | "en";
+  lang: "vi" | "en" | "zh";
   reveal?: boolean;
   /** Emphasis phrases extracted from /word/ markers in the source text field. */
   dataEmphasis?: string[];
@@ -66,6 +67,9 @@ export function completeUsage(text: string, word: string): string {
 /** Create the supplied seven-stage flow, skipping absent optional content. @param word Catalog entry. @param style Narrative preset. @returns Ordered stages. */
 export function buildStages(word: VocabularyWord, style: NarrativeStyle): LearningStage[] {
   const mask = (text: string) => text.replace(answerPattern(word.word), "_____");
+  // The answer language drives <p lang> and font selection on the pages that render the
+  // target script: a Han deck writes its usage sentence and reveal in Chinese, not English.
+  const answerLang = isHanAnswer(word.word) ? "zh" : "en";
   const stages: LearningStage[] = [];
   const leadLabels: Record<NarrativeStyle, string> = {
     detective: "Bối cảnh",
@@ -112,17 +116,18 @@ export function buildStages(word: VocabularyWord, style: NarrativeStyle): Learni
   }
   const count = (word.word.match(/\p{L}/gu) ?? []).length;
   const initial = word.word[0].toUpperCase();
-  if (hanCount === 0) stages.push({
-    id: "letters",
-    label: "Đếm chữ cái",
-    text: `Gồm ${count} chữ cái, bắt đầu bằng ${initial}`,
-    lang: "vi",
-    // The count keeps the primary mark on purpose — getWordImportance scores a
-    // standalone number above everything so the digits always win this sentence.
-    // The initial is added as a second, differently-drawn mark rather than
-    // replacing it, so one page carries both facts.
-    secondaryEmphasis: { phrase: initial, variant: INITIAL_EMPHASIS_VARIANT },
-  });
+  if (hanCount === 0)
+    stages.push({
+      id: "letters",
+      label: "Đếm chữ cái",
+      text: `Gồm ${count} chữ cái, bắt đầu bằng ${initial}`,
+      lang: "vi",
+      // The count keeps the primary mark on purpose — getWordImportance scores a
+      // standalone number above everything so the digits always win this sentence.
+      // The initial is added as a second, differently-drawn mark rather than
+      // replacing it, so one page carries both facts.
+      secondaryEmphasis: { phrase: initial, variant: INITIAL_EMPHASIS_VARIANT },
+    });
   const example = word.usage[0];
   if (example) {
     const { clean: enClean, markers: enMarkers } = parseEmphasisMarkers(example.en);
@@ -132,7 +137,7 @@ export function buildStages(word: VocabularyWord, style: NarrativeStyle): Learni
       label: "Trong câu",
       text: mask(enClean),
       secondary: mask(viClean),
-      lang: "en",
+      lang: answerLang,
       dataEmphasis: enMarkers.length ? enMarkers : undefined,
     });
   }
@@ -146,7 +151,7 @@ export function buildStages(word: VocabularyWord, style: NarrativeStyle): Learni
       dataEmphasis: markers.length ? markers : undefined,
     });
   }
-  stages.push({ id: "reveal", label: "Đây rồi!", text: word.word, lang: "en", reveal: true });
+  stages.push({ id: "reveal", label: "Đây rồi!", text: word.word, lang: answerLang, reveal: true });
   return stages.flatMap((stage) => {
     if (stage.reveal) return [stage];
     return paginateText(stage.text).map((text, index) => ({

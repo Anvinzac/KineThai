@@ -1,7 +1,7 @@
 /**
- * Vietnamese kinetic line packing and page fit metrics.
+ * Vietnamese + Han kinetic line packing and page fit metrics.
  *
- * Exports: WordLine, WordSegment, getVietnameseWordLines, getVietnameseLayoutMetrics, char budget helpers
+ * Exports: WordLine, WordSegment, getVietnameseWordLines, getVietnameseLayoutMetrics, getHanCharBudgetForLine, getHanLayoutMetrics, char budget helpers
  * Depends on: text-language/vietnamese-phrases getBoundPhraseLength
  */
 
@@ -38,6 +38,12 @@ const VIETNAMESE_MAX_CONSECUTIVE_SOLO_LINES = 3;
 // is reached and a pair must be forced.
 const VIETNAMESE_PAIR_RELAX_CHARS = 3;
 const VIETNAMESE_PAIR_FORCE_CHARS = 6;
+// Han pages pack through the SAME staggered line machinery as Vietnamese, one
+// character per token. A token costs the budget one visible char plus one joining
+// gap; a Han glyph is ~1em wide and the gap ~0.24em, so the average unit lands
+// near 0.62em — the block fills the canvas at the physical width the eye already
+// associates with the Vietnamese layout, just in fewer, squarer glyphs.
+const HAN_AVG_CHAR_WIDTH_EM = 0.62;
 /**
  * Inner content width for Vietnamese staggered layout.
  * @param canvasWidthPx - canvasWidthPx argument
@@ -86,6 +92,70 @@ export function getVietnameseLayoutMetrics(
   const getLineCapacity = (lineIndex: number) =>
     getVietnameseCharBudgetForLine(lineIndex, innerWidth, fontSizePx);
   const lines = getVietnameseWordLines(words, { getLineCapacity, phraseKeys });
+  return {
+    lines,
+    suggestedFitScale: suggestPackedFitScale(lines, getLineCapacity, visualScaleGuard),
+  };
+}
+
+/**
+ * Visible-character budget for one Han line at a given canvas width.
+ * @param lineIndex - lineIndex argument
+ * @param canvasInnerWidthPx - canvasInnerWidthPx argument
+ * @param fontSizePx - fontSizePx argument
+ * @returns Soft character-capacity for that line (each Han glyph counts one unit)
+ */
+export function getHanCharBudgetForLine(
+  lineIndex: number,
+  canvasInnerWidthPx: number,
+  fontSizePx: number,
+): number {
+  const indentEm = getVietnameseLineIndentEm(lineIndex);
+  const availablePx =
+    canvasInnerWidthPx - indentEm * fontSizePx - fontSizePx * VIETNAMESE_LINE_SIDE_PAD_EM;
+  const charWidthPx = Math.max(fontSizePx * HAN_AVG_CHAR_WIDTH_EM, 1);
+  return Math.max(3, Math.floor(availablePx / charWidthPx));
+}
+
+/**
+ * Pack Han tokens into the Vietnamese staggered lines and pre-shrink to fit.
+ * @param words - getHanTokens output for the page
+ * @param canvasWidthPx - canvasWidthPx argument
+ * @param fontSizePx - fontSizePx argument
+ * @param visualScaleGuard - visualScaleGuard argument
+ * @param phraseKeys - data-annotated phrase keys (per-character) kept unbreakable
+ * @returns Lines + suggestedFitScale (≥ VIETNAMESE_MIN_FIT_SCALE)
+ */
+export function getHanLayoutMetrics(
+  words: string[],
+  canvasWidthPx: number,
+  fontSizePx: number,
+  visualScaleGuard = 1,
+  phraseKeys?: readonly (readonly string[])[],
+): VietnameseLayoutMetrics {
+  const innerWidth = getVietnameseCanvasInnerWidth(canvasWidthPx);
+  const getLineCapacity = (lineIndex: number) =>
+    getHanCharBudgetForLine(lineIndex, innerWidth, fontSizePx);
+  const lines = getVietnameseWordLines(words, { getLineCapacity, phraseKeys });
+  return {
+    lines,
+    suggestedFitScale: suggestPackedFitScale(lines, getLineCapacity, visualScaleGuard),
+  };
+}
+
+/**
+ * Shrink a packed page until its widest line fits the canvas. Shared by both
+ * languages: the packing model — units against a per-line capacity — is identical.
+ * @param lines - packed lines
+ * @param getLineCapacity - capacity curve the lines were packed with
+ * @param visualScaleGuard - allowance for enlarged emphasised words
+ * @returns Fit scale the page should start its measurement loop at
+ */
+function suggestPackedFitScale(
+  lines: WordLine[],
+  getLineCapacity: (lineIndex: number) => number,
+  visualScaleGuard: number,
+): number {
   let suggestedFitScale = 1;
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
@@ -100,10 +170,7 @@ export function getVietnameseLayoutMetrics(
     }
   }
 
-  return {
-    lines,
-    suggestedFitScale: Math.max(VIETNAMESE_MIN_FIT_SCALE, suggestedFitScale),
-  };
+  return Math.max(VIETNAMESE_MIN_FIT_SCALE, suggestedFitScale);
 }
 
 /**

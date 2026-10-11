@@ -2,11 +2,16 @@
  * Feed-player tempo, page duration, and text sizing helpers (not KineticText preview tempo).
  *
  * Exports: tempoConfig, TEXT_SAFE_*, fit constants, getPageDuration, getWordDelay, getUniformPageTextSize, isSoloTextPage
- * Depends on: features/canvas Tempo/Rhythm, features/kinetic-text getWords/isLikelyVietnameseText
+ * Depends on: features/canvas Tempo/Rhythm, features/kinetic-text getWords/getHanTokens/script detection
  */
 
 import type { Rhythm, Tempo } from "@/features/canvas";
-import { getWords, isLikelyVietnameseText } from "@/features/kinetic-text";
+import {
+  getHanTokens,
+  getWords,
+  isLikelyChineseText,
+  isLikelyVietnameseText,
+} from "@/features/kinetic-text";
 
 /** Keep kinetic text clear of the canvas edge without stealing its scale. */
 export const TEXT_SAFE_MAX_WIDTH = "min(92%, calc(100% - 2rem))";
@@ -38,12 +43,23 @@ export const tempoConfig: Record<
 };
 
 /**
+ * Rhythm units on a page. A Han page counts per-character tokens: whitespace splitting
+ * collapses a whole Chinese sentence into one "word", which would read as a solo page,
+ * while the packed-line renderer animates one entrance per glyph.
+ * @param text - page text
+ * @returns Token count in the unit that page's renderer actually staggers over
+ */
+function getPageWordCount(text: string): number {
+  return isLikelyChineseText(text) ? getHanTokens(text).length : getWords(text).length;
+}
+
+/**
  * Check isSoloTextPage.
  * @param text - text argument
  * @returns Boolean result
  */
 export function isSoloTextPage(text: string): boolean {
-  return getWords(text).length <= 1;
+  return getPageWordCount(text) <= 1;
 }
 
 /**
@@ -70,7 +86,7 @@ export function getUniformPageTextSize(
   // size that works for all. This makes all pages display large and consistent.
   // Never shrinks below MIN_FONT_SIZE.
   const isVietnamese = isLikelyVietnameseText(fullText);
-  const minWordCount = Math.min(...pages.map((p) => getWords(p).length));
+  const minWordCount = Math.min(...pages.map(getPageWordCount));
 
   let size: number;
   if (isVietnamese) {
@@ -78,6 +94,14 @@ export function getUniformPageTextSize(
     else if (minWordCount >= 7) size = Math.min(baseSize, 84);
     else if (minWordCount >= 5) size = Math.min(baseSize, 92);
     else if (minWordCount >= 3) size = Math.min(baseSize, 104);
+    else size = baseSize;
+  } else if (isLikelyChineseText(fullText)) {
+    // Han pages wear the Vietnamese size band; a glyph is roughly half a Vietnamese
+    // syllable's budget units, so the tier thresholds stretch by ~1.4×.
+    if (minWordCount >= 13) size = Math.min(baseSize, 78);
+    else if (minWordCount >= 10) size = Math.min(baseSize, 84);
+    else if (minWordCount >= 7) size = Math.min(baseSize, 92);
+    else if (minWordCount >= 4) size = Math.min(baseSize, 104);
     else size = baseSize;
   } else {
     // English: bump size based on min word count (smaller pages get larger fonts)
@@ -98,12 +122,20 @@ export function getUniformPageTextSize(
  * @returns Computed value
  */
 export function getPageTextSize(baseSize: number, text: string, isVietnamese: boolean): number {
-  const wordCount = getWords(text).length;
+  const wordCount = getPageWordCount(text);
   if (isVietnamese) {
     if (wordCount >= 9) return Math.min(baseSize, 78);
     if (wordCount >= 7) return Math.min(baseSize, 84);
     if (wordCount >= 5) return Math.min(baseSize, 92);
     if (wordCount >= 3) return Math.min(baseSize, 104);
+    return baseSize;
+  }
+  // Han text: the Vietnamese band with thresholds stretched for per-glyph counting.
+  if (isLikelyChineseText(text)) {
+    if (wordCount >= 13) return Math.min(baseSize, 78);
+    if (wordCount >= 10) return Math.min(baseSize, 84);
+    if (wordCount >= 7) return Math.min(baseSize, 92);
+    if (wordCount >= 4) return Math.min(baseSize, 104);
     return baseSize;
   }
   // English text: bump base size so it fills the canvas like Vietnamese posts.
@@ -121,7 +153,7 @@ export function getPageTextSize(baseSize: number, text: string, isVietnamese: bo
  * @returns Computed value
  */
 export function getPageDuration(text: string, tempo: Tempo, rhythm: Rhythm): number {
-  const wordCount = getWords(text).length;
+  const wordCount = getPageWordCount(text);
   const base = Math.max(3200, Math.min(5200, 1900 + wordCount * 430));
   const rhythmMultiplier = rhythm === "poetic" ? 1.18 : 1;
   return base * tempoConfig[tempo].pageMultiplier * rhythmMultiplier;
