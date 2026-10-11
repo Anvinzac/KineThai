@@ -45,6 +45,12 @@ const VIETNAMESE_PAIR_FORCE_CHARS = 6;
 // associates with the Vietnamese layout, just in fewer, squarer glyphs.
 const HAN_AVG_CHAR_WIDTH_EM = 0.62;
 /**
+ * Hard ceiling on Han glyphs per line. Without it, a short Chinese sentence on a wide
+ * canvas fits on one shrunken line and leaves the rest of the screen empty. Four glyphs
+ * per line keeps the block tall, the font readable, and the vertical fill balanced.
+ */
+const HAN_MAX_CHARS_PER_LINE = 4;
+/**
  * Inner content width for Vietnamese staggered layout.
  * @param canvasWidthPx - canvasWidthPx argument
  * @returns Usable inner width (≥ 200)
@@ -103,7 +109,7 @@ export function getVietnameseLayoutMetrics(
  * @param lineIndex - lineIndex argument
  * @param canvasInnerWidthPx - canvasInnerWidthPx argument
  * @param fontSizePx - fontSizePx argument
- * @returns Soft character-capacity for that line (each Han glyph counts one unit)
+ * @returns Soft character-capacity for that line, clamped to HAN_MAX_CHARS_PER_LINE
  */
 export function getHanCharBudgetForLine(
   lineIndex: number,
@@ -114,7 +120,7 @@ export function getHanCharBudgetForLine(
   const availablePx =
     canvasInnerWidthPx - indentEm * fontSizePx - fontSizePx * VIETNAMESE_LINE_SIDE_PAD_EM;
   const charWidthPx = Math.max(fontSizePx * HAN_AVG_CHAR_WIDTH_EM, 1);
-  return Math.max(3, Math.floor(availablePx / charWidthPx));
+  return Math.min(HAN_MAX_CHARS_PER_LINE, Math.max(3, Math.floor(availablePx / charWidthPx)));
 }
 
 /**
