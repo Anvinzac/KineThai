@@ -6,6 +6,7 @@
  */
 
 import { getBoundPhraseLength } from "./vietnamese-phrases";
+import { isHanToken } from "./han-lines";
 import type {
   VietnameseLayoutMetrics,
   VietnameseLineLayoutOptions,
@@ -227,6 +228,27 @@ export function getVietnameseWordLines(
 
       // Within the soft capacity — keep filling.
       if (projected <= capacity) {
+        lineSegments.push(segment);
+        lineLength = projected;
+        lineWords += segmentWords;
+        index += 1;
+        continue;
+      }
+
+      // Han word integrity: when the line ends with a single Han character and the
+      // next segment is also a single Han character, they likely form a 2-character
+      // word. Pull the next segment onto this line even if it exceeds capacity, so
+      // the word stays together rather than being split across two lines.
+      const lastSeg = lineSegments[lineSegments.length - 1];
+      const lastIsSoloHan =
+        lastSeg.words.length === 1 &&
+        getVisibleWordLength(lastSeg.words[0].text) === 1 &&
+        isHanToken(lastSeg.words[0].text);
+      const nextIsSoloHan =
+        segment.words.length === 1 &&
+        getVisibleWordLength(segment.words[0].text) === 1 &&
+        isHanToken(segment.words[0].text);
+      if (lastIsSoloHan && nextIsSoloHan) {
         lineSegments.push(segment);
         lineLength = projected;
         lineWords += segmentWords;

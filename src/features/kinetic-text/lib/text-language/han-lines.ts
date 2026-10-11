@@ -7,7 +7,7 @@
  * so no line ever opens with it), which the Vietnamese line packer then staggers across
  * many short indented lines with the same font size and block fill.
  *
- * Exports: isLikelyChineseText, getHanTokens
+ * Exports: isLikelyChineseText, getHanTokens, isHanToken
  * Depends on: none (leaf module)
  */
 
@@ -73,4 +73,17 @@ export function getHanTokens(text: string): string[] {
 
   if (pendingPrefix) tokens.push(pendingPrefix);
   return tokens;
+}
+
+/**
+ * True when the token begins with a Han character. Used by the line packer to detect
+ * adjacent Han tokens that may form a 2-character word and should be kept on the same
+ * line when possible. Punctuation-only tokens return false (they glue to a neighbour).
+ * @param token - one token from getHanTokens
+ * @returns true when the first codepoint is a Han glyph
+ * @pure true
+ */
+export function isHanToken(token: string): boolean {
+  const first = token.charAt(0);
+  return first ? HAN.test(first) : false;
 }
