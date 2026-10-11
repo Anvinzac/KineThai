@@ -84,6 +84,7 @@ function OptionPicker({
   const rootRef = useRef<HTMLDivElement>(null);
   const labelId = useId();
   const current = options.find((option) => option.id === value) ?? options[0];
+  const presence = usePresence(open, POPUP_EXIT_MS);
 
   useEffect(() => {
     if (!open) return;
@@ -115,8 +116,13 @@ function OptionPicker({
         <span className="vocab-picker-summary">{current?.label}</span>
         <ChevronDown size={15} />
       </button>
-      {open && (
-        <div className="vocab-picker-list" role="listbox" aria-labelledby={labelId}>
+      {presence.mounted && (
+        <div
+          className="vocab-picker-list"
+          role="listbox"
+          aria-labelledby={labelId}
+          data-closing={presence.closing || undefined}
+        >
           {options.map((option) => {
             const on = option.id === value;
             return (
@@ -169,6 +175,7 @@ function ThemePicker({
     () => pool.filter((theme) => selected.has(theme.id)),
     [pool, selected],
   );
+  const presence = usePresence(open, POPUP_EXIT_MS);
 
   useEffect(() => {
     if (!open) return;
@@ -223,12 +230,13 @@ function ThemePicker({
         <span className="vocab-picker-summary">{summary}</span>
         <ChevronDown size={15} />
       </button>
-      {open && (
+      {presence.mounted && (
         <div
           className="vocab-picker-list"
           role="listbox"
           aria-multiselectable="true"
           aria-labelledby={labelId}
+          data-closing={presence.closing || undefined}
         >
           {pool.map((theme) => {
             const on = selected.has(theme.id);

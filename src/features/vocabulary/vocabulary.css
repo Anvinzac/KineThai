@@ -773,6 +773,14 @@
   text-overflow: ellipsis;
 }
 .vocab-picker-list {
+  /* Floats above the sheet as a proper popover — never in-flow, so opening it
+     cannot push the grid's content or expand the container. Anchored to the
+     picker's bottom-left; z-index sits above the sheet's own stacking context. */
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 50;
+  min-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -781,7 +789,12 @@
   padding: 6px;
   border: 1px solid var(--shell-line-strong);
   border-radius: 14px;
-  background: var(--shell-well);
+  background: var(--shell-surface);
+  box-shadow: 0 12px 40px #000a;
+  animation: vocab-picker-in var(--dur-quick) var(--ease-out) both;
+}
+.vocab-picker-list[data-closing] {
+  animation: vocab-picker-out var(--dur-quick) var(--ease-in) forwards;
 }
 .vocab-picker-list button {
   display: flex;
@@ -929,6 +942,27 @@
   to {
     opacity: 0;
     transform: scale(0.3);
+  }
+}
+/* Picker popover: grows down from the trigger's bottom edge, collapses back. */
+@keyframes vocab-picker-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vocab-picker-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
   }
 }
 /* The scrollable option column; the floating confirm bar overlays its bottom edge,
