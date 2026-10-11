@@ -589,6 +589,21 @@
      panel is — not nudged down a few pixels. */
   animation: vocab-options-in var(--dur-move) var(--ease-spring) both;
 }
+/* Gaussian blur over the entire Settings panel when any picker popover is open.
+   The ::before covers the full panel, blurring all the distracting text and controls
+   beneath. The popover itself (z-index 50) escapes the blur via its own stacking
+   context, staying crisp while the background recedes into soft focus. */
+.vocab-options:has(.vocab-picker-list)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--shell-surface) 40%, transparent);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border-radius: 22px;
+  pointer-events: none;
+}
 /* The first block sits beside the notch, so the rest of the sheet starts below
    it rather than running under the button. */
 .vocab-options > :first-child {
@@ -670,21 +685,6 @@
      both columns a stable half and finally lets the summary's ellipsis do its job. */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
-  position: relative;
-}
-/* Backdrop blur when a picker popover is open: the grid's ::before covers the full
-   grid area, sitting above the pickers' content but below the popover list (z-index 50).
-   The blur fades the background options into soft focus while the open list stays crisp. */
-.vocab-select-grid:has(.vocab-picker-list)::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 40;
-  background: color-mix(in srgb, var(--shell-surface) 50%, transparent);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border-radius: 14px;
-  pointer-events: none;
 }
 .vocab-select-grid label {
   display: flex;
