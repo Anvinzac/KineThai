@@ -12,7 +12,12 @@
       "6_anticipate",
       "7_reveal_en"
     ],
-    "reversePages": ["1_word_en", "2_defVi", "3_leadVi", "4_usage_highlighted"],
+    "reversePages": [
+      "1_word_en",
+      "2_defVi",
+      "3_leadVi",
+      "4_usage_highlighted"
+    ],
     "wordCount": 25,
     "notes": "defVi and leadVi must each be 8–11 Vietnamese words. Page 6 (anticipate) is a pure-Vietnamese tease before the English reveal. Never include English words, slang, or the target word.",
     "version": "v1.1",
@@ -35,9 +40,12 @@
         }
       ],
       "topic": "character",
-      "level": "B2",
+      "level": "HSK4",
       "anticipateVi": "Thử nhắm mắt đoán xem…",
-      "emphasis": ["bật dậy", "nghịch cảnh"]
+      "emphasis": [
+        "bật dậy",
+        "nghịch cảnh"
+      ]
     },
     {
       "id": "vague",
@@ -55,9 +63,12 @@
         }
       ],
       "topic": "communication",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Năm chữ cái — đoán đi!",
-      "emphasis": ["rõ ràng", "nắm bắt"]
+      "emphasis": [
+        "rõ ràng",
+        "nắm bắt"
+      ]
     },
     {
       "id": "negotiate",
@@ -75,9 +86,12 @@
         }
       ],
       "topic": "work",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Bạn nghĩ ra chưa?",
-      "emphasis": ["trao đổi", "thỏa thuận"]
+      "emphasis": [
+        "trao đổi",
+        "thỏa thuận"
+      ]
     },
     {
       "id": "deadline",
@@ -88,11 +102,19 @@
       "initial": "D",
       "leadVi": "Một mốc vô hình đang đếm ngược sau lưng bạn.",
       "defVi": "Hạn cuối cùng phải hoàn thành xong một công việc.",
-      "usage": [{ "en": "I missed the _____ by two hours.", "vi": "Tôi trễ hạn chót hai tiếng." }],
+      "usage": [
+        {
+          "en": "I missed the _____ by two hours.",
+          "vi": "Tôi trễ hạn chót hai tiếng."
+        }
+      ],
       "topic": "work",
-      "level": "A2",
+      "level": "HSK2",
       "anticipateVi": "Đếm ngược… đoán đi!",
-      "emphasis": ["cuối cùng", "hoàn thành"]
+      "emphasis": [
+        "cuối cùng",
+        "hoàn thành"
+      ]
     },
     {
       "id": "overlook",
@@ -104,12 +126,18 @@
       "leadVi": "Mắt lướt qua rồi đi thẳng, chẳng dừng lại nhìn.",
       "defVi": "Vô tình bỏ sót điều gì vì không để ý.",
       "usage": [
-        { "en": "It's easy to _____ small errors early on.", "vi": "Dễ bỏ sót lỗi nhỏ lúc đầu." }
+        {
+          "en": "It's easy to _____ small errors early on.",
+          "vi": "Dễ bỏ sót lỗi nhỏ lúc đầu."
+        }
       ],
       "topic": "attention",
-      "level": "B2",
+      "level": "HSK4",
       "anticipateVi": "Từ này có hai nghĩa lận.",
-      "emphasis": ["bỏ sót", "để ý"]
+      "emphasis": [
+        "bỏ sót",
+        "để ý"
+      ]
     },
     {
       "id": "reluctant",
@@ -121,12 +149,18 @@
       "leadVi": "Chân muốn bước nhưng lòng cứ dùng dằng mãi thôi.",
       "defVi": "Không thực sự muốn làm dù biết có lẽ nên làm.",
       "usage": [
-        { "en": "He was _____ to admit his mistake.", "vi": "Anh ấy miễn cưỡng thừa nhận sai lầm." }
+        {
+          "en": "He was _____ to admit his mistake.",
+          "vi": "Anh ấy miễn cưỡng thừa nhận sai lầm."
+        }
       ],
       "topic": "emotion",
-      "level": "B2",
+      "level": "HSK4",
       "anticipateVi": "Cảm giác này ai cũng từng có.",
-      "emphasis": ["thực sự", "dùng dằng"]
+      "emphasis": [
+        "thực sự",
+        "dùng dằng"
+      ]
     },
     {
       "id": "genuine",
@@ -144,9 +178,12 @@
         }
       ],
       "topic": "character",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Bảy chữ cái — đoán thử!",
-      "emphasis": ["thật lòng", "giả tạo"]
+      "emphasis": [
+        "thật lòng",
+        "giả tạo"
+      ]
     },
     {
       "id": "compromise",
@@ -164,9 +201,12 @@
         }
       ],
       "topic": "work",
-      "level": "B2",
+      "level": "HSK4",
       "anticipateVi": "Mười chữ cái — dài nhất bài.",
-      "emphasis": ["nhượng bộ", "thỏa thuận"]
+      "emphasis": [
+        "nhượng bộ",
+        "thỏa thuận"
+      ]
     },
     {
       "id": "subtle",
@@ -184,9 +224,12 @@
         }
       ],
       "topic": "thinking",
-      "level": "B2",
+      "level": "HSK4",
       "anticipateVi": "Nhắm mắt rồi mở ra xem.",
-      "emphasis": ["nhận ra", "tinh tế"]
+      "emphasis": [
+        "nhận ra",
+        "tinh tế"
+      ]
     },
     {
       "id": "postpone",
@@ -204,9 +247,12 @@
         }
       ],
       "topic": "time",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Tám chữ cái — đoán xem!",
-      "emphasis": ["thời điểm", "dự định"]
+      "emphasis": [
+        "thời điểm",
+        "dự định"
+      ]
     },
     {
       "id": "reliable",
@@ -224,9 +270,12 @@
         }
       ],
       "topic": "character",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Đừng lướt — nghĩ kỹ đã.",
-      "emphasis": ["hoàn toàn", "cam kết"]
+      "emphasis": [
+        "hoàn toàn",
+        "cam kết"
+      ]
     },
     {
       "id": "assume",
@@ -238,12 +287,18 @@
       "leadVi": "Đầu đã chốt xong nhưng miệng chẳng buồn hỏi lại.",
       "defVi": "Tự cho rằng đúng mà chẳng hề kiểm chứng.",
       "usage": [
-        { "en": "I _____ you've read the brief.", "vi": "Tôi cứ ngỡ bạn đã đọc bản tóm tắt." }
+        {
+          "en": "I _____ you've read the brief.",
+          "vi": "Tôi cứ ngỡ bạn đã đọc bản tóm tắt."
+        }
       ],
       "topic": "thinking",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Chữ cái đầu dễ đoán lắm.",
-      "emphasis": ["kiểm chứng", "cho rằng"]
+      "emphasis": [
+        "kiểm chứng",
+        "cho rằng"
+      ]
     },
     {
       "id": "feedback",
@@ -261,9 +316,12 @@
         }
       ],
       "topic": "work",
-      "level": "A2",
+      "level": "HSK2",
       "anticipateVi": "Từ ghép hai phần — đoán thử.",
-      "emphasis": ["nhận xét", "kết quả"]
+      "emphasis": [
+        "nhận xét",
+        "kết quả"
+      ]
     },
     {
       "id": "anxious",
@@ -275,12 +333,18 @@
       "leadVi": "Tim đập, tay hơi run mà chưa có gì xảy ra.",
       "defVi": "Cảm giác bồn chồn lo lắng về chuyện sắp xảy ra.",
       "usage": [
-        { "en": "She felt _____ about the exam results.", "vi": "Cô ấy lo lắng về kết quả thi." }
+        {
+          "en": "She felt _____ about the exam results.",
+          "vi": "Cô ấy lo lắng về kết quả thi."
+        }
       ],
       "topic": "emotion",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Thở sâu nào — rồi đoán.",
-      "emphasis": ["bồn chồn", "lo lắng"]
+      "emphasis": [
+        "bồn chồn",
+        "lo lắng"
+      ]
     },
     {
       "id": "clarify",
@@ -292,12 +356,18 @@
       "leadVi": "Đang mờ như sương, bỗng rõ từng nét một.",
       "defVi": "Nói rõ hơn để người nghe hiểu được vấn đề.",
       "usage": [
-        { "en": "Could you _____ the last point?", "vi": "Bạn làm rõ ý cuối giúp tôi được không?" }
+        {
+          "en": "Could you _____ the last point?",
+          "vi": "Bạn làm rõ ý cuối giúp tôi được không?"
+        }
       ],
       "topic": "communication",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Nói to lên xem đúng không!",
-      "emphasis": ["hiểu được", "từng nét"]
+      "emphasis": [
+        "hiểu được",
+        "từng nét"
+      ]
     },
     {
       "id": "priority",
@@ -315,9 +385,12 @@
         }
       ],
       "topic": "work",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Nghe quen lắm phải không?",
-      "emphasis": ["hàng đầu", "quan trọng"]
+      "emphasis": [
+        "hàng đầu",
+        "quan trọng"
+      ]
     },
     {
       "id": "hesitate",
@@ -335,9 +408,12 @@
         }
       ],
       "topic": "emotion",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Bạn đã đoán ra chưa?",
-      "emphasis": ["ngập ngừng", "quyết định"]
+      "emphasis": [
+        "ngập ngừng",
+        "quyết định"
+      ]
     },
     {
       "id": "accurate",
@@ -355,9 +431,12 @@
         }
       ],
       "topic": "thinking",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Đúng một chữ thôi!",
-      "emphasis": ["sự thật", "sai lệch"]
+      "emphasis": [
+        "sự thật",
+        "sai lệch"
+      ]
     },
     {
       "id": "outcome",
@@ -375,9 +454,12 @@
         }
       ],
       "topic": "thinking",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Kết hay mở đây?",
-      "emphasis": ["thực sự", "kết thúc"]
+      "emphasis": [
+        "thực sự",
+        "kết thúc"
+      ]
     },
     {
       "id": "persuade",
@@ -395,9 +477,12 @@
         }
       ],
       "topic": "communication",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Sức mạnh của lời nói.",
-      "emphasis": ["lý lẽ", "đồng ý"]
+      "emphasis": [
+        "lý lẽ",
+        "đồng ý"
+      ]
     },
     {
       "id": "routine",
@@ -415,9 +500,12 @@
         }
       ],
       "topic": "daily",
-      "level": "A2",
+      "level": "HSK2",
       "anticipateVi": "Bạn làm nó mỗi ngày.",
-      "emphasis": ["lặp lại", "nếp quen"]
+      "emphasis": [
+        "lặp lại",
+        "nếp quen"
+      ]
     },
     {
       "id": "awkward",
@@ -435,9 +523,12 @@
         }
       ],
       "topic": "emotion",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Cảm giác này quen lắm.",
-      "emphasis": ["lúng túng", "tự nhiên"]
+      "emphasis": [
+        "lúng túng",
+        "tự nhiên"
+      ]
     },
     {
       "id": "benefit",
@@ -455,9 +546,12 @@
         }
       ],
       "topic": "daily",
-      "level": "A2",
+      "level": "HSK2",
       "anticipateVi": "Ai cũng muốn có thêm.",
-      "emphasis": ["tốt đẹp", "giá trị"]
+      "emphasis": [
+        "tốt đẹp",
+        "giá trị"
+      ]
     },
     {
       "id": "distract",
@@ -475,9 +569,12 @@
         }
       ],
       "topic": "attention",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Đừng nhìn chỗ khác!",
-      "emphasis": ["tập trung", "chú ý"]
+      "emphasis": [
+        "tập trung",
+        "chú ý"
+      ]
     },
     {
       "id": "essential",
@@ -495,9 +592,12 @@
         }
       ],
       "topic": "thinking",
-      "level": "B1",
+      "level": "HSK3",
       "anticipateVi": "Chín chữ cái. Đoán đi!",
-      "emphasis": ["thể thiếu", "tình huống"]
+      "emphasis": [
+        "thể thiếu",
+        "tình huống"
+      ]
     }
   ]
 }

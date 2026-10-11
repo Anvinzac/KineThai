@@ -20,7 +20,7 @@ export type VocabPack = {
   blurb: string;
   /** Illustrative word count for the pack. */
   words: number;
-  /** CEFR band the pack targets. */
+  /** HSK band the pack targets. */
   levels: VocabularyLevel[];
   /** Free-form tags: field, need, topic emphasis. */
   tags: string[];
@@ -51,7 +51,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Giao tiếp thường nhật",
         blurb: "Ăn uống, mua sắm, hỏi đường, trò chuyện xã giao.",
         words: 1600,
-        levels: ["A1", "A2"],
+        levels: ["HSK1", "HSK2"],
         tags: ["giao tiếp", "chủ đề gia đình", "sở thích"],
       },
       {
@@ -59,7 +59,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Gia đình & Nhà cửa",
         blurb: "Thành viên, việc nhà, đồ vật và thói quen sinh hoạt.",
         words: 900,
-        levels: ["A1", "A2"],
+        levels: ["HSK1", "HSK2"],
         tags: ["chủ đề gia đình", "danh từ"],
       },
       {
@@ -67,7 +67,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Cảm xúc & Tính cách",
         blurb: "Mô tả tâm trạng, tính nết và phản ứng.",
         words: 720,
-        levels: ["A2", "B1"],
+        levels: ["HSK2", "HSK3"],
         tags: ["tính từ", "giao tiếp"],
       },
     ],
@@ -82,7 +82,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Kinh doanh tổng quát",
         blurb: "Họp, đàm phán, báo cáo và thuật ngữ văn phòng.",
         words: 1400,
-        levels: ["B1", "B2"],
+        levels: ["HSK3", "HSK4"],
         tags: ["kinh doanh", "thương mại"],
       },
       {
@@ -90,7 +90,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Phỏng vấn xin việc",
         blurb: "Cách nói về trải nghiệm, điểm mạnh và kỳ vọng.",
         words: 640,
-        levels: ["B1", "B2"],
+        levels: ["HSK3", "HSK4"],
         tags: ["phỏng vấn", "giao tiếp"],
       },
       {
@@ -98,7 +98,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Công nghệ & Lập trình",
         blurb: "Thuật ngữ kỹ thuật, sản phẩm và quy trình phát triển.",
         words: 1100,
-        levels: ["B2", "C1"],
+        levels: ["HSK4", "HSK5"],
         tags: ["công nghệ", "kỹ thuật"],
       },
       {
@@ -106,7 +106,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Marketing & Truyền thông",
         blurb: "Thương hiệu, chiến dịch và số liệu tăng trưởng.",
         words: 820,
-        levels: ["B2"],
+        levels: ["HSK4"],
         tags: ["marketing", "kinh doanh"],
       },
     ],
@@ -114,14 +114,14 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
   {
     id: "study",
     title: "Luyện thi & Học thuật",
-    note: "Bám sát khung CEFR cho mục tiêu điểm số và du học.",
+    note: "Bám sát khung HSK cho mục tiêu điểm số và du học.",
     packs: [
       {
         id: "ielts",
         name: "IELTS Listening & Speaking",
         blurb: "Ngôn ngữ chủ đề thi nói và nghe thường gặp.",
         words: 1500,
-        levels: ["B1", "B2", "C1"],
+        levels: ["HSK3", "HSK4", "HSK5"],
         tags: ["luyện thi", "học thuật"],
       },
       {
@@ -129,15 +129,15 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "TOEIC Reading",
         blurb: "Từ vựng kinh doanh và đời sống cho phần đọc hiểu.",
         words: 1300,
-        levels: ["A2", "B1", "B2"],
+        levels: ["HSK2", "HSK3", "HSK4"],
         tags: ["luyện thi", "kinh doanh"],
       },
       {
         id: "academic",
-        name: "Tiếng Anh học thuật",
+        name: "Tiếng Trung học thuật",
         blurb: "Văn phong luận, trích dẫn và lập luận.",
         words: 1200,
-        levels: ["C1", "C2"],
+        levels: ["HSK5", "HSK6"],
         tags: ["học thuật", "viết lách"],
       },
     ],
@@ -152,7 +152,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Du lịch căn bản",
         blurb: "Sân bay, khách sạn, vận chuyển và ăn ngoài.",
         words: 980,
-        levels: ["A1", "A2", "B1"],
+        levels: ["HSK1", "HSK2", "HSK3"],
         tags: ["du lịch", "giao tiếp"],
       },
       {
@@ -160,7 +160,7 @@ export const LIBRARY_GROUPS: readonly VocabPackGroup[] = [
         name: "Ẩm thực",
         blurb: "Món ăn, hương vị, nguyên liệu và gọi món.",
         words: 760,
-        levels: ["A2", "B1"],
+        levels: ["HSK2", "HSK3"],
         tags: ["ẩm thực", "du lịch"],
       },
     ],

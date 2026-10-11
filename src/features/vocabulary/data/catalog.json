@@ -12,7 +12,11 @@
     "time",
     "work"
   ],
-  "levels": ["A2", "B1", "B2"],
+  "levels": [
+    "HSK2",
+    "HSK3",
+    "HSK4"
+  ],
   "words": [
     {
       "id": "resilient",
@@ -23,8 +27,10 @@
       "pos": "adj",
       "ipa": "/rɪˈzɪl.i.ənt/",
       "topic": "character",
-      "topics": ["character"],
-      "level": "B2",
+      "topics": [
+        "character"
+      ],
+      "level": "HSK4",
       "usage": [
         {
           "en": "She proved more _____ than anyone expected.",
@@ -43,8 +49,10 @@
       "pos": "adj",
       "ipa": "/veɪɡ/",
       "topic": "communication",
-      "topics": ["communication"],
-      "level": "B1",
+      "topics": [
+        "communication"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "His plan was too _____ to follow.",
@@ -63,8 +71,10 @@
       "pos": "verb",
       "ipa": "/nɪˈɡoʊ.ʃi.eɪt/",
       "topic": "work",
-      "topics": ["work"],
-      "level": "B1",
+      "topics": [
+        "work"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "They refused to _____ with the rebels.",
@@ -83,8 +93,10 @@
       "pos": "noun",
       "ipa": "/ˈded.laɪn/",
       "topic": "work",
-      "topics": ["work"],
-      "level": "A2",
+      "topics": [
+        "work"
+      ],
+      "level": "HSK2",
       "usage": [
         {
           "en": "I missed the _____ by two hours.",
@@ -103,8 +115,10 @@
       "pos": "verb",
       "ipa": "/ˌoʊ.vɚˈlʊk/",
       "topic": "attention",
-      "topics": ["attention"],
-      "level": "B2",
+      "topics": [
+        "attention"
+      ],
+      "level": "HSK4",
       "usage": [
         {
           "en": "It's easy to _____ small errors early on.",
@@ -123,8 +137,10 @@
       "pos": "adj",
       "ipa": "/rɪˈlʌk.tənt/",
       "topic": "emotion",
-      "topics": ["emotion"],
-      "level": "B2",
+      "topics": [
+        "emotion"
+      ],
+      "level": "HSK4",
       "usage": [
         {
           "en": "He was _____ to admit his mistake.",
@@ -143,8 +159,10 @@
       "pos": "adj",
       "ipa": "/ˈdʒen.ju.ɪn/",
       "topic": "character",
-      "topics": ["character"],
-      "level": "B1",
+      "topics": [
+        "character"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "Her smile looked completely _____.",
@@ -163,8 +181,10 @@
       "pos": "noun",
       "ipa": "/ˈkɑːm.prə.maɪz/",
       "topic": "work",
-      "topics": ["work"],
-      "level": "B2",
+      "topics": [
+        "work"
+      ],
+      "level": "HSK4",
       "usage": [
         {
           "en": "Marriage requires a lot of _____.",
@@ -183,8 +203,10 @@
       "pos": "adj",
       "ipa": "/ˈsʌt.əl/",
       "topic": "thinking",
-      "topics": ["thinking"],
-      "level": "B2",
+      "topics": [
+        "thinking"
+      ],
+      "level": "HSK4",
       "usage": [
         {
           "en": "There's a _____ change in her tone.",
@@ -203,8 +225,10 @@
       "pos": "verb",
       "ipa": "/poʊstˈpoʊn/",
       "topic": "time",
-      "topics": ["time"],
-      "level": "B1",
+      "topics": [
+        "time"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "Rain forced us to _____ the picnic.",
@@ -223,8 +247,10 @@
       "pos": "adj",
       "ipa": "/rɪˈlaɪ.ə.bəl/",
       "topic": "character",
-      "topics": ["character"],
-      "level": "B1",
+      "topics": [
+        "character"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "He's the most _____ person I know.",
@@ -243,8 +269,10 @@
       "pos": "verb",
       "ipa": "/əˈsuːm/",
       "topic": "thinking",
-      "topics": ["thinking"],
-      "level": "B1",
+      "topics": [
+        "thinking"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "I _____ you've read the brief.",
@@ -263,8 +291,10 @@
       "pos": "noun",
       "ipa": "/ˈfiːd.bæk/",
       "topic": "work",
-      "topics": ["work"],
-      "level": "A2",
+      "topics": [
+        "work"
+      ],
+      "level": "HSK2",
       "usage": [
         {
           "en": "Can I get your _____ on this draft?",
@@ -283,8 +313,10 @@
       "pos": "adj",
       "ipa": "/ˈæŋk.ʃəs/",
       "topic": "emotion",
-      "topics": ["emotion"],
-      "level": "B1",
+      "topics": [
+        "emotion"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "She felt _____ about the exam results.",
@@ -303,8 +335,10 @@
       "pos": "verb",
       "ipa": "/ˈkler.ə.faɪ/",
       "topic": "communication",
-      "topics": ["communication"],
-      "level": "B1",
+      "topics": [
+        "communication"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "Could you _____ the last point?",
@@ -323,8 +357,10 @@
       "pos": "noun",
       "ipa": "/praɪˈɔːr.ə.ti/",
       "topic": "work",
-      "topics": ["work"],
-      "level": "B1",
+      "topics": [
+        "work"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "Health should be your top _____.",
@@ -343,8 +379,10 @@
       "pos": "verb",
       "ipa": "/ˈhez.ə.teɪt/",
       "topic": "emotion",
-      "topics": ["emotion"],
-      "level": "B1",
+      "topics": [
+        "emotion"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "Don't _____ to call if you need help.",
@@ -363,8 +401,10 @@
       "pos": "adj",
       "ipa": "/ˈæk.jɚ.ət/",
       "topic": "thinking",
-      "topics": ["thinking"],
-      "level": "B1",
+      "topics": [
+        "thinking"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "Is this data _____ enough to publish?",
@@ -383,8 +423,10 @@
       "pos": "noun",
       "ipa": "/ˈaʊt.kʌm/",
       "topic": "thinking",
-      "topics": ["thinking"],
-      "level": "B1",
+      "topics": [
+        "thinking"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "The _____ surprised everyone in the room.",
@@ -403,8 +445,10 @@
       "pos": "verb",
       "ipa": "/pɚˈsweɪd/",
       "topic": "communication",
-      "topics": ["communication"],
-      "level": "B1",
+      "topics": [
+        "communication"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "I couldn't _____ her to change her mind.",
@@ -423,8 +467,10 @@
       "pos": "noun",
       "ipa": "/ruːˈtiːn/",
       "topic": "daily",
-      "topics": ["daily"],
-      "level": "A2",
+      "topics": [
+        "daily"
+      ],
+      "level": "HSK2",
       "usage": [
         {
           "en": "My morning _____ starts at six.",
@@ -443,8 +489,10 @@
       "pos": "adj",
       "ipa": "/ˈɔː.kwɚd/",
       "topic": "emotion",
-      "topics": ["emotion"],
-      "level": "B1",
+      "topics": [
+        "emotion"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "The silence after his joke was _____.",
@@ -463,8 +511,10 @@
       "pos": "noun",
       "ipa": "/ˈben.ə.fɪt/",
       "topic": "daily",
-      "topics": ["daily"],
-      "level": "A2",
+      "topics": [
+        "daily"
+      ],
+      "level": "HSK2",
       "usage": [
         {
           "en": "One _____ of exercise is better sleep.",
@@ -483,8 +533,10 @@
       "pos": "verb",
       "ipa": "/dɪˈstrækt/",
       "topic": "attention",
-      "topics": ["attention"],
-      "level": "B1",
+      "topics": [
+        "attention"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "Loud noises _____ me from reading.",
@@ -503,8 +555,10 @@
       "pos": "adj",
       "ipa": "/ɪˈsen.ʃəl/",
       "topic": "thinking",
-      "topics": ["thinking"],
-      "level": "B1",
+      "topics": [
+        "thinking"
+      ],
+      "level": "HSK3",
       "usage": [
         {
           "en": "Water is _____ for all living things.",

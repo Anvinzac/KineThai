@@ -13,9 +13,9 @@
     "work"
   ],
   "levels": [
-    "A1",
-    "A2",
-    "B1"
+    "HSK1",
+    "HSK2",
+    "HSK3"
   ],
   "words": [
     {
@@ -30,7 +30,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "她_____姐姐的成功。",
@@ -52,7 +52,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "搬到新城市后，他觉得很_____。",
@@ -74,7 +74,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "爸爸妈妈真为你感到_____。",
@@ -96,7 +96,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "我很_____，不知道接下来该做什么。",
@@ -118,7 +118,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "爬了很久的山，我们都_____了。",
@@ -140,7 +140,7 @@
       "topics": [
         "character"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "_____说，我不喜欢那部电影。",
@@ -162,7 +162,7 @@
       "topics": [
         "character"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "说“谢谢”是有_____的表现。",
@@ -184,7 +184,7 @@
       "topics": [
         "character"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "别这么_____，快帮我收拾！",
@@ -206,7 +206,7 @@
       "topics": [
         "character"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "她敢站出来说话，真_____。",
@@ -228,7 +228,7 @@
       "topics": [
         "character"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "把零食全留给自己太_____了。",
@@ -250,7 +250,7 @@
       "topics": [
         "communication"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "顾客经常_____Wi-Fi太慢。",
@@ -272,7 +272,7 @@
       "topics": [
         "communication"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "你能给我_____一下这条规则吗？",
@@ -294,7 +294,7 @@
       "topics": [
         "communication"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "我_____今晚给你打电话。",
@@ -316,7 +316,7 @@
       "topics": [
         "communication"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "我们兄弟几个不管什么事都会_____。",
@@ -338,7 +338,7 @@
       "topics": [
         "communication"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "老师应该_____学生提问。",
@@ -360,7 +360,7 @@
       "topics": [
         "thinking"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "我没_____已经这么晚了。",
@@ -382,7 +382,7 @@
       "topics": [
         "thinking"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "这件事我们得在周五前_____。",
@@ -404,7 +404,7 @@
       "topics": [
         "thinking"
       ],
-      "level": "A1",
+      "level": "HSK1",
       "usage": [
         {
           "en": "别_____带伞。",
@@ -426,7 +426,7 @@
       "topics": [
         "daily"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "咬指甲是个坏_____。",
@@ -448,7 +448,7 @@
       "topics": [
         "daily"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "我出远门时，_____常帮我浇花。",
@@ -470,7 +470,7 @@
       "topics": [
         "time"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "不用_____，我们还有时间。",
@@ -492,7 +492,7 @@
       "topics": [
         "money"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "我现在哪_____新笔记本电脑啊。",
@@ -514,7 +514,7 @@
       "topics": [
         "money"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
           "en": "我能_____一下你的充电器吗？",
@@ -536,7 +536,7 @@
       "topics": [
         "money"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "我们_____有限，正在计划一次省钱的旅行。",
@@ -558,7 +558,7 @@
       "topics": [
         "work"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
           "en": "她提出要涨_____。",

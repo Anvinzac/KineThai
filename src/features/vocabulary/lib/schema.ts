@@ -1,7 +1,8 @@
 /** WordCrawler validation and normalized catalog contract. Exports: schemas/types, normalizeDeck. Depends on: zod. */
 import { z } from "zod";
 
-export const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+/** HSK 3.0 (2021) proficiency levels — the official Chinese word-frequency standard. */
+export const LEVELS = ["HSK1", "HSK2", "HSK3", "HSK4", "HSK5", "HSK6", "HSK7", "HSK8", "HSK9"] as const;
 export const STYLE_IDS = ["detective", "speed", "confession", "minimal"] as const;
 const optionalText = (max: number) => z.string().trim().max(max).optional().default("");
 /** A grouping-axis value: lowercase slug, no spaces, so it is safe in a URL filter. */

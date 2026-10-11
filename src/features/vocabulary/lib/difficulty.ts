@@ -1,10 +1,10 @@
 /**
  * Difficulty tracks: the learner-facing names shown in the feed's dropdown, and
- * the CEFR level bands each one selects.
+ * the HSK level bands each one selects.
  *
- * The catalog tags words with CEFR levels only, so a track is a curated lens over
+ * The catalog tags words with HSK levels only, so a track is a curated lens over
  * those levels rather than a separate per-word attribute. The bands deliberately
- * overlap: ten named intents cannot map one-to-one onto six CEFR levels without
+ * overlap: ten named intents cannot map one-to-one onto nine HSK levels without
  * either collapsing two tracks into the same words or leaving tracks empty, and
  * an empty track is worse than a shared one. Every band is distinct as a set, and
  * every band intersects the levels the bundled deck actually carries, so no track
@@ -28,13 +28,13 @@ export type DifficultyTrack = {
   hint: string;
   /** Emoji that denotes this track's rung on the difficulty ladder. */
   emoji: string;
-  /** CEFR levels this track admits. */
+  /** HSK levels this track admits. */
   levels: VocabularyLevel[];
   /**
    * Which level's sample word is shown in the onboarding picker.
    * Defaults to trackCeiling() (the hardest level) when omitted.
-   * Set explicitly on vỡ lòng so the first rung shows truly basic A1 words
-   * rather than the A2 business terms in the base catalog.
+   * Set explicitly on sơ cấp so the first rung shows truly basic HSK1 words
+   * rather than the HSK2 business terms in the base catalog.
    */
   sampleLevel?: VocabularyLevel;
 };
@@ -44,89 +44,89 @@ export const DIFFICULTY_ALL = "";
 
 /**
  * Words that should appear first in the onboarding sample pool for each level.
- * The base catalog carries business A2 words (deadline, feedback…) that would be
- * shown as the first A2 samples under the old catalog-order rule; listing specific
+ * The base catalog carries business HSK3 words (deadline, feedback…) that would be
+ * shown as the first HSK3 samples under the old catalog-order rule; listing specific
  * everyday words here ensures the representative shown for each level is one that
  * a learner would actually recognise at that difficulty.
  */
 export const LEVEL_SAMPLE_PRIORITY: Partial<Record<VocabularyLevel, readonly string[]>> = {
-  A1: ["hungry", "thirsty", "tired", "angry"],
-  A2: ["proud", "honest", "polite", "lazy"],
+  HSK1: ["hungry", "thirsty", "tired", "angry"],
+  HSK2: ["proud", "honest", "polite", "lazy"],
 };
 
 /** The ten tracks, in the order the dropdown lists them. */
 export const DIFFICULTY_TRACKS: readonly DifficultyTrack[] = [
   {
     id: "vo-long",
-    label: "vỡ lòng",
+    label: "sơ cấp",
     hint: "Mới bắt đầu, toàn từ rất quen",
     emoji: "🐣",
-    levels: ["A1", "A2"],
-    sampleLevel: "A1",
+    levels: ["HSK1", "HSK2"],
+    sampleLevel: "HSK1",
   },
   {
     id: "co-ban",
-    label: "cơ bản",
+    label: "căn bản",
     hint: "Vốn từ nền tảng hằng ngày",
     emoji: "🌱",
-    levels: ["A2"],
-    sampleLevel: "A2",
+    levels: ["HSK2"],
+    sampleLevel: "HSK2",
   },
   {
     id: "du-lich",
-    label: "du lịch",
+    label: "thực dụng",
     hint: "Đủ dùng khi đi xa",
-    emoji: "🌿",
-    levels: ["A2", "B1"],
+    emoji: "",
+    levels: ["HSK2", "HSK3"],
   },
   {
     id: "doc-hieu",
     label: "đọc hiểu",
     hint: "Đọc báo và đọc truyện",
     emoji: "🍃",
-    levels: ["B1", "B2"],
+    levels: ["HSK3", "HSK4"],
   },
   {
     id: "giao-tiep",
     label: "giao tiếp",
     hint: "Nói chuyện tự nhiên hơn",
     emoji: "🌾",
-    levels: ["A1", "A2", "B1"],
+    levels: ["HSK1", "HSK2", "HSK3"],
   },
   {
     id: "chuyen-sau",
     label: "chuyên sâu",
     hint: "Sắc thái và cách dùng",
     emoji: "🌳",
-    levels: ["B2"],
+    levels: ["HSK4"],
   },
   {
     id: "nang-cao",
-    label: "nâng cao",
+    label: "cao cấp",
     hint: "Từ trừu tượng hơn",
-    emoji: "⚡",
-    levels: ["B2", "C1"],
+    emoji: "",
+    levels: ["HSK4", "HSK5"],
   },
   {
     id: "viet-lach",
-    label: "viết lách",
+    label: "thư diện",
     hint: "Chữ nghĩa dùng khi viết",
     emoji: "🔥",
-    levels: ["B1", "C1"],
+    levels: ["HSK3", "HSK5"],
   },
   {
     id: "du-hoc",
-    label: "du học",
-    hint: "Tiếng Anh học thuật",
+    label: "học thuật",
+    hint: "Tiếng Trung học thuật",
     emoji: "🚀",
-    levels: ["B1", "B2", "C1"],
+    levels: ["HSK3", "HSK4", "HSK5"],
   },
   {
     id: "van-chuong",
     label: "văn chương",
     hint: "Ngôn từ đẹp và hiếm",
     emoji: "🧠",
-    levels: ["B2", "C1", "C2"],
+    levels: ["HSK4", "HSK5", "HSK6"],
   },
 ];
 
@@ -134,9 +134,9 @@ export const DIFFICULTY_TRACKS: readonly DifficultyTrack[] = [
 export const DIFFICULTY_IDS = DIFFICULTY_TRACKS.map((track) => track.id);
 
 /**
- * The hardest CEFR level a track reaches — the level that makes it THAT track.
+ * The hardest HSK level a track reaches — the level that makes it THAT track.
  * @param track A difficulty track
- * @returns Its highest level in the canonical CEFR order
+ * @returns Its highest level in the canonical HSK order
  * @pure true
  */
 export function trackCeiling(track: DifficultyTrack): VocabularyLevel {
@@ -148,8 +148,8 @@ export function trackCeiling(track: DifficultyTrack): VocabularyLevel {
  * Whether the catalog can actually serve a track yet.
  *
  * Bands overlap, so a track whose own top level is missing would still "work" by quietly
- * streaming the easier words it shares with the track below — "nâng cao" (B2–C1) with no
- * C1 words is just "chuyên sâu" (B2) under another name. That is a promise the deck cannot
+ * streaming the easier words it shares with the track below — "cao cấp" (HSK4–HSK5) with no
+ * HSK5 words is just "chuyên sâu" (HSK4) under another name. That is a promise the deck cannot
  * keep, so a track is on offer only once the level that defines it has words; until then
  * it is listed, greyed, at zero.
  * @param track A difficulty track
@@ -165,9 +165,9 @@ export function isTrackAvailable(
 }
 
 /**
- * Resolve a `difficulty` value into the CEFR levels it admits. A difficulty is a
+ * Resolve a `difficulty` value into the HSK levels it admits. A difficulty is a
  * comma-joined list of track ids (multi-select), so the admitted band is the UNION of
- * every chosen track's levels, ordered by the canonical CEFR sequence.
+ * every chosen track's levels, ordered by the canonical HSK sequence.
  *
  * Given `catalogLevels`, tracks the catalog cannot serve yet (see isTrackAvailable)
  * contribute nothing — so a selection made only of such tracks admits NO words, rather
@@ -198,14 +198,14 @@ export function difficultyLevels(
 }
 
 /**
- * Human-readable band for a dropdown row, e.g. "A1–A2" or "B2".
- * @param levels The track's CEFR band
+ * Human-readable band for a dropdown row, e.g. "HSK 1–2" or "HSK 4".
+ * @param levels The track's HSK band
  * @returns A compact band label
  * @pure true
  */
 export function formatLevelBand(levels: readonly VocabularyLevel[]): string {
   if (levels.length === 1) return levels[0];
-  // Order by the canonical CEFR sequence, not by declaration order.
+  // Order by the canonical HSK sequence, not by declaration order.
   const ordered = LEVELS.filter((level) => levels.includes(level));
   const first = ordered[0];
   const last = ordered[ordered.length - 1];
@@ -220,7 +220,7 @@ export function formatLevelBand(levels: readonly VocabularyLevel[]): string {
  * shared level once per track. This is the same union `difficultyLevels` hands the feed
  * endpoint, availability rule included, so the figure shown is the pack that is served.
  * @param ids Track ids (order and duplicates do not matter)
- * @param levelCounts Words per CEFR level, as reported by the feed endpoint
+ * @param levelCounts Words per HSK level, as reported by the feed endpoint
  * @param catalogLevels Levels the catalog has words for
  * @returns The number of distinct words the selection admits (0 for no tracks)
  * @pure true

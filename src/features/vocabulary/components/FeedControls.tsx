@@ -277,7 +277,7 @@ type DifficultyOption = {
 /**
  * The dropdown's rows: an explicit "all" escape hatch ahead of the ten tracks. In the
  * multi-select the "all" row means an EMPTY selection (no restriction), so clearing
- * every track returns to it. Each row shows its CEFR band as a chip ahead of the name
+ * every track returns to it. Each row shows its HSK band as a chip ahead of the name
  * and its real word count at the trailing edge. The rows are static, so the list renders
  * before the first feed page resolves; the counts arrive with that page.
  */
@@ -287,7 +287,7 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     label: "tất cả",
     hint: "Mọi trình độ",
     // Derived from LEVELS rather than written out, so the row keeps stating the real full
-    // span if the CEFR list ever gains or loses an end. Empty here left the one row in the
+    // span if the HSK list ever gains or loses an end. Empty here left the one row in the
     // list without a chip, which broke the column the other ten line up on.
     band: formatLevelBand(LEVELS),
   },
@@ -330,7 +330,7 @@ function describeSelection(ids: string[]): { emoji: string; label: string; band:
  * did and the tagline slot reports the current selection, so the control needs no
  * separate button. It is multi-select — rows toggle into a draft and a "Done" button
  * commits it, so browsing choices never re-shuffle the live stream until confirmed. A
- * listbox rather than a native select so each row can carry its emoji, CEFR band and
+ * listbox rather than a native select so each row can carry its emoji, HSK band and
  * Vietnamese gloss, and so tap targets stay large.
  * Open state lives in the parent: the toolbar-level popup guardrail needs to know the
  * sheet is out, and one popup can never stay open while another is being reached for.
