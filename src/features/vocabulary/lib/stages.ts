@@ -1,7 +1,10 @@
-/** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, kinetic-text emphasis types. */
+/** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, kinetic-text emphasis types, clues, i18n, locale. */
 import type { EmphasisVariant } from "@/features/kinetic-text";
 import { answerPattern, type NarrativeStyle, type VocabularyWord } from "./schema";
 import { paginateText } from "@/features/post-player";
+import { resolveClue } from "./clues";
+import { leadLabel, stageLabel, lettersSentence } from "./i18n";
+import type { Locale } from "./locale";
 
 /**
  * Effect used for the starting initial on the letter-count clue. `frame` draws a
@@ -16,7 +19,7 @@ export type LearningStage = {
   label: string;
   text: string;
   secondary?: string;
-  lang: "vi" | "en";
+  lang: Locale | "en";
   reveal?: boolean;
   /** Emphasis phrases extracted from /word/ markers in the source text field. */
   dataEmphasis?: string[];
@@ -63,33 +66,32 @@ export function completeUsage(text: string, word: string): string {
   return text.replace(/_{2,}/g, word);
 }
 
-/** Create the supplied seven-stage flow, skipping absent optional content. @param word Catalog entry. @param style Narrative preset. @returns Ordered stages. */
-export function buildStages(word: VocabularyWord, style: NarrativeStyle): LearningStage[] {
+/** Create the supplied seven-stage flow, skipping absent optional content. @param word Catalog entry. @param style Narrative preset. @param locale Selected content locale (leading phrases localized; reveal stays English). @returns Ordered stages. */
+export function buildStages(
+  word: VocabularyWord,
+  style: NarrativeStyle,
+  locale: Locale,
+): LearningStage[] {
   const mask = (text: string) => text.replace(answerPattern(word.word), "_____");
   const stages: LearningStage[] = [];
-  const leadLabels: Record<NarrativeStyle, string> = {
-    detective: "Bối cảnh",
-    speed: "Sẵn sàng chưa?",
-    confession: "Có quen không?",
-    minimal: "Một suy nghĩ",
-  };
-  if (word.leadVi) {
-    const { clean, markers } = parseEmphasisMarkers(word.leadVi);
+  const lead = resolveClue(word, "lead", locale);
+  if (lead) {
+    const { clean, markers } = parseEmphasisMarkers(lead);
     stages.push({
       id: "lead",
-      label: leadLabels[style],
+      label: leadLabel(style, locale),
       text: mask(clean),
-      lang: "vi",
+      lang: locale,
       dataEmphasis: markers.length ? markers : undefined,
     });
   }
   {
-    const { clean, markers } = parseEmphasisMarkers(word.defVi);
+    const { clean, markers } = parseEmphasisMarkers(resolveClue(word, "def", locale));
     stages.push({
       id: "definition",
-      label: "Ý nghĩa",
+      label: stageLabel("definition", locale),
       text: mask(clean),
-      lang: "vi",
+      lang: locale,
       dataEmphasis: markers.length ? markers : undefined,
     });
   }
@@ -97,9 +99,9 @@ export function buildStages(word: VocabularyWord, style: NarrativeStyle): Learni
   const initial = word.word[0].toUpperCase();
   stages.push({
     id: "letters",
-    label: "Đếm chữ cái",
-    text: `Gồm ${count} chữ cái, bắt đầu bằng ${initial}`,
-    lang: "vi",
+    label: stageLabel("letters", locale),
+    text: lettersSentence(count, initial, locale),
+    lang: locale,
     // The count keeps the primary mark on purpose — getWordImportance scores a
     // standalone number above everything so the digits always win this sentence.
     // The initial is added as a second, differently-drawn mark rather than
@@ -109,27 +111,34 @@ export function buildStages(word: VocabularyWord, style: NarrativeStyle): Learni
   const example = word.usage[0];
   if (example) {
     const { clean: enClean, markers: enMarkers } = parseEmphasisMarkers(example.en);
-    const { clean: viClean } = parseEmphasisMarkers(example.vi);
+    const { clean: viClean } = parseEmphasisMarkers(resolveClue(word, "hint", locale));
     stages.push({
       id: "usage",
-      label: "Trong câu",
+      label: stageLabel("usage", locale),
       text: mask(enClean),
       secondary: mask(viClean),
       lang: "en",
       dataEmphasis: enMarkers.length ? enMarkers : undefined,
     });
   }
-  if (word.anticipateVi) {
-    const { clean, markers } = parseEmphasisMarkers(word.anticipateVi);
+  const guess = resolveClue(word, "guess", locale);
+  if (guess) {
+    const { clean, markers } = parseEmphasisMarkers(guess);
     stages.push({
       id: "anticipation",
-      label: "Bạn đoán gì?",
+      label: stageLabel("anticipation", locale),
       text: mask(clean),
-      lang: "vi",
+      lang: locale,
       dataEmphasis: markers.length ? markers : undefined,
     });
   }
-  stages.push({ id: "reveal", label: "Đây rồi!", text: word.word, lang: "en", reveal: true });
+  stages.push({
+    id: "reveal",
+    label: stageLabel("reveal", locale),
+    text: word.word,
+    lang: "en",
+    reveal: true,
+  });
   return stages.flatMap((stage) => {
     if (stage.reveal) return [stage];
     return paginateText(stage.text).map((text, index) => ({

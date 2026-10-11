@@ -1,4 +1,7 @@
 /** On-device viewing history with sliding-window repeat caps. Exports: history helpers. Depends on: none (localStorage only). */
+import type { Locale } from "./locale";
+import { DEFAULT_LOCALE } from "./locale";
+
 export const DAY_MS = 24 * 60 * 60 * 1000;
 export const THREE_DAYS_MS = 3 * DAY_MS;
 export const WEEK_MS = 7 * DAY_MS;
@@ -121,14 +124,38 @@ export function historyStats(history: ViewHistory, now: number = Date.now()): Hi
   return { distinctToday, distinct3d, distinct7d, totalViews7d };
 }
 
-/** Countdown duration for the Vietnamese “seen every word” scene. @param target Future time. @param now Reference. @returns A bare duration like "5 giờ 12 phút", safe to place after "sau". */
-export function formatCountdown(target: number, now: number = Date.now()): string {
+/**
+ * Countdown duration for the "seen every word" scene, localized per locale. The unit
+ * words ("phút/giờ/ngày", Thai, Japanese) are looked up per language so the stream's
+ * empty-state sentence (`stream.nextUnlock`) never reads Vietnamese under another locale.
+ * @param target Future time. @param now Reference. @param locale Selected content locale.
+ * @returns A bare duration like "5 giờ 12 phút" (vi), safe to place after the locale's `stream.nextUnlock` lead-in.
+ */
+export function formatCountdown(
+  target: number,
+  now: number = Date.now(),
+  locale: Locale = DEFAULT_LOCALE,
+): string {
+  const units = COUNTDOWN_UNITS[locale] ?? COUNTDOWN_UNITS[DEFAULT_LOCALE];
   const ms = Math.max(0, target - now);
   const mins = Math.ceil(ms / 60_000);
-  if (mins < 1) return "ít phút";
-  if (mins < 60) return `${mins} phút`;
+  if (mins < 1) return units.moments;
+  if (mins < 60) return `${mins} ${units.minute}`;
   const hours = Math.floor(mins / 60);
-  if (hours < 48) return `${hours} giờ ${mins % 60} phút`;
+  if (hours < 48) return `${hours} ${units.hour} ${mins % 60} ${units.minute}`;
   const days = Math.floor(hours / 24);
-  return `${days} ngày ${hours % 24} giờ`;
+  return `${days} ${units.day} ${hours % 24} ${units.hour}`;
 }
+
+/** Per-locale countdown unit words. `vi` is the base; each entry lists its units in the locale's natural order. */
+const COUNTDOWN_UNITS: Record<
+  Locale,
+  { moments: string; minute: string; hour: string; day: string }
+> = {
+  vi: { moments: "ít phút", minute: "phút", hour: "giờ", day: "ngày" },
+  th: { moments: "ไม่กี่นาที", minute: "นาที", hour: "ชั่วโมง", day: "วัน" },
+  ja: { moments: "数分", minute: "分", hour: "時間", day: "日" },
+  zh: { moments: "几分钟", minute: "分钟", hour: "小时", day: "天" },
+  ko: { moments: "몇 분", minute: "분", hour: "시간", day: "일" },
+  fil: { moments: "ilang minuto", minute: "minuto", hour: "oras", day: "araw" },
+};

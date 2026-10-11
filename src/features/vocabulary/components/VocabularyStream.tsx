@@ -6,6 +6,8 @@ import { useFeedPagination } from "../hooks/useFeedPagination";
 import { canWalkFurther, getWalkedPositions } from "../lib/backfill";
 import { formatCountdown, isWordAllowed, nextAvailableAt, type ViewHistory } from "../lib/history";
 import type { FeedPage, Presentation, VocabularyFilters } from "../types";
+import { useLocale } from "../lib/useLocale";
+import { t } from "../lib/ui-copy";
 import { VocabularyCard } from "./VocabularyCard";
 
 // Admin-only, and only on demand: readers never download the export studio.
@@ -50,6 +52,7 @@ export function VocabularyStream({
   /** Custom label for the reveal button, from admin wording presets. */
   revealButtonLabel?: string;
 }) {
+  const locale = useLocale();
   const query = useVocabularyFeed(seed, filters);
   // Tick so day-window expiries re-evaluate without a reload.
   const [now, setNow] = useState(() => Date.now());
@@ -242,33 +245,35 @@ export function VocabularyStream({
         {!visibleEntries.length && (
           <div className="vocab-empty" role="status">
             <p className="vocab-eyebrow">
-              {allBlocked ? "Mỗi từ là một khởi đầu" : "A word is a beginning"}
+              {allBlocked ? t(locale, "stream.empty.title") : t(locale, "stream.eyebrow")}
             </p>
             <h1>
               {initialError
-                ? "Let’s try that again."
+                ? t(locale, "stream.retry")
                 : empty
-                  ? "No words match just yet."
+                  ? t(locale, "stream.noMatch")
                   : allBlocked
-                    ? "Bạn đã xem hết mọi từ rồi."
+                    ? t(locale, "stream.seenAll")
                     : query.isPaused
-                      ? "Waiting for a connection."
+                      ? t(locale, "stream.paused")
                       : query.entries.length
-                        ? "Finding a word you haven’t seen…"
-                        : "Finding your first word…"}
+                        ? t(locale, "stream.searchingSeen")
+                        : t(locale, "stream.searchingFirst")}
             </h1>
             <p>
               {initialError
-                ? "The word stream couldn’t load. Your settings are still here."
+                ? t(locale, "stream.loadError")
                 : empty
-                  ? "Try a different difficulty or category."
+                  ? t(locale, "stream.noMatchHint")
                   : allBlocked
-                    ? `Bộ nhớ trên thiết bị giữ mỗi từ ở mức một lần mỗi ngày, hai lần trong ba ngày, ba lần mỗi tuần.${
+                    ? `${t(locale, "stream.memory")}${
                         nextUnlock
-                          ? ` Từ tiếp theo sẽ mở sau ${formatCountdown(nextUnlock, now)}.`
+                          ? t(locale, "stream.nextUnlock", {
+                              countdown: formatCountdown(nextUnlock, now, locale),
+                            })
                           : ""
                       }`
-                    : "Vietnamese clues. English discoveries. No sign-in needed."}
+                    : t(locale, "stream.tagline")}
             </p>
             {initialError && (
               <button
@@ -276,17 +281,17 @@ export function VocabularyStream({
                 className="vocab-light-button"
                 onClick={query.catalogChanged || exhausted ? onRestart : retry}
               >
-                {query.catalogChanged ? "Start a fresh stream" : "Retry"}
+                {query.catalogChanged ? t(locale, "stream.restart") : t(locale, "stream.retry")}
               </button>
             )}
             {empty && (
               <button type="button" className="vocab-light-button" onClick={onClearFilters}>
-                Show all words
+                {t(locale, "stream.showAll")}
               </button>
             )}
             {allBlocked && (
               <button type="button" className="vocab-light-button" onClick={onClearHistory}>
-                Xóa lịch sử xem
+                {t(locale, "stream.clearHistory")}
               </button>
             )}
           </div>

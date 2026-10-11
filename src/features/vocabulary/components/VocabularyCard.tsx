@@ -27,6 +27,9 @@ import { SPRING, getBeatSeconds } from "@/lib/motion";
 import { Bookmark, Heart } from "lucide-react";
 import { buildVocabularyCanvas, choosePresentation, fitVocabularyTextSize } from "../lib/presets";
 import { buildStages } from "../lib/stages";
+import { resolveClue } from "../lib/clues";
+import { useLocale } from "../lib/useLocale";
+import { t } from "../lib/ui-copy";
 import { getExportStageBox, type CardExportLayout } from "../lib/export-layout";
 import { hasReportedWord } from "../lib/reported-words";
 import { sceneSkipLimiter } from "../lib/skip-limiter";
@@ -170,7 +173,11 @@ export function VocabularyCard({
   revealButtonLabel?: string;
 }) {
   const { theme, style } = choosePresentation(entry.occurrenceId, presentation, entry.position);
-  const stages = useMemo(() => buildStages(entry.word, style.id), [entry.word, style.id]);
+  const locale = useLocale();
+  const stages = useMemo(
+    () => buildStages(entry.word, style.id, locale),
+    [entry.word, style.id, locale],
+  );
   const canvas = useMemo(() => buildVocabularyCanvas(theme, style), [theme, style]);
   // The spelling coda is one extra page appended after the reveal stage, so the
   // playback timer — not the animation component — decides when the card ends.
@@ -183,6 +190,7 @@ export function VocabularyCard({
     [entry.word.word, spellingVariant, reducedMotion],
   );
   const revealPage = stages.length - 1;
+  const defText = resolveClue(entry.word, "def", locale);
   const pageCount = stages.length + 1;
   /** Progress-bar keys: one per clue stage plus the trailing spelling coda. */
   const pageKeys = useMemo(() => [...stages.map((item) => item.id), "spelling"], [stages]);
@@ -204,14 +212,14 @@ export function VocabularyCard({
     () => [
       ...stages.map((stage) =>
         getPageDuration(
-          [stage.text, stage.reveal ? entry.word.defVi : ""].filter(Boolean).join(" "),
+          [stage.text, stage.reveal ? defText : ""].filter(Boolean).join(" "),
           style.tempo,
           style.rhythm,
         ),
       ),
       spellingDuration,
     ],
-    [stages, entry.word.defVi, style.tempo, style.rhythm, spellingDuration],
+    [stages, defText, style.tempo, style.rhythm, spellingDuration],
   );
   // While the report panel is open the card holds still: the reader is describing
   // THIS page, and the stream must not move on underneath them.
@@ -840,7 +848,7 @@ export function VocabularyCard({
                         onClick={playback.reveal}
                         aria-label="Reveal word"
                       >
-                        {revealButtonLabel || "Ê, từ này biết nè"}
+                        {revealButtonLabel || t(locale, "card.reveal")}
                       </button>
                     </motion.span>
                   )}

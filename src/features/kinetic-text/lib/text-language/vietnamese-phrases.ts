@@ -261,16 +261,19 @@ export function normalizeVietnameseToken(token: string): string {
 }
 
 /**
- * Heuristic: Vietnamese diacritics or known bound phrases.
+ * Heuristic: Vietnamese diacritics, known bound phrases, or another dense script
+ * (Thai) that needs the same multi-line, scale-guarded wrapping layout.
  * Lives here so the compound-repair guard below can gate on it without a
  * circular import back into the text-language barrel.
  * @param text - text argument
- * @returns true when text looks Vietnamese
+ * @returns true when text looks like a dense script that should wrap (Vietnamese, Thai)
  */
 export function isLikelyVietnameseText(text: string): boolean {
   if (
     /[ăâđêôơưĂÂĐÊÔƠƯ]/.test(text) ||
-    /[\u0300\u0301\u0303\u0309\u0323]/.test(text.normalize("NFD"))
+    /[\u0300\u0301\u0303\u0309\u0323]/.test(text.normalize("NFD")) ||
+    // Thai block (U+0E00-U+0E7F): space-separated words that wrap the same way.
+    /[\u0E00-\u0E7F]/.test(text)
   ) {
     return true;
   }

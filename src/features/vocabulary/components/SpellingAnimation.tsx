@@ -18,6 +18,8 @@ import {
   getSpellingFitFontSize,
   type SpellingVariant,
 } from "../lib/spelling";
+import { useLocale } from "../lib/useLocale";
+import { t } from "../lib/ui-copy";
 
 /** Per-variant letter motion. Scatter needs the index for its radial offset. */
 function variantMotion(
@@ -100,6 +102,7 @@ export function SpellingAnimation({
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
   const [fontSize, setFontSize] = useState(SPELLING_NOMINAL_FONT_SIZE);
 
   // Array.from keeps surrogate pairs and combining marks together, so an
@@ -150,7 +153,7 @@ export function SpellingAnimation({
 
   return (
     <div className="vocab-spelling" ref={hostRef} aria-hidden="true">
-      <p className="vocab-spelling-label">Spell it once more</p>
+      <p className="vocab-spelling-label">{t(locale, "spelling.label")}</p>
       <p className="sr-only" lang="en">
         {word}
       </p>

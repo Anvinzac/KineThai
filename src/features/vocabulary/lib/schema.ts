@@ -4,6 +4,15 @@ import { z } from "zod";
 export const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 export const STYLE_IDS = ["detective", "speed", "confession", "minimal"] as const;
 const optionalText = (max: number) => z.string().trim().max(max).optional().default("");
+/** The localized leading phrases for one locale (lead / meaning / guess). */
+const localizedWord = z.object({
+  lead: z.string().trim().max(400).optional(),
+  def: z.string().trim().min(2).max(400),
+  guess: z.string().trim().max(400).optional(),
+});
+/** A map of locale code → trimmed localized string (used for usage glosses). */
+const localizedText = () =>
+  z.record(z.enum(["vi", "th", "zh", "ko", "ja", "fil"]), z.string().trim().max(400)).optional();
 /** A grouping-axis value: lowercase slug, no spaces, so it is safe in a URL filter. */
 const taxonomySlug = (max: number) =>
   z
@@ -41,6 +50,10 @@ const wordSchema = z.object({
   defVi: z.string().trim().min(2).max(400),
   leadVi: optionalText(240),
   anticipateVi: optionalText(180),
+  /** Per-locale overlays for the leading phrases. `vi` is the base (the `*Vi` fields
+   * above); any other locale here is preferred over the base when selected. Adding a
+   * language is data-only — populate this and a label set in i18n.ts. */
+  localized: z.record(z.enum(["vi", "th", "zh", "ko", "ja", "fil"]), localizedWord).optional(),
   emphasis: z.array(emphasisPhrase).max(6).optional(),
   pos: optionalText(40),
   ipa: optionalText(120),
@@ -62,7 +75,15 @@ const wordSchema = z.object({
   chars: z.number().int().nonnegative().optional(),
   initial: z.string().max(4).optional(),
   usage: z
-    .array(z.object({ en: z.string().trim().min(1).max(400), vi: optionalText(400) }))
+    .array(
+      z.object({
+        en: z.string().trim().min(1).max(400),
+        vi: optionalText(400),
+        /** Per-locale contextual gloss of the example (the "hint" phrase). `vi` is the
+         * base `vi` field; other locales overlay it when selected. */
+        glosses: localizedText(),
+      }),
+    )
     .max(5)
     .optional()
     .default([]),
@@ -132,6 +153,21 @@ export function normalizeDeck(input: unknown): Omit<Catalog, "revision"> {
     if (targets.has(word)) errors.push(`words.${index}.word: Duplicate word ${word}`);
     if (answerPattern(word).test(entry.anticipateVi)) {
       errors.push(`words.${index}.anticipateVi: Contains the English answer`);
+    }
+    // The same leak rule applies to every localized overlay of the guess phrase, so a
+    // non-Vietnamese locale can never hand the answer away.
+    for (const [locale, overlay] of Object.entries(entry.localized ?? {})) {
+      const guess = overlay?.guess;
+      if (guess && answerPattern(word).test(guess)) {
+        errors.push(`words.${index}.localized.${locale}.guess: Contains the English answer`);
+      }
+    }
+    for (const usage of entry.usage ?? []) {
+      for (const [locale, gloss] of Object.entries(usage.glosses ?? {})) {
+        if (gloss && answerPattern(word).test(gloss)) {
+          errors.push(`words.${index}.usage.glosses.${locale}: Contains the English answer`);
+        }
+      }
     }
     ids.add(id);
     targets.add(word);

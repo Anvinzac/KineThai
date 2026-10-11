@@ -26,7 +26,10 @@ import {
 } from "../lib/difficulty";
 import type { NarrativeStyle } from "../lib/schema";
 import type { HistoryStats } from "../lib/history";
-import { styleLabelVi, themeLabelVi, topicLabelVi } from "../lib/i18n";
+import { styleLabel, themeLabel, topicLabel } from "../lib/i18n";
+import { SUPPORTED_LOCALES, localeLabel, type Locale } from "../lib/locale";
+import { useLocale, setLocale } from "../lib/useLocale";
+import { t, difficultyCopy } from "../lib/ui-copy";
 import { useAmbientSound } from "../hooks/useAmbientSound";
 import type { FeedPage, Presentation, VocabularyFilters } from "../types";
 import { usePresence } from "@/hooks/use-presence";
@@ -57,6 +60,7 @@ function PopupScrim({ closing, onDismiss }: { closing: boolean; onDismiss: () =>
  * Stored as "mix" while everything is picked, else a comma-joined id list.
  */
 function ThemePicker({ value, onChange }: { value: string; onChange: (theme: string) => void }) {
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const labelId = useId();
@@ -94,9 +98,9 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
   }
 
   const summary = isAll
-    ? "Trộn giao diện"
+    ? t(locale, "theme.mix")
     : pickedThemes.length === 1
-      ? themeLabelVi(pickedThemes[0].id, pickedThemes[0].label)
+      ? themeLabel(pickedThemes[0].id, pickedThemes[0].label, locale)
       : `${pickedThemes.length}/${allIds.length}`;
 
   return (
@@ -108,7 +112,7 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
       }}
     >
       <span className="vocab-theme-label" id={labelId}>
-        Giao diện
+        {t(locale, "theme.label")}
       </span>
       <button
         type="button"
@@ -145,14 +149,14 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
               >
                 <span className="vocab-theme-swatch" style={{ background: theme.paint }} />
                 <span className="vocab-theme-option-label">
-                  {themeLabelVi(theme.id, theme.label)}
+                  {themeLabel(theme.id, theme.label, locale)}
                 </span>
               </button>
             );
           })}
           {!isAll && (
             <button type="button" className="vocab-theme-reset" onClick={() => onChange("mix")}>
-              Chọn lại tất cả
+              {t(locale, "theme.reset")}
             </button>
           )}
         </div>
@@ -163,8 +167,6 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
 
 type DifficultyOption = {
   id: string;
-  label: string;
-  hint: string;
   band: string;
   /** Illustrative word count for this track's band (mock, shown at the row's right). */
   words: number;
@@ -175,14 +177,14 @@ type DifficultyOption = {
  * multi-select the "all" row means an EMPTY selection (no restriction), so clearing
  * every track returns to it. Each row shows its CEFR band as a chip ahead of the name
  * and a mock total word count at the trailing edge. The list is static, so it renders
- * before the first feed page resolves.
+ * before the first feed page resolves. Row names and hints are localized at render time
+ * via `difficultyCopy(locale, …)` / `t(locale, "difficulty.*")`, so this table carries no
+ * copy of its own.
  */
 const DIFFICULTY_OPTIONS: DifficultyOption[] = [
-  { id: DIFFICULTY_ALL, label: "tất cả", hint: "Mọi trình độ", band: "", words: MOCK_TOTAL_WORDS },
+  { id: DIFFICULTY_ALL, band: "", words: MOCK_TOTAL_WORDS },
   ...DIFFICULTY_TRACKS.map((track) => ({
     id: track.id,
-    label: track.label,
-    hint: track.hint,
     band: formatLevelBand(track.levels),
     words: mockTrackWordCount(track.id),
   })),
@@ -203,15 +205,22 @@ function parseDifficulty(value: string): string[] {
  * Summarise a selection for the trigger line: none → 🤯 "tất cả", one → that track's
  * emoji and label, several → 🧩 "tổng hợp" over the union band.
  */
-function describeSelection(ids: string[]): { emoji: string; label: string; band: string } {
-  if (!ids.length) return { emoji: "🤯", label: "tất cả", band: "" };
+function describeSelection(
+  ids: string[],
+  locale: Locale,
+): { emoji: string; label: string; band: string } {
+  if (!ids.length) return { emoji: "🤯", label: t(locale, "difficulty.all"), band: "" };
   const tracks = DIFFICULTY_TRACKS.filter((track) => ids.includes(track.id));
   if (tracks.length === 1) {
     const track = tracks[0]!;
-    return { emoji: track.emoji, label: track.label, band: formatLevelBand(track.levels) };
+    return {
+      emoji: track.emoji,
+      label: difficultyCopy(locale, track.id).label,
+      band: formatLevelBand(track.levels),
+    };
   }
   const levels = [...new Set(tracks.flatMap((track) => track.levels))];
-  return { emoji: "🧩", label: "tổng hợp", band: formatLevelBand(levels) };
+  return { emoji: "🧩", label: t(locale, "difficulty.mixed"), band: formatLevelBand(levels) };
 }
 
 /**
@@ -237,9 +246,10 @@ function DifficultyDropdown({
   open: boolean;
   onOpenChange: (next: boolean) => void;
 }) {
+  const locale = useLocale();
   const listId = useId();
   const committed = useMemo(() => parseDifficulty(value), [value]);
-  const summary = describeSelection(committed);
+  const summary = describeSelection(committed, locale);
   const [draft, setDraft] = useState<Set<string>>(() => new Set(committed));
   const [cursor, setCursor] = useState(0);
   // "Done" stays hidden until the reader picks a row this session, then fades in.
@@ -305,7 +315,7 @@ function DifficultyDropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
-        aria-label={`anh.chayLá — difficulty: ${summary.label}. Change difficulty`}
+        aria-label={t(locale, "difficulty.aria", { label: summary.label })}
         onClick={() => (open ? close(true) : openAt())}
       >
         {/* The title needs its own wrapper: .vocab-brand is a column flex, so a bare
@@ -341,7 +351,7 @@ function DifficultyDropdown({
             aria-multiselectable
             tabIndex={-1}
             className="vocab-difficulty-options"
-            aria-label="Difficulty"
+            aria-label={t(locale, "difficulty.label")}
             aria-activedescendant={`${listId}-opt-${cursor}`}
             onKeyDown={(event) => {
               switch (event.key) {
@@ -413,7 +423,9 @@ function DifficultyDropdown({
                     >
                       {option.band}
                     </span>
-                    {option.label}
+                    {option.id === DIFFICULTY_ALL
+                      ? t(locale, "difficulty.all")
+                      : difficultyCopy(locale, option.id).label}
                   </span>
                   {/* key=count re-mounts the figure whenever the sum moves, which is what
                       (re)triggers the spring-and-flash CSS entrance on it. */}
@@ -433,11 +445,11 @@ function DifficultyDropdown({
               onClick={() => close(false)}
             >
               <Library size={16} aria-hidden="true" />
-              Thêm từ mới
+              {t(locale, "addWord")}
             </Link>
             {touched && (
               <button type="button" className="vocab-difficulty-done" onClick={commit}>
-                Xong
+                {t(locale, "difficulty.done")}
               </button>
             )}
           </div>
@@ -476,6 +488,7 @@ export function FeedControls({
   /** Open the video-export studio. Passed only for admins; absent, the control is not rendered. */
   onExport?: () => void;
 }) {
+  const locale = useLocale();
   const panelId = useId();
   const toggleButton = useRef<HTMLButtonElement>(null);
   const toolbar = useRef<HTMLElement>(null);
@@ -655,7 +668,7 @@ export function FeedControls({
             onClick={() => (open ? close() : onOpen(true))}
             aria-expanded={open}
             aria-controls={panelId}
-            aria-label={open ? "Đóng tùy chọn" : "Mở tùy chọn luồng từ vựng"}
+            aria-label={open ? t(locale, "options.close") : t(locale, "options.open")}
             data-active={open || undefined}
           >
             {open ? <X size={19} /> : <Settings size={19} />}
@@ -669,30 +682,30 @@ export function FeedControls({
           className="vocab-options"
           data-closing={options.closing || undefined}
           inert={options.closing || undefined}
-          aria-label="Tùy chọn luồng từ vựng"
+          aria-label={t(locale, "options.title")}
           onKeyDown={(event) => {
             if (event.key === "Escape") close();
           }}
         >
           <p className="vocab-options-summary">
             {metadata
-              ? `Danh mục này có ${metadata.total.toLocaleString("vi-VN")} từ khác nhau.`
-              : "Luồng từ vựng của bạn đang tải."}{" "}
-            Hết một vòng là xáo trộn lại từ đầu.
+              ? t(locale, "catalog.summary", { count: metadata.total.toLocaleString() })
+              : t(locale, "catalog.loading")}{" "}
+            {t(locale, "catalog.cycle")}
           </p>
           <div className="vocab-options-secondary">
-            <span className="vocab-group-label">Chủ đề, giao diện và cách hiện đáp án</span>
+            <span className="vocab-group-label">{t(locale, "options.secondary")}</span>
             <div className="vocab-select-grid">
               <label>
-                Chủ đề
+                {t(locale, "topic.label")}
                 <select
                   value={filters.topic}
                   onChange={(event) => onFilters({ ...filters, topic: event.target.value })}
                 >
-                  <option value="">Mọi chủ đề</option>
+                  <option value="">{t(locale, "topic.all")}</option>
                   {metadata?.topics.map((topic) => (
                     <option key={topic} value={topic}>
-                      {topicLabelVi(topic)}
+                      {topicLabel(topic, locale)}
                     </option>
                   ))}
                 </select>
@@ -702,7 +715,7 @@ export function FeedControls({
                 onChange={(theme) => onPresentation({ ...presentation, theme })}
               />
               <label>
-                Cách hiện
+                {t(locale, "style.label")}
                 <select
                   value={presentation.style}
                   onChange={(event) =>
@@ -712,10 +725,23 @@ export function FeedControls({
                     })
                   }
                 >
-                  <option value="mix">Trộn cách hiện</option>
+                  <option value="mix">{t(locale, "style.mix")}</option>
                   {STYLES.map((style) => (
                     <option key={style.id} value={style.id}>
-                      {styleLabelVi(style.id, style.label)}
+                      {styleLabel(style.id, style.label, locale)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                {t(locale, "language.label")}
+                <select
+                  value={locale}
+                  onChange={(event) => setLocale(event.target.value as Locale)}
+                >
+                  {SUPPORTED_LOCALES.map((code) => (
+                    <option key={code} value={code}>
+                      {localeLabel(code)}
                     </option>
                   ))}
                 </select>
@@ -731,34 +757,34 @@ export function FeedControls({
                 onPresentation({ ...presentation, autoplay: event.target.checked })
               }
             />{" "}
-            Tự động phát luồng
+            {t(locale, "autoplay.label")}
           </label>
           <p className="vocab-options-summary">
-            {reducedMotion
-              ? "Bạn đang bật chế độ giảm chuyển động, nên gợi ý lật thủ công."
-              : "Gợi ý và từ ngữ tự động chạy hết màn hình. Tắt đi để tạm dừng."}
+            {reducedMotion ? t(locale, "autoplay.reduced") : t(locale, "autoplay.hint")}
           </p>
-          <div className="vocab-memory" aria-label="Bộ nhớ lượt xem trên thiết bị">
-            <span className="vocab-group-label">Bộ nhớ trên thiết bị</span>
+          <div className="vocab-memory" aria-label={t(locale, "memory.aria")}>
+            <span className="vocab-group-label">{t(locale, "memory.label")}</span>
             <p className="vocab-options-summary">
-              Hôm nay đã xem {historyStats.distinctToday} từ · 3 ngày qua {historyStats.distinct3d}{" "}
-              · tuần này {historyStats.distinct7d}. Mỗi từ chỉ quay lại tối đa một lần mỗi ngày, hai
-              lần trong ba ngày và ba lần mỗi tuần. Tất cả chỉ lưu trong trình duyệt này.
+              {t(locale, "memory.stats", {
+                today: historyStats.distinctToday,
+                three: historyStats.distinct3d,
+                week: historyStats.distinct7d,
+              })}
             </p>
             <button type="button" className="vocab-memory-clear" onClick={onClearHistory}>
-              Quên lịch sử đã xem
+              {t(locale, "memory.forget")}
             </button>
           </div>
-          <nav aria-label="Điều hướng trang" className="vocab-site-links">
+          <nav aria-label={t(locale, "nav.aria")} className="vocab-site-links">
             {/* Community is not open to readers yet; only the button is hidden, the
                 /community route still resolves. Flip COMMUNITY_AVAILABLE to bring it back. */}
-            {COMMUNITY_AVAILABLE && <Link to="/community">Cộng đồng</Link>}
+            {COMMUNITY_AVAILABLE && <Link to="/community">{t(locale, "nav.community")}</Link>}
             {/* Temporarily hidden at request: "Đăng nhập" and "Về với từ vựng" leave the
                 sheet for now — uncomment (both live together) to bring them back. The
                 /auth route and the close behaviour are untouched.
-            <Link to="/auth">Đăng nhập</Link>
+            <Link to="/auth">{t(locale, "nav.login")}</Link>
             <button type="button" onClick={close}>
-              Về với từ vựng
+              {t(locale, "nav.back")}
             </button>
             */}
           </nav>

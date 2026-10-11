@@ -6,6 +6,8 @@ import { WordSequenceText } from "@/features/post-player";
 import { EASE, SPRING } from "@/lib/motion";
 import type { VocabularyWord } from "../lib/schema";
 import type { LearningStage } from "../lib/stages";
+import { resolveClue } from "../lib/clues";
+import { useLocale } from "../lib/useLocale";
 import { VOCAB_LINE_SPACING_SCALE } from "../lib/presets";
 import { FilledUsage, MarkedText } from "./MarkedText";
 import { RevealBurst } from "./RevealBurst";
@@ -97,6 +99,7 @@ export function VocabularyStage({
    */
   revealY: number;
 }) {
+  const locale = useLocale();
   const details = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (details.current) details.current.scrollTop = 0;
@@ -180,8 +183,8 @@ export function VocabularyStage({
               {word.ipa} {word.pos && <span>· {word.pos}</span>}
             </p>
           )}
-          <p lang="vi">
-            <MarkedText text={word.defVi} />
+          <p lang={locale}>
+            <MarkedText text={resolveClue(word, "def", locale)} />
           </p>
           {word.usage.map((example, index) => (
             <div className="vocab-example" key={index}>

@@ -42,3 +42,8 @@ src/features/admin/data/llm-config.json
 
 # word-crawler is an independent experimental repo (../word-crawler), not part of the feed.
 /word-crawler/
+
+# Local secrets — never commit (keep the example)
+.env
+.env.*
+!.env.example

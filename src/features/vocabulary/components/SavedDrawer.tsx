@@ -28,6 +28,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Bookmark, Heart } from "lucide-react";
 import { usePresence } from "@/hooks/use-presence";
 import { useSavedCount } from "../hooks/useSavedCount";
+import { useLocale } from "../lib/useLocale";
+import { t } from "../lib/ui-copy";
 import { BookmarksPage } from "./BookmarksPage";
 
 /** Matches the panel's exit duration in vocabulary.css and this module's retract timer. */
@@ -183,7 +185,10 @@ export function SavedDrawer({ open, onOpenChange }: SavedDrawerProps): React.Rea
     window.addEventListener("pointercancel", onUp);
   };
 
-  const label = savedCount ? `Xem ${savedCount} từ đã lưu` : "Xem từ vựng đã lưu";
+  const locale = useLocale();
+  const label = savedCount
+    ? t(locale, "drawer.viewCount", { count: savedCount })
+    : t(locale, "drawer.view");
 
   // The handle is a tab welded to the panel's leading edge: it travels the SAME distance the
   // edge sweeps in (a fraction of the panel's width), so during a pull the two move as one.
@@ -210,7 +215,7 @@ export function SavedDrawer({ open, onOpenChange }: SavedDrawerProps): React.Rea
         }}
       >
         <span className="vocab-saved-hint" aria-hidden="true">
-          Đã lưu
+          {t(locale, "drawer.label")}
         </span>
         <button
           ref={handle}
@@ -256,7 +261,7 @@ export function SavedDrawer({ open, onOpenChange }: SavedDrawerProps): React.Rea
             inert={presence.closing || draggingPanel || undefined}
             role="dialog"
             aria-modal="true"
-            aria-label="Từ vựng đã lưu"
+            aria-label={t(locale, "drawer.aria")}
           >
             <BookmarksPage onClose={() => onOpenChange(false)} />
           </motion.aside>

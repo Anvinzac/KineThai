@@ -34,11 +34,27 @@
       "usage": [
         {
           "en": "She proved more _____ than anyone expected.",
-          "vi": "Cô ấy chứng tỏ mình mạnh mẽ hơn người ta tưởng."
+          "vi": "Cô ấy chứng tỏ mình mạnh mẽ hơn người ta tưởng.",
+          "glosses": {
+            "th": "เธอ แข็งแกร่ง กว่า ที่ ใคร คาดไว้",
+            "ja": "彼女は 誰の 想像より 強かった"
+          }
         }
       ],
       "chars": 9,
-      "initial": "R"
+      "initial": "R",
+      "localized": {
+        "th": {
+          "lead": "ล้มแล้ว ลุกเองได้ โดยไม่ต้อง พึ่งใคร",
+          "def": "ความสามารถ ในการ ฟื้นตัว ได้เร็ว หลัง มรสุม ชีวิต",
+          "guess": "ลองเดา ตามา สิ"
+        },
+        "ja": {
+          "lead": "転んでも 自分で また 立ち上がる",
+          "def": "/逆境/のあと すぐ 回復する 強さ",
+          "guess": "目を閉じて 猜ってみて"
+        }
+      }
     },
     {
       "id": "vague",
@@ -56,11 +72,27 @@
       "usage": [
         {
           "en": "His plan was too _____ to follow.",
-          "vi": "Kế hoạch của anh ấy quá mơ hồ để thực hiện."
+          "vi": "Kế hoạch của anh ấy quá mơ hồ để thực hiện.",
+          "glosses": {
+            "th": "แผน ของ เขา คลุมเครือ เกินไป จน ทำตาม ไม่ได้",
+            "ja": "彼の 計画は あまりに 曖昧で 従えなかった"
+          }
         }
       ],
       "chars": 5,
-      "initial": "V"
+      "initial": "V",
+      "localized": {
+        "th": {
+          "lead": "คลุมเครือ เหมือน หมอก ยามเช้า",
+          "def": "ไม่ ชัดเจน พยากรณ์ หรือ เข้าใจ ยาก",
+          "guess": "ลอง คิด ดู สิ"
+        },
+        "ja": {
+          "lead": "/曖昧/な 霧の 朝みたいに 把捉できない",
+          "def": "はっきりせず 把捉も 理解もしにくい",
+          "guess": "考えてみて"
+        }
+      }
     },
     {
       "id": "negotiate",
@@ -78,11 +110,27 @@
       "usage": [
         {
           "en": "They refused to _____ with the rebels.",
-          "vi": "Họ từ chối thảo luận với phe nổi loạn."
+          "vi": "Họ từ chối thảo luận với phe nổi loạn.",
+          "glosses": {
+            "th": "พวกเขา ปฏิเสธ ที่จะ เจรจา กับ ผู้ก่อการ กบฏ",
+            "ja": "彼らは 反乱軍と 交渉する のを 拒否した"
+          }
         }
       ],
       "chars": 9,
-      "initial": "N"
+      "initial": "N",
+      "localized": {
+        "th": {
+          "lead": "การ พูดคุย ของ สองฝ่าย เพื่อ หา ทางออก",
+          "def": "การ เจรจา ตกลง กับ ผู้อื่น",
+          "guess": "ลอง เดา ดู สิ"
+        },
+        "ja": {
+          "lead": "両者の 対話で /出口/を探す",
+          "def": "他者と 調整し 合意に 至る こと",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "deadline",
@@ -100,11 +148,27 @@
       "usage": [
         {
           "en": "I missed the _____ by two hours.",
-          "vi": "Tôi đã trễ thời hạn hai tiếng."
+          "vi": "Tôi đã trễ thời hạn hai tiếng.",
+          "glosses": {
+            "th": "ฉัน มา สาย ไป สอง ชั่วโมง",
+            "ja": "彼は 二時間 締め切りに 遅れた"
+          }
         }
       ],
       "chars": 8,
-      "initial": "D"
+      "initial": "D",
+      "localized": {
+        "th": {
+          "lead": "เส้นตาย ใกล้ เข้ามาแล้ว พร้อม หรือ ยัง",
+          "def": "เวลา สิ้นสุด สำหรับ การ ทำงาน ให้ เสร็จ",
+          "guess": "ดู คุ้น ไหม"
+        },
+        "ja": {
+          "lead": "/締め切り/が 迫る 準備は できた",
+          "def": "仕事を 終えるための 最終 時間",
+          "guess": "見覚え ある かな"
+        }
+      }
     },
     {
       "id": "overlook",
@@ -122,11 +186,27 @@
       "usage": [
         {
           "en": "It's easy to _____ small errors early on.",
-          "vi": "Dễ dàng bỏ qua những lỗi nhỏ từ đầu."
+          "vi": "Dễ dàng bỏ qua những lỗi nhỏ từ đầu.",
+          "glosses": {
+            "th": "ง่าย ที่จะ มองข้าม ข้อผิดพลาด เล็กๆ ตั้งแต่ ต้น",
+            "ja": "初めは 小さな 誤りを 見落としやすい"
+          }
         }
       ],
       "chars": 8,
-      "initial": "O"
+      "initial": "O",
+      "localized": {
+        "th": {
+          "lead": "บางครั้ง เรา ก็ พลาด เรื่อง เล็กๆ",
+          "def": "มองข้าม รายละเอียด เล็กๆ โดย ไม่ สังเกต",
+          "guess": "เห็น อะไร ไหม"
+        },
+        "ja": {
+          "lead": "ときどき 小さな ことが /見落と/される",
+          "def": "気づかず 些細な 細部を 見落とす",
+          "guess": "何か 見えた かな"
+        }
+      }
     },
     {
       "id": "reluctant",
@@ -144,11 +224,27 @@
       "usage": [
         {
           "en": "He was _____ to admit his mistake.",
-          "vi": "Anh ấy không muốn thừa nhận sai lầm của mình."
+          "vi": "Anh ấy không muốn thừa nhận sai lầm của mình.",
+          "glosses": {
+            "th": "เขา ไม่ เต็มใจ ที่จะ ยอมรับ ความผิดพลาด",
+            "ja": "彼は 自分の 謝罪を 認める のが 気が進まなかった"
+          }
         }
       ],
       "chars": 9,
-      "initial": "R"
+      "initial": "R",
+      "localized": {
+        "th": {
+          "lead": "มี บางอย่าง ที่ เขา กระด้าง ที่จะ ยอมรับ",
+          "def": "ไม่ เต็มใจ ทำ บางสิ่ง อย่าง ขัดเขิน",
+          "guess": "ลอง เดา ดู สิ"
+        },
+        "ja": {
+          "lead": "認める のを どこか 気まずく 思う",
+          "def": "する のを /気まずく/ 思い 気が進まない",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "genuine",
@@ -166,11 +262,27 @@
       "usage": [
         {
           "en": "Her smile looked completely _____.",
-          "vi": "Nụ cười của cô ấy trông rất chân thành."
+          "vi": "Nụ cười của cô ấy trông rất chân thành.",
+          "glosses": {
+            "th": "รอยยิ้ม ของ เธอ ดู จริงใจ สนิท",
+            "ja": "彼女の 笑顔は まるで 本物だった"
+          }
         }
       ],
       "chars": 7,
-      "initial": "G"
+      "initial": "G",
+      "localized": {
+        "th": {
+          "lead": "รอยยิ้ม ที่ ส่องสว่าง จาก ใจจริง",
+          "def": "แท้จริง ไม่ เสแสร้ง หรือ ปิดบัง",
+          "guess": "หลับตา เดา ลอง สิ"
+        },
+        "ja": {
+          "lead": "心の 底から /輝く/ 笑顔",
+          "def": "本当 で 飾らない 偽りの ない",
+          "guess": "目を閉じて 猜ってみて"
+        }
+      }
     },
     {
       "id": "compromise",
@@ -188,11 +300,27 @@
       "usage": [
         {
           "en": "Marriage requires a lot of _____.",
-          "vi": "Hôn nhân cần rất nhiều sự thỏa hiệp giữa hai người."
+          "vi": "Hôn nhân cần rất nhiều sự thỏa hiệp giữa hai người.",
+          "glosses": {
+            "th": "การ แต่งงาน ต้องการ การ ประนีประนอม มากมาย",
+            "ja": "結婚は 大きな 折り合いが 必要"
+          }
         }
       ],
       "chars": 10,
-      "initial": "C"
+      "initial": "C",
+      "localized": {
+        "th": {
+          "lead": "บางครั้ง ต้อง ยอม กัน เพื่อ ไปต่อ",
+          "def": "การ ประนีประนอม ระหว่าง สองฝ่าย เพื่อ ลงตัว",
+          "guess": "ลอง เดา ดู สิ"
+        },
+        "ja": {
+          "lead": "ときに /譲る こと/で より 遠くへ",
+          "def": "両者が 折り合いを つけ 同意する こと",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "subtle",
@@ -210,11 +338,27 @@
       "usage": [
         {
           "en": "There's a _____ change in her tone.",
-          "vi": "Giọng cô ấy có chút thay đổi nhỏ mà sâu sắc."
+          "vi": "Giọng cô ấy có chút thay đổi nhỏ mà sâu sắc.",
+          "glosses": {
+            "th": "น้ำเสียง ของ เธอ เปลี่ยนไป อย่าง ละเอียดอ่อน",
+            "ja": "彼女の 声色に 微妙な 変化が あった"
+          }
         }
       ],
       "chars": 6,
-      "initial": "S"
+      "initial": "S",
+      "localized": {
+        "th": {
+          "lead": "การ เปลี่ยน เล็กๆ แต่ ส่งผล มาก",
+          "def": "ละเอียดอ่อน และ สังเกต ไม่ได้ ทันที",
+          "guess": "ลอง คิด ดู สิ"
+        },
+        "ja": {
+          "lead": "小さな 変化 なのに 影響は 大きい",
+          "def": "/繊細/で すぐ 気づかない",
+          "guess": "考えてみて"
+        }
+      }
     },
     {
       "id": "postpone",
@@ -232,11 +376,27 @@
       "usage": [
         {
           "en": "Rain forced us to _____ the picnic.",
-          "vi": "Mưa làm tụi mình phải dời buổi picnic."
+          "vi": "Mưa làm tụi mình phải dời buổi picnic.",
+          "glosses": {
+            "th": "ฝน ทำให้ เรา ต้อง เลื่อน งาน ปิกนิก",
+            "ja": "雨で 私たちは ピクニックを 延ばした"
+          }
         }
       ],
       "chars": 8,
-      "initial": "P"
+      "initial": "P",
+      "localized": {
+        "th": {
+          "lead": "เมื่อ ฝน มา บางที ก็ ต้อง รอ",
+          "def": "เลื่อน แผน ไป อีก ช่วงเวลา หนึ่ง",
+          "guess": "รอ คอย สิ เดา ดู"
+        },
+        "ja": {
+          "lead": "雨が 来たら 少し 待つ しかない",
+          "def": "予定を 別の 時期に /延ばす/",
+          "guess": "少し 待って 猜ってみて"
+        }
+      }
     },
     {
       "id": "reliable",
@@ -254,11 +414,27 @@
       "usage": [
         {
           "en": "He's the most _____ person I know.",
-          "vi": "Anh ấy là người mà tôi tin tưởng nhất."
+          "vi": "Anh ấy là người mà tôi tin tưởng nhất.",
+          "glosses": {
+            "th": "เขา คือ คน ที่ ฉัน ไว้ใจ ที่สุด",
+            "ja": "彼は 私が 知る 最も 信頼できる 人"
+          }
         }
       ],
       "chars": 8,
-      "initial": "R"
+      "initial": "R",
+      "localized": {
+        "th": {
+          "lead": "คน ที่ ใครๆ ก็ พิงพา ได้",
+          "def": "ไว้ใจ ได้ และ รักษา คำพูด เสมอ",
+          "guess": "ลอง เดา ดู สิ"
+        },
+        "ja": {
+          "lead": "誰もが /預けられる 人",
+          "def": "信じられ いつも 約束を 守る",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "assume",
@@ -276,11 +452,27 @@
       "usage": [
         {
           "en": "I _____ you've read the brief.",
-          "vi": "Tôi cho rằng bạn đã đọc qua hồ sơ."
+          "vi": "Tôi cho rằng bạn đã đọc qua hồ sơ.",
+          "glosses": {
+            "th": "ผม คิดว่า คุณ อ่าน บทสรุป มาแล้ว",
+            "ja": "資料は 読んだと 思います"
+          }
         }
       ],
       "chars": 6,
-      "initial": "A"
+      "initial": "A",
+      "localized": {
+        "th": {
+          "lead": "เดา ไปเลย โดย ไม่ต้อง มี หลักฐาน",
+          "def": "เชื่อ ไว้ ก่อน โดย ไม่ต้อง พิสูจน์ ชัดเจน",
+          "guess": "คุณ เดียวยัง"
+        },
+        "ja": {
+          "lead": "/証拠/もなく さらりと 決めつける",
+          "def": "確かめず まず そうだと 信じる",
+          "guess": "猜った かな"
+        }
+      }
     },
     {
       "id": "feedback",
@@ -298,11 +490,27 @@
       "usage": [
         {
           "en": "Can I get your _____ on this draft?",
-          "vi": "Tôi cần phản hồi của bạn về bản nháp này."
+          "vi": "Tôi cần phản hồi của bạn về bản nháp này.",
+          "glosses": {
+            "th": "ขอ คำตอบรับ จาก คุณ เกี่ยวกับ ร่างนี้",
+            "ja": "この 下書きに 意見が ほしい"
+          }
         }
       ],
       "chars": 8,
-      "initial": "F"
+      "initial": "F",
+      "localized": {
+        "th": {
+          "lead": "คำตอบรับ ช่วย ยกระดับ งาน",
+          "def": "ข้อคิดเห็น หรือ การประเมิน เกี่ยวกับ งาน",
+          "guess": "ความเห็น ที่ ช่วย เติมเติม"
+        },
+        "ja": {
+          "lead": "/返信/が 仕事を 上げる",
+          "def": "仕事への 意見や 評価",
+          "guess": "助けに なる 意見"
+        }
+      }
     },
     {
       "id": "anxious",
@@ -320,11 +528,27 @@
       "usage": [
         {
           "en": "She felt _____ about the exam results.",
-          "vi": "Cô ấy cảm thấy lo lắng về kết quả kỳ thi."
+          "vi": "Cô ấy cảm thấy lo lắng về kết quả kỳ thi.",
+          "glosses": {
+            "th": "เธอ รู้สึก กังวล กับ ผลสอบ",
+            "ja": "彼女は 試験結果が 気に なっていた"
+          }
         }
       ],
       "chars": 7,
-      "initial": "A"
+      "initial": "A",
+      "localized": {
+        "th": {
+          "lead": "หัวใจ เต้นเร็ว เมื่อ รอ สิ่งที่ ยังไม่รู้",
+          "def": "รู้สึก กังวล และ กระสับกระส่าย เมื่อ รอคอย",
+          "guess": "ลอง เดา ทดลอง ดู"
+        },
+        "ja": {
+          "lead": "まだ 知れない ことを 待つと 心臓が 速く 打つ",
+          "def": "待つとき /不安/で そわそわ する",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "clarify",
@@ -342,11 +566,27 @@
       "usage": [
         {
           "en": "Could you _____ the last point?",
-          "vi": "Bạn có thể làm rõ ý cuối cùng được không?"
+          "vi": "Bạn có thể làm rõ ý cuối cùng được không?",
+          "glosses": {
+            "th": "คุณ ช่วย ทำให้ ประเด็น สุดท้าย ชัดเจน ได้ ไหม",
+            "ja": "最後の 論点を もう一度 わかりやすく"
+          }
         }
       ],
       "chars": 7,
-      "initial": "C"
+      "initial": "C",
+      "localized": {
+        "th": {
+          "lead": "เมื่อ ทุกอย่าง คลุมเครือ ต้อง มี แสงสว่าง",
+          "def": "ช่วย ทำให้ สิ่งใด ชัดเจนขึ้น เข้าใจง่าย",
+          "guess": "คุณ คิดออก หรือ ยัง"
+        },
+        "ja": {
+          "lead": "すべてが /曖昧/なら ひとつの 光",
+          "def": "わかりやすく はっきり させる",
+          "guess": "思いついた かな"
+        }
+      }
     },
     {
       "id": "priority",
@@ -364,11 +604,27 @@
       "usage": [
         {
           "en": "Health should be your top _____.",
-          "vi": "Sức khỏe nên là điều quan trọng nhất của bạn."
+          "vi": "Sức khỏe nên là điều quan trọng nhất của bạn.",
+          "glosses": {
+            "th": "สุขภาพ ควร เป็น สิ่งสำคัญ อันดับแรก ของ คุณ",
+            "ja": "健康が あなたの 第一 であるべき"
+          }
         }
       ],
       "chars": 8,
-      "initial": "P"
+      "initial": "P",
+      "localized": {
+        "th": {
+          "lead": "สิ่งใด ที่ ควร ทำ ก่อน ใน แผน",
+          "def": "สิ่งสำคัญ ที่ ต้อง ทำ ก่อน สิ่งอื่น",
+          "guess": "เดา ดู ว่า คือ อะไร"
+        },
+        "ja": {
+          "lead": "計画で まず 何を やるか",
+          "def": "/大事/な こと ほかより 先に やる",
+          "guess": "何と 猜う"
+        }
+      }
     },
     {
       "id": "hesitate",
@@ -386,11 +642,27 @@
       "usage": [
         {
           "en": "Don't _____ to call if you need help.",
-          "vi": "Đừng ngập ngừng gọi nếu bạn cần giúp đỡ."
+          "vi": "Đừng ngập ngừng gọi nếu bạn cần giúp đỡ.",
+          "glosses": {
+            "th": "อย่า ชะงัก ที่จะ โทรหา ถ้า คุณ ต้องการ ช่วยเหลือ",
+            "ja": "手伝いが あれば 遠慮なく 電話して"
+          }
         }
       ],
       "chars": 8,
-      "initial": "H"
+      "initial": "H",
+      "localized": {
+        "th": {
+          "lead": "ลังเล เมื่อ ยืนอยู่ หน้า ทางเลือก",
+          "def": "ชะงัก ไม่ ตัดสินใจ ทันที",
+          "guess": "เดา ออก แล้ว หรือ ยัง"
+        },
+        "ja": {
+          "lead": "選択の 前で 踏みとどまる",
+          "def": "すぐに 決めず /ためらう/",
+          "guess": "猜れた かな"
+        }
+      }
     },
     {
       "id": "accurate",
@@ -408,11 +680,27 @@
       "usage": [
         {
           "en": "Is this data _____ enough to publish?",
-          "vi": "Dữ liệu này có đủ chính xác để công bố không?"
+          "vi": "Dữ liệu này có đủ chính xác để công bố không?",
+          "glosses": {
+            "th": "ข้อมูล นี้ แม่นยำ พอ ที่จะ เผยแพร่ หรือ ยัง",
+            "ja": "この データは 発表に 足る だけ 正確"
+          }
         }
       ],
       "chars": 8,
-      "initial": "A"
+      "initial": "A",
+      "localized": {
+        "th": {
+          "lead": "ทำไม ถึง รู้ว่า สิ่งนี้ ไม่ เบี่ยงเบน",
+          "def": "ถูกต้อง แม่นยำ และ ไม่มี ความผิดพลาด",
+          "guess": "ลอง เดา ดู สิ"
+        },
+        "ja": {
+          "lead": "なぜ この ことが /外れ/ない と わかる",
+          "def": "正しく 誤差が ない",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "outcome",
@@ -430,11 +718,27 @@
       "usage": [
         {
           "en": "The _____ surprised everyone in the room.",
-          "vi": "Kết quả đã làm mọi người trong phòng ngạc nhiên."
+          "vi": "Kết quả đã làm mọi người trong phòng ngạc nhiên.",
+          "glosses": {
+            "th": "ผลลัพธ์ ทำให้ ทุกคน ใน ห้อง ประหลาดใจ",
+            "ja": "結果に 部屋の みんなが 驚いた"
+          }
         }
       ],
       "chars": 7,
-      "initial": "O"
+      "initial": "O",
+      "localized": {
+        "th": {
+          "lead": "สิ่งใด ที่ เกิดขึ้น ใน ที่สุด ของ เรื่อง",
+          "def": "ผลลัพธ์ ของ กระบวนการ หรือ เหตุการณ์",
+          "guess": "ลอง เดา ดู สิ"
+        },
+        "ja": {
+          "lead": "その 話の /最後/に 何が 起きるか",
+          "def": "過程や 出来事の 結果",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "persuade",
@@ -452,11 +756,27 @@
       "usage": [
         {
           "en": "I couldn't _____ her to change her mind.",
-          "vi": "Mình không thể nào thuyết phục cô ấy thay đổi ý kiến."
+          "vi": "Mình không thể nào thuyết phục cô ấy thay đổi ý kiến.",
+          "glosses": {
+            "th": "ฉัน ไม่สามารถ โน้มน้าว ให้ เธอ เปลี่ยนใจ ได้",
+            "ja": "彼女が 考えを 変えるのを 言いくるめられなかった"
+          }
         }
       ],
       "chars": 8,
-      "initial": "P"
+      "initial": "P",
+      "localized": {
+        "th": {
+          "lead": "ใช้ ถ้อยคำ หวาน เพื่อ ให้ ได้ ผล",
+          "def": "โน้มน้าว ให้ ผู้อื่น ทำตาม ที่ ตน ต้องการ",
+          "guess": "เดา ออก ไหม"
+        },
+        "ja": {
+          "lead": "甘い 言葉で 目的を 果たす",
+          "def": "他人を 納得して やらせよう とする",
+          "guess": "猜れた かな"
+        }
+      }
     },
     {
       "id": "routine",
@@ -474,11 +794,27 @@
       "usage": [
         {
           "en": "My morning _____ starts at six.",
-          "vi": "Thói quen buổi sáng của tôi bắt đầu lúc sáu giờ."
+          "vi": "Thói quen buổi sáng của tôi bắt đầu lúc sáu giờ.",
+          "glosses": {
+            "th": "กิจวัตร ยามเช้า ของ ฉัน เริ่มต้น หกโมง",
+            "ja": "私の 朝の 慣れの やり方は 六時に 始まる"
+          }
         }
       ],
       "chars": 7,
-      "initial": "R"
+      "initial": "R",
+      "localized": {
+        "th": {
+          "lead": "ทุกคน ควร มี กิจวัตร ประจำตัว",
+          "def": "กิจวัตร ประจำวัน ที่ ช่วย จัดระเบียบ เรา",
+          "guess": "กิจวัตร ประจำวัน"
+        },
+        "ja": {
+          "lead": "誰もが 自分の /慣れた やり方/ を 持つ",
+          "def": "毎日の 慣れた 手順",
+          "guess": "毎日の 習慣"
+        }
+      }
     },
     {
       "id": "awkward",
@@ -496,11 +832,27 @@
       "usage": [
         {
           "en": "The silence after his joke was _____.",
-          "vi": "Sự im lặng sau câu đùa của anh ấy thật kỳ quặc."
+          "vi": "Sự im lặng sau câu đùa của anh ấy thật kỳ quặc.",
+          "glosses": {
+            "th": "ความเงียบ หลังจาก เรื่องตลก ของ เขา ช่าง แปลกประหลาด",
+            "ja": "彼の 冗談の あとの 静寂は ぎこちなかった"
+          }
         }
       ],
       "chars": 7,
-      "initial": "A"
+      "initial": "A",
+      "localized": {
+        "th": {
+          "lead": "คุย แล้ว รู้สึก ไม่ เป็นธรรมชาติ",
+          "def": "รู้สึก ไม่ สบายใจ หรือ แปลกๆ หน่อย",
+          "guess": "ลอง เดา ดู สิ"
+        },
+        "ja": {
+          "lead": "話して いて なんとなく 自然で ない",
+          "def": "気持ちよく なく 少し 変な 感じ",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "benefit",
@@ -518,11 +870,27 @@
       "usage": [
         {
           "en": "One _____ of exercise is better sleep.",
-          "vi": "Một lợi ích của việc tập thể dục là ngủ ngon hơn."
+          "vi": "Một lợi ích của việc tập thể dục là ngủ ngon hơn.",
+          "glosses": {
+            "th": "ข้อดี อย่างหนึ่ง ของ การออกกำลังกาย คือ การ นอนหลับ ที่ ดีขึ้น",
+            "ja": "運動の 一つの 利点は 眠りが 深くなる こと"
+          }
         }
       ],
       "chars": 7,
-      "initial": "B"
+      "initial": "B",
+      "localized": {
+        "th": {
+          "lead": "ขยัน นิดเดียว ผลดี จะ มา",
+          "def": "สิ่งที่ เป็น ประโยชน์ หรือ นำมา ซึ่ง ผลดี",
+          "guess": "เดา ออก ไหม"
+        },
+        "ja": {
+          "lead": "少し 勤勉なら /利益/が くる",
+          "def": "有利な こと 良い 結果を 生む もの",
+          "guess": "猜れた かな"
+        }
+      }
     },
     {
       "id": "distract",
@@ -540,11 +908,27 @@
       "usage": [
         {
           "en": "Loud noises _____ me from reading.",
-          "vi": "Tiếng ồn lớn làm tôi mất tập trung khi đang đọc sách."
+          "vi": "Tiếng ồn lớn làm tôi mất tập trung khi đang đọc sách.",
+          "glosses": {
+            "th": "เสียงดัง ทำให้ ฉัน เสียสมาธิ ขณะ อ่าน หนังสือ",
+            "ja": "大きな 音で 読書の 注意が 散った"
+          }
         }
       ],
       "chars": 8,
-      "initial": "D"
+      "initial": "D",
+      "localized": {
+        "th": {
+          "lead": "เสียงดัง อาจ ทำให้ สมาธิร์ฟ",
+          "def": "ทำให้ สูญเสีย สมาธิ จาก สิ่งที่ ทำ หลัก",
+          "guess": "เดา คำนี้ สิ"
+        },
+        "ja": {
+          "lead": "音が /集中/を 薄らがせる",
+          "def": "本来の 仕事から 注意を 逸らす",
+          "guess": "この 言葉を 猜って"
+        }
+      }
     },
     {
       "id": "essential",
@@ -562,11 +946,27 @@
       "usage": [
         {
           "en": "Water is _____ for all living things.",
-          "vi": "Nước là thứ cần thiết cho mọi sinh vật sống."
+          "vi": "Nước là thứ cần thiết cho mọi sinh vật sống.",
+          "glosses": {
+            "th": "น้ำ เป็น สิ่งจำเป็น สำหรับ สิ่งมีชีวิต ทั้งปวง",
+            "ja": "水は すべての 生き物に 不可欠"
+          }
         }
       ],
       "chars": 9,
-      "initial": "E"
+      "initial": "E",
+      "localized": {
+        "th": {
+          "lead": "สิ่งที่ ขาดไม่ได้ ใน ชีวิต ประจำวัน",
+          "def": "สิ่งจำเป็น ที่ ต้องมี เพื่อ ดำรง ชีวิต",
+          "guess": "มา ด้วยกัน เดา ลอง สิ"
+        },
+        "ja": {
+          "lead": "暮らしから 取り除けない もの",
+          "def": "暮らしを /続ける/のに 不可欠な もの",
+          "guess": "一緒に 猜ってみて"
+        }
+      }
     }
   ]
 }

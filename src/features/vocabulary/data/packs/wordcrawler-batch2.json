@@ -34,11 +34,27 @@
       "usage": [
         {
           "en": "Kids are naturally _____ about the world around them.",
-          "vi": "Trẻ con vốn tò mò về thế giới xung quanh."
+          "vi": "Trẻ con vốn tò mò về thế giới xung quanh.",
+          "glosses": {
+            "th": "เด็กๆ โดย ธรรมชาติ สนใจ โลก ใบนี้",
+            "ja": "子供は 本能的に 周りの 世界に 関心が ある"
+          }
         }
       ],
       "chars": 7,
-      "initial": "C"
+      "initial": "C",
+      "localized": {
+        "th": {
+          "lead": "เห็น กล่องแปลก ก็ อดไม่ได้ ต้อง เปิด",
+          "def": "อยากรู้ อยากเห็น สิ่งที่ ตน ยังไม่รู้",
+          "guess": "อยากรู้ แล้ว หรือ ยัง"
+        },
+        "ja": {
+          "lead": "見たことの ない 箱は 開けず に いられない",
+          "def": "知らない ことを /知りたくなる/ 性質",
+          "guess": "気になる でしょう"
+        }
+      }
     },
     {
       "id": "patient",
@@ -56,11 +72,27 @@
       "usage": [
         {
           "en": "Be _____, good things take time.",
-          "vi": "Hãy kiên nhẫn, điều tốt đẹp cần thời gian."
+          "vi": "Hãy kiên nhẫn, điều tốt đẹp cần thời gian.",
+          "glosses": {
+            "th": "จง มี ความอดทน สิ่งดีงาม ต้อง ใช้เวลา",
+            "ja": "忍耐強く 良いものは 時間が かかる"
+          }
         }
       ],
       "chars": 7,
-      "initial": "P"
+      "initial": "P",
+      "localized": {
+        "th": {
+          "lead": "ต่อคิว เป็น ชั่วโมง แต่ ยัง ยิ้ม ได้",
+          "def": "สงบใจ รอคอย ไม่ รีบร้อน หรือ หงุดหงิด",
+          "guess": "ช้าๆ อย่า เพิ่ง เดา"
+        },
+        "ja": {
+          "lead": "一時間 並んでも まだ 笑える",
+          "def": "落ち着いて 待てる 急がず 怒らない",
+          "guess": "ゆっくり 猜る のを 待って"
+        }
+      }
     },
     {
       "id": "generous",
@@ -78,11 +110,27 @@
       "usage": [
         {
           "en": "It was very _____ of you to share your lunch.",
-          "vi": "Bạn thật hào phóng khi chia đồ ăn trưa cho mình."
+          "vi": "Bạn thật hào phóng khi chia đồ ăn trưa cho mình.",
+          "glosses": {
+            "th": "คุณ ใจกว้าง มาก ที่ แบ่ง อาหารกลางวัน ให้ ฉัน",
+            "ja": "弁当を 分けてくれて とても ありがたかった"
+          }
         }
       ],
       "chars": 8,
-      "initial": "G"
+      "initial": "G",
+      "localized": {
+        "th": {
+          "lead": "มี ขนมอร่อย คนนี้ แบ่งให้ เสมอ",
+          "def": "เต็มใจ ที่จะ แบ่งปัน เงิน เวลา หรือ แรงงาน",
+          "guess": "เดา สิ อย่า กะเหรี่ยง คำ"
+        },
+        "ja": {
+          "lead": "おいしい お菓子は 大きい 方を 分ける",
+          "def": "金や 時間や 力を 惜しまず /分ける/",
+          "guess": "猜ってみて"
+        }
+      }
     },
     {
       "id": "stubborn",
@@ -100,11 +148,27 @@
       "usage": [
         {
           "en": "He's too _____ to admit he was wrong.",
-          "vi": "Anh ta cứng đầu đến mức không chịu nhận sai."
+          "vi": "Anh ta cứng đầu đến mức không chịu nhận sai.",
+          "glosses": {
+            "th": "เขา หัวดื้อ จน ไม่ ยอมรับ ว่าผิด",
+            "ja": "彼は 間を 認めるほど 固執して いる"
+          }
         }
       ],
       "chars": 8,
-      "initial": "S"
+      "initial": "S",
+      "localized": {
+        "th": {
+          "lead": "พูดว่า ไม่ คือ ไม่ ใคร วิงวอน ก็ เปล่า",
+          "def": "ยึดมั่น ใน ความคิด ตน ใคร เตือน ก็ ไม่ฟัง",
+          "guess": "เดา นาน ยัง ไม่ ออก หรือ"
+        },
+        "ja": {
+          "lead": "だめと は だめ 誰が 言っても きかない",
+          "def": "自分の 意見に 固く 執着し 誰の 忠告も 聞かない",
+          "guess": "まだ 猜れない かな"
+        }
+      }
     },
     {
       "id": "humble",
@@ -122,11 +186,27 @@
       "usage": [
         {
           "en": "Despite her fame, she stayed _____.",
-          "vi": "Dù nổi tiếng, cô ấy vẫn khiêm tốn."
+          "vi": "Dù nổi tiếng, cô ấy vẫn khiêm tốn.",
+          "glosses": {
+            "th": "แม้ มี ชื่อเสียง เธอ ก็ ยัง ถ่อมตน",
+            "ja": "有名に なっても 彼女は 謙虚で いた"
+          }
         }
       ],
       "chars": 6,
-      "initial": "H"
+      "initial": "H",
+      "localized": {
+        "th": {
+          "lead": "ได้ ที่หนึ่ง แต่ ยิ้มว่า โชคดี เอง",
+          "def": "ไม่ โอ้อวด แม้ เก่ง ก็ ยัง รู้สึก ว่าตน ขาดอยู่",
+          "guess": "เดา ถูก ก็ อย่า หลงตัว"
+        },
+        "ja": {
+          "lead": "一等を 受けても 笑って 幸運だ と 言う",
+          "def": "/誇らない/ たとえ 上手でも 自分を 低く 見る",
+          "guess": "猜っても 誇らしげに なるな"
+        }
+      }
     },
     {
       "id": "grateful",
@@ -144,11 +224,27 @@
       "usage": [
         {
           "en": "I'm really _____ for your help.",
-          "vi": "Tôi thật sự biết ơn sự giúp đỡ của bạn."
+          "vi": "Tôi thật sự biết ơn sự giúp đỡ của bạn.",
+          "glosses": {
+            "th": "ฉัน ขอบคุณ ความช่วยเหลือ ของ คุณ จริงๆ",
+            "ja": "お手伝いに 本当に 感謝して います"
+          }
         }
       ],
       "chars": 8,
-      "initial": "G"
+      "initial": "G",
+      "localized": {
+        "th": {
+          "lead": "ได้ ช่วย ยาม ลำบาก ใคร จะ ลืม ได้",
+          "def": "รู้สึก ขอบคุณ ต่อ สิ่งดี ที่ ผู้อื่น มอบให้",
+          "guess": "เดา ออก ก็ ขอบใจ นะ"
+        },
+        "ja": {
+          "lead": "困った 時に 助けられれば 誰も 忘れない",
+          "def": "他人の /親切/に 感謝して いる",
+          "guess": "当てられたら お礼を"
+        }
+      }
     },
     {
       "id": "embarrassed",
@@ -166,11 +262,27 @@
       "usage": [
         {
           "en": "I was so _____ when I called her by the wrong name.",
-          "vi": "Tôi ngượng chín mặt khi gọi nhầm tên cô ấy."
+          "vi": "Tôi ngượng chín mặt khi gọi nhầm tên cô ấy.",
+          "glosses": {
+            "th": "ฉัน เขิน จน หน้าแดง เมื่อ เรียกชื่อ เธอ ผิด",
+            "ja": "間違えて 彼女を 呼んだとき とても 恥ずかしかった"
+          }
         }
       ],
       "chars": 11,
-      "initial": "E"
+      "initial": "E",
+      "localized": {
+        "th": {
+          "lead": "สะดุด ล้ม กลาง สนาม โรงเรียน จ้อง หมด",
+          "def": "เขินอาย อยาก กลืนน้ำ เข้าตัว เพราะ ทำ เรื่องน่าอาย",
+          "guess": "เดา ผิด ก็ อย่า แดงหน้า"
+        },
+        "ja": {
+          "lead": "学校の 中央で 転んで みんなが 見て いる",
+          "def": "恥ずかしくて 地面に 引っ込みたくなる",
+          "guess": "猜り 間違えても 顔を 赤く するな"
+        }
+      }
     },
     {
       "id": "frustrated",
@@ -188,11 +300,27 @@
       "usage": [
         {
           "en": "She got _____ when the app kept crashing.",
-          "vi": "Cô ấy bực mình vì ứng dụng cứ bị treo."
+          "vi": "Cô ấy bực mình vì ứng dụng cứ bị treo.",
+          "glosses": {
+            "th": "เธอ บ่งหงิด เพราะ แอป ค้าง ตลอด",
+            "ja": "アプリが なおらず 彼女は イライラ した"
+          }
         }
       ],
       "chars": 10,
-      "initial": "F"
+      "initial": "F",
+      "localized": {
+        "th": {
+          "lead": "พิมพ์ รหัสผ่าน รอบห้า ยัง บอก ผิด",
+          "def": "หงุดหงิด เพราะ พยายาม เต็มที่ แต่ ทุกอย่าง ก็ ไม่สำเร็จ",
+          "guess": "ใจเย็น เดา อีกครั้ง"
+        },
+        "ja": {
+          "lead": "五回目 の パスワード まだ 間違い",
+          "def": "精一杯 やっても うまく いかず 落ち着きを 失う",
+          "guess": "落ち着いて もう一度 猜って"
+        }
+      }
     },
     {
       "id": "relieved",
@@ -210,11 +338,27 @@
       "usage": [
         {
           "en": "We were _____ to hear that everyone was safe.",
-          "vi": "Chúng tôi nhẹ nhõm khi biết mọi người đều an toàn."
+          "vi": "Chúng tôi nhẹ nhõm khi biết mọi người đều an toàn.",
+          "glosses": {
+            "th": "เรา โล่งใจ ที่ รู้ว่า ทุกคน ปลอดภัย",
+            "ja": "誰もが 無事だと 知れて 安心した"
+          }
         }
       ],
       "chars": 8,
-      "initial": "R"
+      "initial": "R",
+      "localized": {
+        "th": {
+          "lead": "คะแนน ขึ้น ผ่านแล้ว โล่ง เลย",
+          "def": "รู้สึก โล่งอก เมื่อ ความกังวล ใน ที่สุด ก็ ผ่านไป",
+          "guess": "ใกล้ ถึง จุดหมาย แล้ว"
+        },
+        "ja": {
+          "lead": "点数が 出て /合格/だ ホッとした",
+          "def": "心配が とうとう 去って 軽く なる",
+          "guess": "もう 目的地が 近い"
+        }
+      }
     },
     {
       "id": "apologize",
@@ -232,11 +376,27 @@
       "usage": [
         {
           "en": "You should _____ to your sister.",
-          "vi": "Bạn nên xin lỗi chị gái mình."
+          "vi": "Bạn nên xin lỗi chị gái mình.",
+          "glosses": {
+            "th": "คุณ ควร ขอโทษ น้องสาว ของ คุณ",
+            "ja": "姉に 謝る べきだ"
+          }
         }
       ],
       "chars": 9,
-      "initial": "A"
+      "initial": "A",
+      "localized": {
+        "th": {
+          "lead": "ทำ แก้ว เพื่อน แตก ประโยค แรก คือ อะไร",
+          "def": "พูด ขอโทษ เมื่อ ตน ทำ ผิด",
+          "guess": "เดา พลาด แล้ว พูดว่า อะไร ดี"
+        },
+        "ja": {
+          "lead": "友達の グラスを 割った 一言目は 何",
+          "def": "自分が 悪かったとき /謝る/",
+          "guess": "猜り 外れたら 何と 言う"
+        }
+      }
     },
     {
       "id": "interrupt",
@@ -254,11 +414,27 @@
       "usage": [
         {
           "en": "Please don't _____ me while I'm talking.",
-          "vi": "Làm ơn đừng ngắt lời khi tôi đang nói."
+          "vi": "Làm ơn đừng ngắt lời khi tôi đang nói.",
+          "glosses": {
+            "th": "โปรด อย่า ขัดจังหวะ เมื่อ ฉัน กำลัง พูด",
+            "ja": "話して いる 最中は 邪魔 しないで"
+          }
         }
       ],
       "chars": 9,
-      "initial": "I"
+      "initial": "I",
+      "localized": {
+        "th": {
+          "lead": "กำลัง เล่า ถึง ตอนเด็ด มี คน แทรก",
+          "def": "แทรกแซง เมื่อ ผู้อื่น กำลัง พูด หรือ ทำ",
+          "guess": "เดี๋ยว ให้ ฉัน เดา ก่อน"
+        },
+        "ja": {
+          "lead": "おもしろい ところで ふいに 邪魔が 入る",
+          "def": "他人が 話や 作業を している 最中に /入り込む/",
+          "guess": "ちょっと 待って 猜らせて"
+        }
+      }
     },
     {
       "id": "mention",
@@ -276,11 +452,27 @@
       "usage": [
         {
           "en": "She didn't _____ that she was leaving.",
-          "vi": "Cô ấy không hề nhắc đến chuyện mình sắp đi."
+          "vi": "Cô ấy không hề nhắc đến chuyện mình sắp đi.",
+          "glosses": {
+            "th": "เธอ ไม่ได้ พูดถึง เรื่อง ที่ จะ ไป เลย",
+            "ja": "彼女は 自分が 退くことを 一切 言わなかった"
+          }
         }
       ],
       "chars": 7,
-      "initial": "M"
+      "initial": "M",
+      "localized": {
+        "th": {
+          "lead": "พูด ผ่านๆ ประโยคเดียว ไม่ ลงลึก",
+          "def": "กล่าวถึง สิ่งใด อย่าง สั้นๆ",
+          "guess": "คำนี้ คุ้น มาก"
+        },
+        "ja": {
+          "lead": "ひとこと 言って 立ち去る それだけ",
+          "def": "ある ことを /短く/ 言い過ぎる",
+          "guess": "この 言葉は おなじみ"
+        }
+      }
     },
     {
       "id": "schedule",
@@ -298,11 +490,27 @@
       "usage": [
         {
           "en": "My _____ is completely full this week.",
-          "vi": "Lịch của tôi tuần này kín hết rồi."
+          "vi": "Lịch của tôi tuần này kín hết rồi.",
+          "glosses": {
+            "th": "ตาราง ของ ฉัน สัปดาห์นี้ แน่น หมดแล้ว",
+            "ja": "私の 今週の 予定は すべて 埋まって いる"
+          }
         }
       ],
       "chars": 8,
-      "initial": "S"
+      "initial": "S",
+      "localized": {
+        "th": {
+          "lead": "จันทร์ ประชุม อังคาร สอบ พุธ แน่น แล้ว",
+          "def": "ตาราง ที่ จัด ว่า ทำ อะไร ตอนไหน ใน วัน",
+          "guess": "เรียง คำ ใน หัว สิ"
+        },
+        "ja": {
+          "lead": "月は 会議 火は 試験 水は ぎっしり",
+          "def": "一日に 何を いつ やるかの 予定表",
+          "guess": "頭の中で 順番に 並べて"
+        }
+      }
     },
     {
       "id": "punctual",
@@ -320,11 +528,27 @@
       "usage": [
         {
           "en": "He is always _____ for meetings.",
-          "vi": "Anh ấy luôn đến họp đúng giờ."
+          "vi": "Anh ấy luôn đến họp đúng giờ.",
+          "glosses": {
+            "th": "เขา มา ประชุม ตรงเวลา เสมอ",
+            "ja": "彼は 会議に 常に 時間どおり"
+          }
         }
       ],
       "chars": 8,
-      "initial": "P"
+      "initial": "P",
+      "localized": {
+        "th": {
+          "lead": "นัด เจ็ดโมง หกโมง ห้าสิบเก้า ไปถึง แล้ว",
+          "def": "มา ตรงเวลา เสมอ ไม่ ปล่อย ให้ ใคร รอ",
+          "guess": "ติ๊กต่อก เดา ทัน ไหม"
+        },
+        "ja": {
+          "lead": "七時の 約束 六時 五十九分に 到着",
+          "def": "時間に 正確で 他人を 待たせない",
+          "guess": "タンタン 猜れる かな"
+        }
+      }
     },
     {
       "id": "delay",
@@ -342,11 +566,27 @@
       "usage": [
         {
           "en": "Heavy rain may _____ the start of the match.",
-          "vi": "Mưa lớn có thể khiến trận đấu bắt đầu trễ."
+          "vi": "Mưa lớn có thể khiến trận đấu bắt đầu trễ.",
+          "glosses": {
+            "th": "ฝนตก หนัก อาจ ทำให้ การแข่ง เริ่ม ล่าช้า",
+            "ja": "大雨が 試合開始を 遅らせる かも"
+          }
         }
       ],
       "chars": 5,
-      "initial": "D"
+      "initial": "D",
+      "localized": {
+        "th": {
+          "lead": "ป้าย ที่ สนามบิน สว่างแดง เที่ยวบิน ยัง ไม่ ขึ้น",
+          "def": "ทำให้ สิ่งใด ช้าลง ล่าช้า กว่า กำหนด",
+          "guess": "อย่า ชะงัก เดา ทันที"
+        },
+        "ja": {
+          "lead": "空港の 看板が 赤く 点滅 搭乗は まだ",
+          "def": "何かを 予定より /遅く/ する",
+          "guess": "躊躇わず 今すぐ 猜って"
+        }
+      }
     },
     {
       "id": "colleague",
@@ -364,11 +604,27 @@
       "usage": [
         {
           "en": "I'm having lunch with a _____ today.",
-          "vi": "Hôm nay tôi ăn trưa với một đồng nghiệp."
+          "vi": "Hôm nay tôi ăn trưa với một đồng nghiệp.",
+          "glosses": {
+            "th": "วันนี้ ฉัน ทาน ข้าวเที่ยง กับ เพื่อนร่วมงาน คนหนึ่ง",
+            "ja": "今日は 同僚と 昼食を いただく"
+          }
         }
       ],
       "chars": 9,
-      "initial": "C"
+      "initial": "C",
+      "localized": {
+        "th": {
+          "lead": "ทุกวัน ก็ เจอ ทาน ข้าวเที่ยง ด้วย คุย เรื่อง เจ้านาย",
+          "def": "คน ที่ ทำงาน บริษัท เดียว หรือ อาชีพ เดียวกัน",
+          "guess": "คนนี้ คุ้น เดา ดู สิ"
+        },
+        "ja": {
+          "lead": "毎日 見て 昼食を 共に 社長の 話を 文句",
+          "def": "同じ 会社や 同じ 職種の 人",
+          "guess": "見覚えの ある 人 猜ってみて"
+        }
+      }
     },
     {
       "id": "achieve",
@@ -386,11 +642,27 @@
       "usage": [
         {
           "en": "She worked hard to _____ her dream.",
-          "vi": "Cô ấy nỗ lực hết mình để thực hiện ước mơ."
+          "vi": "Cô ấy nỗ lực hết mình để thực hiện ước mơ.",
+          "glosses": {
+            "th": "เธอ พยายาม สุดตัว เพื่อ บรรลุ ความฝัน",
+            "ja": "彼女は 夢を 叶えるため 精一杯 努力した"
+          }
         }
       ],
       "chars": 7,
-      "initial": "A"
+      "initial": "A",
+      "localized": {
+        "th": {
+          "lead": "สามปี ขยัน ท้ายที่สุด ก็ ได้ ปริญญา",
+          "def": "บรรลุ เป้าหมาย ด้วย ความพยายาม ของ ตน",
+          "guess": "ถึง เส้นชัย หรือ ยัง"
+        },
+        "ja": {
+          "lead": "三年の 努力 やっと 資格を 手に",
+          "def": "自分の 努力で 目標に /到達する/",
+          "guess": "ゴールに 着いた かな"
+        }
+      }
     },
     {
       "id": "efficient",
@@ -408,11 +680,27 @@
       "usage": [
         {
           "en": "This new system is far more _____.",
-          "vi": "Hệ thống mới này hiệu quả hơn hẳn."
+          "vi": "Hệ thống mới này hiệu quả hơn hẳn.",
+          "glosses": {
+            "th": "ระบบใหม่ นี้ มี ประสิทธิภาพ ดีกว่า เดิม มาก",
+            "ja": "この 新しい 仕組みは ずっと 効率的"
+          }
         }
       ],
       "chars": 9,
-      "initial": "E"
+      "initial": "E",
+      "localized": {
+        "th": {
+          "lead": "คนอื่น ทำ ทั้งวัน คนนี้ เสร็จ ก่อน เที่ยง",
+          "def": "ทำ อย่าง รวดเร็ว ประหยัดแรง แต่ ยัง ได้ ผล",
+          "guess": "เดา ไว แต่ แม่น นะ"
+        },
+        "ja": {
+          "lead": "他人は 一日 かかる この人は 午前中に 終わる",
+          "def": "速く 手間が 少ないのに /効果/が 大きい",
+          "guess": "速く 正しく 猜って"
+        }
+      }
     },
     {
       "id": "notice",
@@ -430,11 +718,27 @@
       "usage": [
         {
           "en": "Did you _____ anything strange?",
-          "vi": "Bạn có để ý thấy điều gì lạ không?"
+          "vi": "Bạn có để ý thấy điều gì lạ không?",
+          "glosses": {
+            "th": "คุณ สังเกต เห็น อะไร แปลกๆ บ้าง ไหม",
+            "ja": "何か 変なことが あった かしら"
+          }
         }
       ],
       "chars": 6,
-      "initial": "N"
+      "initial": "N",
+      "localized": {
+        "th": {
+          "lead": "คุณ ตัดผม ใหม่ มี คนเดียว สังเกต เห็น",
+          "def": "สังเกต เห็น สิ่งใด ด้วยตา หรือ รับรู้",
+          "guess": "ตาเฉียบ เดา ลอง ดู"
+        },
+        "ja": {
+          "lead": "あなたは 前髪を 切った すぐ 気づくのは 一人だけ",
+          "def": "目や 感覚で 何かに /気づく/",
+          "guess": "鋭い 目で 猜ってみて"
+        }
+      }
     },
     {
       "id": "ignore",
@@ -452,11 +756,27 @@
       "usage": [
         {
           "en": "She tried to _____ the noise and focus.",
-          "vi": "Cô ấy cố mặc kệ tiếng ồn để tập trung."
+          "vi": "Cô ấy cố mặc kệ tiếng ồn để tập trung.",
+          "glosses": {
+            "th": "เธอ พยายาม เมิน เสียงดัง เพื่อ มี สมาธิ",
+            "ja": "彼女は 集中するため 音を 無視した"
+          }
         }
       ],
       "chars": 6,
-      "initial": "I"
+      "initial": "I",
+      "localized": {
+        "th": {
+          "lead": "ข้อความ อ่านแล้ว แต่ ไม่ เห็น ตอบ เลย",
+          "def": "จงใจ เพิกเฉย ไม่ สนใจ หรือ ไม่ ตอบสนอง",
+          "guess": "อย่า ข้าม ตา ก็ แล้วกัน"
+        },
+        "ja": {
+          "lead": "既読 なのに 返信は なかなか 来ない",
+          "def": "意図して 気にせず 無視する",
+          "guess": "見過ごさない でね"
+        }
+      }
     },
     {
       "id": "consider",
@@ -474,11 +794,27 @@
       "usage": [
         {
           "en": "We'll _____ your offer carefully.",
-          "vi": "Chúng tôi sẽ cân nhắc kỹ lời đề nghị của bạn."
+          "vi": "Chúng tôi sẽ cân nhắc kỹ lời đề nghị của bạn.",
+          "glosses": {
+            "th": "เรา จะ พิจารณา ข้อเสนอ ของ คุณ อย่าง รอบคอบ",
+            "ja": "私たちは あなたの 提案を じっくり 検討します"
+          }
         }
       ],
       "chars": 8,
-      "initial": "C"
+      "initial": "C",
+      "localized": {
+        "th": {
+          "lead": "ควร มา รับ งานใหม่ ไหม ลอง คิด อีก สัก สอง สาม วัน",
+          "def": "พิจารณา อย่าง รอบคอบ ก่อน ตัดสินใจ",
+          "guess": "คิดดี แล้ว ค่อย เดา"
+        },
+        "ja": {
+          "lead": "新しい 仕事を 受けようか もう 数日 考える",
+          "def": "決める 前に しっかり /検討する/",
+          "guess": "考えて から 猜ってみて"
+        }
+      }
     },
     {
       "id": "doubt",
@@ -496,11 +832,27 @@
       "usage": [
         {
           "en": "I _____ he'll arrive on time.",
-          "vi": "Tôi không tin là anh ấy sẽ đến đúng giờ."
+          "vi": "Tôi không tin là anh ấy sẽ đến đúng giờ.",
+          "glosses": {
+            "th": "ผม ไม่ เชื่อ ว่า เขา จะ มา ตรงเวลา",
+            "ja": "彼が 時間どおり 来るとは 思えない"
+          }
         }
       ],
       "chars": 5,
-      "initial": "D"
+      "initial": "D",
+      "localized": {
+        "th": {
+          "lead": "ได้ยิน โฆษณา ลดน้ำหนัก เร็ว คุณ ขมวดคิ้ว",
+          "def": "สงสัย ไม่ เชื่อ สนิท ว่า สิ่งนั้น เป็น จริง",
+          "guess": "แน่ใจ หรือ ยัง ลอง เดา อีก"
+        },
+        "ja": {
+          "lead": "即効ダイエット の 宣伝に 眉を ひそめる",
+          "def": "本当だと すぐ 信じず 疑う",
+          "guess": "確か もう一度 猜って"
+        }
+      }
     },
     {
       "id": "imagine",
@@ -518,11 +870,27 @@
       "usage": [
         {
           "en": "_____ a world without phones.",
-          "vi": "Hãy tưởng tượng một thế giới không có điện thoại."
+          "vi": "Hãy tưởng tượng một thế giới không có điện thoại.",
+          "glosses": {
+            "th": "ลอง จินตนาการ โลก ที่ ไม่มี โทรศัพท์",
+            "ja": "携帯のない 世界を 想像して みて"
+          }
         }
       ],
       "chars": 7,
-      "initial": "I"
+      "initial": "I",
+      "localized": {
+        "th": {
+          "lead": "หลับตา แล้ว เห็น ตัวเอง นอน ชายหาด",
+          "def": "จินตนาการ ถึง สิ่งที่ ยังไม่ เห็น ด้วย ตาตน",
+          "guess": "ปล่อยใจ ให้ ล่องลอย สิ"
+        },
+        "ja": {
+          "lead": "目を 閉じて 自分が 海岸に いる",
+          "def": "見ていない ものを 頭に /かたち/にする",
+          "guess": "心を そらして みて"
+        }
+      }
     },
     {
       "id": "chore",
@@ -540,11 +908,27 @@
       "usage": [
         {
           "en": "Doing the dishes is my least favorite _____.",
-          "vi": "Rửa bát là việc nhà tôi ghét nhất."
+          "vi": "Rửa bát là việc nhà tôi ghét nhất.",
+          "glosses": {
+            "th": "ล้างจาน คือ งานบ้าน ที่ ฉัน เกลียด ที่สุด",
+            "ja": "食器洗いが 最も 嫌いな 家事"
+          }
         }
       ],
       "chars": 5,
-      "initial": "C"
+      "initial": "C",
+      "localized": {
+        "th": {
+          "lead": "สุดสัปดาห์ ยัง ไม่ ทัน พัก แม่ ก็ ยก โจทย์ มา เต็ม",
+          "def": "งานบ้าน เล็กๆ น้อยๆ เช่น ล้างจาน กวาดบ้าน",
+          "guess": "เดา ไว ยัง ไป ล้างจาน"
+        },
+        "ja": {
+          "lead": "週末も 休めず 母から 段々が 提出",
+          "def": "食器洗いや 掃除など 家の 用事",
+          "guess": "さっさと 猜って あとで 食器を 洗って"
+        }
+      }
     },
     {
       "id": "commute",
@@ -562,11 +946,27 @@
       "usage": [
         {
           "en": "My daily _____ takes about an hour.",
-          "vi": "Mỗi ngày tôi mất khoảng một tiếng đi làm."
+          "vi": "Mỗi ngày tôi mất khoảng một tiếng đi làm.",
+          "glosses": {
+            "th": "ทุกวัน ฉัน ใช้เวลา ประมาณ หนึ่ง ชั่วโมง ไป ทำงาน",
+            "ja": "毎日の 通勤には 約一時間 かかる"
+          }
         }
       ],
       "chars": 7,
-      "initial": "C"
+      "initial": "C",
+      "localized": {
+        "th": {
+          "lead": "เช้า ติดรถ เย็น ก็ ติดรถ อีก",
+          "def": "ระยะทาง ไป ทำงาน และ กลับบ้าน ทุกวัน",
+          "guess": "ติดรถ ก็ ต้อง เดา"
+        },
+        "ja": {
+          "lead": "朝は 渋滞 夕方も 渋滞",
+          "def": "毎日 通勤と 帰宅の 距離や 時間",
+          "guess": "渋滞でも 猜って"
+        }
+      }
     }
   ]
 }
