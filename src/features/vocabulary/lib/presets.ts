@@ -125,12 +125,13 @@ export const THEMES: VocabularyTheme[] = PALETTES.map(paletteToTheme);
 
 /**
  * The Douyin-dialect palettes: color stories mainland short-video readers read as
- * "native" — near-black stages under cyan/red signal light (the Douyin brand pair),
- * lacquer red with imperial gold (国潮), club violet under magenta neon, pale celadon
- * ink-wash, and black lacquer with molten gold. Hand-authored rows, repaired on load
- * through the exact same contrast pipeline as the main collection, so a floor violation
- * can never reach the screen; scripts/check-douyin-presets.ts asserts the raw rows
- * already pass, keeping the authored colors identical to the shipped ones.
+ * "native" — the original five lean Douyin-tech and 国潮, the second five pull
+ * from deeper Eastern artifacts (水墨 ink-wash, 青瓷 Song celadon, 朱砂 cinnabar
+ * seal paste, 青花 Jingdezhen porcelain, 梅 plum blossoms). Hand-authored rows,
+ * repaired on load through the exact same contrast pipeline as the main
+ * collection, so a floor violation can never reach the screen;
+ * scripts/check-douyin-presets.ts asserts the raw rows already pass, keeping the
+ * authored colors identical to the shipped ones.
  * These never join THEMES: the default pool stays untouched on every host.
  */
 export const DOUYIN_PALETTE_ROWS: Palette[] = [
@@ -203,6 +204,76 @@ export const DOUYIN_PALETTE_ROWS: Palette[] = [
     accentB: "#4fd1b4",
     onAccent: "#14101f",
     font: "Inter",
+  },
+  {
+    id: "ink-landscape",
+    label: "Ink landscape",
+    mood: "ink-wash mountain silhouettes over warm rice paper",
+    scheme: "complementary",
+    tone: "light",
+    hue: 35,
+    background: "linear-gradient(150deg,#e8dcc4,#b8c2c8)",
+    ink: "#1a1410",
+    accentA: "#a83028",
+    accentB: "#2e5a4a",
+    onAccent: "#ffffff",
+    font: "Playfair Display",
+  },
+  {
+    id: "celadon-blue",
+    label: "Celadon blue",
+    mood: "Song celadon glaze with seal vermilion and pine",
+    scheme: "split",
+    tone: "light",
+    hue: 155,
+    background: "linear-gradient(150deg,#cfe0d6,#88a8c4)",
+    ink: "#0f2a22",
+    accentA: "#902418",
+    accentB: "#185848",
+    onAccent: "#ffffff",
+    font: "Inter",
+  },
+  {
+    id: "cinnabar-gold",
+    label: "Cinnabar gold",
+    mood: "cinnabar seal paste and temple gold over lacquer",
+    scheme: "complementary",
+    tone: "dark",
+    hue: 8,
+    background: "linear-gradient(150deg,#7a2323,#14483f)",
+    ink: "#faecc8",
+    accentA: "#e8b34b",
+    accentB: "#6fe3c4",
+    onAccent: "#14101f",
+    font: "Playfair Display",
+  },
+  {
+    id: "porcelain-blue",
+    label: "Porcelain blue",
+    mood: "Jingdezhen cobalt over white clay with warm accent",
+    scheme: "split",
+    tone: "dark",
+    hue: 215,
+    background: "linear-gradient(150deg,#1a4478,#84591d)",
+    ink: "#f4f1e6",
+    accentA: "#daaf65",
+    accentB: "#8bbbe1",
+    onAccent: "#14101f",
+    font: "Inter",
+  },
+  {
+    id: "plum-blossom",
+    label: "Plum blossom",
+    mood: "winter plum over ink branch with gold and pink",
+    scheme: "split",
+    tone: "dark",
+    hue: 330,
+    background: "linear-gradient(150deg,#731a5c,#1b6054)",
+    ink: "#fbe8d8",
+    accentA: "#e8b34b",
+    accentB: "#ee87a2",
+    onAccent: "#14101f",
+    font: "Playfair Display",
   },
 ];
 

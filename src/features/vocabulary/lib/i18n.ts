@@ -60,6 +60,12 @@ export const THEME_LABELS_VI: Record<string, string> = {
   "neon-night": "Đêm neon",
   "jade-mist": "Sương ngọc bích",
   "ink-gold": "Vàng ánh mực",
+  // Eastern artifact palettes (also hoa.* only): deeper cultural color stories.
+  "ink-landscape": "Tranh thủy mặc",
+  "celadon-blue": "Men ngọc xanh",
+  "cinnabar-gold": "Chu sa vàng",
+  "porcelain-blue": "Sứ Thanh hoa",
+  "plum-blossom": "Mai hoa",
 };
 
 /** Narrative style id → the Vietnamese name of that reveal. */
