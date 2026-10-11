@@ -316,6 +316,12 @@
   border-color: transparent;
   color: #0a0014;
 }
+/* Strip the base icon-button's circular border from the corner button — the
+   opaque fill already defines the disc, and the semi-transparent border renders
+   as a visible ring on light backgrounds. */
+.vocab-corner-button {
+  border: none;
+}
 
 /* Saved words as a handle docked to the right edge, replacing the old top-right
    bookmark button. The dock is a tall, narrow strip so the pull can be started
@@ -664,6 +670,21 @@
      both columns a stable half and finally lets the summary's ellipsis do its job. */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
+  position: relative;
+}
+/* Backdrop blur when a picker popover is open: the grid's ::before covers the full
+   grid area, sitting above the pickers' content but below the popover list (z-index 50).
+   The blur fades the background options into soft focus while the open list stays crisp. */
+.vocab-select-grid:has(.vocab-picker-list)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--shell-surface) 50%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 14px;
+  pointer-events: none;
 }
 .vocab-select-grid label {
   display: flex;
@@ -789,7 +810,10 @@
   padding: 6px;
   border: 1px solid var(--shell-line-strong);
   border-radius: 14px;
-  background: var(--shell-surface);
+  /* Slightly transparent so the blur layer behind shows through — the grid's
+     ::before (z-index 40) blurs the content beneath, and this 90% opacity lets
+     that soft-focus effect bleed into the popover's edges. */
+  background: color-mix(in srgb, var(--shell-surface) 92%, transparent);
   box-shadow: 0 12px 40px #000a;
   animation: vocab-picker-in var(--dur-quick) var(--ease-out) both;
 }
