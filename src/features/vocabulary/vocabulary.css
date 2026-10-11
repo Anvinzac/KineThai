@@ -5066,3 +5066,34 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Three-zone tap highlight ────────────────────────────────────────────────
+   A translucent overlay that flashes for 350ms when the reader taps one of the
+   three zones (left = rewind, center = pause/play, right = fast-forward). Each
+   zone uses a clip-path polygon matching its 35%-30%-35% bounds; the left and
+   right zones fade from their outer edge inward so the highlight feels like it
+   emanates from the tap side rather than being a hard rectangle. */
+.vocab-tap-zone-highlight {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  animation: vocab-tap-flash 350ms ease-out forwards;
+}
+.vocab-tap-zone-highlight[data-zone="left"] {
+  background: linear-gradient(90deg, rgba(255,255,255,0.12) 0%, transparent 100%);
+  clip-path: polygon(0 0, 35% 0, 35% 100%, 0 100%);
+}
+.vocab-tap-zone-highlight[data-zone="center"] {
+  background: rgba(255,255,255,0.08);
+  clip-path: polygon(35% 0, 65% 0, 65% 100%, 35% 100%);
+}
+.vocab-tap-zone-highlight[data-zone="right"] {
+  background: linear-gradient(270deg, rgba(255,255,255,0.12) 0%, transparent 100%);
+  clip-path: polygon(65% 0, 100% 0, 100% 100%, 65% 100%);
+}
+@keyframes vocab-tap-flash {
+  from { opacity: 0; }
+  15% { opacity: 1; }
+  to { opacity: 0; }
+}

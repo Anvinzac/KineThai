@@ -198,6 +198,9 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
           setFilters(ALL_FILTERS);
         }}
         revealButtonLabel={activeWording?.reveal_button}
+        onToggleAutoplay={() =>
+          setPresentation((p) => ({ ...p, autoplay: !p.autoplay }))
+        }
       />
     </main>
   );

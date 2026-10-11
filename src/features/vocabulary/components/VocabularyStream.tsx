@@ -33,6 +33,7 @@ export function VocabularyStream({
   onRestart,
   onClearFilters,
   revealButtonLabel,
+  onToggleAutoplay,
 }: {
   seed: string;
   filters: VocabularyFilters;
@@ -52,6 +53,8 @@ export function VocabularyStream({
   onClearFilters: () => void;
   /** Custom label for the reveal button, from admin wording presets. */
   revealButtonLabel?: string;
+  /** Toggle autoplay from the card's center tap zone; flips presentation.autoplay. */
+  onToggleAutoplay?: () => void;
 }) {
   const query = useVocabularyFeed(seed, filters);
   // Tick so day-window expiries re-evaluate without a reload.
@@ -336,6 +339,7 @@ export function VocabularyStream({
                   onAdvance={() => advanceFrom(entry.occurrenceId)}
                   onWordEnding={onWordEnding}
                   revealButtonLabel={revealButtonLabel}
+                  onToggleAutoplay={onToggleAutoplay}
                 />
               </div>
             );

@@ -159,6 +159,7 @@ export function VocabularyCard({
   onWordEnding,
   exportLayout,
   revealButtonLabel,
+  onToggleAutoplay,
 }: {
   entry: FeedEntry;
   presentation: Presentation;
@@ -189,6 +190,8 @@ export function VocabularyCard({
   exportLayout?: CardExportLayout;
   /** Custom label for the reveal button, from admin wording presets. */
   revealButtonLabel?: string;
+  /** Toggle autoplay from the center tap zone; threads up to the page-level presentation state. */
+  onToggleAutoplay?: () => void;
 }) {
   const { theme, style } = choosePresentation(entry.occurrenceId, presentation, entry.position);
   const stages = useMemo(() => buildStages(entry.word, style.id), [entry.word, style.id]);
@@ -249,6 +252,10 @@ export function VocabularyCard({
   // While the report panel is open the card holds still: the reader is describing
   // THIS page, and the stream must not move on underneath them.
   const [reportOpen, setReportOpen] = useState(false);
+  // Visual feedback for the three-zone tap: briefly highlights which zone was tapped
+  // (left = rewind, center = pause/play, right = fast-forward) for 350ms.
+  const [tapZone, setTapZone] = useState<"left" | "center" | "right" | null>(null);
+  const tapZoneTimer = useRef<number | undefined>(undefined);
   const [reported, setReported] = useState(() => hasReportedWord(entry.word.id));
   const reportButton = useRef<HTMLButtonElement>(null);
   const closeReport = useCallback(() => {
@@ -511,21 +518,27 @@ export function VocabularyCard({
         const rect = cardRef.current?.getBoundingClientRect();
         if (!rect) return;
         const relX = clientX - rect.left;
-        const leftZone = rect.width * 0.33;
-        const rightZone = rect.width * 0.66;
+        const leftZone = rect.width * 0.35;
+        const rightZone = rect.width * 0.65;
+        // Determine which zone was tapped and show visual feedback.
+        let zone: "left" | "center" | "right";
         if (relX < leftZone) {
+          zone = "left";
           playback.previous();
         } else if (relX > rightZone) {
-          if (stage.reveal) playback.restart();
-          else if (canSkip()) playback.next();
+          zone = "right";
+          playback.next();
         } else {
-          // Center tap reveals or restarts
-          if (stage.reveal) playback.restart();
-          else if (canSkip()) playback.reveal();
+          zone = "center";
+          onToggleAutoplay?.();
         }
+        // Flash the zone highlight for 350ms.
+        clearTimeout(tapZoneTimer.current);
+        setTapZone(zone);
+        tapZoneTimer.current = window.setTimeout(() => setTapZone(null), 350);
       }
     },
-    [playback, stage.reveal, isSpelling, advanceWithExit, releaseDrag],
+    [playback, isSpelling, advanceWithExit, releaseDrag, onToggleAutoplay],
   );
 
   void matching;
@@ -703,6 +716,13 @@ export function VocabularyCard({
           />
         </div>
       </div>
+      {tapZone && !exportLayout && (
+        <div
+          className="vocab-tap-zone-highlight"
+          data-zone={tapZone}
+          aria-hidden="true"
+        />
+      )}
       {isSpelling ? (
         isHan ? (
           <Suspense fallback={null}>
