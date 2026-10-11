@@ -8,8 +8,9 @@
  * palette added by an admin has no entry in this map: every lookup takes the source
  * label as a fallback rather than rendering a blank or an id.
  *
- * Exports: TOPIC_LABELS_VI, THEME_LABELS_VI, STYLE_LABELS_VI, POS_LABELS_VI,
- *   topicLabelVi, themeLabelVi, styleLabelVi, posLabelVi
+ * Exports: TOPIC_LABELS_VI, THEME_LABELS_VI, STYLE_LABELS_VI, DOUYIN_STYLE_LABELS_VI,
+ *   POS_LABELS_VI, topicLabelVi, themeLabelVi, styleLabelVi, douyinStyleLabelVi,
+ *   posLabelVi
  * Depends on: none (leaf module)
  */
 
@@ -53,6 +54,12 @@ export const THEME_LABELS_VI: Record<string, string> = {
   "ink-bamboo": "Mực trúc",
   "lotus-gold": "Sen vàng",
   "indigo-porcelain": "Sứ chàm",
+  // Douyin dialect (hoa.* only): the Chinese-version pool's own color stories.
+  "douyin-neon": "Neon Douyin",
+  "guochao-red": "Đỏ quốc triều",
+  "neon-night": "Đêm neon",
+  "jade-mist": "Sương ngọc bích",
+  "ink-gold": "Vàng ánh mực",
 };
 
 /** Narrative style id → the Vietnamese name of that reveal. */
@@ -61,6 +68,17 @@ export const STYLE_LABELS_VI: Record<string, string> = {
   speed: "Tốc độ",
   confession: "Tự sự",
   minimal: "Tối giản",
+};
+
+/**
+ * The same four style ids under the Douyin dialect wear different motion and
+ * different names: mainland short-video grammar instead of the default reveal styles.
+ */
+export const DOUYIN_STYLE_LABELS_VI: Record<string, string> = {
+  detective: "Hồi hộp",
+  speed: "Giật theo nhịp",
+  confession: "Cảm xúc",
+  minimal: "Quốc phong",
 };
 
 /**
@@ -111,6 +129,17 @@ export function themeLabelVi(id: string, fallback: string): string {
  */
 export function styleLabelVi(id: string, fallback: string): string {
   return STYLE_LABELS_VI[id] ?? fallback;
+}
+
+/**
+ * Reveal name in Vietnamese for the Douyin dialect, falling back to the preset's
+ * own label.
+ * @param id - Narrative style id
+ * @param fallback - Label from the Douyin style presets
+ * @returns Display name
+ */
+export function douyinStyleLabelVi(id: string, fallback: string): string {
+  return DOUYIN_STYLE_LABELS_VI[id] ?? fallback;
 }
 
 /**

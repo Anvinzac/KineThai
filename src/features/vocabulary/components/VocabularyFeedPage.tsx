@@ -18,6 +18,8 @@ import { SavedDrawer } from "./SavedDrawer";
 import { DifficultyOnboarding } from "./DifficultyOnboarding";
 import { fetchVocabularyPage } from "../api/feed";
 import { readDifficultyChoice, writeDifficultyChoice } from "../lib/difficulty-choice";
+import { readDialectChoice, writeDialectChoice } from "../lib/dialect-choice";
+import type { TargetLocale } from "../lib/target-language";
 import "../vocabulary.css";
 
 function newSeed(): string {
@@ -29,15 +31,31 @@ function newSeed(): string {
 /** Every word, no category and no difficulty track. */
 const ALL_FILTERS: VocabularyFilters = { topic: "", level: "", difficulty: DIFFICULTY_ALL };
 
-/** Open the word stream without authentication or persistent storage. @returns Public feed and preferences. */
-export function VocabularyFeedPage() {
+/**
+ * Open the word stream without authentication or persistent storage.
+ * @param props.locale Visited address's deck locale; the toolbar title follows it.
+ * @returns Public feed and preferences.
+ */
+export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   const [seed, setSeed] = useState(newSeed);
   const [filters, setFilters] = useState<VocabularyFilters>(ALL_FILTERS);
-  const [presentation, setPresentation] = useState<Presentation>({
+  const [presentation, setPresentation] = useState<Presentation>(() => ({
     theme: "mix",
     style: "mix",
     autoplay: true,
-  });
+    // Only the Chinese host honors the stored Douyin-dialect preference; every
+    // other address renders the default visuals even on a device that switched.
+    dialect: locale === "zh" ? readDialectChoice() : "default",
+  }));
+  // The dialect is a device-level preference: remember it the moment it flips so
+  // the next visit to this host opens in the same visual language.
+  const handlePresentation = useCallback(
+    (next: Presentation) => {
+      if (next.dialect !== presentation.dialect) writeDialectChoice(next.dialect ?? "default");
+      setPresentation(next);
+    },
+    [presentation.dialect],
+  );
   const [metadata, setMetadata] = useState<FeedPage>();
   // "pending" until the stored choice has been read (storage is not readable while the
   // page is server-rendered), then either the first-load level picker or the feed. The
@@ -132,6 +150,7 @@ export function VocabularyFeedPage() {
       <FeedControls
         metadata={metadata}
         filters={filters}
+        locale={locale}
         presentation={presentation}
         onFilters={(value) => {
           // Confirming a picker without changing anything is not a new stream. A fresh
@@ -149,7 +168,7 @@ export function VocabularyFeedPage() {
           setFilters(value);
           setSeed(newSeed());
         }}
-        onPresentation={setPresentation}
+        onPresentation={handlePresentation}
         onShuffle={shuffle}
         open={optionsOpen}
         onOpen={setOptionsOpen}

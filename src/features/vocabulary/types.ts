@@ -40,7 +40,19 @@ export type FeedPage = {
 };
 export type FeedCursor = { position: number; revision?: string };
 /**
+ * Which visual dialect dresses the stream. "douyin" swaps in the mainland-flavored
+ * palettes, motion presets and highlight reskin; it is only ever offered on the
+ * Chinese (hoa.*) host and only when the reader turns the default visuals off.
+ */
+export type VisualDialect = "default" | "douyin";
+/**
  * `theme` is an allow-list: "mix" lets every theme rotate, one id locks the look,
  * and a comma-joined id list (the picker's unselect model) rotates within just those.
+ * `dialect` picks the pool that allow-list is read against.
  */
-export type Presentation = { theme: string; style: NarrativeStyle | "mix"; autoplay: boolean };
+export type Presentation = {
+  theme: string;
+  style: NarrativeStyle | "mix";
+  autoplay: boolean;
+  dialect?: VisualDialect;
+};

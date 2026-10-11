@@ -655,6 +655,7 @@ export function VocabularyCard({
       style={colors}
       data-theme={theme.id}
       data-tone={theme.tone}
+      data-dialect={presentation.dialect === "douyin" ? "douyin" : undefined}
       data-export={exportLayout ? "" : undefined}
       data-export-progress={exportLayout?.showProgress || undefined}
       data-stage={isSpelling ? "spelling" : stage.id}

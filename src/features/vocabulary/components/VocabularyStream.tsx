@@ -325,7 +325,7 @@ export function VocabularyStream({
                 style={{ height, transform: `translateY(${item.start}px)` }}
               >
                 <VocabularyCard
-                  key={`${entry.occurrenceId}:${presentation.style}`}
+                  key={`${entry.occurrenceId}:${presentation.style}:${presentation.dialect ?? ""}`}
                   entry={entry}
                   current={item.index === activeIndex}
                   active={item.index === activeIndex && !suspended}

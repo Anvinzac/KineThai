@@ -3,7 +3,7 @@
  * deck and the page title do. Unknown hosts (preview, localhost, IPs, anh.*) fall back to
  * English and never throw. Host is client-controlled: use it only to pick public content.
  *
- * Exports: TargetLocale, resolveTarget, siteTitle
+ * Exports: TargetLocale, resolveTarget, siteTitle, siteBrand, sitePageHead
  */
 export type TargetLocale = "en" | "zh" | "ko" | "ja";
 
@@ -36,8 +36,23 @@ export function siteTitle(locale: TargetLocale): string {
   return TITLES[locale];
 }
 
+/**
+ * The toolbar brand renders the accent-coloured "Lá" in its own span, so the title
+ * must arrive pre-split. Every title ends in "chayLá"; only the lead varies.
+ * @param locale Deck locale. @returns Lead ("hoa.chay") plus accent ("Lá").
+ */
+export function siteBrand(locale: TargetLocale): { lead: string; accent: string } {
+  const title = siteTitle(locale);
+  const at = title.lastIndexOf("chay");
+  return { lead: title.slice(0, at + "chay".length), accent: title.slice(at + "chay".length) };
+}
+
 /** Shared leaf metadata keeps browser and sharing titles aligned with the domain. */
-export function sitePageHead(locale: TargetLocale = "en", section = "", description = "Thêm xíu năng lượng cho câu chữ nè") {
+export function sitePageHead(
+  locale: TargetLocale = "en",
+  section = "",
+  description = "Thêm xíu năng lượng cho câu chữ nè",
+) {
   const title = section ? `${section} — ${siteTitle(locale)}` : siteTitle(locale);
   return {
     meta: [

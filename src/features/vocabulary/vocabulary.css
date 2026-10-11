@@ -1445,6 +1445,30 @@
     transform: translate3d(7%, 0, 0);
   }
 }
+/* Landscape phone: widen the colour band so ONE scene fills the screen.
+
+   The sliding backdrop is a long strip of scene colours, and one "segment" of it —
+   a whole colour-to-colour transition — is as wide as this wrapper. The card shows
+   roughly 85% of a segment, so in portrait that is one colour easing into the next
+   down a tall, narrow card, read as a single moody wash: the gradient runs at 100deg,
+   so over 844px of height the band is smeared ~149px sideways and the two ends never
+   line up next to each other.
+
+   Turned landscape, the card is wide and short. The same 85% of the cycle is now laid
+   out across the width with only ~69px of diagonal smear to hide it, so the two ends
+   of the transition sit side by side and read as two different backgrounds meeting in
+   the middle of the screen.
+
+   Widening the wrapper widens the segment with it (the strip is sized in % of this
+   box), so the card sees a much smaller slice of the cycle — ~45% instead of ~85% —
+   and that slice reads as one scene. The per-page shift is defined as one segment, so
+   page turns still change the colour completely; and the overhang (60% a side) still
+   dwarfs the drift's travel (7% of the wrapper), so no edge is ever exposed. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .vocab-backdrop-drift[data-drift] {
+    inset: 0 -60%;
+  }
+}
 /* The kinetic text casts a wide soft black shadow, which lifts light type off a deep
    card. Under dark ink on a pale card it is just a dirty halo, so it is dropped. */
 .vocab-card[data-tone="light"] .vocab-stage-text [data-kinetic-word] {
@@ -4916,6 +4940,65 @@
     --vocab-reveal-seam: 12px;
   }
 }
+/* ── Douyin dialect (hoa.* only) ─────────────────────────────────────────────
+   The Chinese-version visual language: the reader's toggle in the options sheet
+   sets data-dialect on every card and the whole reskin rides on that one
+   attribute. Signature moves from the mainland short-video grammar:
+   - an RGB chromatic split (cyan/red offset shadows) on every highlighted word,
+   - a neon gradient underline bar instead of the single-color currentColor one,
+   - a red seal-stamp (印章) frame in place of the ink-colored box,
+   - a gold-foil shimmer sweep in place of the white spotlight,
+   - a cyan-into-red neon halo.
+   Static paints only — nothing here animates on its own, so the reduced-motion
+   kill-switch at the file tail still covers every moving part. */
+.vocab-card[data-dialect="douyin"] .kinetic-emphasis-mark {
+  filter: drop-shadow(-0.035em 0 0 rgba(37, 244, 238, 0.8))
+    drop-shadow(0.035em 0 0 rgba(254, 44, 85, 0.8));
+}
+.vocab-card[data-dialect="douyin"] .kinetic-emph-underline::after {
+  background: linear-gradient(90deg, #25f4ee, #fe2c55);
+  box-shadow:
+    0 0 0.24em rgba(37, 244, 238, 0.7),
+    0 0 0.6em rgba(254, 44, 85, 0.4);
+}
+.vocab-card[data-dialect="douyin"] .kinetic-emph-frame::after {
+  border-color: #e03c31;
+  box-shadow:
+    0 0 0 0.035em rgba(224, 60, 49, 0.55),
+    0 0 0.55em rgba(224, 60, 49, 0.5);
+}
+.vocab-card[data-dialect="douyin"] .kinetic-emph-sweep::after {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(245, 197, 66, 0.16) 34%,
+    rgba(255, 226, 138, 0.92) 48%,
+    rgba(245, 197, 66, 0.16) 62%,
+    transparent 100%
+  );
+}
+.vocab-card[data-dialect="douyin"] .kinetic-emph-halo::before {
+  background: radial-gradient(
+    closest-side,
+    rgba(37, 244, 238, 0.5) 0%,
+    rgba(254, 44, 85, 0.2) 46%,
+    transparent 78%
+  );
+}
+
+/* The Douyin toggle stacks its explainer under the label: the row wraps and the
+   note takes the full second line. */
+.vocab-dialect {
+  flex-wrap: wrap;
+}
+.vocab-dialect-note {
+  flex-basis: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--vocab-ink, #fff) 62%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .vocabulary-shell *,
   .vocabulary-shell *::before,

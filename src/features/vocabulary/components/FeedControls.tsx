@@ -16,7 +16,7 @@ import {
 import { COMMUNITY_AVAILABLE } from "@/lib/feature-flags";
 import { EcosystemMenu } from "@/features/ecosystem/components/EcosystemMenu";
 import { ECOSYSTEM_STORE_AVAILABLE } from "@/lib/feature-flags";
-import { STYLES, THEMES } from "../lib/presets";
+import { stylePool, themePool } from "../lib/presets";
 import {
   DIFFICULTY_ALL,
   DIFFICULTY_TRACKS,
@@ -25,9 +25,10 @@ import {
 } from "../lib/difficulty";
 import { LEVELS, type NarrativeStyle } from "../lib/schema";
 import type { HistoryStats } from "../lib/history";
-import { styleLabelVi, themeLabelVi, topicLabelVi } from "../lib/i18n";
+import { douyinStyleLabelVi, styleLabelVi, themeLabelVi, topicLabelVi } from "../lib/i18n";
+import { siteBrand, type TargetLocale } from "../lib/target-language";
 import { useAmbientSound } from "../hooks/useAmbientSound";
-import type { FeedPage, Presentation, VocabularyFilters } from "../types";
+import type { FeedPage, Presentation, VocabularyFilters, VisualDialect } from "../types";
 import { usePresence } from "@/hooks/use-presence";
 
 /** Matches the exit keyframes' duration (--dur-quick) in vocabulary.css. */
@@ -140,11 +141,21 @@ function OptionPicker({
   );
 }
 
-function ThemePicker({ value, onChange }: { value: string; onChange: (theme: string) => void }) {
+function ThemePicker({
+  value,
+  onChange,
+  dialect,
+}: {
+  value: string;
+  onChange: (theme: string) => void;
+  /** Which collection the allow-list is read against; the Douyin pool on the zh host. */
+  dialect?: VisualDialect;
+}) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const labelId = useId();
-  const allIds = useMemo(() => THEMES.map((theme) => theme.id), []);
+  const pool = useMemo(() => themePool("mix", dialect), [dialect]);
+  const allIds = useMemo(() => pool.map((theme) => theme.id), [pool]);
   const selected = useMemo(() => {
     const ids = value
       .split(",")
@@ -153,8 +164,11 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
     return new Set(ids.length && !ids.includes("mix") ? ids : allIds);
   }, [value, allIds]);
   const isAll = selected.size === allIds.length;
-  // THEMES order keeps the chips and the joined value stable across toggles.
-  const pickedThemes = useMemo(() => THEMES.filter((theme) => selected.has(theme.id)), [selected]);
+  // Pool order keeps the chips and the joined value stable across toggles.
+  const pickedThemes = useMemo(
+    () => pool.filter((theme) => selected.has(theme.id)),
+    [pool, selected],
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -216,7 +230,7 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
           aria-multiselectable="true"
           aria-labelledby={labelId}
         >
-          {THEMES.map((theme) => {
+          {pool.map((theme) => {
             const on = selected.has(theme.id);
             return (
               <button
@@ -323,6 +337,7 @@ function DifficultyDropdown({
   levelCounts,
   catalogLevels,
   total,
+  locale,
 }: {
   value: string;
   onChange: (next: string) => void;
@@ -334,6 +349,8 @@ function DifficultyDropdown({
   catalogLevels?: FeedPage["levels"];
   /** Every word under the current topic; undefined until the first page has loaded. */
   total?: number;
+  /** Visited address's deck locale: the brand title follows the host (hoa.* → hoa.chayLá). */
+  locale?: TargetLocale;
 }) {
   const listId = useId();
   const committed = useMemo(() => parseDifficulty(value), [value]);
@@ -396,6 +413,9 @@ function DifficultyDropdown({
   }, [open]);
 
   const presence = usePresence(open, POPUP_EXIT_MS);
+  // The visible title is the host's brand, never a hardcoded default: the deck and
+  // the document title already follow the visited address, and so must this one.
+  const brand = siteBrand(locale ?? "en");
 
   return (
     <div className="vocab-difficulty" data-no-gesture>
@@ -407,14 +427,15 @@ function DifficultyDropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
-        aria-label={`anh.chayLá — difficulty: ${summary.label}. Change difficulty`}
+        aria-label={`${brand.lead}${brand.accent} — difficulty: ${summary.label}. Change difficulty`}
         onClick={() => (open ? close(true) : openAt())}
       >
         {/* The title needs its own wrapper: .vocab-brand is a column flex, so a bare
             text node plus a span would become two stacked flex items and break
-            "anh.chayLá" across two lines. */}
+            "hoa.chayLá" across two lines. */}
         <span className="vocab-brand-name">
-          anh.chay<span>Lá</span>
+          {brand.lead}
+          <span>{brand.accent}</span>
         </span>
         <small>
           {/* Single nowrap line, taken out of flow in CSS so it can read in full
@@ -564,6 +585,7 @@ export function FeedControls({
   historyStats,
   onClearHistory,
   onExport,
+  locale,
 }: {
   metadata?: FeedPage;
   filters: VocabularyFilters;
@@ -578,6 +600,8 @@ export function FeedControls({
   onClearHistory: () => void;
   /** Open the video-export studio. Passed only for admins; absent, the control is not rendered. */
   onExport?: () => void;
+  /** Visited address's deck locale; the brand title follows it (undefined → English). */
+  locale?: TargetLocale;
 }) {
   const panelId = useId();
   const toggleButton = useRef<HTMLButtonElement>(null);
@@ -691,6 +715,7 @@ export function FeedControls({
             levelCounts={metadata?.levelCounts}
             catalogLevels={metadata?.levels}
             total={metadata?.topicTotal}
+            locale={locale}
           />
         </div>
         {/* Centre: the three transport controls as bare icons split by two hairlines,
@@ -804,15 +829,19 @@ export function FeedControls({
               <ThemePicker
                 value={presentation.theme}
                 onChange={(theme) => onPresentation({ ...presentation, theme })}
+                dialect={presentation.dialect}
               />
               <OptionPicker
                 label="Cách hiện"
                 value={presentation.style}
                 options={[
                   { id: "mix", label: "Trộn cách hiện" },
-                  ...STYLES.map((style) => ({
+                  ...stylePool(presentation.dialect).map((style) => ({
                     id: style.id,
-                    label: styleLabelVi(style.id, style.label),
+                    label:
+                      presentation.dialect === "douyin"
+                        ? douyinStyleLabelVi(style.id, style.label)
+                        : styleLabelVi(style.id, style.label),
                   })),
                 ]}
                 onChange={(style) =>
@@ -832,6 +861,31 @@ export function FeedControls({
             />{" "}
             Tự động phát luồng
           </label>
+          {/* The Douyin dialect only exists on the Chinese host: it swaps the whole
+              visual language — palettes, motion presets and highlight reskin — and
+              deactivates the default one, so it is offered nowhere else. */}
+          {locale === "zh" && (
+            <label className="vocab-autoplay vocab-dialect">
+              <input
+                type="checkbox"
+                checked={presentation.dialect === "douyin"}
+                onChange={(event) =>
+                  onPresentation({
+                    ...presentation,
+                    // A dialect flip invalidates an allow-list picked from the other
+                    // pool; "mix" reopens the full new collection instead.
+                    theme: "mix",
+                    dialect: event.target.checked ? "douyin" : "default",
+                  })
+                }
+              />{" "}
+              Giao diện Douyin
+              <small className="vocab-dialect-note">
+                Tắt toàn bộ giao diện mặc định, chỉ dùng bảng màu, nhịp hoạt hình và hiệu ứng nổi
+                bật kiểu Douyin.
+              </small>
+            </label>
+          )}
           <p className="vocab-options-summary">
             {reducedMotion
               ? "Bạn đang bật chế độ giảm chuyển động, nên gợi ý lật thủ công."
