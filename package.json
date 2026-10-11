@@ -7,6 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "build:pages": "VITE_STATIC_BUILD=1 BASE_PATH=/KineThai/ vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -17,7 +18,8 @@
     "check:saved-groups": "npx tsx scripts/check-saved-groups.ts",
     "check:emphasis-runs": "npx tsx scripts/check-emphasis-runs.ts",
     "format": "prettier --write .",
-    "check:workbench": "npx tsx scripts/check-vocabulary-workbench.ts"
+    "check:workbench": "npx tsx scripts/check-vocabulary-workbench.ts",
+    "check:static-feed": "npx tsx scripts/check-static-feed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

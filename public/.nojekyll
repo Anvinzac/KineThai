@@ -1,0 +1,2 @@
+# GitHub Pages: disable Jekyll processing so the Vite build output (including
+# folders that begin with an underscore, e.g. _assets) is served verbatim.

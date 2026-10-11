@@ -1,5 +1,6 @@
-/** Anonymous browser fetch adapter. Exports: fetchVocabularyPage, VocabularyRequestError. Depends on: transport types, backfill bounds. */
+/** Anonymous browser fetch adapter. Exports: fetchVocabularyPage, VocabularyRequestError. Depends on: transport types, backfill bounds, feed-pager (static-host fallback). */
 import { VOCAB_PAGE_LIMIT } from "../lib/backfill";
+import { readVocabularyPage } from "../lib/feed-pager";
 import type { FeedCursor, FeedPage, VocabularyFilters } from "../types";
 
 export class VocabularyRequestError extends Error {
@@ -11,32 +12,86 @@ export class VocabularyRequestError extends Error {
   }
 }
 
-/** Request one abortable page without auth headers. @param input Stream/cursor context. @returns The server page. */
+/** The server route that serves pages when the app runs with SSR (Nitro/Cloudflare). */
+const SERVER_ROUTE = "/api/public/vocabulary";
+
+/**
+ * Whether a response means "there is no server behind this origin".
+ *
+ * A static deploy (GitHub Pages) has no `/api/*` handler, so its host answers the
+ * feed route with a 404 — often as the SPA `index.html` rather than a real 404.
+ * Both spellings (404, and an HTML 200 for a JSON request) mean the same thing:
+ * fall back to the bundled pager. A real API that is up but unhappy returns JSON
+ * with a `code`, which is a genuine error and is never treated as "no server".
+ */
+function isServerRouteAbsent(status: number, contentType: string): boolean {
+  if (status === 404) return true;
+  // A static host answers the JSON request with its HTML shell at status 200.
+  return status === 200 && contentType.includes("text/html");
+}
+
+/**
+ * Build the query string shared by the network call and the local fallback.
+ * The fallback mirrors the server endpoint's contract exactly (same defaults,
+ * same params), so a statically-hosted page is indistinguishable from an SSR one.
+ */
+function buildQuery(
+  seed: string,
+  filters: VocabularyFilters,
+  cursor: FeedCursor,
+  includeRevision: boolean,
+): string {
+  return new URLSearchParams({
+    seed,
+    topic: filters.topic,
+    level: filters.level,
+    difficulty: filters.difficulty,
+    position: String(cursor.position),
+    limit: String(VOCAB_PAGE_LIMIT),
+    ...(includeRevision && cursor.revision ? { revision: cursor.revision } : {}),
+  }).toString();
+}
+
+/**
+ * Read one page of the stream.
+ *
+ * On a server-backed deploy this calls `/api/public/vocabulary` exactly as before.
+ * When the app is served as pure static files (e.g. GitHub Pages) and that route
+ * does not exist, it transparently falls back to the bundled deterministic pager —
+ * so the feed loads on static hosts with zero server. @param input Stream/cursor
+ * context. @returns The page, from the server or the local pager.
+ */
 export async function fetchVocabularyPage(input: {
   seed: string;
   filters: VocabularyFilters;
   cursor: FeedCursor;
   signal: AbortSignal;
 }): Promise<FeedPage> {
-  const query = new URLSearchParams({
-    seed: input.seed,
-    topic: input.filters.topic,
-    level: input.filters.level,
-    difficulty: input.filters.difficulty,
-    position: String(input.cursor.position),
-    limit: String(VOCAB_PAGE_LIMIT),
-    ...(input.cursor.revision ? { revision: input.cursor.revision } : {}),
-  });
   const controller = new AbortController();
   const abort = () => controller.abort();
   input.signal.addEventListener("abort", abort, { once: true });
   if (input.signal.aborted) controller.abort();
   const timeout = setTimeout(abort, 15_000);
   try {
-    const response = await fetch(`/api/public/vocabulary?${query}`, {
+    const query = buildQuery(input.seed, input.filters, input.cursor, true);
+    const response = await fetch(`${SERVER_ROUTE}?${query}`, {
       signal: controller.signal,
       credentials: "omit",
     });
+
+    if (isServerRouteAbsent(response.status, response.headers.get("content-type") ?? "")) {
+      // Static host with no server route: read the page locally from the bundled
+      // catalog. The pager is deterministic, so it matches what SSR would serve.
+      return readVocabularyPage({
+        seed: input.seed,
+        topic: input.filters.topic,
+        level: input.filters.level,
+        difficulty: input.filters.difficulty,
+        position: input.cursor.position,
+        limit: VOCAB_PAGE_LIMIT,
+      });
+    }
+
     if (!response.ok) {
       const body = await response.json().catch(() => ({}));
       throw new VocabularyRequestError(
