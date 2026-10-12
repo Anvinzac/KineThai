@@ -2235,44 +2235,76 @@
   line-height: 1.5;
   color: var(--shell-text-mute);
 }
-/* Two tabs over one list. Each tab is named after the reaction that puts a word in it,
-   so the count inside the tab is the size of that list, not of the reader's taps. */
+/* Two tabs over one list each. Each tab is named after the reaction that puts a word in
+   it, so the count inside the tab is the size of that list, not of the reader's taps.
+   The row IS the switcher, drawn as a real tab strip: two flat segments sharing one
+   hairline, welded to the container box below (same side insets, no gap), the open
+   segment marked by an accent underline sitting ON the hairline. */
 .vocab-saved-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 max(18px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left));
+  border-bottom: 1px solid var(--shell-line);
+}
+.vocab-saved-tab-slot {
+  position: relative;
   display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-  padding: 0 max(18px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left));
+  min-width: 0;
+}
+.vocab-saved-tab-slot + .vocab-saved-tab-slot {
+  border-left: 1px solid var(--shell-line);
+}
+/* The open segment's underline. On the slot, not the tab, so it spans the whole segment
+   including the fused density control, and one pixel low so it covers the hairline. */
+.vocab-saved-tab-slot[data-on]::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--vocab-accent);
 }
 .vocab-saved-tab {
   display: inline-flex;
+  flex: 1 1 auto;
   align-items: center;
+  justify-content: center;
   gap: 7px;
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 999px;
-  border: 1px solid var(--shell-line);
+  min-width: 0;
+  min-height: 42px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 0;
   background: transparent;
   color: var(--shell-text-mute);
   font-size: 13px;
   font-weight: 700;
   transition:
     color var(--dur-quick) var(--ease-out),
-    background var(--dur-quick) var(--ease-out),
-    border-color var(--dur-quick) var(--ease-out),
-    transform var(--dur-move) var(--ease-spring);
+    background var(--dur-quick) var(--ease-out);
+}
+/* The label yields first when a half gets tight: it clips, the icon and the count stay. */
+.vocab-saved-tab-label {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .vocab-saved-tab:hover {
   color: var(--shell-text-soft);
   background: var(--shell-hover);
 }
 .vocab-saved-tab:active {
-  transform: scale(0.96);
-  transition-duration: var(--dur-press);
+  background: color-mix(in srgb, var(--shell-hover) 70%, transparent);
 }
 .vocab-saved-tab[data-on] {
   color: var(--vocab-ink);
-  border-color: color-mix(in srgb, var(--vocab-accent) 45%, transparent);
-  background: color-mix(in srgb, var(--vocab-accent) 14%, transparent);
+  background: color-mix(in srgb, var(--vocab-accent) 7%, transparent);
 }
 .vocab-saved-tab-count {
   min-width: 20px;
@@ -2289,29 +2321,21 @@
   background: color-mix(in srgb, var(--vocab-accent) 28%, transparent);
   color: var(--vocab-ink);
 }
-/* Density rides ON the open tab rather than in a switch row of its own: the control only
-   ever applies to the list that is showing, so it is drawn as the tail of that list's own
-   pill. The active tab squares off its trailing edge, the button rounds the far end, and a
-   negative margin swallows the row gap — so the pair reads as one chip with an icon on the
-   end, not as a pill with something parked beside it. */
-.vocab-saved-tab[data-fused] {
-  padding-right: 10px;
-  border-right: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
+/* Density rides ON the open tab as the segment's tail: a flat icon cell divided from the
+   tab by a hairline, stretching the strip's full height — the strip is flat now, so the
+   control is flat with it. */
 .vocab-saved-density {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* Cancels the .vocab-saved-tabs gap so there is no seam between the two halves. */
-  margin-left: -8px;
-  min-height: 40px;
-  padding: 0 11px;
-  border: 1px solid color-mix(in srgb, var(--vocab-accent) 45%, transparent);
+  align-self: stretch;
+  margin-left: 0;
+  min-height: 0;
+  padding: 0 12px;
+  border: 0;
   border-left: 1px solid color-mix(in srgb, var(--vocab-accent) 28%, transparent);
-  border-radius: 0 999px 999px 0;
-  background: color-mix(in srgb, var(--vocab-accent) 14%, transparent);
+  border-radius: 0;
+  background: transparent;
   color: var(--shell-text-soft);
   transition:
     color var(--dur-quick) var(--ease-out),
@@ -2319,27 +2343,38 @@
 }
 .vocab-saved-density:hover {
   color: var(--vocab-ink);
-  background: color-mix(in srgb, var(--vocab-accent) 22%, transparent);
+  background: color-mix(in srgb, var(--vocab-accent) 12%, transparent);
 }
 .vocab-saved-density:active {
-  background: color-mix(in srgb, var(--vocab-accent) 30%, transparent);
+  background: color-mix(in srgb, var(--vocab-accent) 20%, transparent);
 }
 /* Pressed = the list is open; the icon already flips, so the fill only has to confirm it. */
 .vocab-saved-density[aria-pressed="true"] {
   color: var(--vocab-ink);
-  background: color-mix(in srgb, var(--vocab-accent) 26%, transparent);
+  background: color-mix(in srgb, var(--vocab-accent) 14%, transparent);
 }
 .vocab-saved-density:focus-visible {
   outline: 2px solid var(--chrome-accent, #a78bfa);
-  outline-offset: 2px;
+  outline-offset: -2px;
+}
+/* The container a tab opens: welded under the strip (same side insets, no top border of
+   its own, squared top corners) so strip and box read as one tabbed surface. The bottom
+   margin keeps the fixed undo bar off the last row. */
+.vocab-saved-panelbox {
+  margin: 0 max(18px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 96px)
+    max(18px, env(safe-area-inset-left));
+  border: 1px solid var(--shell-line);
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  background: color-mix(in srgb, var(--shell-hover) 24%, transparent);
+  overflow: hidden;
 }
 .vocab-saved-body {
-  padding: 0 max(18px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 96px)
-    max(18px, env(safe-area-inset-left));
+  padding: 6px 16px 20px;
 }
 /* One line of gesture teaching, because a swipe has no visible handle to discover. */
 .vocab-saved-hint {
-  margin: 16px 0 0;
+  margin: 12px 0 0;
   font-size: 11px;
   color: var(--shell-text-mute);
 }
