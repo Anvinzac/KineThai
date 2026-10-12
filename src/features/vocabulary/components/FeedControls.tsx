@@ -1,6 +1,15 @@
 /** Public navigation and stream/presentation controls. Exports: FeedControls. Depends on: router, presets, difficulty tracks, transport types. */
 import { Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import {
   ChevronDown,
   Clapperboard,
@@ -23,8 +32,20 @@ import type { HistoryStats } from "../lib/history";
 import { douyinStyleLabelVi, styleLabelVi, themeLabelVi, topicLabelVi } from "../lib/i18n";
 import { siteBrand, type TargetLocale } from "../lib/target-language";
 import { useAmbientSound } from "../hooks/useAmbientSound";
-import type { FeedPage, Presentation, VocabularyFilters, VisualDialect } from "../types";
+import type {
+  FeedPage,
+  Presentation,
+  ReadingPace,
+  VocabularyFilters,
+  VisualDialect,
+} from "../types";
 import { usePresence } from "@/hooks/use-presence";
+
+const PACE_OPTIONS: { id: ReadingPace; label: string }[] = [
+  { id: "slow", label: "Chậm" },
+  { id: "normal", label: "Vừa" },
+  { id: "fast", label: "Nhanh" },
+];
 
 /** Matches the exit keyframes' duration (--dur-quick) in vocabulary.css. */
 const POPUP_EXIT_MS = 180;
@@ -42,6 +63,91 @@ function PopupScrim({ closing, onDismiss }: { closing: boolean; onDismiss: () =>
       onClick={onDismiss}
     />
   );
+}
+
+/** Gap between a trigger and its list, and the margin kept from the sheet's edges. */
+const PICKER_GAP = 6;
+const PICKER_INSET = 10;
+/** Matches .vocab-picker-list max-height: the tallest a list gets when there is room. */
+const PICKER_MAX_HEIGHT = 240;
+/** Shortest a list may be shrunk to while still sitting clear of its trigger. */
+const PICKER_MIN_HEIGHT = 140;
+
+/**
+ * Keep a picker's list next to its trigger yet wholly inside the visible part of the
+ * options sheet, which scrolls and clips. Below the trigger is preferred; above is
+ * used when below is short and above has more room; when neither side holds the
+ * whole list it shrinks into the roomier side (its rows scroll), and only when even
+ * that side is cramped is it slid over the trigger to fit. Horizontally it starts at the trigger's
+ * left edge and is nudged back from either side. Writes styles straight onto the list
+ * so a sheet scroll or resize re-places it without a React render.
+ */
+function useContainedPicker(
+  open: boolean,
+  rootRef: RefObject<HTMLDivElement | null>,
+  listRef: RefObject<HTMLDivElement | null>,
+  /** Anything that changes the list's rows, so a grown or shrunk list is re-placed. */
+  contentKey?: unknown,
+) {
+  useLayoutEffect(() => {
+    if (!open) return;
+    const root = rootRef.current;
+    const list = listRef.current;
+    const trigger = root?.querySelector<HTMLElement>(".vocab-picker-trigger");
+    if (!root || !list || !trigger) return;
+    const sheet = root.closest<HTMLElement>(".vocab-options");
+
+    const place = () => {
+      const sheetRect = sheet?.getBoundingClientRect();
+      const left = Math.max(sheetRect?.left ?? 0, 0) + PICKER_INSET;
+      const right = Math.min(sheetRect?.right ?? innerWidth, innerWidth) - PICKER_INSET;
+      const top = Math.max(sheetRect?.top ?? 0, 0) + PICKER_INSET;
+      const bottom = Math.min(sheetRect?.bottom ?? innerHeight, innerHeight) - PICKER_INSET;
+      const anchor = trigger.getBoundingClientRect();
+      const origin = root.getBoundingClientRect();
+
+      list.style.maxWidth = `${Math.max(0, right - left)}px`;
+      const width = list.offsetWidth;
+      const border = list.offsetHeight - list.clientHeight;
+      const wanted = Math.min(list.scrollHeight + border, PICKER_MAX_HEIGHT);
+      let height = Math.min(wanted, Math.max(0, bottom - top));
+
+      const below = bottom - (anchor.bottom + PICKER_GAP);
+      const above = anchor.top - PICKER_GAP - top;
+      let y: number;
+      let side: "below" | "above";
+      if (below >= height) {
+        y = anchor.bottom + PICKER_GAP;
+        side = "below";
+      } else if (above >= height) {
+        y = anchor.top - PICKER_GAP - height;
+        side = "above";
+      } else if (Math.max(above, below) >= PICKER_MIN_HEIGHT) {
+        side = above > below ? "above" : "below";
+        height = Math.max(above, below);
+        y = side === "below" ? anchor.bottom + PICKER_GAP : anchor.top - PICKER_GAP - height;
+      } else {
+        side = above > below ? "above" : "below";
+        const preferred =
+          side === "below" ? anchor.bottom + PICKER_GAP : anchor.top - PICKER_GAP - height;
+        y = Math.min(Math.max(preferred, top), bottom - height);
+      }
+      const x = Math.min(Math.max(anchor.left, left), right - width);
+
+      list.style.top = `${y - origin.top}px`;
+      list.style.left = `${x - origin.left}px`;
+      list.style.maxHeight = `${height}px`;
+      list.dataset.side = side;
+    };
+
+    place();
+    sheet?.addEventListener("scroll", place, { passive: true });
+    window.addEventListener("resize", place);
+    return () => {
+      sheet?.removeEventListener("scroll", place);
+      window.removeEventListener("resize", place);
+    };
+  }, [open, rootRef, listRef, contentKey]);
 }
 
 /**
@@ -77,9 +183,11 @@ function OptionPicker({
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const labelId = useId();
   const current = options.find((option) => option.id === value) ?? options[0];
   const presence = usePresence(open, POPUP_EXIT_MS);
+  useContainedPicker(open, rootRef, listRef, options.length);
 
   useEffect(() => {
     if (!open) return;
@@ -113,6 +221,7 @@ function OptionPicker({
       </button>
       {presence.mounted && (
         <div
+          ref={listRef}
           className="vocab-picker-list"
           role="listbox"
           aria-labelledby={labelId}
@@ -154,6 +263,7 @@ function ThemePicker({
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const labelId = useId();
   const pool = useMemo(() => themePool("mix", dialect), [dialect]);
   const allIds = useMemo(() => pool.map((theme) => theme.id), [pool]);
@@ -171,6 +281,7 @@ function ThemePicker({
     [pool, selected],
   );
   const presence = usePresence(open, POPUP_EXIT_MS);
+  useContainedPicker(open, rootRef, listRef, isAll);
 
   useEffect(() => {
     if (!open) return;
@@ -227,6 +338,7 @@ function ThemePicker({
       </button>
       {presence.mounted && (
         <div
+          ref={listRef}
           className="vocab-picker-list"
           role="listbox"
           aria-multiselectable="true"
@@ -862,14 +974,42 @@ export function FeedControls({
           <label className="vocab-autoplay">
             <input
               type="checkbox"
-              checked={presentation.autoplay && !reducedMotion}
+              checked={presentation.advance !== false && !reducedMotion}
               disabled={reducedMotion}
               onChange={(event) =>
-                onPresentation({ ...presentation, autoplay: event.target.checked })
+                onPresentation({ ...presentation, advance: event.target.checked })
               }
             />{" "}
             Tự động phát luồng
           </label>
+          <p className="vocab-options-summary">
+            {reducedMotion
+              ? "Bạn đang bật chế độ giảm chuyển động, nên gợi ý lật thủ công."
+              : presentation.advance === false
+                ? "Mỗi từ sẽ tự phát lại từ đầu cho đến khi bạn vuốt sang từ mới."
+                : "Gợi ý và từ ngữ tự động chạy hết màn hình. Tắt đi để một từ tự phát lại."}
+          </p>
+          <div className="vocab-pace" role="radiogroup" aria-label="Tốc độ đọc">
+            <span className="vocab-pace-label">Tốc độ</span>
+            <div className="vocab-pace-options">
+              {PACE_OPTIONS.map((option) => {
+                const on = (presentation.pace ?? "fast") === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={on}
+                    data-on={on || undefined}
+                    disabled={reducedMotion}
+                    onClick={() => onPresentation({ ...presentation, pace: option.id })}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           {/* The Douyin dialect only exists on the Chinese host: it swaps the whole
               visual language — palettes, motion presets and highlight reskin — and
               deactivates the default one, so it is offered nowhere else. */}
@@ -895,11 +1035,6 @@ export function FeedControls({
               </small>
             </label>
           )}
-          <p className="vocab-options-summary">
-            {reducedMotion
-              ? "Bạn đang bật chế độ giảm chuyển động, nên gợi ý lật thủ công."
-              : "Gợi ý và từ ngữ tự động chạy hết màn hình. Tắt đi để tạm dừng."}
-          </p>
           <div className="vocab-memory" aria-label="Bộ nhớ lượt xem trên thiết bị">
             <span className="vocab-group-label">Bộ nhớ trên thiết bị</span>
             <p className="vocab-options-summary">

@@ -26,7 +26,7 @@ import {
   type Variants,
 } from "framer-motion";
 import { SPRING, getBeatSeconds } from "@/lib/motion";
-import { Bookmark, Heart } from "lucide-react";
+import { Bookmark, Heart, Pause, Play } from "lucide-react";
 import { buildVocabularyCanvas, choosePresentation, fitVocabularyTextSize } from "../lib/presets";
 import { buildStages } from "../lib/stages";
 import { getExportStageBox, type CardExportLayout } from "../lib/export-layout";
@@ -47,7 +47,7 @@ import {
 import { EMOJI_PALETTE, formatEmojiTotal, mockEmojiTotals, withLocalEmojis } from "../lib/emoji";
 import { useLearningPlayback } from "../hooks/useLearningPlayback";
 import { usePresence } from "@/hooks/use-presence";
-import type { FeedEntry, Presentation } from "../types";
+import type { FeedEntry, Presentation, ReadingPace } from "../types";
 import { EmojiBurst } from "./EmojiBurst";
 import { SpellingAnimation } from "./SpellingAnimation";
 import { VocabularyStage } from "./VocabularyStage";
@@ -64,6 +64,8 @@ const HanziStrokeSpelling = lazy(() =>
 
 /** Matches the report panel's exit keyframes (--dur-quick) in vocabulary.css. */
 const REPORT_EXIT_MS = 180;
+/** Clue-page duration multipliers; "fast" is the stream's native timing. */
+const PACE_FACTOR: Record<ReadingPace, number> = { slow: 1.75, normal: 1.35, fast: 1 };
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 const EASE_IN = [0.5, 0, 0.75, 0] as const;
@@ -235,26 +237,34 @@ export function VocabularyCard({
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
+  // Pace stretches the clue pages twice over, in step: how long each page stays up, and
+  // how slowly its words are read out onto it. The spelling coda keeps its own timing.
+  const paceFactor = exportLayout ? 1 : PACE_FACTOR[presentation.pace ?? "fast"];
   /** One duration per page: every clue stage plus the trailing spelling coda. */
   const pageDurations = useMemo(
     () => [
       ...stages.map((stage) =>
-        getPageDuration(
-          [stage.text, stage.reveal ? entry.word.defVi : ""].filter(Boolean).join(" "),
-          style.tempo,
-          style.rhythm,
+        Math.round(
+          getPageDuration(
+            [stage.text, stage.reveal ? entry.word.defVi : ""].filter(Boolean).join(" "),
+            style.tempo,
+            style.rhythm,
+          ) * paceFactor,
         ),
       ),
       spellingDuration,
     ],
-    [stages, entry.word.defVi, style.tempo, style.rhythm, spellingDuration],
+    [stages, entry.word.defVi, style.tempo, style.rhythm, spellingDuration, paceFactor],
   );
+  const looping = presentation.advance === false && !exportLayout;
   // While the report panel is open the card holds still: the reader is describing
   // THIS page, and the stream must not move on underneath them.
   const [reportOpen, setReportOpen] = useState(false);
-  // Visual feedback for the three-zone tap: briefly highlights which zone was tapped
-  // (left = rewind, center = pause/play, right = fast-forward) for 350ms.
-  const [tapZone, setTapZone] = useState<"left" | "center" | "right" | null>(null);
+  // Visual feedback for the side zones of the three-zone tap: briefly washes the
+  // tapped side (left = rewind, right = fast-forward) for 350ms.
+  const [tapZone, setTapZone] = useState<"left" | "right" | null>(null);
+  // Bumped by a center tap that pauses: keys the pause icon that pops out and vanishes.
+  const [pausePop, setPausePop] = useState(0);
   const tapZoneTimer = useRef<number | undefined>(undefined);
   const [reported, setReported] = useState(() => hasReportedWord(entry.word.id));
   const reportButton = useRef<HTMLButtonElement>(null);
@@ -315,6 +325,7 @@ export function VocabularyCard({
     durations: pageDurations,
     canAdvance,
     revealPage,
+    loop: looping,
     onFinish: advanceWithExit,
   });
   // Which way the reader last moved, derived during render so the outgoing page
@@ -324,7 +335,7 @@ export function VocabularyCard({
     setNav({ page: playback.page, direction: playback.page > nav.page ? 1 : -1 });
   }
   const isSpelling = playback.page > revealPage;
-  const autoAdvancing = playback.playing && canAdvance;
+  const autoAdvancing = playback.playing && canAdvance && !looping;
   useEffect(() => {
     if (!active || !isSpelling) return;
     onWordEnding?.(autoAdvancing ? spellingDuration : 0);
@@ -521,7 +532,7 @@ export function VocabularyCard({
         const leftZone = rect.width * 0.35;
         const rightZone = rect.width * 0.65;
         // Determine which zone was tapped and show visual feedback.
-        let zone: "left" | "center" | "right";
+        let zone: "left" | "right";
         if (relX < leftZone) {
           zone = "left";
           playback.previous();
@@ -529,8 +540,10 @@ export function VocabularyCard({
           zone = "right";
           playback.next();
         } else {
-          zone = "center";
+          // The center answers with the pause pop and the resting play button, not a wash.
+          if (presentation.autoplay) setPausePop((count) => count + 1);
           onToggleAutoplay?.();
+          return;
         }
         // Flash the zone highlight for 350ms.
         clearTimeout(tapZoneTimer.current);
@@ -538,7 +551,7 @@ export function VocabularyCard({
         tapZoneTimer.current = window.setTimeout(() => setTapZone(null), 350);
       }
     },
-    [playback, isSpelling, advanceWithExit, releaseDrag, onToggleAutoplay],
+    [playback, isSpelling, advanceWithExit, releaseDrag, onToggleAutoplay, presentation.autoplay],
   );
 
   void matching;
@@ -719,6 +732,42 @@ export function VocabularyCard({
       {tapZone && !exportLayout && (
         <div className="vocab-tap-zone-highlight" data-zone={tapZone} aria-hidden="true" />
       )}
+      {!exportLayout && (
+        <>
+          <AnimatePresence>
+            {pausePop > 0 && !presentation.autoplay && (
+              <motion.div
+                key={`pop-${pausePop}`}
+                className="vocab-pause-pop"
+                aria-hidden="true"
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: [0, 1, 0], scale: [0.6, 1.08, 1.32] }}
+                transition={{ duration: 0.52, times: [0, 0.3, 1], ease: "easeOut" }}
+                onAnimationComplete={() => setPausePop(0)}
+              >
+                <Pause size={30} fill="currentColor" strokeWidth={0} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {current && !presentation.autoplay && !reducedMotion && pausePop === 0 && (
+              <motion.button
+                key="resume"
+                type="button"
+                className="vocab-resume"
+                aria-label="Tiếp tục phát"
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1, transition: SPRING.gentle }}
+                exit={{ opacity: 0, scale: 1.25, transition: { duration: 0.2, ease: "easeIn" } }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => onToggleAutoplay?.()}
+              >
+                <Play size={30} fill="currentColor" strokeWidth={0} />
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </>
+      )}
       {isSpelling ? (
         isHan ? (
           <Suspense fallback={null}>
@@ -747,6 +796,7 @@ export function VocabularyCard({
           dragX={dragX}
           allowFrameEmphasis={!landscape}
           revealY={wideCard ? WIDE_REVEAL_Y : PORTRAIT_REVEAL_Y}
+          timeScale={paceFactor}
         />
       )}
       {isRevealed && (

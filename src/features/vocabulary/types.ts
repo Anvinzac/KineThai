@@ -50,9 +50,17 @@ export type VisualDialect = "default" | "douyin";
  * and a comma-joined id list (the picker's unselect model) rotates within just those.
  * `dialect` picks the pool that allow-list is read against.
  */
+/** How long each clue page stays up; "fast" is the stream's native timing. */
+export type ReadingPace = "slow" | "normal" | "fast";
+/**
+ * `autoplay` is play/pause. `advance` decides what a finished word does: move on to the
+ * next one (default), or replay itself from the first clue until the reader moves on.
+ */
 export type Presentation = {
   theme: string;
   style: NarrativeStyle | "mix";
   autoplay: boolean;
+  advance?: boolean;
+  pace?: ReadingPace;
   dialect?: VisualDialect;
 };

@@ -89,6 +89,7 @@ function StageText({
   | "dataEmphasis"
   | "secondaryEmphasis"
   | "allowFrameEmphasis"
+  | "timeScale"
 >) {
   const [still] = useState(reducedMotion || !playing);
   return (
@@ -117,6 +118,7 @@ export function VocabularyStage({
   dragX,
   allowFrameEmphasis,
   revealY,
+  timeScale = 1,
 }: {
   stage: LearningStage;
   word: VocabularyWord;
@@ -144,6 +146,8 @@ export function VocabularyStage({
    * stylesheet gives the word there.
    */
   revealY: number;
+  /** Reading-pace stretch on the words' read-out; matches the page-duration stretch. */
+  timeScale?: number;
 }) {
   const details = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -210,6 +214,7 @@ export function VocabularyStage({
                 dataEmphasis={stage.dataEmphasis}
                 secondaryEmphasis={stage.secondaryEmphasis}
                 allowFrameEmphasis={allowFrameEmphasis}
+                timeScale={timeScale}
               />
             </motion.div>
           </motion.div>

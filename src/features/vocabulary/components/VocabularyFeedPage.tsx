@@ -43,6 +43,8 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     theme: "mix",
     style: "mix",
     autoplay: true,
+    advance: true,
+    pace: "fast",
     // Only the Chinese host honors the stored Douyin-dialect preference; every
     // other address renders the default visuals even on a device that switched.
     dialect: locale === "zh" ? readDialectChoice() : "default",

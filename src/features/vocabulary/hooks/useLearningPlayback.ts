@@ -22,6 +22,8 @@ export function useLearningPlayback(options: {
    * it, and "reveal" must land on the answer rather than on the coda.
    */
   revealPage?: number;
+  /** Replay the word from its first page instead of finishing when the last page ends. */
+  loop?: boolean;
   onFinish?: () => void;
 }) {
   const [page, setPage] = useState(0);
@@ -82,11 +84,14 @@ export function useLearningPlayback(options: {
     wasPlaying.current = playing;
     if (!playing || !options.autoplay) return;
     // Wait for a buffered next word; retry/reconnect must not strand the reveal.
-    if (isLast && !options.canAdvance) return;
+    if (isLast && !options.loop && !options.canAdvance) return;
     const startedAt = performance.now();
     const timer = setTimeout(
       () => {
-        if (isLast) finishRef.current?.();
+        if (isLast && options.loop) {
+          setPage(0);
+          setReplay((current) => current + 1);
+        } else if (isLast) finishRef.current?.();
         else setPage((current) => Math.min(current + 1, options.count - 1));
       },
       Math.max(0, duration - elapsed.current),
@@ -95,7 +100,16 @@ export function useLearningPlayback(options: {
       clearTimeout(timer);
       elapsed.current = Math.min(duration, elapsed.current + (performance.now() - startedAt));
     };
-  }, [playing, options.autoplay, options.count, options.canAdvance, duration, isLast, pageKey]);
+  }, [
+    playing,
+    options.autoplay,
+    options.loop,
+    options.count,
+    options.canAdvance,
+    duration,
+    isLast,
+    pageKey,
+  ]);
   // Declared after the timer effect on purpose: its cleanup has just banked the time this
   // page was shown, and a word the reader has LEFT must not keep that — coming back to a
   // finished card would otherwise find its clock already spent and bounce straight off it.

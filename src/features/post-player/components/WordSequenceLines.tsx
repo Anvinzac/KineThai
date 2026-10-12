@@ -52,6 +52,8 @@ export type WordSequenceLinesProps = {
   textColor: string;
   emphasisColor: string;
   entranceStyle: ResolvedEntranceStyle;
+  /** Multiplier on every entrance's delay and length, forwarded from WordSequenceText. */
+  timeScale?: number;
 };
 
 /**
@@ -116,6 +118,7 @@ export function WordSequenceLines({
   textColor,
   emphasisColor,
   entranceStyle,
+  timeScale = 1,
 }: WordSequenceLinesProps): ReactElement {
   const renderWord = (
     word: string,
@@ -149,6 +152,7 @@ export function WordSequenceLines({
       allowFrame={allowFrame}
       runEffect={runEffect}
       sharedVariant={sharedVariant}
+      timeScale={timeScale}
     />
   );
 
@@ -156,10 +160,12 @@ export function WordSequenceLines({
   // rounded-rect outline never appears before the words it frames.
   const rhythmDurationMultiplier = spec.rhythm === "poetic" ? 1.28 : 1;
   const frameEntrance = (firstWordIndex: number) => {
-    const delay = staticRender ? 0 : getWordDelay(firstWordIndex, spec.tempo, spec.rhythm);
+    const delay = staticRender
+      ? 0
+      : getWordDelay(firstWordIndex, spec.tempo, spec.rhythm) * timeScale;
     const duration = staticRender
       ? 0.01
-      : tempoConfig[spec.tempo].wordDuration * 1.22 * rhythmDurationMultiplier;
+      : tempoConfig[spec.tempo].wordDuration * 1.22 * rhythmDurationMultiplier * timeScale;
     return { delay, duration };
   };
 
@@ -203,7 +209,7 @@ export function WordSequenceLines({
         className="inline-flex relative"
         initial={staticRender ? false : { opacity: 0, filter: "blur(6px)" }}
         animate={{ opacity: 1, filter: "blur(0px)" }}
-        transition={getEntranceTransition(entranceStyle, frameDelay, frameDuration)}
+        transition={getEntranceTransition(entranceStyle, frameDelay, frameDuration, timeScale)}
         style={{
           display: "inline-flex",
           flex: "0 0 auto",

@@ -78,6 +78,12 @@ export type WordSequenceTextProps = {
    * applies to `secondaryEmphasis`. Defaults to true, so every other surface is unchanged.
    */
   allowFrameEmphasis?: boolean;
+  /**
+   * Multiplier on how fast the words are read out — every word's start delay and its
+   * entrance length, springs included. 1 keeps the tempo's own pace; the vocabulary
+   * card raises it for a reader who picked a slower reading speed.
+   */
+  timeScale?: number;
 };
 
 /**
@@ -102,6 +108,7 @@ export function WordSequenceText({
   dataEmphasis,
   secondaryEmphasis,
   allowFrameEmphasis = true,
+  timeScale = 1,
 }: WordSequenceTextProps): ReactElement {
   // A Han page tokenizes per character before anything else: a whole Chinese sample
   // sentence is one whitespace token, and as one token it rendered as a single
@@ -277,6 +284,7 @@ export function WordSequenceText({
           textColor={textColor}
           emphasisColor={emphasisColor}
           entranceStyle={entranceStyle}
+          timeScale={timeScale}
         />
       </motion.div>
     </div>

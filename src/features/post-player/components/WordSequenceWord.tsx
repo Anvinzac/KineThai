@@ -66,6 +66,8 @@ export type WordSequenceWordProps = {
    * pair is in the curated list; otherwise two syllables of one word pick two effects.
    */
   sharedVariant?: EmphasisVariant;
+  /** Multiplier on the entrance's delay and length; above 1 reads the page out slower. */
+  timeScale?: number;
 };
 
 /**
@@ -96,6 +98,7 @@ export function WordSequenceWord({
   allowFrame = true,
   runEffect = false,
   sharedVariant,
+  timeScale = 1,
 }: WordSequenceWordProps): ReactElement {
   const hasGlyph = /\p{L}|\p{N}/u.test(word);
   // A masked answer ("_____", possibly with trailing punctuation) is split so the
@@ -144,12 +147,14 @@ export function WordSequenceWord({
     : textColor;
   const entranceDelay = staticRender
     ? 0
-    : getWordDelay(important ? emphasisAnchorIndex : index, spec.tempo, spec.rhythm);
+    : getWordDelay(important ? emphasisAnchorIndex : index, spec.tempo, spec.rhythm) * timeScale;
   const tempo = tempoConfig[spec.tempo];
   const rhythmDurationMultiplier = spec.rhythm === "poetic" ? 1.28 : 1;
   const entranceDuration = staticRender
     ? 0.01
-    : (important ? tempo.wordDuration * 1.22 : tempo.wordDuration) * rhythmDurationMultiplier;
+    : (important ? tempo.wordDuration * 1.22 : tempo.wordDuration) *
+      rhythmDurationMultiplier *
+      timeScale;
   const emphasisStyle = important
     ? ({
         "--kinetic-emphasis-delay": `${entranceDelay + entranceDuration + 0.18}s`,
@@ -189,7 +194,7 @@ export function WordSequenceWord({
       transition={
         isSolo
           ? { delay: entranceDelay, duration: entranceDuration, ease: [0.22, 1, 0.36, 1] }
-          : getEntranceTransition(entranceStyle, entranceDelay, entranceDuration)
+          : getEntranceTransition(entranceStyle, entranceDelay, entranceDuration, timeScale)
       }
       className={important ? "relative inline-flex" : "inline-flex"}
       style={{
