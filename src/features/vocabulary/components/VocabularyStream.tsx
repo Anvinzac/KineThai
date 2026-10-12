@@ -357,19 +357,19 @@ export function VocabularyStream({
             <div className="vocab-stream-status" role="status">
               <span>
                 {query.catalogChanged
-                  ? "New catalog available. Restart to load it."
+                  ? "Có bộ từ mới. Khởi động lại để tải."
                   : exhausted
-                    ? "Ready for another shuffle? Start a fresh stream."
+                    ? "Sẵn sàng trộn lần nữa? Bắt đầu dòng mới."
                     : query.isPaused
-                      ? "Offline — loaded words are still available."
-                      : "Couldn’t load more words."}
+                      ? "Mất mạng — các từ đã tải vẫn xem được."
+                      : "Không tải thêm từ được."}
               </span>
               <button
                 type="button"
                 onClick={query.catalogChanged || exhausted ? onRestart : retry}
                 disabled={query.isFetching}
               >
-                {query.catalogChanged || exhausted ? "Restart" : "Retry"}
+                {query.catalogChanged || exhausted ? "Khởi động lại" : "Thử lại"}
               </button>
             </div>
           )}

@@ -220,7 +220,7 @@ export function VocabularyStage({
           ref={details}
           className="vocab-reveal-details"
           tabIndex={0}
-          aria-label="Word meaning and examples"
+          aria-label="Nghĩa và ví dụ của từ"
           initial={reducedMotion ? false : { opacity: 0, y: 30, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={

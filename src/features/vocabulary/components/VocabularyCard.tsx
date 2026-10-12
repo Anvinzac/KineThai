@@ -674,7 +674,7 @@ export function VocabularyCard({
       data-stage={isSpelling ? "spelling" : stage.id}
       inert={!active}
       aria-hidden={!active}
-      aria-label={`Vocabulary card ${entry.position + 1}`}
+      aria-label={`Thẻ từ vựng ${entry.position + 1}`}
       aria-posinset={entry.position + 1}
       aria-setsize={-1}
       onTouchStart={(e) => {
@@ -717,11 +717,7 @@ export function VocabularyCard({
         </div>
       </div>
       {tapZone && !exportLayout && (
-        <div
-          className="vocab-tap-zone-highlight"
-          data-zone={tapZone}
-          aria-hidden="true"
-        />
+        <div className="vocab-tap-zone-highlight" data-zone={tapZone} aria-hidden="true" />
       )}
       {isSpelling ? (
         isHan ? (
@@ -815,7 +811,7 @@ export function VocabularyCard({
         </p>
       )}
       {!isSpelling && <p className="vocab-stage-label">{stage.label}</p>}
-      <div className="vocab-progress" aria-label={`Page ${playback.page + 1} of ${pageCount}`}>
+      <div className="vocab-progress" aria-label={`Trang ${playback.page + 1} / ${pageCount}`}>
         {pageKeys.map((key, index) => (
           <span key={key} data-complete={index < playback.page}>
             {index === playback.page && (
@@ -939,9 +935,7 @@ export function VocabularyCard({
                       className="vocab-emoji-strip-btn vocab-reaction-heart"
                       data-on={reactions.heart || undefined}
                       onClick={() => toggleReaction("heart")}
-                      aria-label={
-                        reactions.heart ? "Remove your heart from this word" : "Heart this word"
-                      }
+                      aria-label={reactions.heart ? "Bỏ yêu thích cho từ này" : "Yêu thích từ này"}
                     >
                       <span
                         key={pops.heart}
@@ -962,9 +956,7 @@ export function VocabularyCard({
                       className="vocab-emoji-strip-btn vocab-reaction-bookmark"
                       data-on={reactions.bookmark || undefined}
                       onClick={() => toggleReaction("bookmark")}
-                      aria-label={
-                        reactions.bookmark ? "Remove this word from saved" : "Save this word"
-                      }
+                      aria-label={reactions.bookmark ? "Bỏ lưu từ này" : "Lưu từ này"}
                     >
                       <span
                         key={pops.bookmark}
@@ -991,7 +983,7 @@ export function VocabularyCard({
                         type="button"
                         className="vocab-reveal-button vocab-reveal-pill"
                         onClick={playback.reveal}
-                        aria-label="Reveal word"
+                        aria-label="Lộ đáp án"
                       >
                         {revealButtonLabel || "Ê, từ này biết nè"}
                       </button>
@@ -1003,9 +995,7 @@ export function VocabularyCard({
                       className="vocab-reaction-button vocab-reaction-heart"
                       data-on={reactions.heart || undefined}
                       onClick={() => toggleReaction("heart")}
-                      aria-label={
-                        reactions.heart ? "Remove your heart from this word" : "Heart this word"
-                      }
+                      aria-label={reactions.heart ? "Bỏ yêu thích cho từ này" : "Yêu thích từ này"}
                     >
                       <span
                         key={pops.heart}
@@ -1025,9 +1015,7 @@ export function VocabularyCard({
                       className="vocab-reaction-button vocab-reaction-bookmark"
                       data-on={reactions.bookmark || undefined}
                       onClick={() => toggleReaction("bookmark")}
-                      aria-label={
-                        reactions.bookmark ? "Remove this word from saved" : "Save this word"
-                      }
+                      aria-label={reactions.bookmark ? "Bỏ lưu từ này" : "Lưu từ này"}
                     >
                       <span
                         key={pops.bookmark}

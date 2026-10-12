@@ -150,7 +150,7 @@ export function SpellingAnimation({
 
   return (
     <div className="vocab-spelling" ref={hostRef} aria-hidden="true">
-      <p className="vocab-spelling-label">Spell it once more</p>
+      <p className="vocab-spelling-label">Đánh vần lại lần nữa</p>
       <p className="sr-only" lang="en">
         {word}
       </p>

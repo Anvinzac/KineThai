@@ -19,7 +19,7 @@ export function VocabLibraryPage() {
   return (
     <main className="vocabulary-shell vocab-library-shell">
       <header className="vocab-library-header">
-        <Link className="vocab-icon-button" to="/feed" aria-label="Back to the word stream">
+        <Link className="vocab-icon-button" to="/feed" aria-label="Quay lại dòng từ vựng">
           <ArrowLeft size={19} />
         </Link>
         <div>

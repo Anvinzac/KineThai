@@ -55,11 +55,7 @@ export function WordReportButton({
       onClick={onToggle}
       aria-haspopup="dialog"
       aria-expanded={open}
-      aria-label={
-        reported
-          ? "You reported this word. Open the report panel"
-          : "Report a problem with this word"
-      }
+      aria-label={reported ? "Bạn đã báo lỗi từ này. Mở bảng báo lỗi" : "Báo lỗi từ này"}
       title="Báo lỗi thẻ này"
     >
       <span className="vocab-report-face" aria-hidden="true">

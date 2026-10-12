@@ -17,12 +17,7 @@ import { COMMUNITY_AVAILABLE } from "@/lib/feature-flags";
 import { EcosystemMenu } from "@/features/ecosystem/components/EcosystemMenu";
 import { ECOSYSTEM_STORE_AVAILABLE } from "@/lib/feature-flags";
 import { stylePool, themePool } from "../lib/presets";
-import {
-  DIFFICULTY_ALL,
-  formatLevelBand,
-  countTrackWords,
-  tracksFor,
-} from "../lib/difficulty";
+import { DIFFICULTY_ALL, formatLevelBand, countTrackWords, tracksFor } from "../lib/difficulty";
 import { CEFR_LEVELS, HSK_LEVELS, type NarrativeStyle } from "../lib/schema";
 import type { HistoryStats } from "../lib/history";
 import { douyinStyleLabelVi, styleLabelVi, themeLabelVi, topicLabelVi } from "../lib/i18n";
@@ -409,7 +404,8 @@ function DifficultyDropdown({
   };
   const commit = () => {
     onChange(
-      tracks.filter((track) => draft.has(track.id))
+      tracks
+        .filter((track) => draft.has(track.id))
         .map((track) => track.id)
         .join(","),
     );
@@ -442,7 +438,7 @@ function DifficultyDropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
-        aria-label={`${brand.lead}${brand.accent} — difficulty: ${summary.label}. Change difficulty`}
+        aria-label={`${brand.lead}${brand.accent} — độ khó: ${summary.label}. Đổi độ khó`}
         onClick={() => (open ? close(true) : openAt())}
       >
         {/* The title needs its own wrapper: .vocab-brand is a column flex, so a bare
@@ -479,7 +475,7 @@ function DifficultyDropdown({
             aria-multiselectable
             tabIndex={-1}
             className="vocab-difficulty-options"
-            aria-label="Difficulty"
+            aria-label="Độ khó"
             aria-activedescendant={`${listId}-opt-${cursor}`}
             onKeyDown={(event) => {
               switch (event.key) {
@@ -493,9 +489,7 @@ function DifficultyDropdown({
                   break;
                 case "ArrowUp":
                   event.preventDefault();
-                  setCursor(
-                    (index) => (index - 1 + options.length) % options.length,
-                  );
+                  setCursor((index) => (index - 1 + options.length) % options.length);
                   break;
                 case "Home":
                   event.preventDefault();
@@ -741,7 +735,7 @@ export function FeedControls({
             type="button"
             disabled={reducedMotion}
             onClick={() => onPresentation({ ...presentation, autoplay: !presentation.autoplay })}
-            aria-label={playing ? "Pause stream" : "Play stream"}
+            aria-label={playing ? "Tạm dừng dòng" : "Phát dòng"}
             aria-pressed={playing}
             data-active={playing || undefined}
           >
@@ -752,7 +746,7 @@ export function FeedControls({
             className="vocab-icon-button"
             type="button"
             onClick={ambient.toggle}
-            aria-label={ambient.enabled ? "Mute background music" : "Play background music"}
+            aria-label={ambient.enabled ? "Tắt nhạc nền" : "Bật nhạc nền"}
             aria-pressed={ambient.enabled}
             data-active={ambient.enabled || undefined}
           >
@@ -766,7 +760,7 @@ export function FeedControls({
               onShuffle();
               ambient.nextTrack();
             }}
-            aria-label="Shuffle words and start a new stream"
+            aria-label="Trộn từ và bắt đầu dòng mới"
           >
             <Shuffle size={19} />
           </button>
@@ -775,8 +769,8 @@ export function FeedControls({
               className="vocab-icon-button vocab-export-open"
               type="button"
               onClick={onExport}
-              aria-label="Export this word as a video (admin)"
-              title="Export this word as a video"
+              aria-label="Xuất từ này thành video (admin)"
+              title="Xuất từ này thành video"
             >
               <Clapperboard size={19} />
             </button>
