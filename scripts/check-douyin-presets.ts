@@ -18,10 +18,15 @@ import {
 } from "../src/features/vocabulary/lib/presets";
 
 // ── Palettes: every raw row already passes the audit, so the repair pipeline is
-// a no-op and what was designed is what ships. The collection now carries ten
-// rows: the original Douyin-tech / 国潮 five plus five Eastern artifact palettes
-// (ink-wash, celadon, cinnabar, porcelain, plum).
-assert.equal(DOUYIN_PALETTE_ROWS.length, 10, "the Douyin collection ships ten palettes");
+// a no-op and what was designed is what ships. The collection now carries
+// thirteen rows: the original Douyin-tech / 国潮 five, five Eastern artifact
+// palettes (ink-wash, celadon, cinnabar, porcelain, plum), and three
+// Chinese New Year palettes (spring crimson, hongbao gold, lantern paper-cut).
+assert.equal(
+  DOUYIN_PALETTE_ROWS.length,
+  13,
+  "the Douyin collection ships thirteen palettes",
+);
 for (const row of DOUYIN_PALETTE_ROWS) {
   const audit = auditPalette(row);
   const failed = audit.checks.filter((check) => !check.pass);
@@ -106,6 +111,6 @@ assert.equal(
   beatDrop,
 );
 
-console.log("OK — 10 Douyin palettes pass the contrast audit unrepaired.");
+console.log("OK — 13 Douyin palettes pass the contrast audit unrepaired.");
 console.log("OK — dialect pools never leak; styles keep the four-id contract.");
 console.log("All douyin-presets checks passed.");

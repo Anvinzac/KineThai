@@ -66,6 +66,10 @@ export const THEME_LABELS_VI: Record<string, string> = {
   "cinnabar-gold": "Chu sa vàng",
   "porcelain-blue": "Sứ Thanh hoa",
   "plum-blossom": "Mai hoa",
+  // Chinese New Year (xuân / Tết) palettes — crimson, temple gold, rice-paper cream.
+  "spring-crimson": "Đỏ xuân",
+  "hongbao-gold": "Lì xì vàng",
+  "lantern-paper-cut": "Đèn lồng giấy",
 };
 
 /** Narrative style id → the Vietnamese name of that reveal. */

@@ -275,6 +275,52 @@ export const DOUYIN_PALETTE_ROWS: Palette[] = [
     onAccent: "#14101f",
     font: "Playfair Display",
   },
+  // 春节 / Chūnjié — Chinese New Year: crimson lanterns, temple gold, rice-paper
+  // cream. Three palettes lean heavy on red and yellow with a light paper-cut
+  // variant on the cream side, so the reader can pick whichever register fits the
+  // card.
+  {
+    id: "spring-crimson",
+    label: "Spring crimson",
+    mood: "imperial crimson and old-brass gold over lacquer night",
+    scheme: "complementary",
+    tone: "dark",
+    hue: 345,
+    background: "linear-gradient(155deg,#8b1a48,#5a4820)",
+    ink: "#fdf3d1",
+    accentA: "#f5c542",
+    accentB: "#ff8f8f",
+    onAccent: "#14101f",
+    font: "Playfair Display",
+  },
+  {
+    id: "hongbao-gold",
+    label: "Hongbao gold",
+    mood: "red envelope with foil-sealed gold and a spark of coral",
+    scheme: "complementary",
+    tone: "dark",
+    hue: 350,
+    background: "linear-gradient(150deg,#a01c48,#6a5820)",
+    ink: "#fff7d1",
+    accentA: "#ffd23f",
+    accentB: "#ffa0a0",
+    onAccent: "#14101f",
+    font: "Space Grotesk",
+  },
+  {
+    id: "lantern-paper-cut",
+    label: "Lantern paper-cut",
+    mood: "cut-red lantern paste on cream rice paper with pine accent",
+    scheme: "complementary",
+    tone: "light",
+    hue: 40,
+    background: "linear-gradient(155deg,#fef1c4,#e898b8)",
+    ink: "#1f0f14",
+    accentA: "#7a1a4e",
+    accentB: "#5a4820",
+    onAccent: "#ffffff",
+    font: "Playfair Display",
+  },
 ];
 
 const DOUYIN_PALETTES: Palette[] = DOUYIN_PALETTE_ROWS.map((palette) =>
