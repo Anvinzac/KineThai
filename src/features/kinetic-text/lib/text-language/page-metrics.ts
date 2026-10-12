@@ -203,6 +203,12 @@ export function getVietnameseWordLines(
     // Once we've stacked the max run of single-word lines, the next line must
     // carry a pair so the column can't grow any thinner.
     const forcePair = consecutiveSolo >= VIETNAMESE_MAX_CONSECUTIVE_SOLO_LINES;
+    // Han pages pack one glyph per token, so a "solo line" (one segment = one Han
+    // character) is the natural short-line shape. The Vietnamese pair-reach exists to
+    // keep two-syllable compounds together; applying it to Han would balloon a 4-glyph
+    // line to 10, defeating HAN_MAX_CHARS_PER_LINE. Detect the Han line once from its
+    // first segment and skip the pair-reach for the rest of the pack.
+    const lineIsHan = segments[index]!.words.every((word) => isHanToken(word.text));
 
     const lineSegments: WordSegment[] = [];
     let lineLength = 0;
@@ -210,6 +216,12 @@ export function getVietnameseWordLines(
     // but two words, so a line holding it alone is already balanced — thinness is
     // measured in words, not segments.
     let lineWords = 0;
+    // Han word-integrity pull is allowed exactly once per line: two adjacent lone
+    // Han characters form a plausible 2-character word, but a third lone Han glued
+    // onto the pair is a separate word and should start a new line. Without this
+    // flag the look-ahead chains indefinitely and the 4-glyph cap becomes
+    // decorative.
+    let hanRescueUsed = false;
 
     while (index < segments.length) {
       const segment = segments[index];
@@ -239,6 +251,8 @@ export function getVietnameseWordLines(
       // next segment is also a single Han character, they likely form a 2-character
       // word. Pull the next segment onto this line even if it exceeds capacity, so
       // the word stays together rather than being split across two lines.
+      // Bounded to one rescue per line so a run of lone-Han tokens cannot chain
+      // past HAN_MAX_CHARS_PER_LINE.
       const lastSeg = lineSegments[lineSegments.length - 1];
       const lastIsSoloHan =
         lastSeg.words.length === 1 &&
@@ -248,18 +262,21 @@ export function getVietnameseWordLines(
         segment.words.length === 1 &&
         getVisibleWordLength(segment.words[0].text) === 1 &&
         isHanToken(segment.words[0].text);
-      if (lastIsSoloHan && nextIsSoloHan) {
+      if (!hanRescueUsed && lastIsSoloHan && nextIsSoloHan) {
         lineSegments.push(segment);
         lineLength = projected;
         lineWords += segmentWords;
+        hanRescueUsed = true;
         index += 1;
         continue;
       }
 
-      // Over capacity, but the line is still a single word. Reach a little
-      // further to pull a partner up rather than leave a one-word line. The reach
-      // is wider when a pair is being forced by the consecutive-solo cap.
-      if (lineWords === 1) {
+      // Over capacity, but the line is still a single word. Reach a little further
+      // to pull a partner up rather than leave a one-word line. The reach is wider
+      // when a pair is being forced by the consecutive-solo cap. Han lines skip
+      // this rescue — a lone Han glyph is already a whole word, so a short Han line
+      // is intentional and the pair-reach would only balloon the 4-glyph cap.
+      if (!lineIsHan && lineWords === 1) {
         const reach =
           capacity + (forcePair ? VIETNAMESE_PAIR_FORCE_CHARS : VIETNAMESE_PAIR_RELAX_CHARS);
         if (forcePair || projected <= reach) {

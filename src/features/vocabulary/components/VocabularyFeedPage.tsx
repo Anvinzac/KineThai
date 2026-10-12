@@ -139,7 +139,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
       <main className="vocabulary-shell">
         <OrientationGate show={orientationGated} />
         {stage === "onboarding" && (
-          <DifficultyOnboarding metadata={ladder} onPick={pickDifficulty} />
+          <DifficultyOnboarding metadata={ladder} locale={locale ?? "en"} onPick={pickDifficulty} />
         )}
       </main>
     );
@@ -198,9 +198,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
           setFilters(ALL_FILTERS);
         }}
         revealButtonLabel={activeWording?.reveal_button}
-        onToggleAutoplay={() =>
-          setPresentation((p) => ({ ...p, autoplay: !p.autoplay }))
-        }
+        onToggleAutoplay={() => setPresentation((p) => ({ ...p, autoplay: !p.autoplay }))}
       />
     </main>
   );

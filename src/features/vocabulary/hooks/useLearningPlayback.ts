@@ -65,11 +65,21 @@ export function useLearningPlayback(options: {
   const elapsed = useRef(0);
   const pageKey = `${page}:${replay}`;
   const lastPageKey = useRef(pageKey);
+  // Remember the previous `playing` state so a resume can be detected inside the
+  // timer effect. On the last page the reader must have actually SEEN the answer
+  // for its clock to count; a scroll-away-and-return pause leaves `elapsed` near
+  // `duration` and the resume fires `onFinish` in ~0ms — the card auto-skips with
+  // a burst of gradient pans the reader never looked at. Intermediate pages keep
+  // their banked partial time so pausing a clue mid-way still resumes in the middle.
+  const wasPlaying = useRef(false);
   useEffect(() => {
     if (lastPageKey.current !== pageKey) {
       lastPageKey.current = pageKey;
       elapsed.current = 0;
+    } else if (playing && !wasPlaying.current && isLast) {
+      elapsed.current = 0;
     }
+    wasPlaying.current = playing;
     if (!playing || !options.autoplay) return;
     // Wait for a buffered next word; retry/reconnect must not strand the reveal.
     if (isLast && !options.canAdvance) return;

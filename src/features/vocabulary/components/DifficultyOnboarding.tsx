@@ -22,12 +22,13 @@ import {
 } from "react";
 import {
   DIFFICULTY_ALL,
-  DIFFICULTY_TRACKS,
   countTrackWords,
   formatLevelBand,
   isTrackAvailable,
   trackCeiling,
+  tracksFor,
 } from "../lib/difficulty";
+import type { TargetLocale } from "../lib/target-language";
 import type { FeedPage } from "../types";
 
 /**
@@ -70,15 +71,22 @@ function nearestAvailable(target: number, available: readonly boolean[]): number
  */
 export function DifficultyOnboarding({
   metadata,
+  locale,
   onPick,
 }: {
   metadata: Pick<FeedPage, "levelCounts" | "levels" | "levelSamples"> | undefined;
+  /**
+   * Deck locale. Resolves which track set to render: CEFR for en/ko/ja, HSK for
+   * zh. Without this the picker would hardcode CEFR and every rung would show
+   * "Sắp có" on the hoa host because HSK catalogs never populate A1–C2.
+   */
+  locale: TargetLocale;
   onPick: (difficulty: string) => void;
 }) {
   // Several tracks top out at the same level; each takes the NEXT sample of that level so
   // no two rungs are illustrated by the same word.
   const taken = new Map<string, number>();
-  const rungs = DIFFICULTY_TRACKS.map((track, index) => {
+  const rungs = tracksFor(locale).map((track, index) => {
     const available = metadata ? isTrackAvailable(track, metadata.levels) : false;
     // Honour sampleLevel override so vỡ lòng can show an A1 word instead of the
     // A2 business term that happens to be first in the base catalog for that level.
@@ -214,7 +222,7 @@ export function DifficultyOnboarding({
               <span className="vocab-onboard-sample">
                 {rung.sample ? (
                   <>
-                    <strong lang="en">{rung.sample.word}</strong>
+                    <strong lang={locale === "zh" ? "zh-Hans" : locale}>{rung.sample.word}</strong>
                     {/* Fixed curiosity prompt: slides in with a spring when this rung
                         becomes active, fades out when the knob moves away. */}
                     <span className="vocab-onboard-curiosity">
