@@ -846,6 +846,9 @@ export function VocabularyCard({
           direction={nav.direction}
           dragX={dragX}
           allowFrameEmphasis={!landscape}
+          // The highlight comes from the reveal style's own short pool, so the effect is a
+          // property of the style and not of whichever word happened to land there.
+          emphasisPool={style.emphasis}
           revealY={wideCard ? WIDE_REVEAL_Y : PORTRAIT_REVEAL_Y}
           timeScale={paceFactor}
         />

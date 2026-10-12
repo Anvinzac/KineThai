@@ -3,6 +3,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type MotionValue, type Variants } from "framer-motion";
 import type { CanvasSpec } from "@/features/canvas";
 import { WordSequenceText } from "@/features/post-player";
+import type { EmphasisVariant } from "@/features/kinetic-text";
 import { EASE, SPRING } from "@/lib/motion";
 import type { VocabularyWord } from "../lib/schema";
 import type { LearningStage } from "../lib/stages";
@@ -90,6 +91,7 @@ function StageText({
   | "dataEmphasis"
   | "secondaryEmphasis"
   | "allowFrameEmphasis"
+  | "emphasisPool"
   | "timeScale"
 >) {
   const [still] = useState(reducedMotion || !playing);
@@ -118,6 +120,7 @@ export function VocabularyStage({
   direction,
   dragX,
   allowFrameEmphasis,
+  emphasisPool,
   revealY,
   timeScale = 1,
 }: {
@@ -141,6 +144,8 @@ export function VocabularyStage({
   dragX: MotionValue<number>;
   /** False on a landscape card, where the boxed highlight is drawn as an underline. */
   allowFrameEmphasis: boolean;
+  /** The highlight effects the reveal style authored for itself. */
+  emphasisPool?: readonly EmphasisVariant[];
   /**
    * Where the answer sits, as a percentage of its band's height. Portrait uses the fixed
    * 34% the card was designed at; a wide card passes the centre of the shorter band the
@@ -223,6 +228,7 @@ export function VocabularyStage({
                 dataEmphasis={stage.dataEmphasis}
                 secondaryEmphasis={stage.secondaryEmphasis}
                 allowFrameEmphasis={allowFrameEmphasis}
+                emphasisPool={emphasisPool}
                 timeScale={timeScale}
               />
             </motion.div>

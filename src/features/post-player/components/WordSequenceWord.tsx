@@ -55,6 +55,8 @@ export type WordSequenceWordProps = {
   skipFrame?: boolean;
   /** False where the box-drawing frame is not allowed; it is drawn as an underline. */
   allowFrame?: boolean;
+  /** The effects this slot may draw from; absent means the global pool. */
+  pool?: readonly EmphasisVariant[];
   /**
    * The enclosing run draws this word's moving effect (sweep, halo, glow, pulse,
    * jiggle) once across all of its syllables, so the word must not draw its own.
@@ -96,6 +98,7 @@ export function WordSequenceWord({
   entranceStyle,
   skipFrame = false,
   allowFrame = true,
+  pool,
   runEffect = false,
   sharedVariant,
   timeScale = 1,
@@ -130,6 +133,7 @@ export function WordSequenceWord({
       emphasisColor,
       inRun: skipFrame,
       allowFrame,
+      pool,
     });
   const important = displayVariant !== null;
   const primary = important && emphasized.has(index);
@@ -248,7 +252,11 @@ export function WordSequenceWord({
                           " kinetic-emph-underline"
                         : ownEffect === "sweep"
                           ? " kinetic-emph-sweep"
-                          : ""
+                          : // A hollow word filling with ink: one-shot draw, no class needed for
+                            // the movers that ride in on `animation` below.
+                            ownEffect === "outline"
+                            ? " kinetic-emph-outline"
+                            : ""
                 }${staticRender ? "" : " is-animated"}`
               : undefined
           }

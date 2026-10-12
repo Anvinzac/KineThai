@@ -35,6 +35,8 @@ export const RUN_LEVEL_VARIANTS: readonly EmphasisVariant[] = [
   "pulse",
   "jiggle",
   "underline",
+  "flash",
+  "fringe",
 ];
 
 /** A masked answer slot ("_____"), which the vocabulary card draws with its own baseline bar. */
@@ -81,6 +83,12 @@ export type WordEmphasisInput = {
    * substitution a shared run already makes. Defaults to allowed.
    */
   allowFrame?: boolean;
+  /**
+   * The effects this slot may draw from, authored per reveal style. Absent means the
+   * global pool. The luminous gate filters this list rather than replacing it, so a
+   * surface can narrow a style's effects but never force an aura onto a dim colour.
+   */
+  pool?: readonly EmphasisVariant[];
 };
 
 /**
@@ -105,6 +113,7 @@ export function resolveWordEmphasisVariant(input: WordEmphasisInput): EmphasisVa
           getBoundPhraseEmphasisSeed(words, index, phraseKeys),
           getBoundPhraseStartIndex(words, index, phraseKeys),
           !isDimEmphasisColor(input.emphasisColor),
+          input.pool,
         );
   const boxed = variant === "frame" && !input.inRun && input.allowFrame !== false;
   return avoidBlankUnderline(variant === "frame" && !boxed ? "underline" : variant, words);
@@ -178,5 +187,5 @@ function getRunAnchoredVariant(
     (shared.secondaryEmphasized?.has(first) ?? false);
   // A caller-forced second mark names its own effect; the run simply obeys it.
   if (isSecondary) return shared.secondaryVariant ?? null;
-  return getRunEmphasisStyle(shared.text, shared.words, indexes, shared.emphasisColor);
+  return getRunEmphasisStyle(shared.text, shared.words, indexes, shared.emphasisColor, shared.pool);
 }

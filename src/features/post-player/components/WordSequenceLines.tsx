@@ -42,6 +42,8 @@ export type WordSequenceLinesProps = {
   secondaryVariant?: EmphasisVariant;
   /** False where the box-drawing frame is not allowed (forwarded from WordSequenceText). */
   allowFrame?: boolean;
+  /** The effects this slot may draw from, forwarded from WordSequenceText. */
+  pool?: readonly EmphasisVariant[];
   spotlightEmphasis: boolean;
   spec: CanvasSpec;
   staticRender: boolean;
@@ -108,6 +110,7 @@ export function WordSequenceLines({
   secondaryEmphasized,
   secondaryVariant,
   allowFrame = true,
+  pool,
   spotlightEmphasis,
   spec,
   staticRender,
@@ -150,6 +153,7 @@ export function WordSequenceLines({
       entranceStyle={entranceStyle}
       skipFrame={skipFrame}
       allowFrame={allowFrame}
+      pool={pool}
       runEffect={runEffect}
       sharedVariant={sharedVariant}
       timeScale={timeScale}
@@ -191,6 +195,7 @@ export function WordSequenceLines({
         secondaryVariant,
         emphasisColor,
         allowFrame,
+        pool,
       },
     );
     // Every syllable of the run is dressed in the one effect the run settled on; only a

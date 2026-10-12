@@ -167,7 +167,11 @@ export function AnimatedWord({
                         : " kinetic-emph-underline"
                       : displayVariant === "sweep"
                         ? " kinetic-emph-sweep"
-                        : ""
+                        : // A hollow word filling with ink. The two filter movers (fringe, flash)
+                          // need no class here — they arrive on the animation below.
+                          displayVariant === "outline"
+                          ? " kinetic-emph-outline"
+                          : ""
               }${paused || staticLayout ? "" : " is-animated"}`
             : undefined
         }

@@ -447,6 +447,76 @@
   }
 }
 
+/* ── outline: a hollow word that fills with ink ───────────────────────────────────
+   The stroke is drawn with -webkit-text-stroke, the fill is the clipped background.
+   -webkit-text-fill-color:transparent wins over an inherited inline `color`, so the
+   renderer's colour still drives currentColor for the stroke without painting solid
+   glyphs. AT REST the fill is complete: the draw is a one-shot, so a card paused by
+   prefers-reduced-motion shows solid ink, never a permanent outline. ───────────── */
+.kinetic-emph-outline {
+  -webkit-text-stroke: 0.035em currentColor;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  padding: 0.02em 0.04em;
+}
+.kinetic-emph-outline.is-animated {
+  animation: kinetic-emphasis-outline-fill 0.72s cubic-bezier(0.22, 1, 0.36, 1)
+    var(--kinetic-emphasis-delay, 0.68s) both;
+}
+@keyframes kinetic-emphasis-outline-fill {
+  from {
+    background-size: 0% 100%;
+  }
+  to {
+    background-size: 100% 100%;
+  }
+}
+
+/* ── fringe: a one-shot chromatic tear that settles back into register ────────────
+   Written as transparent drop-shadows rather than a colour-stop gradient, so the word
+   itself never moves and nothing is clipped. The final keyframe is a ZERO-OFFSET
+   transparent shadow pair, not `filter: none`: `none` is not an interpolable value in a
+   filter list, so ending there would snap the tear off instead of easing it out. ──── */
+@keyframes kinetic-emphasis-fringe {
+  0% {
+    filter: drop-shadow(-0.05em 0 0 rgba(0, 255, 255, 0))
+      drop-shadow(0.05em 0 0 rgba(255, 0, 64, 0));
+  }
+  22% {
+    filter: drop-shadow(-0.07em 0.01em 0 rgba(0, 255, 255, 0.85))
+      drop-shadow(0.07em -0.01em 0 rgba(255, 0, 64, 0.85));
+  }
+  46% {
+    filter: drop-shadow(0.04em -0.01em 0 rgba(0, 255, 255, 0.6))
+      drop-shadow(-0.04em 0.01em 0 rgba(255, 0, 64, 0.6));
+  }
+  70% {
+    filter: drop-shadow(-0.02em 0 0 rgba(0, 255, 255, 0.3))
+      drop-shadow(0.02em 0 0 rgba(255, 0, 64, 0.3));
+  }
+  100% {
+    filter: drop-shadow(0 0 0 rgba(0, 255, 255, 0)) drop-shadow(0 0 0 rgba(255, 0, 64, 0));
+  }
+}
+
+/* ── flash: a brightness swell on the beat, capped so it cannot become a strobe ───
+   1.55 is the ceiling; anything brighter on a large glyph against a dark backdrop
+   crosses into flashing territory once the tempo scales it down. The duration floor
+   lives with the animation shorthand in getEmphasisInnerAnimation. ───────────────── */
+@keyframes kinetic-emphasis-flash {
+  0%,
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+  40% {
+    filter: brightness(1.55) saturate(1.12);
+  }
+}
+
 @keyframes kinetic-emphasis-jiggle {
   0%,
   100% {

@@ -86,6 +86,12 @@ export type WordSequenceTextProps = {
    */
   allowFrameEmphasis?: boolean;
   /**
+   * The highlight effects the emphasised words may draw from. A reveal style authors a short
+   * pool so the effect reads as a property of the style; absent, the global pool applies and
+   * every other surface looks exactly as it did.
+   */
+  emphasisPool?: readonly EmphasisVariant[];
+  /**
    * Multiplier on how fast the words are read out — every word's start delay and its
    * entrance length, springs included. 1 keeps the tempo's own pace; the vocabulary
    * card raises it for a reader who picked a slower reading speed.
@@ -116,6 +122,7 @@ export function WordSequenceText({
   dataEmphasis,
   secondaryEmphasis,
   allowFrameEmphasis = true,
+  emphasisPool,
   timeScale = 1,
 }: WordSequenceTextProps): ReactElement {
   // A Han page tokenizes per character before anything else: a whole Chinese sample
@@ -282,6 +289,7 @@ export function WordSequenceText({
           secondaryEmphasized={secondaryEmphasized}
           secondaryVariant={secondaryVariant}
           allowFrame={allowFrameEmphasis}
+          pool={emphasisPool}
           spotlightEmphasis={spotlightEmphasis}
           spec={spec}
           staticRender={staticRender}
