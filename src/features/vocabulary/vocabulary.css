@@ -1552,11 +1552,26 @@
   position: absolute;
   inset: 0;
 }
-.vocab-backdrop-drift[data-drift] {
+/* A card's backdrop has ONE geometry, whether or not it is the word on screen. The
+   overhang and the drift's starting offset used to be applied only once the card was
+   playing, so a neighbour was painted from a differently sized, differently placed strip
+   — other colours — and snapped to its real ones the instant it became current: in the
+   middle of every swipe, and for a frame or more after every auto-advance. Now the
+   wrapper is sized and offset the same from the first paint, and becoming current only
+   starts the motion from where the card already is. The resting offset is the keyframes'
+   first frame, written as a 2D translate so idle neighbours do not each claim a layer. */
+.vocab-backdrop-drift[data-strip] {
   inset: 0 -9%;
+  transform: translate(-7%, 0);
+}
+.vocab-backdrop-drift[data-drift] {
   animation: vocab-backdrop-drift calc(var(--kinetic-beat, 0.6s) * 16) ease-in-out infinite
     alternate;
   will-change: transform;
+}
+/* The word the reader just left keeps its drift, frozen, until it is unmounted. */
+.vocab-backdrop-drift[data-drift="held"] {
+  animation-play-state: paused;
 }
 @keyframes vocab-backdrop-drift {
   from {
@@ -1586,7 +1601,7 @@
    page turns still change the colour completely; and the overhang (60% a side) still
    dwarfs the drift's travel (7% of the wrapper), so no edge is ever exposed. */
 @media (orientation: landscape) and (max-height: 560px) {
-  .vocab-backdrop-drift[data-drift] {
+  .vocab-backdrop-drift[data-strip] {
     inset: 0 -60%;
   }
 }
@@ -5202,7 +5217,7 @@
 }
 /* The center third has no wash: a pause icon pops out and vanishes, then a translucent
    play button rests on the card while the stream is paused; tapping it resumes. Both
-   are centred by margins, not translate, because framer-motion owns their transform. */
+   are centred by margins, not translate, because their animations own the transform. */
 .vocab-pause-pop,
 .vocab-resume {
   position: absolute;
@@ -5222,14 +5237,77 @@
   backdrop-filter: blur(10px) saturate(140%);
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--chrome-ink) 18%, transparent),
-    var(--chrome-shadow);
+    0 8px 24px rgb(0 0 0 / 28%);
 }
+/* No opacity in either keyframe set (see the note in VocabularyCard): the disc fades
+   by its tint, blur radius and shadow growing from zero; only the icon's opacity moves. */
 .vocab-pause-pop {
   pointer-events: none;
+  animation: vocab-pause-pop 520ms var(--ease-out) forwards;
+}
+.vocab-pause-pop svg {
+  animation: vocab-pause-pop-icon 520ms var(--ease-out) forwards;
 }
 .vocab-resume {
   border: 0;
   cursor: pointer;
+  /* backwards, not both: once it has landed, framer's exit inline styles must win. */
+  animation: vocab-resume-in var(--dur-move) var(--ease-spring) backwards;
+}
+.vocab-resume > span {
+  display: grid;
+  animation: vocab-resume-icon-in var(--dur-quick) var(--ease-out) backwards;
+}
+@keyframes vocab-resume-in {
+  from {
+    transform: scale(0.7);
+    background-color: transparent;
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+    backdrop-filter: blur(0px) saturate(100%);
+    box-shadow:
+      inset 0 0 0 1px transparent,
+      0 8px 24px rgb(0 0 0 / 0%);
+  }
+}
+@keyframes vocab-resume-icon-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes vocab-pause-pop {
+  0%,
+  100% {
+    background-color: transparent;
+    -webkit-backdrop-filter: blur(0px) saturate(100%);
+    backdrop-filter: blur(0px) saturate(100%);
+    box-shadow:
+      inset 0 0 0 1px transparent,
+      0 8px 24px rgb(0 0 0 / 0%);
+  }
+  0% {
+    transform: scale(0.6);
+  }
+  30% {
+    transform: scale(1.08);
+    background-color: var(--chrome-fill);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    backdrop-filter: blur(10px) saturate(140%);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--chrome-ink) 18%, transparent),
+      0 8px 24px rgb(0 0 0 / 28%);
+  }
+  100% {
+    transform: scale(1.32);
+  }
+}
+@keyframes vocab-pause-pop-icon {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
 }
 /* The play triangle's visual centre sits left of its box; nudge it to look centred. */
 .vocab-resume svg {
