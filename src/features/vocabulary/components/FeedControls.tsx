@@ -19,11 +19,11 @@ import { ECOSYSTEM_STORE_AVAILABLE } from "@/lib/feature-flags";
 import { stylePool, themePool } from "../lib/presets";
 import {
   DIFFICULTY_ALL,
-  DIFFICULTY_TRACKS,
   formatLevelBand,
   countTrackWords,
+  tracksFor,
 } from "../lib/difficulty";
-import { LEVELS, type NarrativeStyle } from "../lib/schema";
+import { CEFR_LEVELS, HSK_LEVELS, type NarrativeStyle } from "../lib/schema";
 import type { HistoryStats } from "../lib/history";
 import { douyinStyleLabelVi, styleLabelVi, themeLabelVi, topicLabelVi } from "../lib/i18n";
 import { siteBrand, type TargetLocale } from "../lib/target-language";
@@ -277,51 +277,55 @@ type DifficultyOption = {
 /**
  * The dropdown's rows: an explicit "all" escape hatch ahead of the ten tracks. In the
  * multi-select the "all" row means an EMPTY selection (no restriction), so clearing
- * every track returns to it. Each row shows its HSK band as a chip ahead of the name
- * and its real word count at the trailing edge. The rows are static, so the list renders
- * before the first feed page resolves; the counts arrive with that page.
+ * every track returns to it. Each row shows its level band as a chip ahead of the name
+ * and its real word count at the trailing edge. The rows are static per locale, so the
+ * list renders before the first feed page resolves; the counts arrive with that page.
  */
-const DIFFICULTY_OPTIONS: DifficultyOption[] = [
-  {
-    id: DIFFICULTY_ALL,
-    label: "tất cả",
-    hint: "Mọi trình độ",
-    // Derived from LEVELS rather than written out, so the row keeps stating the real full
-    // span if the HSK list ever gains or loses an end. Empty here left the one row in the
-    // list without a chip, which broke the column the other ten line up on.
-    band: formatLevelBand(LEVELS),
-  },
-  ...DIFFICULTY_TRACKS.map((track) => ({
-    id: track.id,
-    label: track.label,
-    hint: track.hint,
-    band: formatLevelBand(track.levels),
-  })),
-];
+function buildDifficultyOptions(locale: TargetLocale): DifficultyOption[] {
+  const tracks = tracksFor(locale);
+  const allLevels = locale === "zh" ? HSK_LEVELS : CEFR_LEVELS;
+  return [
+    {
+      id: DIFFICULTY_ALL,
+      label: "tất cả",
+      hint: "Mọi trình độ",
+      band: formatLevelBand(allLevels),
+    },
+    ...tracks.map((track) => ({
+      id: track.id,
+      label: track.label,
+      hint: track.hint,
+      band: formatLevelBand(track.levels),
+    })),
+  ];
+}
 
 /** Split a committed `difficulty` value into its track ids, in canonical order. */
-function parseDifficulty(value: string): string[] {
+function parseDifficulty(value: string, tracks: readonly { id: string }[]): string[] {
   const seen = new Set(
     value
       .split(",")
       .map((id) => id.trim())
       .filter(Boolean),
   );
-  return DIFFICULTY_TRACKS.map((track) => track.id).filter((id) => seen.has(id));
+  return tracks.map((track) => track.id).filter((id) => seen.has(id));
 }
 
 /**
  * Summarise a selection for the trigger line: none → 🤯 "tất cả", one → that track's
  * emoji and label, several → 🧩 "tổng hợp" over the union band.
  */
-function describeSelection(ids: string[]): { emoji: string; label: string; band: string } {
+function describeSelection(
+  ids: string[],
+  tracks: ReturnType<typeof tracksFor>,
+): { emoji: string; label: string; band: string } {
   if (!ids.length) return { emoji: "🤯", label: "tất cả", band: "" };
-  const tracks = DIFFICULTY_TRACKS.filter((track) => ids.includes(track.id));
-  if (tracks.length === 1) {
-    const track = tracks[0]!;
+  const selected = tracks.filter((track) => ids.includes(track.id));
+  if (selected.length === 1) {
+    const track = selected[0]!;
     return { emoji: track.emoji, label: track.label, band: formatLevelBand(track.levels) };
   }
-  const levels = [...new Set(tracks.flatMap((track) => track.levels))];
+  const levels = [...new Set(selected.flatMap((track) => track.levels))];
   return { emoji: "🧩", label: "tổng hợp", band: formatLevelBand(levels) };
 }
 
@@ -361,8 +365,11 @@ function DifficultyDropdown({
   locale?: TargetLocale;
 }) {
   const listId = useId();
-  const committed = useMemo(() => parseDifficulty(value), [value]);
-  const summary = describeSelection(committed);
+  const activeLocale = locale ?? "en";
+  const tracks = tracksFor(activeLocale);
+  const options = useMemo(() => buildDifficultyOptions(activeLocale), [activeLocale]);
+  const committed = useMemo(() => parseDifficulty(value, tracks), [value, tracks]);
+  const summary = describeSelection(committed, tracks);
   const [draft, setDraft] = useState<Set<string>>(() => new Set(committed));
   const [cursor, setCursor] = useState(0);
   // "Done" stays hidden until the reader picks a row this session, then fades in.
@@ -402,7 +409,7 @@ function DifficultyDropdown({
   };
   const commit = () => {
     onChange(
-      DIFFICULTY_TRACKS.filter((track) => draft.has(track.id))
+      tracks.filter((track) => draft.has(track.id))
         .map((track) => track.id)
         .join(","),
     );
@@ -482,12 +489,12 @@ function DifficultyDropdown({
                   break;
                 case "ArrowDown":
                   event.preventDefault();
-                  setCursor((index) => (index + 1) % DIFFICULTY_OPTIONS.length);
+                  setCursor((index) => (index + 1) % options.length);
                   break;
                 case "ArrowUp":
                   event.preventDefault();
                   setCursor(
-                    (index) => (index - 1 + DIFFICULTY_OPTIONS.length) % DIFFICULTY_OPTIONS.length,
+                    (index) => (index - 1 + options.length) % options.length,
                   );
                   break;
                 case "Home":
@@ -496,19 +503,19 @@ function DifficultyDropdown({
                   break;
                 case "End":
                   event.preventDefault();
-                  setCursor(DIFFICULTY_OPTIONS.length - 1);
+                  setCursor(options.length - 1);
                   break;
                 case "Enter":
                 case " ":
                   event.preventDefault();
-                  pickRow(DIFFICULTY_OPTIONS[cursor]!.id);
+                  pickRow(options[cursor]!.id);
                   break;
                 default:
                   break;
               }
             }}
           >
-            {DIFFICULTY_OPTIONS.map((option, index) => {
+            {options.map((option, index) => {
               const isSelected =
                 option.id === DIFFICULTY_ALL ? draft.size === 0 : draft.has(option.id);
               const count = countFor(option.id);

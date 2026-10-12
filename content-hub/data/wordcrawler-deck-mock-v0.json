@@ -40,7 +40,7 @@
         }
       ],
       "topic": "character",
-      "level": "HSK4",
+      "level": "B2",
       "anticipateVi": "Thử nhắm mắt đoán xem…",
       "emphasis": [
         "bật dậy",
@@ -63,7 +63,7 @@
         }
       ],
       "topic": "communication",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Năm chữ cái — đoán đi!",
       "emphasis": [
         "rõ ràng",
@@ -86,7 +86,7 @@
         }
       ],
       "topic": "work",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Bạn nghĩ ra chưa?",
       "emphasis": [
         "trao đổi",
@@ -109,7 +109,7 @@
         }
       ],
       "topic": "work",
-      "level": "HSK2",
+      "level": "A2",
       "anticipateVi": "Đếm ngược… đoán đi!",
       "emphasis": [
         "cuối cùng",
@@ -132,7 +132,7 @@
         }
       ],
       "topic": "attention",
-      "level": "HSK4",
+      "level": "B2",
       "anticipateVi": "Từ này có hai nghĩa lận.",
       "emphasis": [
         "bỏ sót",
@@ -155,7 +155,7 @@
         }
       ],
       "topic": "emotion",
-      "level": "HSK4",
+      "level": "B2",
       "anticipateVi": "Cảm giác này ai cũng từng có.",
       "emphasis": [
         "thực sự",
@@ -178,7 +178,7 @@
         }
       ],
       "topic": "character",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Bảy chữ cái — đoán thử!",
       "emphasis": [
         "thật lòng",
@@ -201,7 +201,7 @@
         }
       ],
       "topic": "work",
-      "level": "HSK4",
+      "level": "B2",
       "anticipateVi": "Mười chữ cái — dài nhất bài.",
       "emphasis": [
         "nhượng bộ",
@@ -224,7 +224,7 @@
         }
       ],
       "topic": "thinking",
-      "level": "HSK4",
+      "level": "B2",
       "anticipateVi": "Nhắm mắt rồi mở ra xem.",
       "emphasis": [
         "nhận ra",
@@ -247,7 +247,7 @@
         }
       ],
       "topic": "time",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Tám chữ cái — đoán xem!",
       "emphasis": [
         "thời điểm",
@@ -270,7 +270,7 @@
         }
       ],
       "topic": "character",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Đừng lướt — nghĩ kỹ đã.",
       "emphasis": [
         "hoàn toàn",
@@ -293,7 +293,7 @@
         }
       ],
       "topic": "thinking",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Chữ cái đầu dễ đoán lắm.",
       "emphasis": [
         "kiểm chứng",
@@ -316,7 +316,7 @@
         }
       ],
       "topic": "work",
-      "level": "HSK2",
+      "level": "A2",
       "anticipateVi": "Từ ghép hai phần — đoán thử.",
       "emphasis": [
         "nhận xét",
@@ -339,7 +339,7 @@
         }
       ],
       "topic": "emotion",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Thở sâu nào — rồi đoán.",
       "emphasis": [
         "bồn chồn",
@@ -362,7 +362,7 @@
         }
       ],
       "topic": "communication",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Nói to lên xem đúng không!",
       "emphasis": [
         "hiểu được",
@@ -385,7 +385,7 @@
         }
       ],
       "topic": "work",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Nghe quen lắm phải không?",
       "emphasis": [
         "hàng đầu",
@@ -408,7 +408,7 @@
         }
       ],
       "topic": "emotion",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Bạn đã đoán ra chưa?",
       "emphasis": [
         "ngập ngừng",
@@ -431,7 +431,7 @@
         }
       ],
       "topic": "thinking",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Đúng một chữ thôi!",
       "emphasis": [
         "sự thật",
@@ -454,7 +454,7 @@
         }
       ],
       "topic": "thinking",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Kết hay mở đây?",
       "emphasis": [
         "thực sự",
@@ -477,7 +477,7 @@
         }
       ],
       "topic": "communication",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Sức mạnh của lời nói.",
       "emphasis": [
         "lý lẽ",
@@ -500,7 +500,7 @@
         }
       ],
       "topic": "daily",
-      "level": "HSK2",
+      "level": "A2",
       "anticipateVi": "Bạn làm nó mỗi ngày.",
       "emphasis": [
         "lặp lại",
@@ -523,7 +523,7 @@
         }
       ],
       "topic": "emotion",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Cảm giác này quen lắm.",
       "emphasis": [
         "lúng túng",
@@ -546,7 +546,7 @@
         }
       ],
       "topic": "daily",
-      "level": "HSK2",
+      "level": "A2",
       "anticipateVi": "Ai cũng muốn có thêm.",
       "emphasis": [
         "tốt đẹp",
@@ -569,7 +569,7 @@
         }
       ],
       "topic": "attention",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Đừng nhìn chỗ khác!",
       "emphasis": [
         "tập trung",
@@ -592,7 +592,7 @@
         }
       ],
       "topic": "thinking",
-      "level": "HSK3",
+      "level": "B1",
       "anticipateVi": "Chín chữ cái. Đoán đi!",
       "emphasis": [
         "thể thiếu",

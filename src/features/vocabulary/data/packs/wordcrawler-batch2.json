@@ -13,9 +13,9 @@
     "work"
   ],
   "levels": [
-    "HSK2",
-    "HSK3",
-    "HSK4"
+    "A2",
+    "B1",
+    "B2"
   ],
   "words": [
     {
@@ -30,7 +30,7 @@
       "topics": [
         "character"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "Kids are naturally _____ about the world around them.",
@@ -52,7 +52,7 @@
       "topics": [
         "character"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "Be _____, good things take time.",
@@ -74,7 +74,7 @@
       "topics": [
         "character"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "It was very _____ of you to share your lunch.",
@@ -96,7 +96,7 @@
       "topics": [
         "character"
       ],
-      "level": "HSK4",
+      "level": "B2",
       "usage": [
         {
           "en": "He's too _____ to admit he was wrong.",
@@ -118,7 +118,7 @@
       "topics": [
         "character"
       ],
-      "level": "HSK4",
+      "level": "B2",
       "usage": [
         {
           "en": "Despite her fame, she stayed _____.",
@@ -140,7 +140,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "I'm really _____ for your help.",
@@ -162,7 +162,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "I was so _____ when I called her by the wrong name.",
@@ -184,7 +184,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "She got _____ when the app kept crashing.",
@@ -206,7 +206,7 @@
       "topics": [
         "emotion"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "We were _____ to hear that everyone was safe.",
@@ -228,7 +228,7 @@
       "topics": [
         "communication"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "You should _____ to your sister.",
@@ -250,7 +250,7 @@
       "topics": [
         "communication"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "Please don't _____ me while I'm talking.",
@@ -272,7 +272,7 @@
       "topics": [
         "communication"
       ],
-      "level": "HSK2",
+      "level": "A2",
       "usage": [
         {
           "en": "She didn't _____ that she was leaving.",
@@ -294,7 +294,7 @@
       "topics": [
         "time"
       ],
-      "level": "HSK2",
+      "level": "A2",
       "usage": [
         {
           "en": "My _____ is completely full this week.",
@@ -316,7 +316,7 @@
       "topics": [
         "time"
       ],
-      "level": "HSK4",
+      "level": "B2",
       "usage": [
         {
           "en": "He is always _____ for meetings.",
@@ -338,7 +338,7 @@
       "topics": [
         "time"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "Heavy rain may _____ the start of the match.",
@@ -360,7 +360,7 @@
       "topics": [
         "work"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "I'm having lunch with a _____ today.",
@@ -382,7 +382,7 @@
       "topics": [
         "work"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "She worked hard to _____ her dream.",
@@ -404,7 +404,7 @@
       "topics": [
         "work"
       ],
-      "level": "HSK4",
+      "level": "B2",
       "usage": [
         {
           "en": "This new system is far more _____.",
@@ -426,7 +426,7 @@
       "topics": [
         "attention"
       ],
-      "level": "HSK2",
+      "level": "A2",
       "usage": [
         {
           "en": "Did you _____ anything strange?",
@@ -448,7 +448,7 @@
       "topics": [
         "attention"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "She tried to _____ the noise and focus.",
@@ -470,7 +470,7 @@
       "topics": [
         "thinking"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "We'll _____ your offer carefully.",
@@ -492,7 +492,7 @@
       "topics": [
         "thinking"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "I _____ he'll arrive on time.",
@@ -514,7 +514,7 @@
       "topics": [
         "thinking"
       ],
-      "level": "HSK2",
+      "level": "A2",
       "usage": [
         {
           "en": "_____ a world without phones.",
@@ -536,7 +536,7 @@
       "topics": [
         "daily"
       ],
-      "level": "HSK3",
+      "level": "B1",
       "usage": [
         {
           "en": "Doing the dishes is my least favorite _____.",
@@ -558,7 +558,7 @@
       "topics": [
         "daily"
       ],
-      "level": "HSK4",
+      "level": "B2",
       "usage": [
         {
           "en": "My daily _____ takes about an hour.",
