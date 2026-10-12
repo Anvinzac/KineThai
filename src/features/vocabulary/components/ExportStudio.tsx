@@ -335,7 +335,7 @@ export function ExportStudio({
                   </select>
                 </label>
                 <label>
-                  Pace
+                  Reveal style
                   <select
                     value={style}
                     onChange={(event) => setStyle(event.target.value as NarrativeStyle | "mix")}

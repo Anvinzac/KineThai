@@ -85,6 +85,7 @@ function StageText({
   | "canvasWidth"
   | "background"
   | "entranceSeed"
+  | "entrance"
   | "fitAsUnit"
   | "dataEmphasis"
   | "secondaryEmphasis"
@@ -199,17 +200,25 @@ export function VocabularyStage({
                   exact phrase matching keeps only the ones occurring in this stage's
                   text, so unrelated annotations never glow. The letter-count clue also
                   sends a second mark (its starting initial) drawn with its own effect.
-                  The text block itself stays still (loop: "none") — a page of clue
+                  A clue page's text block stays still (loop: "none") — a page of clue
                   text that bobs forever is harder to read; the life is in the backdrop
-                  and in the emphasised word. */}
+                  and in the emphasised word. The answer is one word and nothing is left
+                  to read off it, so there the reveal style's own loop plays. */}
               <StageText
-                spec={{ ...spec, y: stage.reveal ? revealY : 46, loop: "none" }}
+                spec={{
+                  ...spec,
+                  y: stage.reveal ? revealY : 46,
+                  loop: stage.reveal ? spec.loop : "none",
+                }}
                 playKey={playKey}
                 playing={playing}
                 reducedMotion={reducedMotion}
                 canvasWidth={canvasWidth}
                 background={background}
+                // The seed still varies the two poetic reveals from word to word; every
+                // other rhythm arrives the way its reveal style says.
                 entranceSeed={word.id}
+                entrance={spec.entrance}
                 fitAsUnit={!!stage.reveal}
                 dataEmphasis={stage.dataEmphasis}
                 secondaryEmphasis={stage.secondaryEmphasis}

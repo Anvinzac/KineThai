@@ -2,11 +2,11 @@
  * Auto-picked word entrance personalities for the feed player.
  *
  * Exports: ENTRANCE_REST, getEntranceStyle, getEntranceHidden, getEntranceTransition
- * Depends on: framer-motion TargetAndTransition/Transition, canvas Rhythm, kinetic-text getStableNumber
+ * Depends on: framer-motion TargetAndTransition/Transition, canvas Entrance/Rhythm, kinetic-text getStableNumber
  */
 
 import type { TargetAndTransition, Transition } from "framer-motion";
-import type { Rhythm } from "@/features/canvas";
+import type { Entrance, Rhythm } from "@/features/canvas";
 import { getStableNumber } from "@/features/kinetic-text";
 
 // Every post is auto-assigned one of these word-entrance "personalities", picked
@@ -19,6 +19,19 @@ const POETIC_ENTRANCE_STYLES = ["poetic-bloom", "poetic-drift"] as const;
 type EntranceStyle = (typeof ENTRANCE_STYLES)[number];
 type PoeticEntranceStyle = (typeof POETIC_ENTRANCE_STYLES)[number];
 export type ResolvedEntranceStyle = EntranceStyle | PoeticEntranceStyle;
+
+// A caller that authors its entrance (a vocabulary reveal style) names the personality
+// instead of leaving it to the seed. Each authored name gets the pool member with the
+// same character and no two share one, so presets that differ in entrance differ on
+// screen. `fade` takes the plain rise rather than `focus`: blur stays the one thing
+// that sets the `blur` entrance apart, and it is the costliest of the six to animate.
+const AUTHORED_ENTRANCE_STYLES: Record<Entrance, EntranceStyle> = {
+  fade: "rise",
+  slide: "drift",
+  scale: "pop",
+  blur: "focus",
+  split: "tilt",
+};
 
 // Shared resting state — resets every transform any hidden state touches (x, y,
 // scale, rotate, blur) so words always land in the same place.
@@ -35,14 +48,21 @@ export const ENTRANCE_REST: TargetAndTransition = {
  * Compute entrancestyle.
  * @param seed - seed argument
  * @param rhythm? - rhythm? argument
+ * @param entrance? - authored entrance; omitted, the personality is picked from the seed.
+ *   A poetic rhythm keeps its own reveals either way.
  * @returns Computed value
  */
-export function getEntranceStyle(seed: string, rhythm?: Rhythm): ResolvedEntranceStyle {
+export function getEntranceStyle(
+  seed: string,
+  rhythm?: Rhythm,
+  entrance?: Entrance,
+): ResolvedEntranceStyle {
   if (rhythm === "poetic") {
     return POETIC_ENTRANCE_STYLES[
       getStableNumber(`poetic-entrance|${seed}`) % POETIC_ENTRANCE_STYLES.length
     ];
   }
+  if (entrance) return AUTHORED_ENTRANCE_STYLES[entrance];
   return ENTRANCE_STYLES[getStableNumber(`entrance|${seed}`) % ENTRANCE_STYLES.length];
 }
 
