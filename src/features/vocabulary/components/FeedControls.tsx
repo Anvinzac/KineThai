@@ -29,7 +29,20 @@ import { stylePool, themePool } from "../lib/presets";
 import { DIFFICULTY_ALL, formatLevelBand, countTrackWords, tracksFor } from "../lib/difficulty";
 import { CEFR_LEVELS, HSK_LEVELS, type NarrativeStyle } from "../lib/schema";
 import type { HistoryStats } from "../lib/history";
-import { douyinStyleLabelVi, styleLabelVi, themeLabelVi, topicLabelVi } from "../lib/i18n";
+import {
+  douyinStyleLabel,
+  douyinStyleLabelVi,
+  posLabel,
+  styleLabel,
+  styleLabelVi,
+  themeLabel,
+  themeLabelVi,
+  topicLabel,
+  topicLabelVi,
+} from "../lib/i18n";
+import { SUPPORTED_LOCALES, localeLabel, type Locale } from "../lib/locale";
+import { setLocale, useLocale } from "../lib/useLocale";
+import { difficultyCopy, t } from "../lib/ui-copy";
 import { siteBrand, type TargetLocale } from "../lib/target-language";
 import { useAmbientSound } from "../hooks/useAmbientSound";
 import type {
@@ -255,11 +268,14 @@ function ThemePicker({
   value,
   onChange,
   dialect,
+  uiLocale,
 }: {
   value: string;
   onChange: (theme: string) => void;
   /** Which collection the allow-list is read against; the Douyin pool on the zh host. */
   dialect?: VisualDialect;
+  /** UI locale for the palette names (KineThai overlay; defaults to Vietnamese). */
+  uiLocale?: Locale;
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -305,9 +321,9 @@ function ThemePicker({
   }
 
   const summary = isAll
-    ? "Trộn giao diện"
+    ? t(uiLocale ?? "vi", "theme.mix")
     : pickedThemes.length === 1
-      ? themeLabelVi(pickedThemes[0].id, pickedThemes[0].label)
+      ? themeLabel(pickedThemes[0].id, pickedThemes[0].label, uiLocale)
       : `${pickedThemes.length}/${allIds.length}`;
 
   return (
@@ -319,7 +335,7 @@ function ThemePicker({
       }}
     >
       <span className="vocab-picker-label" id={labelId}>
-        Giao diện
+        {t(uiLocale ?? "vi", "theme.label")}
       </span>
       <button
         type="button"
@@ -358,14 +374,14 @@ function ThemePicker({
               >
                 <span className="vocab-theme-swatch" style={{ background: theme.paint }} />
                 <span className="vocab-picker-option-label">
-                  {themeLabelVi(theme.id, theme.label)}
+                  {themeLabel(theme.id, theme.label, uiLocale)}
                 </span>
               </button>
             );
           })}
           {!isAll && (
             <button type="button" className="vocab-picker-reset" onClick={() => onChange("mix")}>
-              Chọn lại tất cả
+              {t(uiLocale ?? "vi", "theme.reset")}
             </button>
           )}
         </div>
@@ -388,20 +404,20 @@ type DifficultyOption = {
  * and its real word count at the trailing edge. The rows are static per locale, so the
  * list renders before the first feed page resolves; the counts arrive with that page.
  */
-function buildDifficultyOptions(locale: TargetLocale): DifficultyOption[] {
+function buildDifficultyOptions(locale: TargetLocale, uiLocale?: Locale): DifficultyOption[] {
   const tracks = tracksFor(locale);
   const allLevels = locale === "zh" ? HSK_LEVELS : CEFR_LEVELS;
   return [
     {
       id: DIFFICULTY_ALL,
-      label: "tất cả",
-      hint: "Mọi trình độ",
+      label: t(uiLocale ?? "vi", "difficulty.all"),
+      hint: t(uiLocale ?? "vi", "difficulty.allHint"),
       band: formatLevelBand(allLevels),
     },
     ...tracks.map((track) => ({
       id: track.id,
-      label: track.label,
-      hint: track.hint,
+      label: difficultyCopy(uiLocale ?? "vi", track.id).label || track.label,
+      hint: difficultyCopy(uiLocale ?? "vi", track.id).hint || track.hint,
       band: formatLevelBand(track.levels),
     })),
   ];
@@ -419,21 +435,30 @@ function parseDifficulty(value: string, tracks: readonly { id: string }[]): stri
 }
 
 /**
- * Summarise a selection for the trigger line: none → 🤯 "tất cả", one → that track's
- * emoji and label, several → 🧩 "tổng hợp" over the union band.
+ * Summarise a selection for the trigger line: none → 🤯 "all", one → that track's
+ * emoji and label, several → 🧩 "mixed" over the union band.
  */
 function describeSelection(
   ids: string[],
   tracks: ReturnType<typeof tracksFor>,
+  uiLocale?: Locale,
 ): { emoji: string; label: string; band: string } {
-  if (!ids.length) return { emoji: "🤯", label: "tất cả", band: "" };
+  if (!ids.length) return { emoji: "🤯", label: t(uiLocale ?? "vi", "difficulty.all"), band: "" };
   const selected = tracks.filter((track) => ids.includes(track.id));
   if (selected.length === 1) {
     const track = selected[0]!;
-    return { emoji: track.emoji, label: track.label, band: formatLevelBand(track.levels) };
+    return {
+      emoji: track.emoji,
+      label: difficultyCopy(uiLocale ?? "vi", track.id).label || track.label,
+      band: formatLevelBand(track.levels),
+    };
   }
   const levels = [...new Set(selected.flatMap((track) => track.levels))];
-  return { emoji: "🧩", label: "tổng hợp", band: formatLevelBand(levels) };
+  return {
+    emoji: "🧩",
+    label: t(uiLocale ?? "vi", "difficulty.mixed"),
+    band: formatLevelBand(levels),
+  };
 }
 
 /**
@@ -457,6 +482,7 @@ function DifficultyDropdown({
   catalogLevels,
   total,
   locale,
+  uiLocale,
 }: {
   value: string;
   onChange: (next: string) => void;
@@ -470,13 +496,16 @@ function DifficultyDropdown({
   total?: number;
   /** Visited address's deck locale: the brand title follows the host (hoa.* → hoa.chayLá). */
   locale?: TargetLocale;
+  /** UI locale for catalog labels (KineThai overlay; Japanese by default). */
+  uiLocale: Locale;
 }) {
+  const ui = uiLocale;
   const listId = useId();
   const activeLocale = locale ?? "en";
   const tracks = tracksFor(activeLocale);
-  const options = useMemo(() => buildDifficultyOptions(activeLocale), [activeLocale]);
+  const options = useMemo(() => buildDifficultyOptions(activeLocale, ui), [activeLocale, ui]);
   const committed = useMemo(() => parseDifficulty(value, tracks), [value, tracks]);
-  const summary = describeSelection(committed, tracks);
+  const summary = describeSelection(committed, tracks, ui);
   const [draft, setDraft] = useState<Set<string>>(() => new Set(committed));
   const [cursor, setCursor] = useState(0);
   // "Done" stays hidden until the reader picks a row this session, then fades in.
@@ -550,7 +579,7 @@ function DifficultyDropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
-        aria-label={`${brand.lead}${brand.accent} — độ khó: ${summary.label}. Đổi độ khó`}
+        aria-label={`${brand.lead}${brand.accent} — ${t(ui, "difficulty.aria", { label: summary.label })}`}
         onClick={() => (open ? close(true) : openAt())}
       >
         {/* The title needs its own wrapper: .vocab-brand is a column flex, so a bare
@@ -587,7 +616,7 @@ function DifficultyDropdown({
             aria-multiselectable
             tabIndex={-1}
             className="vocab-difficulty-options"
-            aria-label="Độ khó"
+            aria-label={t(ui, "difficulty.label")}
             aria-activedescendant={`${listId}-opt-${cursor}`}
             onKeyDown={(event) => {
               switch (event.key) {
@@ -678,11 +707,11 @@ function DifficultyDropdown({
               onClick={() => close(false)}
             >
               <Library size={16} aria-hidden="true" />
-              Thêm từ mới
+              {t(ui, "addWord")}
             </Link>
             {touched && (
               <button type="button" className="vocab-difficulty-done" onClick={commit}>
-                Xong
+                {t(ui, "difficulty.done")}
               </button>
             )}
           </div>
@@ -724,6 +753,7 @@ export function FeedControls({
   /** Visited address's deck locale; the brand title follows it (undefined → English). */
   locale?: TargetLocale;
 }) {
+  const ui = useLocale();
   const panelId = useId();
   const toggleButton = useRef<HTMLButtonElement>(null);
   const toolbar = useRef<HTMLElement>(null);
@@ -837,6 +867,7 @@ export function FeedControls({
             catalogLevels={metadata?.levels}
             total={metadata?.topicTotal}
             locale={locale}
+            uiLocale={ui}
           />
         </div>
         {/* Centre: the three transport controls as bare icons split by two hairlines,
@@ -847,7 +878,7 @@ export function FeedControls({
             type="button"
             disabled={reducedMotion}
             onClick={() => onPresentation({ ...presentation, autoplay: !presentation.autoplay })}
-            aria-label={playing ? "Tạm dừng dòng" : "Phát dòng"}
+            aria-label={playing ? t(ui, "player.pause") : t(ui, "player.play")}
             aria-pressed={playing}
             data-active={playing || undefined}
           >
@@ -858,7 +889,7 @@ export function FeedControls({
             className="vocab-icon-button"
             type="button"
             onClick={ambient.toggle}
-            aria-label={ambient.enabled ? "Tắt nhạc nền" : "Bật nhạc nền"}
+            aria-label={ambient.enabled ? t(ui, "player.mute") : t(ui, "player.unmute")}
             aria-pressed={ambient.enabled}
             data-active={ambient.enabled || undefined}
           >
@@ -872,7 +903,7 @@ export function FeedControls({
               onShuffle();
               ambient.nextTrack();
             }}
-            aria-label="Trộn từ và bắt đầu dòng mới"
+            aria-label={t(ui, "player.shuffle")}
           >
             <Shuffle size={19} />
           </button>
@@ -881,8 +912,8 @@ export function FeedControls({
               className="vocab-icon-button vocab-export-open"
               type="button"
               onClick={onExport}
-              aria-label="Xuất từ này thành video (admin)"
-              title="Xuất từ này thành video"
+              aria-label={t(ui, "player.export")}
+              title={t(ui, "player.export")}
             >
               <Clapperboard size={19} />
             </button>
@@ -907,7 +938,7 @@ export function FeedControls({
             onClick={() => (open ? close() : onOpen(true))}
             aria-expanded={open}
             aria-controls={panelId}
-            aria-label={open ? "Đóng tùy chọn" : "Mở tùy chọn luồng từ vựng"}
+            aria-label={open ? t(ui, "options.close") : t(ui, "options.open")}
             data-active={open || undefined}
           >
             {open ? <X size={19} /> : <Settings size={19} />}
@@ -921,28 +952,28 @@ export function FeedControls({
           className="vocab-options"
           data-closing={options.closing || undefined}
           inert={options.closing || undefined}
-          aria-label="Tùy chọn luồng từ vựng"
+          aria-label={t(ui, "options.title")}
           onKeyDown={(event) => {
             if (event.key === "Escape") close();
           }}
         >
           <p className="vocab-options-summary">
             {metadata
-              ? `Danh mục này có ${metadata.total.toLocaleString("vi-VN")} từ khác nhau.`
-              : "Luồng từ vựng của bạn đang tải."}{" "}
-            Hết một vòng là xáo trộn lại từ đầu.
+              ? t(ui, "catalog.summary", { count: metadata.total.toLocaleString() })
+              : t(ui, "catalog.loading")}{" "}
+            {t(ui, "catalog.cycle")}
           </p>
           <div className="vocab-options-secondary">
-            <span className="vocab-group-label">Chủ đề, giao diện và cách hiện đáp án</span>
+            <span className="vocab-group-label">{t(ui, "options.secondary")}</span>
             <div className="vocab-select-grid">
               <OptionPicker
-                label="Chủ đề"
+                label={t(ui, "topic.label")}
                 value={filters.topic}
                 options={[
-                  { id: "", label: "Mọi chủ đề" },
+                  { id: "", label: t(ui, "topic.all") },
                   ...(metadata?.topics ?? []).map((topic) => ({
                     id: topic,
-                    label: topicLabelVi(topic),
+                    label: topicLabel(topic, ui),
                   })),
                 ]}
                 onChange={(topic) => onFilters({ ...filters, topic })}
@@ -951,23 +982,33 @@ export function FeedControls({
                 value={presentation.theme}
                 onChange={(theme) => onPresentation({ ...presentation, theme })}
                 dialect={presentation.dialect}
+                uiLocale={ui}
               />
               <OptionPicker
-                label="Cách hiện"
+                label={t(ui, "style.label")}
                 value={presentation.style}
                 options={[
-                  { id: "mix", label: "Trộn cách hiện" },
+                  { id: "mix", label: t(ui, "style.mix") },
                   ...stylePool(presentation.dialect).map((style) => ({
                     id: style.id,
                     label:
                       presentation.dialect === "douyin"
-                        ? douyinStyleLabelVi(style.id, style.label)
-                        : styleLabelVi(style.id, style.label),
+                        ? douyinStyleLabel(style.id, style.label, ui)
+                        : styleLabel(style.id, style.label, ui),
                   })),
                 ]}
                 onChange={(style) =>
                   onPresentation({ ...presentation, style: style as NarrativeStyle | "mix" })
                 }
+              />
+              <OptionPicker
+                label={t(ui, "language.label")}
+                value={ui}
+                options={SUPPORTED_LOCALES.map((code) => ({
+                  id: code,
+                  label: localeLabel(code),
+                }))}
+                onChange={(code) => setLocale(code as Locale)}
               />
             </div>
           </div>

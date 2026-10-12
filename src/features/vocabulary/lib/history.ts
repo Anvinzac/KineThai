@@ -1,6 +1,6 @@
 /** On-device viewing history with sliding-window repeat caps. Exports: history helpers. Depends on: none (localStorage only). */
 import type { Locale } from "./locale";
-import { DEFAULT_LOCALE } from "./locale";
+import { BASE_LOCALE, DEFAULT_LOCALE } from "./locale";
 
 export const DAY_MS = 24 * 60 * 60 * 1000;
 export const THREE_DAYS_MS = 3 * DAY_MS;
@@ -136,7 +136,9 @@ export function formatCountdown(
   now: number = Date.now(),
   locale: Locale = DEFAULT_LOCALE,
 ): string {
-  const units = COUNTDOWN_UNITS[locale] ?? COUNTDOWN_UNITS[DEFAULT_LOCALE];
+  // Missing locale → Vietnamese data base, never blank. The UI default
+  // (DEFAULT_LOCALE = ja) is already populated, so this only fires for stubs.
+  const units = COUNTDOWN_UNITS[locale] ?? COUNTDOWN_UNITS[BASE_LOCALE];
   const ms = Math.max(0, target - now);
   const mins = Math.ceil(ms / 60_000);
   if (mins < 1) return units.moments;

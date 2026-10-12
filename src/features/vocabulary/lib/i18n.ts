@@ -8,11 +8,22 @@
  * palette added by an admin has no entry in this map: every lookup takes the source
  * label as a fallback rather than rendering a blank or an id.
  *
+ * KineThai overlay: locale-parametric wrappers (topicLabel/themeLabel/styleLabel/
+ * douyinStyleLabel/posLabel + LabelSet/LOCALE_LABELS) sit on top of the upstream
+ * Vietnamese maps below. The UI default is Japanese (DEFAULT_LOCALE = "ja");
+ * Vietnamese (BASE_LOCALE) is the data fallback. The English answer is never
+ * translated.
+ *
  * Exports: TOPIC_LABELS_VI, THEME_LABELS_VI, STYLE_LABELS_VI, DOUYIN_STYLE_LABELS_VI,
  *   POS_LABELS_VI, topicLabelVi, themeLabelVi, styleLabelVi, douyinStyleLabelVi,
- *   posLabelVi
- * Depends on: none (leaf module)
+ *   posLabelVi, LabelSet, LOCALE_LABELS, topicLabel, themeLabel, styleLabel,
+ *   douyinStyleLabel, posLabel
+ * Depends on: ./locale (UI default + data fallback), ./schema (NarrativeStyle)
  */
+
+import type { Locale } from "./locale";
+import { BASE_LOCALE, DEFAULT_LOCALE } from "./locale";
+import type { NarrativeStyle } from "./schema";
 
 /** Catalog topic slug → the name shown in the "Chủ đề" picker. */
 export const TOPIC_LABELS_VI: Record<string, string> = {
@@ -160,4 +171,306 @@ export function douyinStyleLabelVi(id: string, fallback: string): string {
  */
 export function posLabelVi(pos: string): string {
   return POS_LABELS_VI[pos.toLowerCase()] ?? pos;
+}
+
+// ── KineThai locale-parametric overlay (Japanese default, Vietnamese fallback) ──
+// Upstream ships only the Vietnamese maps above. The overlay below adds the Thai +
+// Japanese label sets backed up from the pre-merge tree. Missing locale entries
+// fall back to Vietnamese (BASE_LOCALE), never to blanks.
+
+/** The complete set of catalog label strings for one UI locale. */
+export type LabelSet = {
+  /** Catalog topic slug → name shown in the topic picker. */
+  topics: Record<string, string>;
+  /** Palette id → colour-story name. */
+  themes: Record<string, string>;
+  /** Narrative style id → reveal name. */
+  styles: Record<string, string>;
+  /** Douyin-dialect style id → mainland short-video name. */
+  douyinStyles: Record<string, string>;
+  /** Part-of-speech code → grammar label. */
+  pos: Record<string, string>;
+};
+
+const TOPIC_LABELS_TH: Record<string, string> = {
+  attention: "ความสนใจ",
+  character: "บุคลิกภาพ",
+  communication: "การสื่อสาร",
+  daily: "ชีวิตประจำวัน",
+  emotion: "อารมณ์",
+  thinking: "ความคิด",
+  time: "เวลา",
+  work: "งาน",
+};
+
+const TOPIC_LABELS_JA: Record<string, string> = {
+  attention: "注意",
+  character: "性格",
+  communication: "コミュニケーション",
+  daily: "日常",
+  emotion: "感情",
+  thinking: "思考",
+  time: "時間",
+  work: "仕事",
+};
+
+const STYLE_LABELS_TH: Record<string, string> = {
+  detective: "นักสืบ",
+  speed: "ความเร็ว",
+  confession: "สารภาพ",
+  minimal: "มินิมอล",
+};
+
+const STYLE_LABELS_JA: Record<string, string> = {
+  detective: "探偵",
+  speed: "スピード",
+  confession: "告白",
+  minimal: "ミニマル",
+};
+
+const DOUYIN_STYLE_LABELS_TH: Record<string, string> = {
+  detective: "ตื่นเต้น",
+  speed: "จังหวะเร็ว",
+  confession: "อารมณ์",
+  minimal: "สไตล์จีน",
+};
+
+const DOUYIN_STYLE_LABELS_JA: Record<string, string> = {
+  detective: "サスペンス",
+  speed: "リズム",
+  confession: "エモーション",
+  minimal: "中華風",
+};
+
+const POS_LABELS_TH: Record<string, string> = {
+  adj: "คำคุณศัพท์",
+  adjective: "คำคุณศัพท์",
+  adv: "คำวิเศษณ์",
+  adverb: "คำวิเศษณ์",
+  noun: "คำนาม",
+  v: "คำกริยา",
+  verb: "คำกริยา",
+  prep: "คำบุพบท",
+  preposition: "คำบุพบท",
+  conj: "คำสันธาน",
+  pron: "คำสรรพนาม",
+  pronoun: "คำสรรพนาม",
+};
+
+const POS_LABELS_JA: Record<string, string> = {
+  adj: "形容詞",
+  adjective: "形容詞",
+  adv: "副詞",
+  adverb: "副詞",
+  noun: "名詞",
+  v: "動詞",
+  verb: "動詞",
+  prep: "前置詞",
+  preposition: "前置詞",
+  conj: "接続詞",
+  pron: "代名詞",
+  pronoun: "代名詞",
+};
+
+// Theme (palette) names: upstream Vietnamese map is the base; Thai + Japanese
+// overlays translate the stable palette ids. New upstream palettes (Douyin, CNY)
+// fall back to Vietnamese, then to the palette's own label.
+const THEME_LABELS_TH: Record<string, string> = {
+  "midnight-magenta": "ม่วงแดงเที่ยงคืน",
+  "deep-lagoon": "ทะเลสาบลึก",
+  "forest-ember": "ป่าเพลิง",
+  "indigo-dusk": "ครามยามเย็น",
+  "olive-brass": "มะกอกทองเหลือง",
+  "plum-orchid": "บ๊วยกล้วยไม้",
+  "slate-cyan": "เทาฟ้า",
+  "obsidian-lime": "ดำมะนาว",
+  "teal-sunrise": "เขียวเป็ดรุ่งอรุณ",
+  "cobalt-flare": "โคบอลต์เจิดจ้า",
+  "rose-quartz": "กุหลาบควอตซ์",
+  "morning-mint": "มิ้นต์ยามเช้า",
+  "azure-linen": "ฟ้าผ้าลินิน",
+  "paper-amber": "กระดาษอำพัน",
+  "apple-frost": "แอปเปิลน้ำค้างแข็ง",
+  "apple-sand": "แอปเปิลทราย",
+  "apple-graphite": "แอปเปิลแกรไฟต์",
+  "apple-twilight": "แอปเปิลสนธยา",
+  "obsidian-vault": "ห้องนิรภัยออบซิเดียน",
+  "phantom-rose": "กุหลาบลวงตา",
+  "ink-wash": "หมึกพู่กัน",
+  "midnight-ember": "ถ่านเที่ยงคืน",
+  "vermillion-jade": "ชาดหยก",
+  "ink-bamboo": "หมึกไผ่",
+  "lotus-gold": "บัวทอง",
+  "indigo-porcelain": "ครามกระเบื้อง",
+};
+
+const THEME_LABELS_JA: Record<string, string> = {
+  "midnight-magenta": "真夜中のマゼンタ",
+  "deep-lagoon": "深いラグーン",
+  "forest-ember": "森の残り火",
+  "indigo-dusk": "藍の夕暮れ",
+  "olive-brass": "オリーブブラス",
+  "plum-orchid": "梅と蘭",
+  "slate-cyan": "スレートシアン",
+  "obsidian-lime": "黒曜とライム",
+  "teal-sunrise": "ティールの朝日",
+  "cobalt-flare": "コバルトの閃光",
+  "rose-quartz": "ローズクォーツ",
+  "morning-mint": "朝のミント",
+  "azure-linen": "空色リネン",
+  "paper-amber": "紙のアンバー",
+  "apple-frost": "林檎の霜",
+  "apple-sand": "林檎の砂",
+  "apple-graphite": "林檎の黒鉛",
+  "apple-twilight": "林檎の黄昏",
+  "obsidian-vault": "黒曜の宝庫",
+  "phantom-rose": "幻の薔薇",
+  "ink-wash": "水墨",
+  "midnight-ember": "真夜中の残り火",
+  "vermillion-jade": "朱と翡翠",
+  "ink-bamboo": "墨と竹",
+  "lotus-gold": "蓮と金",
+  "indigo-porcelain": "藍の磁器",
+};
+
+/** Locale → label set. Stub locales fall back to Vietnamese via the helpers below. */
+export const LOCALE_LABELS: Record<Locale, LabelSet> = {
+  vi: {
+    topics: TOPIC_LABELS_VI,
+    themes: THEME_LABELS_VI,
+    styles: STYLE_LABELS_VI,
+    douyinStyles: DOUYIN_STYLE_LABELS_VI,
+    pos: POS_LABELS_VI,
+  },
+  th: {
+    topics: TOPIC_LABELS_TH,
+    themes: THEME_LABELS_TH,
+    styles: STYLE_LABELS_TH,
+    douyinStyles: DOUYIN_STYLE_LABELS_TH,
+    pos: POS_LABELS_TH,
+  },
+  ja: {
+    topics: TOPIC_LABELS_JA,
+    themes: THEME_LABELS_JA,
+    styles: STYLE_LABELS_JA,
+    douyinStyles: DOUYIN_STYLE_LABELS_JA,
+    pos: POS_LABELS_JA,
+  },
+  zh: { topics: {}, themes: {}, styles: {}, douyinStyles: {}, pos: {} },
+  ko: { topics: {}, themes: {}, styles: {}, douyinStyles: {}, pos: {} },
+  fil: { topics: {}, themes: {}, styles: {}, douyinStyles: {}, pos: {} },
+};
+
+/** Base (Vietnamese) label set — the fallback every helper degrades to. */
+const BASE_LABELS: LabelSet = LOCALE_LABELS[BASE_LOCALE]!;
+
+/** Topic name, falling back to Vietnamese then to the slug itself. */
+export function topicLabel(topic: string, locale: Locale = DEFAULT_LOCALE): string {
+  return LOCALE_LABELS[locale].topics[topic] ?? BASE_LABELS.topics[topic] ?? topic;
+}
+
+/** Theme name, falling back to Vietnamese then to the palette's own label. */
+export function themeLabel(id: string, fallback: string, locale: Locale = DEFAULT_LOCALE): string {
+  return LOCALE_LABELS[locale].themes[id] ?? BASE_LABELS.themes[id] ?? fallback;
+}
+
+/** Narrative style name, falling back to Vietnamese then to the preset label. */
+export function styleLabel(id: string, fallback: string, locale: Locale = DEFAULT_LOCALE): string {
+  return LOCALE_LABELS[locale].styles[id] ?? BASE_LABELS.styles[id] ?? fallback;
+}
+
+/** Douyin-dialect style name, falling back to Vietnamese then to the preset label. */
+export function douyinStyleLabel(
+  id: string,
+  fallback: string,
+  locale: Locale = DEFAULT_LOCALE,
+): string {
+  return LOCALE_LABELS[locale].douyinStyles[id] ?? BASE_LABELS.douyinStyles[id] ?? fallback;
+}
+
+/** Part-of-speech label, falling back to Vietnamese then to the stored code. */
+export function posLabel(pos: string, locale: Locale = DEFAULT_LOCALE): string {
+  const key = pos.toLowerCase();
+  return LOCALE_LABELS[locale].pos[key] ?? BASE_LABELS.pos[key] ?? pos;
+}
+
+type StageLabels = {
+  definition: string;
+  usage: string;
+  anticipation: string;
+  letters: string;
+  lettersText: string;
+  reveal: string;
+  lead: Record<NarrativeStyle, string>;
+};
+
+const STAGE_LABELS: Record<Locale, StageLabels | undefined> = {
+  vi: {
+    definition: "Ý nghĩa",
+    usage: "Trong câu",
+    anticipation: "Bạn đoán gì?",
+    letters: "Đếm chữ cái",
+    lettersText: "Gồm {count} chữ cái, bắt đầu bằng {initial}",
+    reveal: "Đây rồi!",
+    lead: {
+      detective: "Bối cảnh",
+      speed: "Sẵn sàng chưa?",
+      confession: "Có quen không?",
+      minimal: "Một suy nghĩ",
+    },
+  },
+  th: {
+    definition: "ความหมาย",
+    usage: "ในประโยค",
+    anticipation: "เดาสิ?",
+    letters: "นับตัวอักษร",
+    lettersText: "มี {count} ตัวอักษร ขึ้นต้นด้วย {initial}",
+    reveal: "นี่ไง!",
+    lead: {
+      detective: "บริบท",
+      speed: "พร้อมไหม?",
+      confession: "คุ้นไหม?",
+      minimal: "หนึ่งความคิด",
+    },
+  },
+  ja: {
+    definition: "意味",
+    usage: "例文",
+    anticipation: "当ててみて！",
+    letters: "文字数",
+    lettersText: "{count} 文字、{initial} で始まる",
+    reveal: "これだ！",
+    lead: {
+      detective: "状況",
+      speed: "準備はいい？",
+      confession: "見覚えある？",
+      minimal: "ひとつの想い",
+    },
+  },
+  zh: undefined,
+  ko: undefined,
+  fil: undefined,
+};
+
+/** Stage (page) label for a given role, falling back to Vietnamese. */
+export function stageLabel(
+  role: "definition" | "usage" | "anticipation" | "letters" | "reveal",
+  locale: Locale = DEFAULT_LOCALE,
+): string {
+  return STAGE_LABELS[locale]?.[role] ?? STAGE_LABELS[BASE_LOCALE]![role]!;
+}
+
+/** Lead-page label, which depends on the narrative style. */
+export function leadLabel(style: NarrativeStyle, locale: Locale = DEFAULT_LOCALE): string {
+  return STAGE_LABELS[locale]?.lead[style] ?? STAGE_LABELS[BASE_LOCALE]!.lead[style]!;
+}
+
+/** Filled letter-count sentence, localized, falling back to Vietnamese. */
+export function lettersSentence(
+  count: number,
+  initial: string,
+  locale: Locale = DEFAULT_LOCALE,
+): string {
+  const template = STAGE_LABELS[locale]?.lettersText ?? STAGE_LABELS[BASE_LOCALE]!.lettersText;
+  return template.replace("{count}", String(count)).replace("{initial}", initial);
 }

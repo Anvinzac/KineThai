@@ -16,14 +16,17 @@
  */
 
 import type { Locale } from "./locale";
+import { BASE_LOCALE } from "./locale";
 import type { VocabularyWord } from "./schema";
 
 /** The four localized leading phrases (the reveal `word` is handled separately). */
 export type ClueField = "lead" | "def" | "guess" | "hint";
 
-/** Resolve the phrase text for a locale. Never returns undefined — empty string when absent. */
+/** Resolve the phrase text for a locale. Never returns undefined — empty string when absent.
+ * The requested locale wins; when it has not been authored, fall back to the
+ * Vietnamese base (BASE_LOCALE), never to a blank. */
 export function resolveClue(word: VocabularyWord, field: ClueField, locale: Locale): string {
-  if (locale !== "vi") {
+  if (locale !== BASE_LOCALE) {
     if (field === "hint") {
       const gloss = word.usage[0]?.glosses?.[locale];
       if (gloss) return gloss;

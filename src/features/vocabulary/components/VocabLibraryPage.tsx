@@ -10,32 +10,35 @@
 
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Library as LibraryIcon, Sparkles } from "lucide-react";
-import { LIBRARY_GROUPS } from "../lib/library";
+import { libraryGroups } from "../lib/library";
 import { formatLevelBand } from "../lib/difficulty";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
 import "../vocabulary.css";
 
 /** Show the curated pack shelves. @returns Public library page. */
 export function VocabLibraryPage() {
+  // Shelves resolve in the active UI locale (Japanese by default); the seed data
+  // falls back to Vietnamese for any string a locale has not authored.
+  const ui = useLocale();
+  const groups = libraryGroups(ui);
   return (
     <main className="vocabulary-shell vocab-library-shell">
       <header className="vocab-library-header">
-        <Link className="vocab-icon-button" to="/feed" aria-label="Quay lại dòng từ vựng">
+        <Link className="vocab-icon-button" to="/feed" aria-label={t(ui, "library.back")}>
           <ArrowLeft size={19} />
         </Link>
         <div>
           <h1 className="vocab-library-title">
             <LibraryIcon size={20} aria-hidden="true" />
-            Thư viện từ vựng
+            {t(ui, "library.title")}
           </h1>
-          <p className="vocab-library-subtitle">
-            Những gói từ vựng chuyên sâu theo lĩnh vực, nhu cầu và trình độ — bổ sung cho dòng ngẫu
-            nhiên hằng ngày.
-          </p>
+          <p className="vocab-library-subtitle">{t(ui, "library.subtitle")}</p>
         </div>
       </header>
 
       <div className="vocab-library-body">
-        {LIBRARY_GROUPS.map((group) => (
+        {groups.map((group) => (
           <section
             className="vocab-library-group"
             key={group.id}
@@ -54,7 +57,7 @@ export function VocabLibraryPage() {
                     <span className="vocab-pack-band">{formatLevelBand(pack.levels)}</span>
                     <span className="vocab-pack-soon">
                       <Sparkles size={12} aria-hidden="true" />
-                      Sắp có
+                      {t(ui, "library.soon")}
                     </span>
                   </div>
                   <h3 className="vocab-pack-name">{pack.name}</h3>
@@ -66,7 +69,9 @@ export function VocabLibraryPage() {
                       </li>
                     ))}
                   </ul>
-                  <p className="vocab-pack-count">~{pack.words.toLocaleString()} từ</p>
+                  <p className="vocab-pack-count">
+                    {t(ui, "library.packCount", { count: pack.words.toLocaleString() })}
+                  </p>
                 </li>
               ))}
             </ul>

@@ -14,14 +14,20 @@
  * Depends on: none (leaf module)
  */
 
-/** A supported UI/content locale. `vi` is the canonical base the crawler produces. */
+/** A supported UI/content locale. `vi` is the data fallback every word guarantees. */
 export type Locale = "vi" | "th" | "zh" | "ko" | "ja" | "fil";
 
 /** Locales the UI may offer. Order is the display order in the language picker. */
-export const SUPPORTED_LOCALES: readonly Locale[] = ["vi", "th", "zh", "ko", "ja", "fil"];
+export const SUPPORTED_LOCALES: readonly Locale[] = ["ja", "vi", "th", "zh", "ko", "fil"];
 
-/** The base locale every word is guaranteed to carry (Vietnamese). */
-export const DEFAULT_LOCALE: Locale = "vi";
+/**
+ * The UI default: what renders when no `?lang=` is present. This is Japanese —
+ * the app opens in Japanese. Distinct from BASE_LOCALE below (the data fallback).
+ */
+export const DEFAULT_LOCALE: Locale = "ja";
+
+/** The data fallback every word is guaranteed to carry (Vietnamese `*Vi` fields). */
+export const BASE_LOCALE: Locale = "vi";
 
 /** End-user names shown in the language picker. */
 export const LOCALE_NAMES: Record<Locale, string> = {

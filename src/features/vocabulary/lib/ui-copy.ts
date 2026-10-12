@@ -13,6 +13,7 @@
  */
 
 import type { Locale } from "./locale";
+import { BASE_LOCALE } from "./locale";
 import { DIFFICULTY_TRACKS } from "./difficulty";
 
 /** Vietnamese base — the source strings, verbatim. */
@@ -47,6 +48,13 @@ const VI = {
   "nav.login": "Đăng nhập",
   "nav.back": "Về với từ vựng",
   addWord: "Thêm từ mới",
+  // ── Player transport buttons (FeedControls) ──
+  "player.pause": "Tạm dừng luồng",
+  "player.play": "Phát luồng",
+  "player.mute": "Tắt nhạc nền",
+  "player.unmute": "Bật nhạc nền",
+  "player.shuffle": "Xáo trộn từ và bắt đầu luồng mới",
+  "player.export": "Xuất từ này thành video (quản trị)",
   // ── Difficulty summary rows ──
   "difficulty.label": "Độ khó",
   "difficulty.done": "Xong",
@@ -180,6 +188,13 @@ const TH: Partial<Record<CopyKey, string>> = {
   "nav.login": "เข้าสู่ระบบ",
   "nav.back": "กลับไปที่คำศัพท์",
   addWord: "เพิ่มคำใหม่",
+  // ── Player transport buttons (FeedControls) ──
+  "player.pause": "หยุดสตรีมชั่วคราว",
+  "player.play": "เล่นสตรีม",
+  "player.mute": "ปิดเสียงเพลงพื้นหลัง",
+  "player.unmute": "เปิดเสียงเพลงพื้นหลัง",
+  "player.shuffle": "สุ่มคำและเริ่มสตรีมใหม่",
+  "player.export": "ส่งออกคำนี้เป็นวิดีโอ (แอดมิน)",
   "difficulty.label": "ระดับความยาก",
   "difficulty.done": "เสร็จ",
   "difficulty.all": "ทั้งหมด",
@@ -301,6 +316,13 @@ const JA: Partial<Record<CopyKey, string>> = {
   "nav.login": "ログイン",
   "nav.back": "語彙に戻る",
   addWord: "新しい単語を追加",
+  // ── Player transport buttons (FeedControls) ──
+  "player.pause": "ストリームを一時停止",
+  "player.play": "ストリームを再生",
+  "player.mute": "BGMをミュート",
+  "player.unmute": "BGMを再生",
+  "player.shuffle": "単語をシャッフルして新しいストリームを開始",
+  "player.export": "この単語を動画として書き出す（管理者）",
   "difficulty.label": "難易度",
   "difficulty.done": "完了",
   "difficulty.all": "すべて",
@@ -401,10 +423,12 @@ const COPY: Record<Locale, Partial<Record<CopyKey, string>>> = {
 
 /**
  * Resolve a UI string for a locale, filling `{name}` placeholders from `params`.
- * Falls back to the Vietnamese base (never blank).
+ * Falls back to the Vietnamese data base (BASE_LOCALE), never blank.
+ * NOTE: the UI *default* is Japanese (DEFAULT_LOCALE) — this fallback only fires
+ * for locales whose dictionary entry is missing.
  */
 export function t(locale: Locale, key: CopyKey, params?: Record<string, string | number>): string {
-  const raw = COPY[locale]?.[key] ?? VI[key] ?? key;
+  const raw = COPY[locale]?.[key] ?? COPY[BASE_LOCALE]?.[key] ?? VI[key] ?? key;
   if (!params) return raw;
   return raw.replace(/\{(\w+)\}/g, (_, name: string) =>
     name in params ? String(params[name]) : `{${name}}`,

@@ -1,6 +1,7 @@
 /** Anonymous browser fetch adapter. Exports: fetchVocabularyPage, VocabularyRequestError. Depends on: transport types, backfill bounds, feed-pager (static-host fallback). */
 import { VOCAB_PAGE_LIMIT } from "../lib/backfill";
 import { readVocabularyPage } from "../lib/feed-pager";
+import { resolveTarget } from "../lib/target-language";
 import type { FeedCursor, FeedPage, VocabularyFilters } from "../types";
 
 export class VocabularyRequestError extends Error {
@@ -81,15 +82,20 @@ export async function fetchVocabularyPage(input: {
 
     if (isServerRouteAbsent(response.status, response.headers.get("content-type") ?? "")) {
       // Static host with no server route: read the page locally from the bundled
-      // catalog. The pager is deterministic, so it matches what SSR would serve.
-      return readVocabularyPage({
-        seed: input.seed,
-        topic: input.filters.topic,
-        level: input.filters.level,
-        difficulty: input.filters.difficulty,
-        position: input.cursor.position,
-        limit: VOCAB_PAGE_LIMIT,
-      });
+      // catalog. The deck follows the visited host exactly like the server
+      // (`catalogFor(resolveTarget(host))`), so the fallback can never disagree
+      // with SSR — on a static host the host always resolves to English.
+      return readVocabularyPage(
+        {
+          seed: input.seed,
+          topic: input.filters.topic,
+          level: input.filters.level,
+          difficulty: input.filters.difficulty,
+          position: input.cursor.position,
+          limit: VOCAB_PAGE_LIMIT,
+        },
+        resolveTarget(window.location.host),
+      );
     }
 
     if (!response.ok) {
