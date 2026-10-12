@@ -31,10 +31,36 @@ export type FeedPage = {
   name: string;
   topics: string[];
   levels: VocabularyLevel[];
+  /** Words per CEFR level under the page's topic filter; sizes the difficulty picker. */
+  levelCounts: Partial<Record<VocabularyLevel, number>>;
+  /** A few representative words per level, for the onboarding picker's samples. */
+  levelSamples: Partial<Record<VocabularyLevel, { word: string; defVi: string }[]>>;
+  /** Total words under the page's topic filter, unlevelled words included. */
+  topicTotal: number;
 };
 export type FeedCursor = { position: number; revision?: string };
 /**
+ * Which visual dialect dresses the stream. "douyin" swaps in the mainland-flavored
+ * palettes, motion presets and highlight reskin; it is only ever offered on the
+ * Chinese (hoa.*) host and only when the reader turns the default visuals off.
+ */
+export type VisualDialect = "default" | "douyin";
+/**
  * `theme` is an allow-list: "mix" lets every theme rotate, one id locks the look,
  * and a comma-joined id list (the picker's unselect model) rotates within just those.
+ * `dialect` picks the pool that allow-list is read against.
  */
-export type Presentation = { theme: string; style: NarrativeStyle | "mix"; autoplay: boolean };
+/** How long each clue page stays up; "fast" is the stream's native timing. */
+export type ReadingPace = "slow" | "normal" | "fast";
+/**
+ * `autoplay` is play/pause. `advance` decides what a finished word does: move on to the
+ * next one (default), or replay itself from the first clue until the reader moves on.
+ */
+export type Presentation = {
+  theme: string;
+  style: NarrativeStyle | "mix";
+  autoplay: boolean;
+  advance?: boolean;
+  pace?: ReadingPace;
+  dialect?: VisualDialect;
+};

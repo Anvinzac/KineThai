@@ -1,6 +1,15 @@
 /** Public navigation and stream/presentation controls. Exports: FeedControls. Depends on: router, presets, difficulty tracks, transport types. */
 import { Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import {
   ChevronDown,
   Clapperboard,
@@ -16,23 +25,27 @@ import {
 import { COMMUNITY_AVAILABLE } from "@/lib/feature-flags";
 import { EcosystemMenu } from "@/features/ecosystem/components/EcosystemMenu";
 import { ECOSYSTEM_STORE_AVAILABLE } from "@/lib/feature-flags";
-import { STYLES, THEMES } from "../lib/presets";
-import {
-  DIFFICULTY_ALL,
-  DIFFICULTY_TRACKS,
-  MOCK_TOTAL_WORDS,
-  formatLevelBand,
-  mockTrackWordCount,
-} from "../lib/difficulty";
-import type { NarrativeStyle } from "../lib/schema";
+import { stylePool, themePool } from "../lib/presets";
+import { DIFFICULTY_ALL, formatLevelBand, countTrackWords, tracksFor } from "../lib/difficulty";
+import { CEFR_LEVELS, HSK_LEVELS, type NarrativeStyle } from "../lib/schema";
 import type { HistoryStats } from "../lib/history";
-import { styleLabel, themeLabel, topicLabel } from "../lib/i18n";
-import { SUPPORTED_LOCALES, localeLabel, type Locale } from "../lib/locale";
-import { useLocale, setLocale } from "../lib/useLocale";
-import { t, difficultyCopy } from "../lib/ui-copy";
+import { douyinStyleLabelVi, styleLabelVi, themeLabelVi, topicLabelVi } from "../lib/i18n";
+import { siteBrand, type TargetLocale } from "../lib/target-language";
 import { useAmbientSound } from "../hooks/useAmbientSound";
-import type { FeedPage, Presentation, VocabularyFilters } from "../types";
+import type {
+  FeedPage,
+  Presentation,
+  ReadingPace,
+  VocabularyFilters,
+  VisualDialect,
+} from "../types";
 import { usePresence } from "@/hooks/use-presence";
+
+const PACE_OPTIONS: { id: ReadingPace; label: string }[] = [
+  { id: "slow", label: "Chậm" },
+  { id: "normal", label: "Vừa" },
+  { id: "fast", label: "Nhanh" },
+];
 
 /** Matches the exit keyframes' duration (--dur-quick) in vocabulary.css. */
 const POPUP_EXIT_MS = 180;
@@ -52,6 +65,91 @@ function PopupScrim({ closing, onDismiss }: { closing: boolean; onDismiss: () =>
   );
 }
 
+/** Gap between a trigger and its list, and the margin kept from the sheet's edges. */
+const PICKER_GAP = 6;
+const PICKER_INSET = 10;
+/** Matches .vocab-picker-list max-height: the tallest a list gets when there is room. */
+const PICKER_MAX_HEIGHT = 240;
+/** Shortest a list may be shrunk to while still sitting clear of its trigger. */
+const PICKER_MIN_HEIGHT = 140;
+
+/**
+ * Keep a picker's list next to its trigger yet wholly inside the visible part of the
+ * options sheet, which scrolls and clips. Below the trigger is preferred; above is
+ * used when below is short and above has more room; when neither side holds the
+ * whole list it shrinks into the roomier side (its rows scroll), and only when even
+ * that side is cramped is it slid over the trigger to fit. Horizontally it starts at the trigger's
+ * left edge and is nudged back from either side. Writes styles straight onto the list
+ * so a sheet scroll or resize re-places it without a React render.
+ */
+function useContainedPicker(
+  open: boolean,
+  rootRef: RefObject<HTMLDivElement | null>,
+  listRef: RefObject<HTMLDivElement | null>,
+  /** Anything that changes the list's rows, so a grown or shrunk list is re-placed. */
+  contentKey?: unknown,
+) {
+  useLayoutEffect(() => {
+    if (!open) return;
+    const root = rootRef.current;
+    const list = listRef.current;
+    const trigger = root?.querySelector<HTMLElement>(".vocab-picker-trigger");
+    if (!root || !list || !trigger) return;
+    const sheet = root.closest<HTMLElement>(".vocab-options");
+
+    const place = () => {
+      const sheetRect = sheet?.getBoundingClientRect();
+      const left = Math.max(sheetRect?.left ?? 0, 0) + PICKER_INSET;
+      const right = Math.min(sheetRect?.right ?? innerWidth, innerWidth) - PICKER_INSET;
+      const top = Math.max(sheetRect?.top ?? 0, 0) + PICKER_INSET;
+      const bottom = Math.min(sheetRect?.bottom ?? innerHeight, innerHeight) - PICKER_INSET;
+      const anchor = trigger.getBoundingClientRect();
+      const origin = root.getBoundingClientRect();
+
+      list.style.maxWidth = `${Math.max(0, right - left)}px`;
+      const width = list.offsetWidth;
+      const border = list.offsetHeight - list.clientHeight;
+      const wanted = Math.min(list.scrollHeight + border, PICKER_MAX_HEIGHT);
+      let height = Math.min(wanted, Math.max(0, bottom - top));
+
+      const below = bottom - (anchor.bottom + PICKER_GAP);
+      const above = anchor.top - PICKER_GAP - top;
+      let y: number;
+      let side: "below" | "above";
+      if (below >= height) {
+        y = anchor.bottom + PICKER_GAP;
+        side = "below";
+      } else if (above >= height) {
+        y = anchor.top - PICKER_GAP - height;
+        side = "above";
+      } else if (Math.max(above, below) >= PICKER_MIN_HEIGHT) {
+        side = above > below ? "above" : "below";
+        height = Math.max(above, below);
+        y = side === "below" ? anchor.bottom + PICKER_GAP : anchor.top - PICKER_GAP - height;
+      } else {
+        side = above > below ? "above" : "below";
+        const preferred =
+          side === "below" ? anchor.bottom + PICKER_GAP : anchor.top - PICKER_GAP - height;
+        y = Math.min(Math.max(preferred, top), bottom - height);
+      }
+      const x = Math.min(Math.max(anchor.left, left), right - width);
+
+      list.style.top = `${y - origin.top}px`;
+      list.style.left = `${x - origin.left}px`;
+      list.style.maxHeight = `${height}px`;
+      list.dataset.side = side;
+    };
+
+    place();
+    sheet?.addEventListener("scroll", place, { passive: true });
+    window.addEventListener("resize", place);
+    return () => {
+      sheet?.removeEventListener("scroll", place);
+      window.removeEventListener("resize", place);
+    };
+  }, [open, rootRef, listRef, contentKey]);
+}
+
 /**
  * Theme allow-list, deliberately the inverse of a single choice: every theme starts
  * picked and the reader only ever UNPICKS the ones they dislike, so the stream keeps
@@ -59,12 +157,116 @@ function PopupScrim({ closing, onDismiss }: { closing: boolean; onDismiss: () =>
  * live gradient swatch — a theme IS its colors, and a name alone can't show that.
  * Stored as "mix" while everything is picked, else a comma-joined id list.
  */
-function ThemePicker({ value, onChange }: { value: string; onChange: (theme: string) => void }) {
-  const locale = useLocale();
+/**
+ * Single-select dropdown in the sheet's own skin.
+ *
+ * A native <select> was styled to match while closed, but the list it opens belongs to the
+ * OS — the iOS wheel, the desktop menu — and no stylesheet can reach inside it, so the one
+ * part a reader actually looks at never matched the app. This is the theme picker's popover
+ * with one choice instead of many, so topic, theme and style all open the same thing.
+ *
+ * @param label Caption above the trigger
+ * @param value Current option id
+ * @param options Rows to choose from, in display order
+ * @param onChange Called with the chosen id
+ */
+function OptionPicker({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: { id: string; label: string }[];
+  onChange: (id: string) => void;
+}) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const labelId = useId();
-  const allIds = useMemo(() => THEMES.map((theme) => theme.id), []);
+  const current = options.find((option) => option.id === value) ?? options[0];
+  const presence = usePresence(open, POPUP_EXIT_MS);
+  useContainedPicker(open, rootRef, listRef, options.length);
+
+  useEffect(() => {
+    if (!open) return;
+    function onPointerDown(event: PointerEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
+  return (
+    <div
+      className="vocab-picker"
+      ref={rootRef}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") setOpen(false);
+      }}
+    >
+      <span className="vocab-picker-label" id={labelId}>
+        {label}
+      </span>
+      <button
+        type="button"
+        className="vocab-picker-trigger"
+        onClick={() => setOpen((value2) => !value2)}
+        aria-expanded={open}
+        aria-haspopup="listbox"
+      >
+        <span className="vocab-picker-summary">{current?.label}</span>
+        <ChevronDown size={15} />
+      </button>
+      {presence.mounted && (
+        <div
+          ref={listRef}
+          className="vocab-picker-list"
+          role="listbox"
+          aria-labelledby={labelId}
+          data-closing={presence.closing || undefined}
+        >
+          {options.map((option) => {
+            const on = option.id === value;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                role="option"
+                aria-selected={on}
+                data-on={on || undefined}
+                onClick={() => {
+                  onChange(option.id);
+                  setOpen(false);
+                }}
+              >
+                <span className="vocab-picker-option-label">{option.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ThemePicker({
+  value,
+  onChange,
+  dialect,
+}: {
+  value: string;
+  onChange: (theme: string) => void;
+  /** Which collection the allow-list is read against; the Douyin pool on the zh host. */
+  dialect?: VisualDialect;
+}) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const labelId = useId();
+  const pool = useMemo(() => themePool("mix", dialect), [dialect]);
+  const allIds = useMemo(() => pool.map((theme) => theme.id), [pool]);
   const selected = useMemo(() => {
     const ids = value
       .split(",")
@@ -73,8 +275,13 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
     return new Set(ids.length && !ids.includes("mix") ? ids : allIds);
   }, [value, allIds]);
   const isAll = selected.size === allIds.length;
-  // THEMES order keeps the chips and the joined value stable across toggles.
-  const pickedThemes = useMemo(() => THEMES.filter((theme) => selected.has(theme.id)), [selected]);
+  // Pool order keeps the chips and the joined value stable across toggles.
+  const pickedThemes = useMemo(
+    () => pool.filter((theme) => selected.has(theme.id)),
+    [pool, selected],
+  );
+  const presence = usePresence(open, POPUP_EXIT_MS);
+  useContainedPicker(open, rootRef, listRef, isAll);
 
   useEffect(() => {
     if (!open) return;
@@ -98,25 +305,25 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
   }
 
   const summary = isAll
-    ? t(locale, "theme.mix")
+    ? "Trộn giao diện"
     : pickedThemes.length === 1
-      ? themeLabel(pickedThemes[0].id, pickedThemes[0].label, locale)
+      ? themeLabelVi(pickedThemes[0].id, pickedThemes[0].label)
       : `${pickedThemes.length}/${allIds.length}`;
 
   return (
     <div
-      className="vocab-theme-picker"
+      className="vocab-picker"
       ref={rootRef}
       onKeyDown={(event) => {
         if (event.key === "Escape") setOpen(false);
       }}
     >
-      <span className="vocab-theme-label" id={labelId}>
-        {t(locale, "theme.label")}
+      <span className="vocab-picker-label" id={labelId}>
+        Giao diện
       </span>
       <button
         type="button"
-        className="vocab-theme-trigger"
+        className="vocab-picker-trigger"
         onClick={() => (open ? setOpen(false) : setOpen(true))}
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -126,17 +333,19 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
             <span key={theme.id} style={{ background: theme.paint }} />
           ))}
         </span>
-        <span className="vocab-theme-summary">{summary}</span>
+        <span className="vocab-picker-summary">{summary}</span>
         <ChevronDown size={15} />
       </button>
-      {open && (
+      {presence.mounted && (
         <div
-          className="vocab-theme-list"
+          ref={listRef}
+          className="vocab-picker-list"
           role="listbox"
           aria-multiselectable="true"
           aria-labelledby={labelId}
+          data-closing={presence.closing || undefined}
         >
-          {THEMES.map((theme) => {
+          {pool.map((theme) => {
             const on = selected.has(theme.id);
             return (
               <button
@@ -148,15 +357,15 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
                 onClick={() => toggle(theme.id)}
               >
                 <span className="vocab-theme-swatch" style={{ background: theme.paint }} />
-                <span className="vocab-theme-option-label">
-                  {themeLabel(theme.id, theme.label, locale)}
+                <span className="vocab-picker-option-label">
+                  {themeLabelVi(theme.id, theme.label)}
                 </span>
               </button>
             );
           })}
           {!isAll && (
-            <button type="button" className="vocab-theme-reset" onClick={() => onChange("mix")}>
-              {t(locale, "theme.reset")}
+            <button type="button" className="vocab-picker-reset" onClick={() => onChange("mix")}>
+              Chọn lại tất cả
             </button>
           )}
         </div>
@@ -167,38 +376,46 @@ function ThemePicker({ value, onChange }: { value: string; onChange: (theme: str
 
 type DifficultyOption = {
   id: string;
+  label: string;
+  hint: string;
   band: string;
-  /** Illustrative word count for this track's band (mock, shown at the row's right). */
-  words: number;
 };
 
 /**
  * The dropdown's rows: an explicit "all" escape hatch ahead of the ten tracks. In the
  * multi-select the "all" row means an EMPTY selection (no restriction), so clearing
- * every track returns to it. Each row shows its CEFR band as a chip ahead of the name
- * and a mock total word count at the trailing edge. The list is static, so it renders
- * before the first feed page resolves. Row names and hints are localized at render time
- * via `difficultyCopy(locale, …)` / `t(locale, "difficulty.*")`, so this table carries no
- * copy of its own.
+ * every track returns to it. Each row shows its level band as a chip ahead of the name
+ * and its real word count at the trailing edge. The rows are static per locale, so the
+ * list renders before the first feed page resolves; the counts arrive with that page.
  */
-const DIFFICULTY_OPTIONS: DifficultyOption[] = [
-  { id: DIFFICULTY_ALL, band: "", words: MOCK_TOTAL_WORDS },
-  ...DIFFICULTY_TRACKS.map((track) => ({
-    id: track.id,
-    band: formatLevelBand(track.levels),
-    words: mockTrackWordCount(track.id),
-  })),
-];
+function buildDifficultyOptions(locale: TargetLocale): DifficultyOption[] {
+  const tracks = tracksFor(locale);
+  const allLevels = locale === "zh" ? HSK_LEVELS : CEFR_LEVELS;
+  return [
+    {
+      id: DIFFICULTY_ALL,
+      label: "tất cả",
+      hint: "Mọi trình độ",
+      band: formatLevelBand(allLevels),
+    },
+    ...tracks.map((track) => ({
+      id: track.id,
+      label: track.label,
+      hint: track.hint,
+      band: formatLevelBand(track.levels),
+    })),
+  ];
+}
 
 /** Split a committed `difficulty` value into its track ids, in canonical order. */
-function parseDifficulty(value: string): string[] {
+function parseDifficulty(value: string, tracks: readonly { id: string }[]): string[] {
   const seen = new Set(
     value
       .split(",")
       .map((id) => id.trim())
       .filter(Boolean),
   );
-  return DIFFICULTY_TRACKS.map((track) => track.id).filter((id) => seen.has(id));
+  return tracks.map((track) => track.id).filter((id) => seen.has(id));
 }
 
 /**
@@ -207,20 +424,16 @@ function parseDifficulty(value: string): string[] {
  */
 function describeSelection(
   ids: string[],
-  locale: Locale,
+  tracks: ReturnType<typeof tracksFor>,
 ): { emoji: string; label: string; band: string } {
-  if (!ids.length) return { emoji: "🤯", label: t(locale, "difficulty.all"), band: "" };
-  const tracks = DIFFICULTY_TRACKS.filter((track) => ids.includes(track.id));
-  if (tracks.length === 1) {
-    const track = tracks[0]!;
-    return {
-      emoji: track.emoji,
-      label: difficultyCopy(locale, track.id).label,
-      band: formatLevelBand(track.levels),
-    };
+  if (!ids.length) return { emoji: "🤯", label: "tất cả", band: "" };
+  const selected = tracks.filter((track) => ids.includes(track.id));
+  if (selected.length === 1) {
+    const track = selected[0]!;
+    return { emoji: track.emoji, label: track.label, band: formatLevelBand(track.levels) };
   }
-  const levels = [...new Set(tracks.flatMap((track) => track.levels))];
-  return { emoji: "🧩", label: t(locale, "difficulty.mixed"), band: formatLevelBand(levels) };
+  const levels = [...new Set(selected.flatMap((track) => track.levels))];
+  return { emoji: "🧩", label: "tổng hợp", band: formatLevelBand(levels) };
 }
 
 /**
@@ -228,7 +441,7 @@ function describeSelection(
  * did and the tagline slot reports the current selection, so the control needs no
  * separate button. It is multi-select — rows toggle into a draft and a "Done" button
  * commits it, so browsing choices never re-shuffle the live stream until confirmed. A
- * listbox rather than a native select so each row can carry its emoji, CEFR band and
+ * listbox rather than a native select so each row can carry its emoji, HSK band and
  * Vietnamese gloss, and so tap targets stay large.
  * Open state lives in the parent: the toolbar-level popup guardrail needs to know the
  * sheet is out, and one popup can never stay open while another is being reached for.
@@ -240,16 +453,30 @@ function DifficultyDropdown({
   onChange,
   open,
   onOpenChange,
+  levelCounts,
+  catalogLevels,
+  total,
+  locale,
 }: {
   value: string;
   onChange: (next: string) => void;
   open: boolean;
   onOpenChange: (next: boolean) => void;
+  /** Words per CEFR level from the feed; undefined until the first page has loaded. */
+  levelCounts?: FeedPage["levelCounts"];
+  /** Levels the catalog has any word for: decides which tracks are on offer at all. */
+  catalogLevels?: FeedPage["levels"];
+  /** Every word under the current topic; undefined until the first page has loaded. */
+  total?: number;
+  /** Visited address's deck locale: the brand title follows the host (hoa.* → hoa.chayLá). */
+  locale?: TargetLocale;
 }) {
-  const locale = useLocale();
   const listId = useId();
-  const committed = useMemo(() => parseDifficulty(value), [value]);
-  const summary = describeSelection(committed, locale);
+  const activeLocale = locale ?? "en";
+  const tracks = tracksFor(activeLocale);
+  const options = useMemo(() => buildDifficultyOptions(activeLocale), [activeLocale]);
+  const committed = useMemo(() => parseDifficulty(value, tracks), [value, tracks]);
+  const summary = describeSelection(committed, tracks);
   const [draft, setDraft] = useState<Set<string>>(() => new Set(committed));
   const [cursor, setCursor] = useState(0);
   // "Done" stays hidden until the reader picks a row this session, then fades in.
@@ -270,14 +497,27 @@ function DifficultyDropdown({
       return next;
     });
   const selectAll = () => setDraft(new Set());
+  // Every figure in the list is the catalog's own count — what the stream will actually
+  // serve for that choice — not a placeholder. A row's number is the words at its levels;
+  // the "tất cả" row shows the size of whatever is picked so far (the UNION of the picked
+  // tracks' levels: tracks overlap, so adding their sizes would double-count), and the
+  // whole topic again once nothing is picked. undefined = the first page has not arrived.
+  const countFor = (id: string): number | undefined => {
+    if (!levelCounts || !catalogLevels) return undefined;
+    if (id !== DIFFICULTY_ALL) return countTrackWords([id], levelCounts, catalogLevels);
+    return draft.size > 0 ? countTrackWords(draft, levelCounts, catalogLevels) : total;
+  };
   const pickRow = (id: string) => {
+    // Shared by tap and keyboard: an empty track cannot be chosen by either.
+    if (id !== DIFFICULTY_ALL && countFor(id) === 0) return;
     setTouched(true);
     if (id === DIFFICULTY_ALL) selectAll();
     else toggle(id);
   };
   const commit = () => {
     onChange(
-      DIFFICULTY_TRACKS.filter((track) => draft.has(track.id))
+      tracks
+        .filter((track) => draft.has(track.id))
         .map((track) => track.id)
         .join(","),
     );
@@ -290,20 +530,15 @@ function DifficultyDropdown({
     onOpenChange(true);
   };
 
-  // Sum of the packs (tracks) picked so far this session. The "tất cả" row borrows this
-  // figure while a selection is pending, so it reads the combined size of the chosen
-  // packs; once the selection is cleared (tapping "tất cả") it falls back to MOCK_TOTAL.
-  const selectedTotal = useMemo(
-    () => [...draft].reduce((sum, id) => sum + mockTrackWordCount(id), 0),
-    [draft],
-  );
-
   // Move focus into the list once it mounts so arrow keys work without a tab stop.
   useEffect(() => {
     if (open) list.current?.focus();
   }, [open]);
 
   const presence = usePresence(open, POPUP_EXIT_MS);
+  // The visible title is the host's brand, never a hardcoded default: the deck and
+  // the document title already follow the visited address, and so must this one.
+  const brand = siteBrand(locale ?? "en");
 
   return (
     <div className="vocab-difficulty" data-no-gesture>
@@ -315,14 +550,15 @@ function DifficultyDropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
-        aria-label={t(locale, "difficulty.aria", { label: summary.label })}
+        aria-label={`${brand.lead}${brand.accent} — độ khó: ${summary.label}. Đổi độ khó`}
         onClick={() => (open ? close(true) : openAt())}
       >
         {/* The title needs its own wrapper: .vocab-brand is a column flex, so a bare
             text node plus a span would become two stacked flex items and break
-            "anh.chayLá" across two lines. */}
+            "hoa.chayLá" across two lines. */}
         <span className="vocab-brand-name">
-          anh.chay<span>Lá</span>
+          {brand.lead}
+          <span>{brand.accent}</span>
         </span>
         <small>
           {/* Single nowrap line, taken out of flow in CSS so it can read in full
@@ -351,7 +587,7 @@ function DifficultyDropdown({
             aria-multiselectable
             tabIndex={-1}
             className="vocab-difficulty-options"
-            aria-label={t(locale, "difficulty.label")}
+            aria-label="Độ khó"
             aria-activedescendant={`${listId}-opt-${cursor}`}
             onKeyDown={(event) => {
               switch (event.key) {
@@ -361,13 +597,11 @@ function DifficultyDropdown({
                   break;
                 case "ArrowDown":
                   event.preventDefault();
-                  setCursor((index) => (index + 1) % DIFFICULTY_OPTIONS.length);
+                  setCursor((index) => (index + 1) % options.length);
                   break;
                 case "ArrowUp":
                   event.preventDefault();
-                  setCursor(
-                    (index) => (index - 1 + DIFFICULTY_OPTIONS.length) % DIFFICULTY_OPTIONS.length,
-                  );
+                  setCursor((index) => (index - 1 + options.length) % options.length);
                   break;
                 case "Home":
                   event.preventDefault();
@@ -375,25 +609,25 @@ function DifficultyDropdown({
                   break;
                 case "End":
                   event.preventDefault();
-                  setCursor(DIFFICULTY_OPTIONS.length - 1);
+                  setCursor(options.length - 1);
                   break;
                 case "Enter":
                 case " ":
                   event.preventDefault();
-                  pickRow(DIFFICULTY_OPTIONS[cursor]!.id);
+                  pickRow(options[cursor]!.id);
                   break;
                 default:
                   break;
               }
             }}
           >
-            {DIFFICULTY_OPTIONS.map((option, index) => {
+            {options.map((option, index) => {
               const isSelected =
                 option.id === DIFFICULTY_ALL ? draft.size === 0 : draft.has(option.id);
-              // "tất cả" reports the combined size of the packs just chosen; with no
-              // selection pending it shows the whole library again.
-              const count =
-                option.id === DIFFICULTY_ALL && draft.size > 0 ? selectedTotal : option.words;
+              const count = countFor(option.id);
+              // A track the catalog cannot serve yet (its defining level has no words) shows
+              // 0 and is greyed: it stays on the ladder as a promise, but cannot be picked.
+              const unavailable = count === 0 && option.id !== DIFFICULTY_ALL;
               return (
                 <li
                   key={option.id}
@@ -402,6 +636,7 @@ function DifficultyDropdown({
                   aria-selected={isSelected}
                   data-active={isSelected || undefined}
                   data-cursor={index === cursor || undefined}
+                  aria-disabled={unavailable || undefined}
                   className="vocab-difficulty-option"
                   onClick={() => {
                     pickRow(option.id);
@@ -423,14 +658,12 @@ function DifficultyDropdown({
                     >
                       {option.band}
                     </span>
-                    {option.id === DIFFICULTY_ALL
-                      ? t(locale, "difficulty.all")
-                      : difficultyCopy(locale, option.id).label}
+                    {option.label}
                   </span>
                   {/* key=count re-mounts the figure whenever the sum moves, which is what
                       (re)triggers the spring-and-flash CSS entrance on it. */}
                   <span className="vocab-difficulty-count" aria-hidden="true" key={count}>
-                    {count.toLocaleString()}
+                    {count === undefined ? "–" : count.toLocaleString("vi-VN")}
                   </span>
                 </li>
               );
@@ -445,11 +678,11 @@ function DifficultyDropdown({
               onClick={() => close(false)}
             >
               <Library size={16} aria-hidden="true" />
-              {t(locale, "addWord")}
+              Thêm từ mới
             </Link>
             {touched && (
               <button type="button" className="vocab-difficulty-done" onClick={commit}>
-                {t(locale, "difficulty.done")}
+                Xong
               </button>
             )}
           </div>
@@ -473,6 +706,7 @@ export function FeedControls({
   historyStats,
   onClearHistory,
   onExport,
+  locale,
 }: {
   metadata?: FeedPage;
   filters: VocabularyFilters;
@@ -487,8 +721,9 @@ export function FeedControls({
   onClearHistory: () => void;
   /** Open the video-export studio. Passed only for admins; absent, the control is not rendered. */
   onExport?: () => void;
+  /** Visited address's deck locale; the brand title follows it (undefined → English). */
+  locale?: TargetLocale;
 }) {
-  const locale = useLocale();
   const panelId = useId();
   const toggleButton = useRef<HTMLButtonElement>(null);
   const toolbar = useRef<HTMLElement>(null);
@@ -598,6 +833,10 @@ export function FeedControls({
             onChange={(difficulty) => onFilters({ ...filters, difficulty })}
             open={difficultyOpen}
             onOpenChange={setDifficultyOpen}
+            levelCounts={metadata?.levelCounts}
+            catalogLevels={metadata?.levels}
+            total={metadata?.topicTotal}
+            locale={locale}
           />
         </div>
         {/* Centre: the three transport controls as bare icons split by two hairlines,
@@ -608,7 +847,7 @@ export function FeedControls({
             type="button"
             disabled={reducedMotion}
             onClick={() => onPresentation({ ...presentation, autoplay: !presentation.autoplay })}
-            aria-label={playing ? "Pause stream" : "Play stream"}
+            aria-label={playing ? "Tạm dừng dòng" : "Phát dòng"}
             aria-pressed={playing}
             data-active={playing || undefined}
           >
@@ -619,7 +858,7 @@ export function FeedControls({
             className="vocab-icon-button"
             type="button"
             onClick={ambient.toggle}
-            aria-label={ambient.enabled ? "Mute background music" : "Play background music"}
+            aria-label={ambient.enabled ? "Tắt nhạc nền" : "Bật nhạc nền"}
             aria-pressed={ambient.enabled}
             data-active={ambient.enabled || undefined}
           >
@@ -633,7 +872,7 @@ export function FeedControls({
               onShuffle();
               ambient.nextTrack();
             }}
-            aria-label="Shuffle words and start a new stream"
+            aria-label="Trộn từ và bắt đầu dòng mới"
           >
             <Shuffle size={19} />
           </button>
@@ -642,8 +881,8 @@ export function FeedControls({
               className="vocab-icon-button vocab-export-open"
               type="button"
               onClick={onExport}
-              aria-label="Export this word as a video (admin)"
-              title="Export this word as a video"
+              aria-label="Xuất từ này thành video (admin)"
+              title="Xuất từ này thành video"
             >
               <Clapperboard size={19} />
             </button>
@@ -668,7 +907,7 @@ export function FeedControls({
             onClick={() => (open ? close() : onOpen(true))}
             aria-expanded={open}
             aria-controls={panelId}
-            aria-label={open ? t(locale, "options.close") : t(locale, "options.open")}
+            aria-label={open ? "Đóng tùy chọn" : "Mở tùy chọn luồng từ vựng"}
             data-active={open || undefined}
           >
             {open ? <X size={19} /> : <Settings size={19} />}
@@ -682,109 +921,141 @@ export function FeedControls({
           className="vocab-options"
           data-closing={options.closing || undefined}
           inert={options.closing || undefined}
-          aria-label={t(locale, "options.title")}
+          aria-label="Tùy chọn luồng từ vựng"
           onKeyDown={(event) => {
             if (event.key === "Escape") close();
           }}
         >
           <p className="vocab-options-summary">
             {metadata
-              ? t(locale, "catalog.summary", { count: metadata.total.toLocaleString() })
-              : t(locale, "catalog.loading")}{" "}
-            {t(locale, "catalog.cycle")}
+              ? `Danh mục này có ${metadata.total.toLocaleString("vi-VN")} từ khác nhau.`
+              : "Luồng từ vựng của bạn đang tải."}{" "}
+            Hết một vòng là xáo trộn lại từ đầu.
           </p>
           <div className="vocab-options-secondary">
-            <span className="vocab-group-label">{t(locale, "options.secondary")}</span>
+            <span className="vocab-group-label">Chủ đề, giao diện và cách hiện đáp án</span>
             <div className="vocab-select-grid">
-              <label>
-                {t(locale, "topic.label")}
-                <select
-                  value={filters.topic}
-                  onChange={(event) => onFilters({ ...filters, topic: event.target.value })}
-                >
-                  <option value="">{t(locale, "topic.all")}</option>
-                  {metadata?.topics.map((topic) => (
-                    <option key={topic} value={topic}>
-                      {topicLabel(topic, locale)}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <OptionPicker
+                label="Chủ đề"
+                value={filters.topic}
+                options={[
+                  { id: "", label: "Mọi chủ đề" },
+                  ...(metadata?.topics ?? []).map((topic) => ({
+                    id: topic,
+                    label: topicLabelVi(topic),
+                  })),
+                ]}
+                onChange={(topic) => onFilters({ ...filters, topic })}
+              />
               <ThemePicker
                 value={presentation.theme}
                 onChange={(theme) => onPresentation({ ...presentation, theme })}
+                dialect={presentation.dialect}
               />
-              <label>
-                {t(locale, "style.label")}
-                <select
-                  value={presentation.style}
-                  onChange={(event) =>
-                    onPresentation({
-                      ...presentation,
-                      style: event.target.value as NarrativeStyle | "mix",
-                    })
-                  }
-                >
-                  <option value="mix">{t(locale, "style.mix")}</option>
-                  {STYLES.map((style) => (
-                    <option key={style.id} value={style.id}>
-                      {styleLabel(style.id, style.label, locale)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                {t(locale, "language.label")}
-                <select
-                  value={locale}
-                  onChange={(event) => setLocale(event.target.value as Locale)}
-                >
-                  {SUPPORTED_LOCALES.map((code) => (
-                    <option key={code} value={code}>
-                      {localeLabel(code)}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <OptionPicker
+                label="Cách hiện"
+                value={presentation.style}
+                options={[
+                  { id: "mix", label: "Trộn cách hiện" },
+                  ...stylePool(presentation.dialect).map((style) => ({
+                    id: style.id,
+                    label:
+                      presentation.dialect === "douyin"
+                        ? douyinStyleLabelVi(style.id, style.label)
+                        : styleLabelVi(style.id, style.label),
+                  })),
+                ]}
+                onChange={(style) =>
+                  onPresentation({ ...presentation, style: style as NarrativeStyle | "mix" })
+                }
+              />
             </div>
           </div>
           <label className="vocab-autoplay">
             <input
               type="checkbox"
-              checked={presentation.autoplay && !reducedMotion}
+              checked={presentation.advance !== false && !reducedMotion}
               disabled={reducedMotion}
               onChange={(event) =>
-                onPresentation({ ...presentation, autoplay: event.target.checked })
+                onPresentation({ ...presentation, advance: event.target.checked })
               }
             />{" "}
-            {t(locale, "autoplay.label")}
+            Tự động phát luồng
           </label>
           <p className="vocab-options-summary">
-            {reducedMotion ? t(locale, "autoplay.reduced") : t(locale, "autoplay.hint")}
+            {reducedMotion
+              ? "Bạn đang bật chế độ giảm chuyển động, nên gợi ý lật thủ công."
+              : presentation.advance === false
+                ? "Mỗi từ sẽ tự phát lại từ đầu cho đến khi bạn vuốt sang từ mới."
+                : "Gợi ý và từ ngữ tự động chạy hết màn hình. Tắt đi để một từ tự phát lại."}
           </p>
-          <div className="vocab-memory" aria-label={t(locale, "memory.aria")}>
-            <span className="vocab-group-label">{t(locale, "memory.label")}</span>
-            <p className="vocab-options-summary">
-              {t(locale, "memory.stats", {
-                today: historyStats.distinctToday,
-                three: historyStats.distinct3d,
-                week: historyStats.distinct7d,
+          <div className="vocab-pace" role="radiogroup" aria-label="Tốc độ đọc">
+            <span className="vocab-pace-label">Tốc độ</span>
+            <div className="vocab-pace-options">
+              {PACE_OPTIONS.map((option) => {
+                const on = (presentation.pace ?? "fast") === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={on}
+                    data-on={on || undefined}
+                    disabled={reducedMotion}
+                    onClick={() => onPresentation({ ...presentation, pace: option.id })}
+                  >
+                    {option.label}
+                  </button>
+                );
               })}
+            </div>
+          </div>
+          {/* The Douyin dialect only exists on the Chinese host: it swaps the whole
+              visual language — palettes, motion presets and highlight reskin — and
+              deactivates the default one, so it is offered nowhere else. */}
+          {locale === "zh" && (
+            <label className="vocab-autoplay vocab-dialect">
+              <input
+                type="checkbox"
+                checked={presentation.dialect === "douyin"}
+                onChange={(event) =>
+                  onPresentation({
+                    ...presentation,
+                    // A dialect flip invalidates an allow-list picked from the other
+                    // pool; "mix" reopens the full new collection instead.
+                    theme: "mix",
+                    dialect: event.target.checked ? "douyin" : "default",
+                  })
+                }
+              />{" "}
+              Giao diện Douyin
+              <small className="vocab-dialect-note">
+                Tắt toàn bộ giao diện mặc định, chỉ dùng bảng màu, nhịp hoạt hình và hiệu ứng nổi
+                bật kiểu Douyin.
+              </small>
+            </label>
+          )}
+          <div className="vocab-memory" aria-label="Bộ nhớ lượt xem trên thiết bị">
+            <span className="vocab-group-label">Bộ nhớ trên thiết bị</span>
+            <p className="vocab-options-summary">
+              Hôm nay đã xem {historyStats.distinctToday} từ · 3 ngày qua {historyStats.distinct3d}{" "}
+              · tuần này {historyStats.distinct7d}. Mỗi từ chỉ quay lại tối đa một lần mỗi ngày, hai
+              lần trong ba ngày và ba lần mỗi tuần. Tất cả chỉ lưu trong trình duyệt này.
             </p>
             <button type="button" className="vocab-memory-clear" onClick={onClearHistory}>
-              {t(locale, "memory.forget")}
+              Quên lịch sử đã xem
             </button>
           </div>
-          <nav aria-label={t(locale, "nav.aria")} className="vocab-site-links">
+          <nav aria-label="Điều hướng trang" className="vocab-site-links">
             {/* Community is not open to readers yet; only the button is hidden, the
                 /community route still resolves. Flip COMMUNITY_AVAILABLE to bring it back. */}
-            {COMMUNITY_AVAILABLE && <Link to="/community">{t(locale, "nav.community")}</Link>}
+            {COMMUNITY_AVAILABLE && <Link to="/community">Cộng đồng</Link>}
             {/* Temporarily hidden at request: "Đăng nhập" and "Về với từ vựng" leave the
                 sheet for now — uncomment (both live together) to bring them back. The
                 /auth route and the close behaviour are untouched.
-            <Link to="/auth">{t(locale, "nav.login")}</Link>
+            <Link to="/auth">Đăng nhập</Link>
             <button type="button" onClick={close}>
-              {t(locale, "nav.back")}
+              Về với từ vựng
             </button>
             */}
           </nav>

@@ -24,23 +24,13 @@
  *    A pack file has the SAME shape documented below (its own revision/name/count/…).
  *
  *  ── The card turns ONE word into this ordered page flow (buildStages, lib/stages.ts) ──
- *    1. lead         (from `localized.<locale>.lead` ⊕ `leadVi`,  label depends on `style`)
- *    2. definition   (from `localized.<locale>.def`  ⊕ `defVi`,     label per-locale)
- *    3. letters      (derived: "{count} letters, starts with {initial}" — label per-locale)
- *    4. usage        (from `usage[0].en` primary, `glosses.<locale>` ⊕ `usage[0].vi` secondary)
- *    5. anticipation (from `localized.<locale>.guess` ⊕ `anticipateVi`, label per-locale)
- *    6. reveal       (the `word` itself — ALWAYS English, the card's anchor)
+ *    1. lead         (from `leadVi`,     label depends on `style`)   — skipped if absent
+ *    2. definition   (from `defVi`,      label "Ý nghĩa")
+ *    3. letters      (derived: "Gồm {chars} chữ cái, bắt đầu bằng {initial}")
+ *    4. usage        (from `usage[0]`,   label "Trong câu")          — skipped if absent
+ *    5. anticipation (from `anticipateVi`, label "Bạn đoán gì?")     — skipped if absent
+ *    6. reveal       (the `word` itself, label "Đây rồi!")
  *    7. spelling     (letter-by-letter coda of `word`, appended by VocabularyCard)
- *
- *  ── Multi-language (locale) support ────────────────────────────────────────────────
- *    The four leading phrases (lead / meaning / hint / guess) are LOCALE-PARAMETRIC. For
- *    the base locale `vi` the legacy `*Vi` fields ARE the source. For any other locale
- *    the matching `localized.<locale>.*` (and `usage[].glosses.<locale>`) overlay is
- *    preferred, falling back to the Vietnamese base when that locale is unauthored.
- *    Adding a language is DATA-ONLY: populate `localized.<code>` + `usage[].glosses.<code>`
- *    on each word and a label set in lib/i18n.ts — no rendering code changes.
- *    INVARIANT: only the leading phrases are localized; the reveal (6) is always the
- *    English `word`, so the card always ENDS on the English word regardless of locale.
  *    Every non-reveal page is further split by paginateText() at clause boundaries.
  *
  *  ── Two emphasis systems (do not mix them up) ────────────────────────────────────
@@ -68,7 +58,16 @@
   "count": 25,
 
   // [DERIVED] Sorted union of every word's `topics`. Feeds the topic filter UI.
-  "topics": ["attention", "character", "communication", "daily", "emotion", "thinking", "time", "work"],
+  "topics": [
+    "attention",
+    "character",
+    "communication",
+    "daily",
+    "emotion",
+    "thinking",
+    "time",
+    "work",
+  ],
 
   // [DERIVED] Only the CEFR levels actually present, in A1→C2 order. Feeds the level filter.
   "levels": ["A2", "B1", "B2"],
@@ -122,23 +121,6 @@
       //   • MUST NOT contain the English answer — normalizeDeck() HARD-FAILS the import if
       //     answerPattern(word) matches this field.
       "anticipateVi": "Thử nhắm mắt đoán…",
-
-      // [AUTHOR] OPTIONAL. Per-locale overlays of the leading phrases (lead / meaning /
-      // guess). The base locale `vi` uses the `*Vi` fields above; every other locale here
-      // is preferred over the base when that locale is selected. Adding a language is
-      // DATA-ONLY — populate a new locale key and a label set in lib/i18n.ts.
-      // SCHEMA: Record<Locale, { lead?, def, guess? }>, each value trimmed, def 2–400 chars.
-      // REQUIREMENTS (per locale entry):
-      //   • `def` is REQUIRED (the meaning always has a localized form or falls back to vi).
-      //   • `guess` MUST NOT contain the English answer — normalizeDeck() hard-fails if so.
-      //   • The reveal (the English `word`) is NEVER localized; it is the card's anchor.
-      "localized": {
-        "th": {
-          "lead": "ล้มแล้วลุกเองได้ โดยไม่ต้องพึ่งใคร",
-          "def": "ความสามารถในการฟื้นตัวได้เร็วหลังมรสุมชีวิต",
-          "guess": "ลองเดาตามาสิ"
-        }
-      },
 
       // [LEGACY] Optional array of emphasis phrases (≤6). Superseded by inline /markers/ above.
       // normalizeEmphasisPhrases() NFC-normalizes, collapses whitespace and de-duplicates
@@ -202,17 +184,13 @@
       //   • May carry at most one inline /emphasis/ marker.
       // REQUIREMENTS for `vi`:
       //   • OPTIONAL, ≤400 chars. Vietnamese translation of the example; may carry /markers/.
-      // `glosses` (OPTIONAL): per-locale overlay of the example gloss, parallel to `vi`.
-      //   For a selected non-vi locale the matching `glosses.<locale>` is shown instead of
-      //   `vi`; an unauthored locale falls back to `vi`. Schema: Record<Locale, string>.
       "usage": [
         {
           "en": "She proved more _____ than anyone expected.",
           "vi": "Cô ấy chứng tỏ mình mạnh mẽ hơn người ta tưởng.",
-          "glosses": { "th": "เธอแข็งแกร่งกว่าที่ใครคาดไว้" }
-        }
-      ]
-    }
+        },
+      ],
+    },
 
     // ── Minimal valid entry ────────────────────────────────────────────────────────
     // Only `id`, `word` and `defVi` are strictly required; everything else is optional or
@@ -222,7 +200,7 @@
     //   "word": "example",
     //   "defVi": "Một /trường hợp/ cụ thể minh hoạ cho điều gì đó."
     // }
-  ]
+  ],
 }
 
 /**
@@ -232,9 +210,7 @@
  *  □ `id`   unique, ^[a-zA-Z0-9_-]+$, 1–80      □ `word` unique, letters/'/-, 2–64
  *  □ `defVi` present, 2–400 chars, 8–11 words   □ `leadVi` ≤240, 8–11 words (optional)
  *  □ `anticipateVi` ≤180, 3–8 words, NO English answer (hard-fails import)
- *  □ `localized[locale].guess` (any locale incl. `th`) ALSO hard-fails if it leaks the English answer
- *  □ `usage[].en` contains a "_____" blank, ≤400;  `usage[].vi` ≤400;  `usage[].glosses.<locale>` ≤400
- *  □ INVARIANT: the reveal is always the English `word`; only lead/def/guess/gloss are localized
+ *  □ `usage[].en` contains a "_____" blank, ≤400;  `usage[].vi` ≤400
  *  □ inline /emphasis/ markers: ≤1 per field, whole Vietnamese unit (2–3 syllables),
  *    never starting/ending mid-compound, ≤6 words, ≤80 chars, present verbatim in that field
  *  □ `topics`/`exams` lowercase slugs;  `level` ∈ A1..C2;  `style` ∈ the 4 ids

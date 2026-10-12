@@ -1,23 +1,29 @@
-/** Curated vocabulary color/motion presets. Exports: THEMES, STYLES, choosePresentation. Depends on: canvas palettes, stable hash. */
+/** Curated vocabulary color/motion presets. Exports: THEMES, STYLES, DOUYIN_THEMES, DOUYIN_STYLES, themePool, stylePool, choosePresentation. Depends on: canvas palettes, stable hash. */
 import {
   DEFAULT_CANVAS,
   PALETTES,
+  ensureReadablePalette,
+  normalizePalette,
   paletteBackgroundStops,
   vividGradient,
   type CanvasSpec,
+  type Palette,
   type PaletteTone,
 } from "@/features/canvas";
 import { getRelativeLuminance } from "@/features/canvas/contrast/color-math";
 import {
+  getHanLayoutMetrics,
+  getHanTokens,
   getVietnameseLayoutMetrics,
   getWords,
+  isLikelyChineseText,
   isLikelyVietnameseText,
 } from "@/features/kinetic-text";
 import { getTextSafeInsets } from "@/features/post-player/lib/playback-timing";
 import type { NarrativeStyle } from "./schema";
 import { hash } from "./random";
 import { pickHandwritingFont } from "./handwriting";
-import type { Presentation } from "../types";
+import type { Presentation, VisualDialect } from "../types";
 
 /**
  * One selectable appearance for a card. Every color role comes from a single
@@ -94,24 +100,236 @@ function classifyBackdropTone(background: string): PaletteTone {
 // The theme list IS the palette collection: no accent is derived at runtime from
 // whatever stop happens to be brightest, which is what used to pair a pale
 // background with white ink and an unrelated fallback highlight.
-export const THEMES: VocabularyTheme[] = PALETTES.map((palette) => ({
-  id: palette.id,
-  label: palette.label,
-  background: palette.background,
-  paint: vividGradient(palette.background),
-  // Chrome follows the measured backdrop, not the authored flag, so an edited or
-  // mis-tagged gradient can't put a light veil over a dark card.
-  tone: classifyBackdropTone(palette.background),
-  ink: palette.ink,
-  accent: palette.accentA,
-  accentAlt: palette.accentB,
-  onAccent: palette.onAccent,
-  font: palette.font,
-  canvas: {
-    backgroundStyle: "transition" as const,
-    gradientPath: [palette.background, reversedGradient(palette.background)],
+function paletteToTheme(palette: Palette): VocabularyTheme {
+  return {
+    id: palette.id,
+    label: palette.label,
+    background: palette.background,
+    paint: vividGradient(palette.background),
+    // Chrome follows the measured backdrop, not the authored flag, so an edited or
+    // mis-tagged gradient can't put a light veil over a dark card.
+    tone: classifyBackdropTone(palette.background),
+    ink: palette.ink,
+    accent: palette.accentA,
+    accentAlt: palette.accentB,
+    onAccent: palette.onAccent,
+    font: palette.font,
+    canvas: {
+      backgroundStyle: "transition" as const,
+      gradientPath: [palette.background, reversedGradient(palette.background)],
+    },
+  };
+}
+
+export const THEMES: VocabularyTheme[] = PALETTES.map(paletteToTheme);
+
+/**
+ * The Douyin-dialect palettes: color stories mainland short-video readers read as
+ * "native" — the original five lean Douyin-tech and 国潮, the second five pull
+ * from deeper Eastern artifacts (水墨 ink-wash, 青瓷 Song celadon, 朱砂 cinnabar
+ * seal paste, 青花 Jingdezhen porcelain, 梅 plum blossoms). Hand-authored rows,
+ * repaired on load through the exact same contrast pipeline as the main
+ * collection, so a floor violation can never reach the screen;
+ * scripts/check-douyin-presets.ts asserts the raw rows already pass, keeping the
+ * authored colors identical to the shipped ones.
+ * These never join THEMES: the default pool stays untouched on every host.
+ */
+export const DOUYIN_PALETTE_ROWS: Palette[] = [
+  {
+    id: "douyin-neon",
+    label: "Douyin neon",
+    mood: "signal cyan and douyin red crossing a steel-dark stage",
+    scheme: "complementary",
+    tone: "dark",
+    hue: 210,
+    background: "linear-gradient(135deg,#33445f,#7d1a3d)",
+    ink: "#f4f7fb",
+    accentA: "#25f4ee",
+    accentB: "#ff4d6d",
+    onAccent: "#14101f",
+    font: "Space Grotesk",
   },
-}));
+  {
+    id: "guochao-red",
+    label: "Guochao red",
+    mood: "imperial gold and jade light over deep lacquer red",
+    scheme: "complementary",
+    tone: "dark",
+    hue: 352,
+    background: "linear-gradient(160deg,#8a1f2d,#14544a)",
+    ink: "#fdf4e7",
+    accentA: "#f5c542",
+    accentB: "#6fe3c4",
+    onAccent: "#14101f",
+    font: "Playfair Display",
+  },
+  {
+    id: "neon-night",
+    label: "Neon night",
+    mood: "hot magenta and electric cyan over club violet",
+    scheme: "split",
+    tone: "dark",
+    hue: 280,
+    background: "linear-gradient(135deg,#5c2185,#a51245)",
+    ink: "#f8f4ff",
+    accentA: "#ff77dd",
+    accentB: "#22e6ff",
+    onAccent: "#14101f",
+    font: "Space Grotesk",
+  },
+  {
+    id: "jade-mist",
+    label: "Jade mist",
+    mood: "seal vermilion and pine green over pale celadon",
+    scheme: "complementary",
+    tone: "light",
+    hue: 150,
+    background: "linear-gradient(150deg,#e9f2e8,#d8e6f2)",
+    ink: "#14281f",
+    accentA: "#c53020",
+    accentB: "#1f6f57",
+    onAccent: "#ffffff",
+    font: "Inter",
+  },
+  {
+    id: "ink-gold",
+    label: "Ink gold",
+    mood: "molten gold and jade over bronze lacquer",
+    scheme: "split",
+    tone: "dark",
+    hue: 42,
+    background: "linear-gradient(150deg,#57431a,#14514f)",
+    ink: "#f5ead2",
+    accentA: "#e8b34b",
+    accentB: "#4fd1b4",
+    onAccent: "#14101f",
+    font: "Inter",
+  },
+  {
+    id: "ink-landscape",
+    label: "Ink landscape",
+    mood: "ink-wash mountain silhouettes over warm rice paper",
+    scheme: "complementary",
+    tone: "light",
+    hue: 35,
+    background: "linear-gradient(150deg,#e8dcc4,#b8c2c8)",
+    ink: "#1a1410",
+    accentA: "#a83028",
+    accentB: "#2e5a4a",
+    onAccent: "#ffffff",
+    font: "Playfair Display",
+  },
+  {
+    id: "celadon-blue",
+    label: "Celadon blue",
+    mood: "Song celadon glaze with seal vermilion and pine",
+    scheme: "split",
+    tone: "light",
+    hue: 155,
+    background: "linear-gradient(150deg,#cfe0d6,#88a8c4)",
+    ink: "#0f2a22",
+    accentA: "#902418",
+    accentB: "#185848",
+    onAccent: "#ffffff",
+    font: "Inter",
+  },
+  {
+    id: "cinnabar-gold",
+    label: "Cinnabar gold",
+    mood: "cinnabar seal paste and temple gold over lacquer",
+    scheme: "complementary",
+    tone: "dark",
+    hue: 8,
+    background: "linear-gradient(150deg,#7a2323,#14483f)",
+    ink: "#faecc8",
+    accentA: "#e8b34b",
+    accentB: "#6fe3c4",
+    onAccent: "#14101f",
+    font: "Playfair Display",
+  },
+  {
+    id: "porcelain-blue",
+    label: "Porcelain blue",
+    mood: "Jingdezhen cobalt over white clay with warm accent",
+    scheme: "split",
+    tone: "dark",
+    hue: 215,
+    background: "linear-gradient(150deg,#1a4478,#84591d)",
+    ink: "#f4f1e6",
+    accentA: "#daaf65",
+    accentB: "#8bbbe1",
+    onAccent: "#14101f",
+    font: "Inter",
+  },
+  {
+    id: "plum-blossom",
+    label: "Plum blossom",
+    mood: "winter plum over ink branch with gold and pink",
+    scheme: "split",
+    tone: "dark",
+    hue: 330,
+    background: "linear-gradient(150deg,#731a5c,#1b6054)",
+    ink: "#fbe8d8",
+    accentA: "#e8b34b",
+    accentB: "#ee87a2",
+    onAccent: "#14101f",
+    font: "Playfair Display",
+  },
+  // 春节 / Chūnjié — Chinese New Year: crimson lanterns, temple gold, rice-paper
+  // cream. Three palettes lean heavy on red and yellow with a light paper-cut
+  // variant on the cream side, so the reader can pick whichever register fits the
+  // card.
+  {
+    id: "spring-crimson",
+    label: "Spring crimson",
+    mood: "imperial crimson and old-brass gold over lacquer night",
+    scheme: "complementary",
+    tone: "dark",
+    hue: 345,
+    background: "linear-gradient(155deg,#8b1a48,#5a4820)",
+    ink: "#fdf3d1",
+    accentA: "#f5c542",
+    accentB: "#ff8f8f",
+    onAccent: "#14101f",
+    font: "Playfair Display",
+  },
+  {
+    id: "hongbao-gold",
+    label: "Hongbao gold",
+    mood: "red envelope with foil-sealed gold and a spark of coral",
+    scheme: "complementary",
+    tone: "dark",
+    hue: 350,
+    background: "linear-gradient(150deg,#a01c48,#6a5820)",
+    ink: "#fff7d1",
+    accentA: "#ffd23f",
+    accentB: "#ffa0a0",
+    onAccent: "#14101f",
+    font: "Space Grotesk",
+  },
+  {
+    id: "lantern-paper-cut",
+    label: "Lantern paper-cut",
+    mood: "cut-red lantern paste on cream rice paper with pine accent",
+    scheme: "complementary",
+    tone: "light",
+    hue: 40,
+    background: "linear-gradient(155deg,#fef1c4,#e898b8)",
+    ink: "#1f0f14",
+    accentA: "#7a1a4e",
+    accentB: "#5a4820",
+    onAccent: "#ffffff",
+    font: "Playfair Display",
+  },
+];
+
+const DOUYIN_PALETTES: Palette[] = DOUYIN_PALETTE_ROWS.map((palette) =>
+  ensureReadablePalette(normalizePalette(palette)),
+);
+
+/** The zh-only theme pool: Douyin-flavored colors, same validated role contract. */
+export const DOUYIN_THEMES: VocabularyTheme[] = DOUYIN_PALETTES.map(paletteToTheme);
+
 export type StylePreset = {
   id: NarrativeStyle;
   label: string;
@@ -155,6 +373,61 @@ export const STYLES: StylePreset[] = [
     rhythm: "smooth",
   },
 ];
+
+/**
+ * The Douyin-dialect motion presets: the same four style slots readers already know,
+ * re-choreographed to mainland short-video grammar — 卡点 beat-cut snapping (scale-in,
+ * shake loop, burst rhythm), suspense blur-ins, slow emotional drift, and a composed
+ * 国潮 slide. Reusing the NarrativeStyle ids keeps deck-authored styles, the
+ * `Presentation.style` contract and buildStages untouched; only the motion and the
+ * Vietnamese names swap when the dialect does.
+ */
+export const DOUYIN_STYLES: StylePreset[] = [
+  {
+    id: "detective",
+    label: "Suspense",
+    caption: "A slow-burn reveal",
+    entrance: "blur",
+    loop: "none",
+    tempo: "steady",
+    rhythm: "smooth",
+  },
+  {
+    id: "speed",
+    label: "Beat drop",
+    caption: "Cut on the beat",
+    entrance: "scale",
+    loop: "shake",
+    tempo: "snappy",
+    rhythm: "burst",
+  },
+  {
+    id: "confession",
+    label: "Heartfelt",
+    caption: "Feelings first",
+    entrance: "fade",
+    loop: "float",
+    tempo: "slow",
+    rhythm: "poetic",
+  },
+  {
+    id: "minimal",
+    label: "Guochao",
+    caption: "Ink and gold, composed",
+    entrance: "slide",
+    loop: "none",
+    tempo: "steady",
+    rhythm: "stagger",
+  },
+];
+
+/**
+ * The style presets a card may wear for a given dialect.
+ * @pure (module-level registries only)
+ */
+export function stylePool(dialect?: VisualDialect): StylePreset[] {
+  return dialect === "douyin" ? DOUYIN_STYLES : STYLES;
+}
 
 /** Build a player spec with the original canvas defaults and selected backdrop. */
 export function buildVocabularyCanvas(theme: VocabularyTheme, style: StylePreset): CanvasSpec {
@@ -216,10 +489,16 @@ export function fitVocabularyTextSize(
   const availableHeight = Math.max(100, height - chrome);
   const availableWidth = Math.max(180, width * 0.84);
   const vietnamese = isLikelyVietnameseText(text);
+  // A Han deck's usage sentence packs through the same staggered-line renderer as
+  // Vietnamese, so its size must be solved against the same packed line count.
+  const han = !vietnamese && isLikelyChineseText(text);
+  const tokens = han ? getHanTokens(text) : words;
   for (let size = baseSize; size >= 28; size -= 2) {
     let lines = 1;
-    if (vietnamese) {
-      lines = getVietnameseLayoutMetrics(words, width, size, 1.24).lines.length;
+    if (vietnamese || han) {
+      lines = han
+        ? getHanLayoutMetrics(tokens, width, size, 1.24).lines.length
+        : getVietnameseLayoutMetrics(tokens, width, size, 1.24).lines.length;
     } else {
       let used = 0;
       for (const word of words) {
@@ -255,16 +534,19 @@ function withFont(theme: VocabularyTheme, font: string | null): VocabularyTheme 
  * The choice is the picker's allow-list — "mix" (everything), one id, or a
  * comma-joined set of ids the reader left picked. An unparseable or emptied
  * list falls back to the full collection so the stream can never go colorless.
- * @pure (depends only on the module-level THEMES registry)
+ * The dialect picks the collection the allow-list is read against: a Douyin
+ * stream never rotates into a default palette, and vice versa.
+ * @pure (depends only on the module-level theme registries)
  */
-export function themePool(theme: string): VocabularyTheme[] {
+export function themePool(theme: string, dialect?: VisualDialect): VocabularyTheme[] {
+  const collection = dialect === "douyin" ? DOUYIN_THEMES : THEMES;
   const ids = theme
     .split(",")
     .map((id) => id.trim())
     .filter(Boolean);
-  if (!ids.length || ids.includes("mix")) return THEMES;
-  const picked = THEMES.filter((item) => ids.includes(item.id));
-  return picked.length ? picked : THEMES;
+  if (!ids.length || ids.includes("mix")) return collection;
+  const picked = collection.filter((item) => ids.includes(item.id));
+  return picked.length ? picked : collection;
 }
 
 /**
@@ -277,15 +559,18 @@ export function themePool(theme: string): VocabularyTheme[] {
 export function choosePresentation(occurrence: string, choice: Presentation, position?: number) {
   // A single-theme pick still locks (a one-item pool always lands on it); a
   // multi-theme pick keeps the per-card surprise of mix inside the picked subset.
-  const pool = themePool(choice.theme);
+  const pool = themePool(choice.theme, choice.dialect);
   const theme = pool[hash(`${occurrence}:theme`) % pool.length];
+  const styles = stylePool(choice.dialect);
   return {
-    theme: withFont(
-      theme,
-      position === undefined ? null : pickHandwritingFont(occurrence, position),
-    ),
+    // The handwriting surprise is part of the DEFAULT dialect's charm; a Douyin
+    // stream keeps its own clean faces on every card.
+    theme:
+      choice.dialect === "douyin" || position === undefined
+        ? theme
+        : withFont(theme, pickHandwritingFont(occurrence, position)),
     style:
-      STYLES.find((style) => style.id === choice.style) ??
-      STYLES[hash(`${occurrence}:style`) % STYLES.length],
+      styles.find((style) => style.id === choice.style) ??
+      styles[hash(`${occurrence}:style`) % styles.length],
   };
 }

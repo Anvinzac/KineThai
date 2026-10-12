@@ -1,5 +1,5 @@
 /** Readable clue text and reveal detail, reusing existing kinetic primitives. Exports: VocabularyStage. Depends on: canvas, kinetic-text, stages, motion tokens. */
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type MotionValue, type Variants } from "framer-motion";
 import type { CanvasSpec } from "@/features/canvas";
 import { WordSequenceText } from "@/features/post-player";
@@ -61,6 +61,49 @@ const STILL_VARIANTS: Variants = {
   exit: { opacity: 0, transition: { duration: 0 } },
 };
 
+/**
+ * One page's kinetic text, with the animate-or-not decision made ONCE, when the page
+ * arrives.
+ *
+ * WordSequenceText keys its whole subtree on `revealed`, so flipping that prop remounts the
+ * text. It used to be passed `!playing` live: pausing swapped the text for its static twin
+ * and resuming swapped it back to a fresh animated one, which replayed the entrance from
+ * the first word. The page is mounted under a key of its own (stage + play count), so a
+ * value latched in state here lasts exactly as long as the page does — a page that arrives
+ * while nothing is playing (autoplay off, pages turned by hand) is still shown at once,
+ * and one that arrives playing keeps its entrance no matter what pauses it afterwards.
+ */
+function StageText({
+  playing,
+  reducedMotion,
+  ...text
+}: {
+  playing: boolean;
+  reducedMotion: boolean;
+} & Pick<
+  React.ComponentProps<typeof WordSequenceText>,
+  | "spec"
+  | "playKey"
+  | "canvasWidth"
+  | "background"
+  | "entranceSeed"
+  | "fitAsUnit"
+  | "dataEmphasis"
+  | "secondaryEmphasis"
+  | "allowFrameEmphasis"
+  | "timeScale"
+>) {
+  const [still] = useState(reducedMotion || !playing);
+  return (
+    <WordSequenceText
+      {...text}
+      paused={!playing}
+      revealed={still || reducedMotion}
+      lineSpacingScale={VOCAB_LINE_SPACING_SCALE}
+    />
+  );
+}
+
 /** Render only the current clue; answer details mount only on reveal. @param props Stage and presentation. @returns Accessible text. */
 export function VocabularyStage({
   stage,
@@ -69,6 +112,7 @@ export function VocabularyStage({
   background,
   canvasWidth,
   active,
+  staged,
   playing,
   reducedMotion,
   playKey,
@@ -76,6 +120,7 @@ export function VocabularyStage({
   dragX,
   allowFrameEmphasis,
   revealY,
+  timeScale = 1,
 }: {
   stage: LearningStage;
   word: VocabularyWord;
@@ -83,6 +128,11 @@ export function VocabularyStage({
   background: string;
   canvasWidth: number;
   active: boolean;
+  /**
+   * Whether the page's text is on stage. True from this card's first play until the reader
+   * leaves the word, so a pause (which drops `active`) leaves the text exactly as it is.
+   */
+  staged: boolean;
   playing: boolean;
   reducedMotion: boolean;
   playKey: number;
@@ -98,6 +148,8 @@ export function VocabularyStage({
    * stylesheet gives the word there.
    */
   revealY: number;
+  /** Reading-pace stretch on the words' read-out; matches the page-duration stretch. */
+  timeScale?: number;
 }) {
   const locale = useLocale();
   const details = useRef<HTMLDivElement>(null);
@@ -115,9 +167,14 @@ export function VocabularyStage({
       <p className="sr-only" lang={stage.lang}>
         {stage.text}
       </p>
-      {stage.reveal && active && !reducedMotion && <RevealBurst key={playKey} />}
-      <AnimatePresence custom={pageMotion} initial={false}>
-        {active && (
+      {stage.reveal && staged && !reducedMotion && <RevealBurst key={playKey} />}
+      {/* No `initial={false}` here. It read as "do not slide the first page in", but
+          AnimatePresence hands that flag to EVERY motion component underneath, so on a card
+          that was born playing — the first word of a stream, whenever its fonts were ready
+          before its data — the whole page, words included, was painted finished and never
+          animated. Every later card dodged it only because it mounts off screen first. */}
+      <AnimatePresence custom={pageMotion}>
+        {staged && (
           // Two layers per page. The outer BAND is the box the text is fitted to — the
           // fit pipeline reads its height — and it never transforms, so the page's
           // entrance scale cannot distort that reading. It only relays the page's
@@ -148,19 +205,19 @@ export function VocabularyStage({
                   The text block itself stays still (loop: "none") — a page of clue
                   text that bobs forever is harder to read; the life is in the backdrop
                   and in the emphasised word. */}
-              <WordSequenceText
+              <StageText
                 spec={{ ...spec, y: stage.reveal ? revealY : 46, loop: "none" }}
                 playKey={playKey}
-                paused={!playing}
-                revealed={reducedMotion || !playing}
+                playing={playing}
+                reducedMotion={reducedMotion}
                 canvasWidth={canvasWidth}
                 background={background}
                 entranceSeed={word.id}
-                fitAsUnit={stage.reveal}
-                lineSpacingScale={VOCAB_LINE_SPACING_SCALE}
+                fitAsUnit={!!stage.reveal}
                 dataEmphasis={stage.dataEmphasis}
                 secondaryEmphasis={stage.secondaryEmphasis}
                 allowFrameEmphasis={allowFrameEmphasis}
+                timeScale={timeScale}
               />
             </motion.div>
           </motion.div>
@@ -171,7 +228,7 @@ export function VocabularyStage({
           ref={details}
           className="vocab-reveal-details"
           tabIndex={0}
-          aria-label="Word meaning and examples"
+          aria-label="Nghĩa và ví dụ của từ"
           initial={reducedMotion ? false : { opacity: 0, y: 30, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={

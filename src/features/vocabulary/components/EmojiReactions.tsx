@@ -92,7 +92,7 @@ export function EmojiReactions({
   if (locked) return null;
 
   return (
-    <div ref={railRef} className="vocab-emoji-rail" data-no-gesture aria-label="Emoji comments">
+    <div ref={railRef} className="vocab-emoji-rail" data-no-gesture aria-label="Bình luận emoji">
       {/* Reacted emoji bubbles, most-recent last so new taps land near the trigger. */}
       {reacted.map(([emoji, count]) => (
         <button
@@ -100,7 +100,7 @@ export function EmojiReactions({
           type="button"
           className="vocab-emoji-bubble"
           onClick={() => handleEmojiTap(emoji)}
-          aria-label={`${emoji} tapped ${count} time${count === 1 ? "" : "s"}. Tap to add another.`}
+          aria-label={`${emoji} đã chạm ${count} lần. Chạm để thêm.`}
         >
           <span className="vocab-emoji-glyph" aria-hidden="true">
             {emoji}
@@ -115,7 +115,7 @@ export function EmojiReactions({
         className="vocab-emoji-trigger"
         data-open={pickerOpen || undefined}
         onClick={() => setPickerOpen((prev) => !prev)}
-        aria-label={pickerOpen ? "Close emoji picker" : "Add an emoji comment"}
+        aria-label={pickerOpen ? "Đóng bảng emoji" : "Thêm bình luận emoji"}
         aria-expanded={pickerOpen}
       >
         <Plus size={18} />
@@ -131,7 +131,7 @@ export function EmojiReactions({
             exit={reducedMotion ? undefined : { opacity: 0, y: 8, scale: 0.95 }}
             transition={{ duration: reducedMotion ? 0 : 0.2, ease: "easeOut" }}
             role="group"
-            aria-label="Choose an emoji"
+            aria-label="Chọn một emoji"
           >
             {EMOJI_PALETTE.map((emoji) => (
               <button
@@ -139,7 +139,7 @@ export function EmojiReactions({
                 type="button"
                 className="vocab-emoji-picker-btn"
                 onClick={() => handleEmojiTap(emoji)}
-                aria-label={`Leave a ${emoji} comment`}
+                aria-label={`Thả ${emoji} bình luận`}
               >
                 {emoji}
               </button>

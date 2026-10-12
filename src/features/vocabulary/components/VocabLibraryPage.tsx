@@ -1,42 +1,41 @@
 /**
  * Vocabulary Library: a browsable shelf of additional packs, each focused on a field,
- * a need and a proficiency band. Reads locale-resolved metadata from `libraryGroups(locale)`
- * (../lib/library) — no account, no network, no feed wiring yet (the page is a discovery
- * surface, so every pack is marked "coming soon" rather than offered as a working import).
+ * a need and a proficiency band. Reads static mock metadata from ../lib/library — no
+ * account, no network, no feed wiring yet (the page is a discovery surface, so every
+ * pack is marked "Sắp có" rather than offered as a working import).
  *
  * Exports: VocabLibraryPage
- * Depends on: router Link, lucide icons, library data, formatLevelBand, useLocale, vocabulary.css
+ * Depends on: router Link, lucide icons, library data, formatLevelBand, vocabulary.css
  */
 
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Library as LibraryIcon, Sparkles } from "lucide-react";
-import { libraryGroups } from "../lib/library";
+import { LIBRARY_GROUPS } from "../lib/library";
 import { formatLevelBand } from "../lib/difficulty";
-import { useLocale } from "../lib/useLocale";
-import { t } from "../lib/ui-copy";
 import "../vocabulary.css";
 
 /** Show the curated pack shelves. @returns Public library page. */
 export function VocabLibraryPage() {
-  const locale = useLocale();
-  const groups = libraryGroups(locale);
   return (
     <main className="vocabulary-shell vocab-library-shell">
       <header className="vocab-library-header">
-        <Link className="vocab-icon-button" to="/feed" aria-label={t(locale, "library.back")}>
+        <Link className="vocab-icon-button" to="/feed" aria-label="Quay lại dòng từ vựng">
           <ArrowLeft size={19} />
         </Link>
         <div>
           <h1 className="vocab-library-title">
             <LibraryIcon size={20} aria-hidden="true" />
-            {t(locale, "library.title")}
+            Thư viện từ vựng
           </h1>
-          <p className="vocab-library-subtitle">{t(locale, "library.subtitle")}</p>
+          <p className="vocab-library-subtitle">
+            Những gói từ vựng chuyên sâu theo lĩnh vực, nhu cầu và trình độ — bổ sung cho dòng ngẫu
+            nhiên hằng ngày.
+          </p>
         </div>
       </header>
 
       <div className="vocab-library-body">
-        {groups.map((group) => (
+        {LIBRARY_GROUPS.map((group) => (
           <section
             className="vocab-library-group"
             key={group.id}
@@ -55,7 +54,7 @@ export function VocabLibraryPage() {
                     <span className="vocab-pack-band">{formatLevelBand(pack.levels)}</span>
                     <span className="vocab-pack-soon">
                       <Sparkles size={12} aria-hidden="true" />
-                      {t(locale, "library.soon")}
+                      Sắp có
                     </span>
                   </div>
                   <h3 className="vocab-pack-name">{pack.name}</h3>
@@ -67,9 +66,7 @@ export function VocabLibraryPage() {
                       </li>
                     ))}
                   </ul>
-                  <p className="vocab-pack-count">
-                    {t(locale, "library.packCount", { count: pack.words.toLocaleString() })}
-                  </p>
+                  <p className="vocab-pack-count">~{pack.words.toLocaleString()} từ</p>
                 </li>
               ))}
             </ul>

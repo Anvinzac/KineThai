@@ -119,26 +119,30 @@ export function getEntranceTransition(
   style: ResolvedEntranceStyle,
   delay: number,
   duration: number,
+  /**
+   * Stretch on the spring styles, matching the factor the caller already applied to
+   * `delay` and `duration`. Stiffness / s² and damping / s slow a spring by exactly s
+   * while keeping its damping ratio, so it settles with the same overshoot.
+   */
+  timeScale = 1,
 ): Transition {
+  const spring = (stiffness: number, damping: number, mass: number): Transition => ({
+    delay,
+    type: "spring",
+    stiffness: stiffness / (timeScale * timeScale),
+    damping: damping / timeScale,
+    mass,
+  });
   if (style === "poetic-bloom" || style === "poetic-drift") {
     return { delay, duration: duration * 1.55, ease: [0.16, 1, 0.3, 1] };
   }
-  if (style === "pop") {
-    return { delay, type: "spring", stiffness: 380, damping: 17, mass: 0.7 };
-  }
-  if (style === "tilt") {
-    return { delay, type: "spring", stiffness: 300, damping: 19, mass: 0.8 };
-  }
+  if (style === "pop") return spring(380, 17, 0.7);
+  if (style === "tilt") return spring(300, 19, 0.8);
   // Rise and fall land on a lightly under-damped spring: now that they no longer
   // hide behind a blur, a small settle is what keeps them from stopping dead.
-  if (style === "rise") {
-    return { delay, type: "spring", stiffness: 260, damping: 22, mass: 0.9 };
-  }
-  if (style === "fall") {
-    return { delay, type: "spring", stiffness: 320, damping: 20, mass: 0.9 };
-  }
+  if (style === "rise") return spring(260, 22, 0.9);
+  if (style === "fall") return spring(320, 20, 0.9);
   // Slower, softer easing for the blur-heavy focus reveal so it breathes rather than snaps.
   const stretch = style === "focus" ? 1.12 : style === "drift" ? 1.05 : 1;
   return { delay, duration: duration * stretch, ease: [0.22, 1, 0.36, 1] };
 }
-

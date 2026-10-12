@@ -316,6 +316,12 @@
   border-color: transparent;
   color: #0a0014;
 }
+/* Strip the base icon-button's circular border from the corner button — the
+   opaque fill already defines the disc, and the semi-transparent border renders
+   as a visible ring on light backgrounds. */
+.vocab-corner-button {
+  border: none;
+}
 
 /* Saved words as a handle docked to the right edge, replacing the old top-right
    bookmark button. The dock is a tall, narrow strip so the pull can be started
@@ -348,13 +354,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  /* The two glyphs sit apart and dead-centre now the grip bar is gone. */
+  gap: 10px;
   /* 1.5× wider (20 → 30px): the tab now carries two stacked glyphs, not one icon
      and a count. */
   width: 30px;
   height: 72px;
-  /* Room on the left for the grip bar, so the glyph stays optically centred. */
-  padding-left: 4px;
   border: 1px solid #ffffff1f;
   border-right: 0;
   border-radius: 11px 0 0 11px;
@@ -433,19 +438,6 @@
 .vocab-saved-handle:focus-visible {
   outline: 2px solid var(--chrome-accent, #a78bfa);
   outline-offset: 2px;
-}
-/* Two-pixel bar at the inner edge: the one affordance saying this is pulled, not
-   pressed. */
-.vocab-saved-grip {
-  position: absolute;
-  top: 50%;
-  left: 4px;
-  width: 2px;
-  height: 18px;
-  border-radius: 2px;
-  background: currentColor;
-  opacity: 0.34;
-  transform: translateY(-50%);
 }
 /* The handle is the drawer's edge: once the panel is in, it has nothing left to
    pull, so it steps aside instead of sitting on top of the panel. */
@@ -532,7 +524,10 @@
 }
 
 /* Fades in as the pull progresses, so the gesture names its own destination. */
-.vocab-saved-hint {
+/* Scoped to the dock. The saved PANEL has a paragraph on the same class, and unscoped
+   this rule reached it too — absolutely positioned at opacity var(--pull), which is 0 off
+   the feed, so the panel's gesture hint rendered invisible. */
+.vocab-saved-dock .vocab-saved-hint {
   position: absolute;
   top: 50%;
   /* Travels with the handle's small stretch, so the label stays beside the tab it
@@ -593,6 +588,24 @@
   /* Grown from the corner of the control that opened it, the same way the app
      panel is — not nudged down a few pixels. */
   animation: vocab-options-in var(--dur-move) var(--ease-spring) both;
+}
+/* While a picker list is open the rest of the sheet recedes, but only a touch: a
+   faint veil and a light blur that soften the controls without hiding them, so the
+   reader still sees where they are. The list (z-index 50) sits above the veil. */
+.vocab-options:has(.vocab-picker-list)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--shell-surface) 18%, transparent);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  border-radius: 22px;
+  pointer-events: none;
+  animation: vocab-saved-fade var(--dur-quick) var(--ease-out) both;
+}
+.vocab-options:has(.vocab-picker-list[data-closing])::before {
+  animation: vocab-saved-fade-out var(--dur-quick) var(--ease-in) forwards;
 }
 /* The first block sits beside the notch, so the rest of the sheet starts below
    it rather than running under the button. */
@@ -716,9 +729,9 @@
 /* Theme allow-list: the trigger wears the select's skin, and the open list expands
    in flow inside its grid cell — the options sheet already scrolls, so no absolute
    popover can escape (or fight) it. Checked swatches burn, unchecked ones fade.
-   Row labels are `.vocab-theme-option-label`, NOT `.vocab-theme-name`: the latter is a
+   Row labels are `.vocab-picker-option-label`, NOT `.vocab-theme-name`: the latter is a
    removed card element still hidden by a display:none !important rule below. */
-.vocab-theme-picker {
+.vocab-picker {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -728,7 +741,7 @@
   color: var(--shell-text-soft);
   align-self: start;
 }
-.vocab-theme-trigger {
+.vocab-picker-trigger {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -748,18 +761,18 @@
     border-color var(--dur-quick) var(--ease-out),
     background-color var(--dur-quick) var(--ease-out);
 }
-.vocab-theme-trigger:hover {
+.vocab-picker-trigger:hover {
   border-color: color-mix(in srgb, var(--vocab-accent) 60%, transparent);
 }
-.vocab-theme-trigger:focus-visible {
+.vocab-picker-trigger:focus-visible {
   border-color: var(--vocab-accent);
 }
-.vocab-theme-trigger svg {
+.vocab-picker-trigger svg {
   flex: none;
   opacity: 0.7;
   transition: transform var(--dur-quick) var(--ease-out);
 }
-.vocab-theme-trigger[aria-expanded="true"] svg {
+.vocab-picker-trigger[aria-expanded="true"] svg {
   transform: rotate(180deg);
 }
 .vocab-theme-chips {
@@ -776,14 +789,25 @@
 .vocab-theme-chips span:first-child {
   margin-left: 0;
 }
-.vocab-theme-summary {
+.vocab-picker-summary {
   flex: 1;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.vocab-theme-list {
+.vocab-picker-list {
+  /* Floats above the sheet as a proper popover — never in-flow, so opening it
+     cannot push the grid's content or expand the container. top/left here are only
+     the fallback: useContainedPicker places it beside the trigger and nudges it so
+     it never crosses the sheet's clipped edges. */
+  --picker-shift: -6px;
+  transform-origin: top left;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 50;
+  min-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -792,9 +816,20 @@
   padding: 6px;
   border: 1px solid var(--shell-line-strong);
   border-radius: 14px;
-  background: var(--shell-well);
+  /* Opaque: the veil behind only lightly blurs the sheet, so any translucency here
+     would let the controls underneath read through the rows. */
+  background: var(--shell-surface);
+  box-shadow: 0 12px 40px #000a;
+  animation: vocab-picker-in var(--dur-quick) var(--ease-out) both;
 }
-.vocab-theme-list button {
+.vocab-picker-list[data-side="above"] {
+  --picker-shift: 6px;
+  transform-origin: bottom left;
+}
+.vocab-picker-list[data-closing] {
+  animation: vocab-picker-out var(--dur-quick) var(--ease-in) forwards;
+}
+.vocab-picker-list button {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -810,7 +845,7 @@
   text-align: left;
   cursor: pointer;
 }
-.vocab-theme-list button:hover {
+.vocab-picker-list button:hover {
   background: rgb(255 255 255 / 6%);
 }
 .vocab-theme-swatch {
@@ -823,12 +858,12 @@
   box-shadow: 0 0 0 1.5px #ffffff2e;
   transition: box-shadow var(--dur-quick) var(--ease-out);
 }
-.vocab-theme-list button[data-on] .vocab-theme-swatch {
+.vocab-picker-list button[data-on] .vocab-theme-swatch {
   box-shadow:
     0 0 0 2px var(--shell-text),
     0 2px 8px #0005;
 }
-.vocab-theme-option-label {
+.vocab-picker-option-label {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -836,10 +871,10 @@
   text-overflow: ellipsis;
 }
 /* The name fades with the ring going translucent, so an unselected row dims as one unit. */
-.vocab-theme-list button:not([data-on]) .vocab-theme-option-label {
+.vocab-picker-list button:not([data-on]) .vocab-picker-option-label {
   opacity: 0.55;
 }
-.vocab-theme-reset {
+.vocab-picker-reset {
   justify-content: center;
   color: var(--vocab-accent) !important;
 }
@@ -942,6 +977,27 @@
     transform: scale(0.3);
   }
 }
+/* Picker popover: grows down from the trigger's bottom edge, collapses back. */
+@keyframes vocab-picker-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--picker-shift)) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vocab-picker-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(var(--picker-shift)) scale(0.96);
+  }
+}
 /* The scrollable option column; the floating confirm bar overlays its bottom edge,
    so the column reserves padding-bottom for the last row to scroll clear of it.
    min-height:0 lets the flex child actually scroll instead of growing the panel. */
@@ -1009,6 +1065,11 @@
   flex-shrink: 0;
 }
 /* Mock total words for the track's band, at the trailing edge. */
+/* A track with no words in the catalog yet: still on the ladder, visibly not on offer. */
+.vocab-difficulty-option[aria-disabled="true"] {
+  opacity: 0.38;
+  cursor: default;
+}
 .vocab-difficulty-count {
   grid-area: count;
   align-self: center;
@@ -1319,6 +1380,60 @@
   opacity: 0.45;
   cursor: default;
 }
+/* Reading pace: a three-way segmented switch whose lit pill slides between choices. */
+.vocab-pace {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.vocab-pace-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+.vocab-pace-options {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--shell-well);
+  box-shadow: inset 0 0 0 1px var(--shell-line-strong);
+}
+.vocab-pace-options button {
+  min-width: 58px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--shell-text-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-quick) var(--ease-out),
+    color var(--dur-quick) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+.vocab-pace-options button:hover:not([data-on], :disabled) {
+  color: var(--shell-text);
+}
+.vocab-pace-options button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+.vocab-pace-options button[data-on] {
+  background: var(--vocab-accent);
+  color: #10140f;
+  box-shadow: 0 2px 8px #0005;
+}
+.vocab-pace-options button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
 .vocab-site-links {
   display: flex;
   flex-wrap: wrap;
@@ -1451,6 +1566,30 @@
     transform: translate3d(7%, 0, 0);
   }
 }
+/* Landscape phone: widen the colour band so ONE scene fills the screen.
+
+   The sliding backdrop is a long strip of scene colours, and one "segment" of it —
+   a whole colour-to-colour transition — is as wide as this wrapper. The card shows
+   roughly 85% of a segment, so in portrait that is one colour easing into the next
+   down a tall, narrow card, read as a single moody wash: the gradient runs at 100deg,
+   so over 844px of height the band is smeared ~149px sideways and the two ends never
+   line up next to each other.
+
+   Turned landscape, the card is wide and short. The same 85% of the cycle is now laid
+   out across the width with only ~69px of diagonal smear to hide it, so the two ends
+   of the transition sit side by side and read as two different backgrounds meeting in
+   the middle of the screen.
+
+   Widening the wrapper widens the segment with it (the strip is sized in % of this
+   box), so the card sees a much smaller slice of the cycle — ~45% instead of ~85% —
+   and that slice reads as one scene. The per-page shift is defined as one segment, so
+   page turns still change the colour completely; and the overhang (60% a side) still
+   dwarfs the drift's travel (7% of the wrapper), so no edge is ever exposed. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .vocab-backdrop-drift[data-drift] {
+    inset: 0 -60%;
+  }
+}
 /* The kinetic text casts a wide soft black shadow, which lifts light type off a deep
    card. Under dark ink on a pale card it is just a dirty halo, so it is dropped. */
 .vocab-card[data-tone="light"] .vocab-stage-text [data-kinetic-word] {
@@ -1531,11 +1670,11 @@
   overflow-x: hidden;
   overscroll-behavior-y: contain;
   scrollbar-width: thin;
-  /* Never let a single over-wide token push the meaning past the viewport edge: break it
-     inside the box (inherited by every paragraph below), so the panel is exactly the width
-     it declares and its text can never overflow horizontally on a phone. */
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  /* Never let text overflow horizontally, but respect Vietnamese compound words:
+     keep-all prevents breaking mid-word (so 2-syllable compounds stay on one line),
+     while break-word only breaks as a last resort for truly unbreakable tokens. */
+  overflow-wrap: break-word;
+  word-break: keep-all;
   font-family: "Inter", sans-serif;
   /* Definition + examples were reading too small next to the large kinetic stage
      text, so the panel baseline is lifted a step; the pronunciation tracks it in em
@@ -1894,6 +2033,24 @@
   text-shadow: 0 6px 18px #0005;
   will-change: transform, opacity;
 }
+/* The reader's own reaction: a single crisp, large, near-opaque emoji that rises straight
+   into the scene from the tapped button. Kept deliberately distinct from the blurred
+   community smoke above — same card-local launch geometry, but no blur, a much larger em,
+   full opacity, and it paints over both the burst (z2) and the strip (z3). pointer-events
+   none keeps the card gestures and the strip interactive. `translate` is its own property,
+   so framer-motion writing `transform` (scale/y) still composes with the -50% -50% centring. */
+.vocab-emoji-self {
+  position: absolute;
+  z-index: 4;
+  line-height: 1;
+  translate: -50% -50%;
+  font-size: 44px;
+  opacity: 0;
+  filter: none;
+  text-shadow: 0 3px 14px #0007;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
 .vocab-reaction {
   /* Sized to the button alone: the count label is positioned out of flow below, so this
      box is 44px tall exactly like the reveal pill and the row centres all three on one
@@ -2113,33 +2270,49 @@
   background: color-mix(in srgb, var(--vocab-accent) 28%, transparent);
   color: var(--vocab-ink);
 }
-/* The grouping switch sits under the tabs and is deliberately quieter: it only changes
-   how the same words are filed, not which list is open. */
-.vocab-saved-switch {
-  display: flex;
-  width: fit-content;
-  gap: 4px;
-  margin: 0 max(18px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left));
-  padding: 3px;
-  border: 1px solid var(--shell-line);
-  border-radius: 999px;
+/* Density rides ON the open tab rather than in a switch row of its own: the control only
+   ever applies to the list that is showing, so it is drawn as the tail of that list's own
+   pill. The active tab squares off its trailing edge, the button rounds the far end, and a
+   negative margin swallows the row gap — so the pair reads as one chip with an icon on the
+   end, not as a pill with something parked beside it. */
+.vocab-saved-tab[data-fused] {
+  padding-right: 10px;
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
-.vocab-saved-switch-button {
-  min-height: 32px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--shell-text-mute);
-  font-size: 12px;
-  font-weight: 700;
+.vocab-saved-density {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Cancels the .vocab-saved-tabs gap so there is no seam between the two halves. */
+  margin-left: -8px;
+  min-height: 40px;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, var(--vocab-accent) 45%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--vocab-accent) 28%, transparent);
+  border-radius: 0 999px 999px 0;
+  background: color-mix(in srgb, var(--vocab-accent) 14%, transparent);
+  color: var(--shell-text-soft);
   transition:
     color var(--dur-quick) var(--ease-out),
     background var(--dur-quick) var(--ease-out);
 }
-.vocab-saved-switch-button[aria-pressed="true"] {
-  background: var(--shell-hover);
+.vocab-saved-density:hover {
   color: var(--vocab-ink);
+  background: color-mix(in srgb, var(--vocab-accent) 22%, transparent);
+}
+.vocab-saved-density:active {
+  background: color-mix(in srgb, var(--vocab-accent) 30%, transparent);
+}
+/* Pressed = the list is open; the icon already flips, so the fill only has to confirm it. */
+.vocab-saved-density[aria-pressed="true"] {
+  color: var(--vocab-ink);
+  background: color-mix(in srgb, var(--vocab-accent) 26%, transparent);
+}
+.vocab-saved-density:focus-visible {
+  outline: 2px solid var(--chrome-accent, #a78bfa);
+  outline-offset: 2px;
 }
 .vocab-saved-body {
   padding: 0 max(18px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 96px)
@@ -2306,6 +2479,26 @@
   gap: 12px;
   flex-wrap: wrap;
 }
+/* Compact rows: the word alone, the row itself the control that reveals the rest.
+   A smaller word than the full view's 26px, because a compact list is read as a
+   column of items rather than a stack of cards. */
+.vocab-saved-item[data-compact] {
+  cursor: pointer;
+}
+.vocab-saved-item[data-compact] .vocab-saved-word {
+  font-size: 21px;
+}
+.vocab-saved-peek {
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: center;
+  color: var(--shell-text-mute);
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.vocab-saved-item[aria-expanded="true"] .vocab-saved-peek {
+  transform: rotate(180deg);
+}
+
 .vocab-saved-word {
   font-size: 26px;
   font-weight: 800;
@@ -2327,7 +2520,7 @@
   border-radius: 999px;
   padding: 3px 9px;
 }
-/* The CEFR chip is a code ("B2") and survives being shouted; Vietnamese grammar and topic
+/* The level chip is a code ("B2") and survives being shouted; Vietnamese grammar and topic
    labels do not, so those two keep sentence casing and a readable tracking. */
 .vocab-saved-badge[data-plain] {
   font-size: 11px;
@@ -2430,6 +2623,10 @@
        fall  - how far the chip travels to sink through the mouth
      Width follows the drawer so the bubbles can reach the panel's edges. */
   --vault-head: 56px;
+  /* Half a key plus half the gap between the two: how far each key's centre sits from the
+     centre line. The bubbles are placed from it, so their tails stay on the icons when a
+     shorter tier shrinks the keys (they were 3px off there while this was a literal 29px). */
+  --vault-key-x: 29px;
   --vault-tip: 116px;
   --vault-chip: 164px;
   --vault-jar-h: 56px;
@@ -2783,7 +2980,7 @@
 .vocab-vault-tip[data-tip="heart"] {
   --tip-accent: var(--vault-heart);
   top: 6px;
-  left: calc(50% - 29px);
+  left: calc(50% - var(--vault-key-x));
   transform: translateX(-66.6%);
 }
 .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
@@ -2799,7 +2996,7 @@
 .vocab-vault-tip[data-tip="bookmark"] {
   --tip-accent: var(--vault-accent);
   top: var(--vault-tip);
-  left: calc(50% + 29px);
+  left: calc(50% + var(--vault-key-x));
   right: auto;
   transform: translateX(-33.3%);
 }
@@ -2943,6 +3140,7 @@
 @media (max-height: 680px) {
   .vocab-vault {
     --vault-head: 46px;
+    --vault-key-x: 26px;
     --vault-tip: 98px;
     --vault-chip: 140px;
     --vault-jar-h: 48px;
@@ -2966,6 +3164,61 @@
     font-size: 12.7px;
   }
 }
+/* ── Landscape phone: the keys and their two bubbles ─────────────────────────
+   The full scene is a vertical stack ~234px tall before any text. A landscape phone
+   has barely that much height in total, so the bowl, the chips and the drop are
+   dropped — but the part that names the gesture is kept EXACTLY as it stands in
+   portrait: the heart's bubble above its key with the tail pointing down at the icon,
+   the bookmark's bubble below its key with the tail pointing up, mirrored about the
+   centre line. (An earlier version laid the bubbles out in a row above the keys with
+   no tails, which left each sentence pointing at nothing.) The same absolute
+   placement rules apply; only the vertical stack is restated for a scene that ends
+   at the lower bubble instead of at a bowl. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .vocab-vault {
+    --vault-head: 40px;
+    /* head + the 34px key + room for the lower bubble's tail. */
+    --vault-tip: 88px;
+    height: 118px;
+    padding-top: var(--vault-head);
+    /* The column is shorter than its contents on the smallest phones; the scene must not
+       be the thing that gives, or the lower bubble slides under the description. */
+    flex-shrink: 0;
+  }
+  /* The bowl and everything that falls into it. */
+  .vocab-vault-jar,
+  .vocab-vault-lid,
+  .vocab-vault-chip {
+    display: none;
+  }
+  .vocab-vault-tip {
+    padding: 6px 11px;
+    font-size: 12.5px;
+  }
+  /* No chip to catch, so the keys stop miming a press and just sit there. */
+  .vocab-vault-key[data-active],
+  .vocab-vault-key[data-active]::after {
+    animation: none;
+  }
+  .vocab-saved-empty {
+    gap: 6px;
+  }
+  /* The one-line description says it all at this height; the heading only pushed the
+     scene and the way-back button into each other. */
+  .vocab-saved-empty h2 {
+    display: none;
+  }
+  .vocab-saved-empty p {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .vocab-saved-empty .vocab-light-button {
+    min-height: 40px;
+    padding-block: 8px;
+    margin-bottom: 8px;
+  }
+}
+
 /* The scene is a loop, not information: with motion turned down every part holds a legible
    resting pose — chip in hand above the open vault — and the instruction is carried by the
    heading and body below it. */
@@ -2984,6 +3237,17 @@
   .vocab-vault-chip {
     opacity: 1;
     transform: translate(var(--chip-from, 0), 0) rotate(-10deg);
+  }
+}
+.vocab-saved-empty-short {
+  display: none;
+}
+@media (orientation: landscape) and (max-height: 560px) {
+  .vocab-saved-empty-long {
+    display: none;
+  }
+  .vocab-saved-empty-short {
+    display: block;
   }
 }
 .vocab-saved-empty h2 {
@@ -3009,6 +3273,546 @@
    band above the button instead of glued to the top. */
 .vocab-saved-empty .vocab-vault {
   margin-top: auto;
+}
+/* ── First-load level picker ──────────────────────────────────────────────────
+   The difficulty ladder as one gauge: level names down the left, a rail with a draggable
+   knob through the middle, one real word per level on the right. Rows are equal shares of
+   the gauge's height, which is what lets the knob's position be pure arithmetic
+   (--rung-index of --rung-count) instead of a measurement. --rung is the colour of the
+   level the knob is on; it tints the knob, the page glow and the start button together,
+   so climbing the ladder visibly heats the whole screen. */
+.vocab-onboard {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  background:
+    radial-gradient(
+      120% 70% at 50% 46%,
+      color-mix(in srgb, var(--rung) 20%, transparent),
+      transparent 70%
+    ),
+    var(--shell-bg);
+  color: var(--shell-text);
+  font-family: "Inter", sans-serif;
+}
+.vocab-onboard-head {
+  padding: 10px 12px 6px;
+  text-align: center;
+}
+.vocab-onboard-head h1 {
+  margin: 4px 0 6px;
+  font-size: clamp(22px, 6vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.vocab-onboard-head p:last-child {
+  margin: 0 auto;
+  max-width: 340px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--shell-text-mute);
+}
+.vocab-onboard-gauge {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: min(560px, 100%);
+  margin: 10px auto;
+}
+.vocab-onboard-ladder {
+  display: grid;
+  grid-template-rows: repeat(var(--rung-count), minmax(0, 1fr));
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* name | rail column | sample. The middle column is only a gap here; the rail itself is one
+   element laid over it, so the knob can cross every row. */
+.vocab-onboard-rung {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr);
+  column-gap: 14px;
+  align-items: center;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity var(--dur-quick) var(--ease-out);
+}
+.vocab-onboard-rung[data-on] {
+  opacity: 1;
+}
+/* Not on offer yet: listed so the ladder reads whole, plainly out of reach. */
+.vocab-onboard-rung[aria-disabled="true"] {
+  opacity: 0.26;
+  cursor: default;
+}
+.vocab-onboard-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  min-width: 0;
+  text-align: right;
+}
+.vocab-onboard-label {
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    color var(--dur-quick) var(--ease-out),
+    font-size var(--dur-quick) var(--ease-out);
+}
+.vocab-onboard-rung[data-on] .vocab-onboard-label {
+  color: var(--rung-own);
+  font-size: 18px;
+}
+.vocab-onboard-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--shell-text-mute);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.vocab-onboard-band {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #ffffff1f;
+  color: #ffffffd9;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+/* A dot per rung on the rail's centre line; it takes its level's colour once the knob has
+   reached or passed it. */
+.vocab-onboard-tick {
+  justify-self: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--shell-line-strong);
+  transition: background var(--dur-quick) var(--ease-out);
+}
+.vocab-onboard-rung:is([data-on], [data-passed]) .vocab-onboard-tick {
+  background: var(--rung-own);
+}
+.vocab-onboard-sample {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+.vocab-onboard-sample strong {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: font-size var(--dur-quick) var(--ease-out);
+}
+.vocab-onboard-rung[data-on] .vocab-onboard-sample strong {
+  font-size: 21px;
+}
+/* The meaning is one quiet line everywhere except on the chosen rung, where it opens to two. */
+.vocab-onboard-sample > span:not(.vocab-onboard-curiosity) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--shell-text-mute);
+}
+.vocab-onboard-rung[data-on] .vocab-onboard-sample > span:not(.vocab-onboard-curiosity) {
+  -webkit-line-clamp: 2;
+  color: var(--shell-text-soft);
+}
+/* The curiosity prompt replaces the old per-word defVi line.
+   Hidden state: fully transparent and offset — the slot stays open so no layout jump.
+   Active rung: slides up with a spring overshoot while the colour shifts to the rung hue. */
+.vocab-onboard-curiosity {
+  display: block;
+  font-size: 11.5px;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--shell-text-mute);
+  opacity: 0;
+  transform: translateY(8px) scale(0.86);
+  transform-origin: left center;
+  /* Fast smooth exit — no overshoot leaving */
+  transition:
+    opacity 0.13s ease-out,
+    transform 0.17s ease-out,
+    color 0.18s ease-out;
+}
+.vocab-onboard-rung[data-on] .vocab-onboard-curiosity {
+  opacity: 1;
+  color: var(--rung-own);
+  transform: translateY(0) scale(1);
+  /* Enter: spring overshoot, matching the premium count-pop feel */
+  transition:
+    opacity 0.18s cubic-bezier(0.22, 1, 0.37, 1),
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    color 0.24s ease-out;
+}
+.vocab-onboard-soon {
+  font-style: italic;
+}
+/* The rail: a 56px-wide strip over the ladder's middle column. touch-action: none, or a
+   vertical drag would scroll the page instead of moving the knob. */
+.vocab-onboard-rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 56px;
+  transform: translateX(-50%);
+  touch-action: none;
+  cursor: grab;
+  outline: none;
+}
+.vocab-onboard-rail:active {
+  cursor: grabbing;
+}
+/* Runs from the first rung's centre to the last one's. The whole scale is painted on it;
+   the ::after shade covers everything BELOW the knob, so what shows is the climb so far. */
+.vocab-onboard-track {
+  position: absolute;
+  left: 50%;
+  top: calc(50% / var(--rung-count));
+  bottom: calc(50% / var(--rung-count));
+  width: 4px;
+  border-radius: 4px;
+  background: var(--rung-scale);
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+.vocab-onboard-track::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--rung-index) / (var(--rung-count) - 1) * 100%) 0 0;
+  background: color-mix(in srgb, var(--shell-bg) 82%, #ffffff);
+  transition: inset var(--dur-move) var(--ease-spring);
+}
+.vocab-onboard-knob {
+  position: absolute;
+  left: 50%;
+  top: calc((var(--rung-index) + 0.5) * 100% / var(--rung-count));
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background: var(--rung);
+  box-shadow:
+    0 0 0 6px color-mix(in srgb, var(--rung) 28%, transparent),
+    0 0 26px color-mix(in srgb, var(--rung) 70%, transparent),
+    0 4px 12px #00000080;
+  transition:
+    top var(--dur-move) var(--ease-spring),
+    background var(--dur-move) var(--ease-out),
+    box-shadow var(--dur-move) var(--ease-out);
+}
+.vocab-onboard-rail:focus-visible .vocab-onboard-knob {
+  outline: 2px solid #ffffff;
+  outline-offset: 5px;
+}
+.vocab-onboard-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px 0;
+}
+/* The start button wears the chosen level's colour, so the commitment matches the knob. */
+.vocab-onboard-go {
+  width: min(360px, 100%);
+  min-height: 50px;
+  padding: 12px 24px;
+  border-radius: 40px;
+  background: var(--rung);
+  color: #14101f;
+  font-size: 15px;
+  font-weight: 800;
+  transition:
+    background var(--dur-move) var(--ease-out),
+    transform var(--dur-move) var(--ease-spring);
+}
+.vocab-onboard-go:active {
+  transform: scale(0.97);
+}
+.vocab-onboard-go:disabled {
+  background: var(--shell-hover);
+  color: var(--shell-text-mute);
+}
+.vocab-onboard-all {
+  min-height: 40px;
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--shell-text-mute);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* Short screens: ten rows have to share less height, so the secondary line of each gives. */
+@media (max-height: 640px) {
+  .vocab-onboard-head p:last-child,
+  .vocab-onboard-rung:not([data-on]) .vocab-onboard-sample > span:not(.vocab-onboard-curiosity) {
+    display: none;
+  }
+  .vocab-onboard-rung[data-on] .vocab-onboard-sample > span:not(.vocab-onboard-curiosity) {
+    -webkit-line-clamp: 1;
+  }
+  /* Curiosity is already opacity-0 when inactive, so just shrink it on short screens. */
+  .vocab-onboard-curiosity {
+    font-size: 10px;
+  }
+  /* Two lines (name, then band and count) have to fit a ~34px row on the smallest phones,
+     so both tighten and lose their breathing room rather than spilling into the next rung. */
+  .vocab-onboard-name {
+    gap: 1px;
+  }
+  .vocab-onboard-label {
+    font-size: 13px;
+    line-height: 1.15;
+  }
+  .vocab-onboard-rung[data-on] .vocab-onboard-label {
+    font-size: 15px;
+  }
+  .vocab-onboard-meta {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .vocab-onboard-band {
+    padding: 0 5px;
+    font-size: 9px;
+  }
+  .vocab-onboard-sample strong {
+    font-size: 14px;
+    line-height: 1.15;
+  }
+  .vocab-onboard-head h1 {
+    margin: 2px 0;
+  }
+  .vocab-onboard-rung[data-on] .vocab-onboard-sample strong {
+    font-size: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vocab-onboard-knob,
+  .vocab-onboard-track::after,
+  .vocab-onboard-label,
+  .vocab-onboard-sample strong,
+  .vocab-onboard-go {
+    transition: none;
+  }
+  /* Reduced motion: fade only, no translateY or scale. */
+  .vocab-onboard-curiosity {
+    transition: opacity 0.18s ease;
+    transform: translateY(0) scale(1);
+  }
+  .vocab-onboard-rung[data-on] .vocab-onboard-curiosity {
+    transform: translateY(0) scale(1);
+    transition: opacity 0.18s ease;
+  }
+}
+/* ── Landscape onboarding ────────────────────────────────────────────────────
+   The gauge flips to a horizontal rail. Each rung becomes a narrow vertical
+   strip; the tick sits on the centre rail and the name/sample are positioned
+   on opposite sides using :nth-child(odd/even) so adjacent labels never
+   collide. The knob tracks --rung-index on the left axis. All driven by the
+   data-landscape attribute set by DifficultyOnboarding.tsx. */
+@media (orientation: landscape) {
+  /* Section: reclaim vertical space with tighter safe-area padding. */
+  .vocab-onboard[data-landscape] {
+    padding: max(6px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right))
+      max(6px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+  /* Head: single-line title, hint paragraph hidden. */
+  .vocab-onboard[data-landscape] .vocab-onboard-head {
+    padding: 0 0 2px;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-head h1 {
+    margin: 0;
+    font-size: 16px;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-head p {
+    display: none;
+  }
+  /* Gauge: span full viewport width. */
+  .vocab-onboard[data-landscape] .vocab-onboard-gauge {
+    width: 100%;
+    max-width: none;
+    margin: 2px 0;
+  }
+  /* Ladder: columns instead of rows. */
+  .vocab-onboard[data-landscape] .vocab-onboard-ladder {
+    grid-template-rows: none;
+    grid-template-columns: repeat(var(--rung-count), minmax(0, 1fr));
+  }
+  /* Rung: relative container; children are absolutely positioned inside. */
+  .vocab-onboard[data-landscape] .vocab-onboard-rung {
+    display: block;
+    position: relative;
+    height: 100%;
+    column-gap: 0;
+  }
+  /* Tick: centred on the rail line. */
+  .vocab-onboard[data-landscape] .vocab-onboard-tick {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    justify-self: unset;
+  }
+  /* Name: centred horizontally, placed above or below the rail. */
+  .vocab-onboard[data-landscape] .vocab-onboard-name {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    padding: 0 2px;
+    box-sizing: border-box;
+  }
+  /* All names: consistently BELOW the rail, fixed position. */
+  .vocab-onboard[data-landscape] .vocab-onboard-name {
+    top: calc(50% + 22px);
+    bottom: auto;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-label {
+    font-size: 11px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-rung[data-on] .vocab-onboard-label {
+    font-size: 13px;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-meta {
+    font-size: 9px;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-band {
+    padding: 0 4px;
+    font-size: 8px;
+  }
+  /* All samples: consistently ABOVE the rail. */
+  .vocab-onboard[data-landscape] .vocab-onboard-sample {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    padding: 0 2px;
+    box-sizing: border-box;
+    bottom: auto;
+  }
+  /* Odd rungs (1st, 3rd, 5th…): word sits closer to the rail. */
+  .vocab-onboard[data-landscape] .vocab-onboard-rung:nth-child(odd) .vocab-onboard-sample {
+    bottom: calc(50% + 22px);
+    top: auto;
+  }
+  /* Even rungs (2nd, 4th, 6th…): word is lifted one row higher so neighbours never collide. */
+  .vocab-onboard[data-landscape] .vocab-onboard-rung:nth-child(even) .vocab-onboard-sample {
+    bottom: calc(50% + 54px);
+    top: auto;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-sample strong {
+    font-size: 13px;
+    white-space: normal;
+    text-align: center;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-rung[data-on] .vocab-onboard-sample strong {
+    font-size: 17px;
+  }
+  /* Curiosity: allow wrapping in narrow columns; scale from centre. */
+  .vocab-onboard[data-landscape] .vocab-onboard-curiosity {
+    white-space: normal;
+    text-align: center;
+    font-size: 9.5px;
+    line-height: 1.3;
+    transform: translateY(0) scale(0.8);
+    transform-origin: center center;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-rung[data-on] .vocab-onboard-curiosity {
+    transform: translateY(0) scale(1);
+  }
+  /* Rail: horizontal strip through the middle. */
+  .vocab-onboard[data-landscape] .vocab-onboard-rail {
+    left: 0;
+    right: 0;
+    top: 50%;
+    bottom: auto;
+    width: auto;
+    height: 56px;
+    transform: translateY(-50%);
+    cursor: ew-resize;
+  }
+  /* Track: horizontal gradient bar (direction handled by --rung-scale inline angle). */
+  .vocab-onboard[data-landscape] .vocab-onboard-track {
+    left: calc(50% / var(--rung-count));
+    right: calc(50% / var(--rung-count));
+    top: 50%;
+    bottom: auto;
+    width: auto;
+    height: 4px;
+    transform: translateY(-50%);
+  }
+  /* Overlay: fills to the RIGHT of the knob (unvisited harder levels). */
+  .vocab-onboard[data-landscape] .vocab-onboard-track::after {
+    inset: 0 0 0 calc(var(--rung-index) / (var(--rung-count) - 1) * 100%);
+    transition: inset var(--dur-move) var(--ease-spring);
+  }
+  /* Knob: moves left by --rung-index. */
+  .vocab-onboard[data-landscape] .vocab-onboard-knob {
+    left: calc((var(--rung-index) + 0.5) * 100% / var(--rung-count));
+    top: 50%;
+    margin: -15px 0 0 -15px;
+    transition:
+      left var(--dur-move) var(--ease-spring),
+      background var(--dur-move) var(--ease-out),
+      box-shadow var(--dur-move) var(--ease-out);
+  }
+  /* Foot: buttons side-by-side. */
+  .vocab-onboard[data-landscape] .vocab-onboard-foot {
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    padding: 2px 8px 0;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-go {
+    width: auto;
+    flex: 1;
+    max-width: 240px;
+    min-height: 38px;
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-all {
+    min-height: 34px;
+    font-size: 11px;
+  }
+}
+/* Landscape reduced-motion: remove left transition on knob. */
+@media (orientation: landscape) and (prefers-reduced-motion: reduce) {
+  .vocab-onboard[data-landscape] .vocab-onboard-knob {
+    transition:
+      background 0s,
+      box-shadow 0s;
+  }
 }
 /* ── Post-reveal spelling replay ──────────────────────────────────────────────
    The revealed word dissolves, then every letter pops in one at a time so the
@@ -3069,6 +3873,36 @@
     text-shadow: 0 0 0 transparent;
   }
 }
+/* ── CJK stroke coda ─────────────────────────────────────────────────────────
+   Hanzi Writer renders one SVG per character into each .vocab-stroke-char. The
+   overlay mirrors .vocab-spelling so a Han answer holds the same centred coda
+   slot; the label reuses .vocab-spelling-label. Motion is driven in JS (Hanzi
+   Writer + the reducedMotion prop), not CSS, so no transition lives here. */
+.vocab-stroke {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 0 24px;
+  pointer-events: none;
+}
+.vocab-stroke-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.vocab-stroke-char {
+  line-height: 0;
+}
+.vocab-stroke-char svg {
+  display: block;
+}
 /* ── Prose inside the meaning panel ───────────────────────────────────────────
    Deck emphasis becomes an accent underline (the text stays the audited ink, so its
    contrast is untouched) and the answer filled into the example becomes an accent
@@ -3080,11 +3914,29 @@
   font-weight: 700;
 }
 .vocab-def-mark {
-  text-decoration: underline;
-  text-decoration-color: var(--vocab-accent);
-  text-decoration-thickness: 0.14em;
-  text-underline-offset: 0.2em;
-  text-decoration-skip-ink: none;
+  position: relative;
+  text-decoration: none;
+}
+/* The underline is a progress-bar stroke: it grows from left to right, not a fade.
+   A pseudo-element lets us animate width via scaleX, which text-decoration cannot do. */
+.vocab-def-mark::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2em;
+  height: 0.14em;
+  background: var(--vocab-accent);
+  transform-origin: left;
+  animation: vocab-def-mark-grow 0.6s ease-out forwards;
+}
+@keyframes vocab-def-mark-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 .vocab-def-answer {
   padding: 0.02em 0.34em 0.06em;
@@ -3380,7 +4232,8 @@
   font-weight: 800;
   letter-spacing: -0.6px;
   line-height: 1.15;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 .vocab-export-group {
   display: flex;
@@ -4118,20 +4971,28 @@
    portrait phone measured here (360×640). */
 @media (max-height: 560px) {
   .vocabulary-shell {
-    /* The whole bottom chrome gets 15% of the screen height, and inside this tier that is
-       at most 84px — already less than the 131px the portrait stack occupies, so the chrome
-       can only ever shrink here. Everything below is a split of this one number. */
-    --vocab-chrome-band: 15dvh;
+    /* The bottom chrome gets 15% of the screen height, but NOT less than 72px. A pure
+       ratio collapsed on a landscape phone: at 390px tall, 15dvh is 58px, which the
+       44px button row and the 3px progress row all but fill, leaving the gap on its
+       floor and the progress bar sitting on top of the buttons. The floor costs a
+       little height on the shortest screens and buys a gap you can see. At the tier's
+       own ceiling (560px) 15dvh is 84px, so the ratio still governs the taller end and
+       the two meet continuously at the boundary. */
+    --vocab-chrome-band: max(15dvh, 72px);
     --vocab-chrome-inset: max(6px, calc(env(safe-area-inset-bottom) + 4px));
     --vocab-chrome-progress: 3px;
+    /* The separation the progress row needs to read as its own row rather than as part
+       of the button row below it. The button row compacts before this is given up. */
+    --vocab-chrome-gap-min: 14px;
     --vocab-chrome-bar: min(
       44px,
       calc(
-        var(--vocab-chrome-band) - var(--vocab-chrome-inset) - var(--vocab-chrome-progress) - 6px
+        var(--vocab-chrome-band) - var(--vocab-chrome-inset) - var(--vocab-chrome-progress) -
+          var(--vocab-chrome-gap-min)
       )
     );
     --vocab-chrome-gap: max(
-      6px,
+      var(--vocab-chrome-gap-min),
       calc(
         var(--vocab-chrome-band) - var(--vocab-chrome-inset) - var(--vocab-chrome-bar) -
           var(--vocab-chrome-progress)
@@ -4200,6 +5061,65 @@
     --vocab-reveal-seam: 12px;
   }
 }
+/* ── Douyin dialect (hoa.* only) ─────────────────────────────────────────────
+   The Chinese-version visual language: the reader's toggle in the options sheet
+   sets data-dialect on every card and the whole reskin rides on that one
+   attribute. Signature moves from the mainland short-video grammar:
+   - an RGB chromatic split (cyan/red offset shadows) on every highlighted word,
+   - a neon gradient underline bar instead of the single-color currentColor one,
+   - a red seal-stamp (印章) frame in place of the ink-colored box,
+   - a gold-foil shimmer sweep in place of the white spotlight,
+   - a cyan-into-red neon halo.
+   Static paints only — nothing here animates on its own, so the reduced-motion
+   kill-switch at the file tail still covers every moving part. */
+.vocab-card[data-dialect="douyin"] .kinetic-emphasis-mark {
+  filter: drop-shadow(-0.035em 0 0 rgba(37, 244, 238, 0.8))
+    drop-shadow(0.035em 0 0 rgba(254, 44, 85, 0.8));
+}
+.vocab-card[data-dialect="douyin"] .kinetic-emph-underline::after {
+  background: linear-gradient(90deg, #25f4ee, #fe2c55);
+  box-shadow:
+    0 0 0.24em rgba(37, 244, 238, 0.7),
+    0 0 0.6em rgba(254, 44, 85, 0.4);
+}
+.vocab-card[data-dialect="douyin"] .kinetic-emph-frame::after {
+  border-color: #e03c31;
+  box-shadow:
+    0 0 0 0.035em rgba(224, 60, 49, 0.55),
+    0 0 0.55em rgba(224, 60, 49, 0.5);
+}
+.vocab-card[data-dialect="douyin"] .kinetic-emph-sweep::after {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(245, 197, 66, 0.16) 34%,
+    rgba(255, 226, 138, 0.92) 48%,
+    rgba(245, 197, 66, 0.16) 62%,
+    transparent 100%
+  );
+}
+.vocab-card[data-dialect="douyin"] .kinetic-emph-halo::before {
+  background: radial-gradient(
+    closest-side,
+    rgba(37, 244, 238, 0.5) 0%,
+    rgba(254, 44, 85, 0.2) 46%,
+    transparent 78%
+  );
+}
+
+/* The Douyin toggle stacks its explainer under the label: the row wraps and the
+   note takes the full second line. */
+.vocab-dialect {
+  flex-wrap: wrap;
+}
+.vocab-dialect-note {
+  flex-basis: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--vocab-ink, #fff) 62%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .vocabulary-shell *,
   .vocabulary-shell *::before,
@@ -4207,5 +5127,83 @@
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ── Three-zone tap highlight ────────────────────────────────────────────────
+   A full-height wash that flashes for 350ms over the tapped zone (left = rewind,
+   center = pause/play, right = fast-forward), sized to its 35%-30%-35% band.
+   Purely horizontal fades, peaking at 25% opacity: a side zone is near that peak
+   at its screen edge and thins to 0 by the time it reaches the center third. */
+.vocab-tap-zone-highlight {
+  /* Same tint as the toolbar scrim (--chrome-scrim): dark over a dark card. */
+  --tap-glow: 9 7 18;
+  --tap-peak: rgb(var(--tap-glow) / 25%);
+  --tap-clear: rgb(var(--tap-glow) / 0%);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 30;
+  pointer-events: none;
+  animation: vocab-tap-flash 350ms var(--ease-out) forwards;
+}
+/* …and light over a pale one, matching the scrim's light-tone override. */
+.vocab-card[data-tone="light"] .vocab-tap-zone-highlight {
+  --tap-glow: 255 255 255;
+}
+.vocab-tap-zone-highlight[data-zone="left"] {
+  left: 0;
+  width: 35%;
+  background: linear-gradient(90deg, var(--tap-peak) 0%, var(--tap-clear) 100%);
+}
+/* The center third has no wash: a pause icon pops out and vanishes, then a translucent
+   play button rests on the card while the stream is paused; tapping it resumes. Both
+   are centred by margins, not translate, because framer-motion owns their transform. */
+.vocab-pause-pop,
+.vocab-resume {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  z-index: 31;
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--chrome-ink);
+  background: var(--chrome-fill);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--chrome-ink) 18%, transparent),
+    var(--chrome-shadow);
+}
+.vocab-pause-pop {
+  pointer-events: none;
+}
+.vocab-resume {
+  border: 0;
+  cursor: pointer;
+}
+/* The play triangle's visual centre sits left of its box; nudge it to look centred. */
+.vocab-resume svg {
+  margin-left: 4px;
+}
+.vocab-tap-zone-highlight[data-zone="right"] {
+  left: 65%;
+  width: 35%;
+  background: linear-gradient(270deg, var(--tap-peak) 0%, var(--tap-clear) 100%);
+}
+@keyframes vocab-tap-flash {
+  from {
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }

@@ -1,10 +1,8 @@
-/** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, kinetic-text emphasis types, clues, i18n, locale. */
+/** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, hanzi script detection, kinetic-text emphasis types. */
 import type { EmphasisVariant } from "@/features/kinetic-text";
 import { answerPattern, type NarrativeStyle, type VocabularyWord } from "./schema";
+import { isHanAnswer } from "./hanzi";
 import { paginateText } from "@/features/post-player";
-import { resolveClue } from "./clues";
-import { leadLabel, stageLabel, lettersSentence } from "./i18n";
-import type { Locale } from "./locale";
 
 /**
  * Effect used for the starting initial on the letter-count clue. `frame` draws a
@@ -19,7 +17,7 @@ export type LearningStage = {
   label: string;
   text: string;
   secondary?: string;
-  lang: Locale | "en";
+  lang: "vi" | "en" | "zh";
   reveal?: boolean;
   /** Emphasis phrases extracted from /word/ markers in the source text field. */
   dataEmphasis?: string[];
@@ -66,79 +64,94 @@ export function completeUsage(text: string, word: string): string {
   return text.replace(/_{2,}/g, word);
 }
 
-/** Create the supplied seven-stage flow, skipping absent optional content. @param word Catalog entry. @param style Narrative preset. @param locale Selected content locale (leading phrases localized; reveal stays English). @returns Ordered stages. */
-export function buildStages(
-  word: VocabularyWord,
-  style: NarrativeStyle,
-  locale: Locale,
-): LearningStage[] {
+/** Create the supplied seven-stage flow, skipping absent optional content. @param word Catalog entry. @param style Narrative preset. @returns Ordered stages. */
+export function buildStages(word: VocabularyWord, style: NarrativeStyle): LearningStage[] {
   const mask = (text: string) => text.replace(answerPattern(word.word), "_____");
+  // The answer language drives <p lang> and font selection on the pages that render the
+  // target script: a Han deck writes its usage sentence and reveal in Chinese, not English.
+  const answerLang = isHanAnswer(word.word) ? "zh" : "en";
   const stages: LearningStage[] = [];
-  const lead = resolveClue(word, "lead", locale);
-  if (lead) {
-    const { clean, markers } = parseEmphasisMarkers(lead);
+  const leadLabels: Record<NarrativeStyle, string> = {
+    detective: "Bối cảnh",
+    speed: "Sẵn sàng chưa?",
+    confession: "Có quen không?",
+    minimal: "Một suy nghĩ",
+  };
+  if (word.leadVi) {
+    const { clean, markers } = parseEmphasisMarkers(word.leadVi);
     stages.push({
       id: "lead",
-      label: leadLabel(style, locale),
+      label: leadLabels[style],
       text: mask(clean),
-      lang: locale,
+      lang: "vi",
       dataEmphasis: markers.length ? markers : undefined,
     });
   }
   {
-    const { clean, markers } = parseEmphasisMarkers(resolveClue(word, "def", locale));
+    const { clean, markers } = parseEmphasisMarkers(word.defVi);
     stages.push({
       id: "definition",
-      label: stageLabel("definition", locale),
+      label: "Ý nghĩa",
       text: mask(clean),
-      lang: locale,
+      lang: "vi",
       dataEmphasis: markers.length ? markers : undefined,
+    });
+  }
+  const hanCount = (word.word.match(/\p{Script=Han}/gu) ?? []).length;
+  if (hanCount > 0) {
+    // Chinese: the first character would give away half a 2-character word, so the
+    // clue is the character count plus the first pinyin letter.
+    const pinyinInitial = (word.ipa?.trim()[0] ?? "").toUpperCase();
+    stages.push({
+      id: "letters",
+      label: "Đếm chữ Hán",
+      text: pinyinInitial
+        ? `Gồm ${hanCount} chữ Hán, pinyin bắt đầu bằng ${pinyinInitial}`
+        : `Gồm ${hanCount} chữ Hán`,
+      lang: "vi",
+      secondaryEmphasis: pinyinInitial
+        ? { phrase: pinyinInitial, variant: INITIAL_EMPHASIS_VARIANT }
+        : undefined,
     });
   }
   const count = (word.word.match(/\p{L}/gu) ?? []).length;
   const initial = word.word[0].toUpperCase();
-  stages.push({
-    id: "letters",
-    label: stageLabel("letters", locale),
-    text: lettersSentence(count, initial, locale),
-    lang: locale,
-    // The count keeps the primary mark on purpose — getWordImportance scores a
-    // standalone number above everything so the digits always win this sentence.
-    // The initial is added as a second, differently-drawn mark rather than
-    // replacing it, so one page carries both facts.
-    secondaryEmphasis: { phrase: initial, variant: INITIAL_EMPHASIS_VARIANT },
-  });
+  if (hanCount === 0)
+    stages.push({
+      id: "letters",
+      label: "Đếm chữ cái",
+      text: `Gồm ${count} chữ cái, bắt đầu bằng ${initial}`,
+      lang: "vi",
+      // The count keeps the primary mark on purpose — getWordImportance scores a
+      // standalone number above everything so the digits always win this sentence.
+      // The initial is added as a second, differently-drawn mark rather than
+      // replacing it, so one page carries both facts.
+      secondaryEmphasis: { phrase: initial, variant: INITIAL_EMPHASIS_VARIANT },
+    });
   const example = word.usage[0];
   if (example) {
     const { clean: enClean, markers: enMarkers } = parseEmphasisMarkers(example.en);
-    const { clean: viClean } = parseEmphasisMarkers(resolveClue(word, "hint", locale));
+    const { clean: viClean } = parseEmphasisMarkers(example.vi);
     stages.push({
       id: "usage",
-      label: stageLabel("usage", locale),
+      label: "Trong câu",
       text: mask(enClean),
       secondary: mask(viClean),
-      lang: "en",
+      lang: answerLang,
       dataEmphasis: enMarkers.length ? enMarkers : undefined,
     });
   }
-  const guess = resolveClue(word, "guess", locale);
-  if (guess) {
-    const { clean, markers } = parseEmphasisMarkers(guess);
+  if (word.anticipateVi) {
+    const { clean, markers } = parseEmphasisMarkers(word.anticipateVi);
     stages.push({
       id: "anticipation",
-      label: stageLabel("anticipation", locale),
+      label: "Bạn đoán gì?",
       text: mask(clean),
-      lang: locale,
+      lang: "vi",
       dataEmphasis: markers.length ? markers : undefined,
     });
   }
-  stages.push({
-    id: "reveal",
-    label: stageLabel("reveal", locale),
-    text: word.word,
-    lang: "en",
-    reveal: true,
-  });
+  stages.push({ id: "reveal", label: "Đây rồi!", text: word.word, lang: answerLang, reveal: true });
   return stages.flatMap((stage) => {
     if (stage.reveal) return [stage];
     return paginateText(stage.text).map((text, index) => ({

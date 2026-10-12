@@ -6,6 +6,37 @@ become if the answer word were ever in Chinese, Japanese or Korean, so that work
 have to be re-derived later. Nothing here is scheduled; it is a note for when the English
 deck is good enough to justify a second language.
 
+## Implemented since: the Chinese stroke coda
+
+The 筆順 half of the "Coda equivalent" row below is now built for Chinese. When the revealed
+answer is Han (`isHanAnswer` in `src/features/vocabulary/lib/hanzi.ts`), the post-reveal coda
+draws each character stroke-by-stroke instead of popping whole characters:
+
+- Renderer: `components/HanziStrokeSpelling.tsx`, using [Hanzi Writer](https://hanziwriter.org)
+  (MIT) over a synchronous `charDataLoader`. Strokes paint in the card's `--vocab-accent`
+  over a faint `--vocab-ink` outline guide, then flash `--vocab-accent-alt` on completion.
+  Multi-character words draw left-to-right. Reduced motion shows the finished character.
+- Stroke data is **vendored, not fetched**: `scripts/build-hanzi-strokes.ts` scans every
+  served deck, pulls just those characters from `hanzi-writer-data`, and writes
+  `src/features/vocabulary/data/hanzi-strokes.json`. Re-run it (`npm run build:hanzi`)
+  whenever a CJK deck changes; `npm run check:hanzi` fails if any served character is
+  uncovered. The renderer and dataset are lazy-loaded, so the English feed chunk never
+  carries Hanzi Writer or the stroke JSON.
+- Timing stays owned by the playback hook: `getStrokeSpellingDurationMs` derives a fixed
+  draw budget from the character count alone (pure), and the component splits that budget
+  across the real strokes via `solveStrokeTiming`, so the drawing always lands inside the
+  coda page. The Latin letter coda (`SpellingAnimation`) is untouched.
+- Chinese answers are served from `data/zh/*.json` on the `hoa.*` domain (see
+  `lib/target-language.ts`); `catalogFor("zh")` merges them. The reveal and usage stages now
+  emit `lang="zh"` for a Han answer.
+
+Still deferred: the pinyin/reading hint axis, the spaceless-script masking and tokenization
+fixes (the pack authors `usage` blanks with `____` to avoid the leak), and Japanese/Korean codas.
+
+**Data attribution:** the stroke outlines in `hanzi-strokes.json` derive from
+[Make Me a Hanzi](https://github.com/skishore/makemeahanzi) (Arphic Public License) as
+redistributed by the `hanzi-writer-data` package; they are vendored under that licence.
+
 ## What the current clue actually relies on
 
 One page carries the whole hint. In `src/features/vocabulary/lib/stages.ts` (`buildStages`):

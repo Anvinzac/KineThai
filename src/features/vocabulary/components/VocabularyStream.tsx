@@ -6,14 +6,15 @@ import { useFeedPagination } from "../hooks/useFeedPagination";
 import { canWalkFurther, getWalkedPositions } from "../lib/backfill";
 import { formatCountdown, isWordAllowed, nextAvailableAt, type ViewHistory } from "../lib/history";
 import type { FeedPage, Presentation, VocabularyFilters } from "../types";
-import { useLocale } from "../lib/useLocale";
-import { t } from "../lib/ui-copy";
 import { VocabularyCard } from "./VocabularyCard";
 
 // Admin-only, and only on demand: readers never download the export studio.
 const ExportStudio = lazy(() =>
   import("./ExportStudio").then((module) => ({ default: module.ExportStudio })),
 );
+
+/** How long a word must hold the screen before it counts as seen. */
+const VIEW_DWELL_MS = 900;
 
 /** Render a single mounted session; remount on shuffle/filter changes. @param props Session and UI choices. @returns Virtualized feed. */
 export function VocabularyStream({
@@ -32,6 +33,7 @@ export function VocabularyStream({
   onRestart,
   onClearFilters,
   revealButtonLabel,
+  onToggleAutoplay,
 }: {
   seed: string;
   filters: VocabularyFilters;
@@ -51,8 +53,9 @@ export function VocabularyStream({
   onClearFilters: () => void;
   /** Custom label for the reveal button, from admin wording presets. */
   revealButtonLabel?: string;
+  /** Toggle autoplay from the card's center tap zone; flips presentation.autoplay. */
+  onToggleAutoplay?: () => void;
 }) {
-  const locale = useLocale();
   const query = useVocabularyFeed(seed, filters);
   // Tick so day-window expiries re-evaluate without a reload.
   const [now, setNow] = useState(() => Date.now());
@@ -103,20 +106,39 @@ export function VocabularyStream({
     windowState,
     canFetchMorePositions,
   );
-  const { viewport, height, activeIndex, virtualizer, onScroll, onKeyDown, move } = windowState;
+  const {
+    viewport,
+    height,
+    activeIndex,
+    virtualizer,
+    onScroll,
+    onKeyDown,
+    advanceFrom,
+    flick,
+    touchStarted,
+  } = windowState;
   useEffect(() => {
     if (query.metadata) onMetadata(query.metadata);
   }, [query.metadata, onMetadata]);
 
-  // Record a view once per occurrence when its card becomes active.
+  // Record a view once per occurrence — but only for a word the reader actually stayed on.
+  // Recording the instant a card became active meant every card the scroll merely passed
+  // through (a long flick, a snap that overshot and came back) was written to the history
+  // and blocked for a day without ever having been read. The dwell is short enough that a
+  // word someone glances at and deliberately skips still counts.
   const recorded = useRef(new Set<string>());
   const activeEntry = visibleEntries[activeIndex];
+  const activeOccurrenceId = activeEntry?.occurrenceId;
+  const activeWordId = activeEntry?.word.id;
   useEffect(() => {
-    if (!activeEntry || suspended) return;
-    if (recorded.current.has(activeEntry.occurrenceId)) return;
-    recorded.current.add(activeEntry.occurrenceId);
-    onRecordView(activeEntry.word.id);
-  }, [activeEntry, suspended, onRecordView]);
+    if (!activeOccurrenceId || !activeWordId || suspended) return;
+    if (recorded.current.has(activeOccurrenceId)) return;
+    const timer = setTimeout(() => {
+      recorded.current.add(activeOccurrenceId);
+      onRecordView(activeWordId);
+    }, VIEW_DWELL_MS);
+    return () => clearTimeout(timer);
+  }, [activeOccurrenceId, activeWordId, suspended, onRecordView]);
 
   // The export studio needs a word. Opened with none on screen (empty stream, every
   // word blocked) it would render nothing while still holding the feed suspended, so
@@ -178,9 +200,12 @@ export function VocabularyStream({
   ]);
 
   // Natural vertical flick gestures: flick up -> next word, flick down -> previous word
-  const flickStart = useRef<{ x: number; y: number; t: number } | null>(null);
+  const flickStart = useRef<{ x: number; y: number; t: number; index: number } | null>(null);
   const handleFlickStart = (x: number, y: number) => {
-    flickStart.current = { x, y, t: Date.now() };
+    // The row is captured HERE, at finger-down: by finger-up the native drag may already
+    // have carried the feed onto the next word, and "one past whatever is on screen" would
+    // then be two words on.
+    flickStart.current = { x, y, t: Date.now(), index: touchStarted() };
   };
   const handleFlickEnd = (x: number, y: number) => {
     const start = flickStart.current;
@@ -193,13 +218,9 @@ export function VocabularyStream({
     if (Math.abs(dy) < 52 || Math.abs(dy) < Math.abs(dx) * 1.1) return;
     if (dt > 700) return;
     // Velocity hint: short duration + sufficient distance already gated; allow both directions
-    if (dy < 0) {
-      // flick up -> next word
-      if (activeIndex < visibleEntries.length - 1) move(1);
-    } else {
-      // flick down -> previous word
-      if (activeIndex > 0) move(-1);
-    }
+    // flick up -> next word, flick down -> previous word; always relative to the row the
+    // gesture started on. The window clamps at either end.
+    flick(start.index, dy < 0 ? 1 : -1, !reducedMotion);
   };
 
   const empty = query.isSuccess && !query.entries.length;
@@ -227,7 +248,7 @@ export function VocabularyStream({
         ref={viewport}
         className="vocab-viewport"
         role="feed"
-        aria-label="Endless English vocabulary"
+        aria-label="Vốn từ tiếng Anh vô tận"
         aria-busy={query.isFetching}
         tabIndex={0}
         onScroll={onScroll}
@@ -244,36 +265,32 @@ export function VocabularyStream({
       >
         {!visibleEntries.length && (
           <div className="vocab-empty" role="status">
-            <p className="vocab-eyebrow">
-              {allBlocked ? t(locale, "stream.empty.title") : t(locale, "stream.eyebrow")}
-            </p>
+            <p className="vocab-eyebrow">Mỗi từ là một khởi đầu</p>
             <h1>
               {initialError
-                ? t(locale, "stream.retry")
+                ? "Thử lại nhé."
                 : empty
-                  ? t(locale, "stream.noMatch")
+                  ? "Chưa có từ nào khớp."
                   : allBlocked
-                    ? t(locale, "stream.seenAll")
+                    ? "Bạn đã xem hết mọi từ rồi."
                     : query.isPaused
-                      ? t(locale, "stream.paused")
+                      ? "Đang chờ kết nối."
                       : query.entries.length
-                        ? t(locale, "stream.searchingSeen")
-                        : t(locale, "stream.searchingFirst")}
+                        ? "Đang tìm một từ bạn chưa xem…"
+                        : "Đang tìm từ đầu tiên của bạn…"}
             </h1>
             <p>
               {initialError
-                ? t(locale, "stream.loadError")
+                ? "Không tải được dòng từ. Cài đặt của bạn vẫn được giữ nguyên."
                 : empty
-                  ? t(locale, "stream.noMatchHint")
+                  ? "Hãy thử một cấp độ hoặc chủ đề khác."
                   : allBlocked
-                    ? `${t(locale, "stream.memory")}${
+                    ? `Bộ nhớ trên thiết bị giữ mỗi từ ở mức một lần mỗi ngày, hai lần trong ba ngày, ba lần mỗi tuần.${
                         nextUnlock
-                          ? t(locale, "stream.nextUnlock", {
-                              countdown: formatCountdown(nextUnlock, now, locale),
-                            })
+                          ? ` Từ tiếp theo sẽ mở sau ${formatCountdown(nextUnlock, now)}.`
                           : ""
                       }`
-                    : t(locale, "stream.tagline")}
+                    : "Gợi ý tiếng Việt, từ mới tiếng Anh. Không cần đăng nhập."}
             </p>
             {initialError && (
               <button
@@ -281,17 +298,17 @@ export function VocabularyStream({
                 className="vocab-light-button"
                 onClick={query.catalogChanged || exhausted ? onRestart : retry}
               >
-                {query.catalogChanged ? t(locale, "stream.restart") : t(locale, "stream.retry")}
+                {query.catalogChanged ? "Bắt đầu dòng mới" : "Thử lại"}
               </button>
             )}
             {empty && (
               <button type="button" className="vocab-light-button" onClick={onClearFilters}>
-                {t(locale, "stream.showAll")}
+                Xem tất cả từ
               </button>
             )}
             {allBlocked && (
               <button type="button" className="vocab-light-button" onClick={onClearHistory}>
-                {t(locale, "stream.clearHistory")}
+                Xóa lịch sử xem
               </button>
             )}
           </div>
@@ -311,16 +328,18 @@ export function VocabularyStream({
                 style={{ height, transform: `translateY(${item.start}px)` }}
               >
                 <VocabularyCard
-                  key={`${entry.occurrenceId}:${presentation.style}`}
+                  key={`${entry.occurrenceId}:${presentation.style}:${presentation.dialect ?? ""}`}
                   entry={entry}
+                  current={item.index === activeIndex}
                   active={item.index === activeIndex && !suspended}
                   presentation={presentation}
                   reducedMotion={reducedMotion}
                   matching={query.metadata?.matching ?? 0}
                   canAdvance={activeIndex < visibleEntries.length - 1}
-                  onAdvance={() => move(1)}
+                  onAdvance={() => advanceFrom(entry.occurrenceId)}
                   onWordEnding={onWordEnding}
                   revealButtonLabel={revealButtonLabel}
+                  onToggleAutoplay={onToggleAutoplay}
                 />
               </div>
             );
@@ -338,19 +357,19 @@ export function VocabularyStream({
             <div className="vocab-stream-status" role="status">
               <span>
                 {query.catalogChanged
-                  ? "New catalog available. Restart to load it."
+                  ? "Có bộ từ mới. Khởi động lại để tải."
                   : exhausted
-                    ? "Ready for another shuffle? Start a fresh stream."
+                    ? "Sẵn sàng trộn lần nữa? Bắt đầu dòng mới."
                     : query.isPaused
-                      ? "Offline — loaded words are still available."
-                      : "Couldn’t load more words."}
+                      ? "Mất mạng — các từ đã tải vẫn xem được."
+                      : "Không tải thêm từ được."}
               </span>
               <button
                 type="button"
                 onClick={query.catalogChanged || exhausted ? onRestart : retry}
                 disabled={query.isFetching}
               >
-                {query.catalogChanged || exhausted ? "Restart" : "Retry"}
+                {query.catalogChanged || exhausted ? "Khởi động lại" : "Thử lại"}
               </button>
             </div>
           )}

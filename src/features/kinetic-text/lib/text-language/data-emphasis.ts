@@ -7,6 +7,8 @@
 
 import { getCompoundTokenKey } from "./vietnamese-phrases";
 
+const HAN = /\p{Script=Han}/u;
+
 /**
  * Split a data emphasis phrase into comparison keys.
  * @param phrase - raw annotation phrase
@@ -15,7 +17,17 @@ import { getCompoundTokenKey } from "./vietnamese-phrases";
 function getEmphasisPhraseKeys(phrase: string): string[] | null {
   const tokens = phrase.trim().split(/\s+/).filter(Boolean);
   if (!tokens.length) return null;
-  const keys = tokens.map(getCompoundTokenKey);
+  // A Han annotation is written as one glued word ("诚实"), but a Han page tokenizes
+  // per character — expand those tokens to one key per glyph so the phrase matches
+  // the same units the packer and the renderer see.
+  const keys = tokens.flatMap((token) =>
+    HAN.test(token)
+      ? // Glued punctuation ("诚实，") simply drops out; the glyphs keep the phrase whole.
+        Array.from(token)
+          .map(getCompoundTokenKey)
+          .filter((key) => key.length > 0)
+      : [getCompoundTokenKey(token)],
+  );
   // Punctuation-only tokens ("—", "…") cannot anchor a meaningful emphasis
   // match, and silently dropping them would rewrite the phrase, so skip the
   // whole annotation instead.

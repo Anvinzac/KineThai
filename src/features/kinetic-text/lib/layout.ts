@@ -13,20 +13,20 @@ export type KineticTextLayoutMode = "left-spotlight" | "left" | "center";
 /**
  * Choose left / center / spotlight layout from text + emphasis.
  * @param text - text argument
- * @param isVietnamese - isVietnamese argument
+ * @param isPackedLines - true for pages pre-packed into staggered lines (Vietnamese or Han)
  * @param wordCount - wordCount argument
  * @param emphasized - emphasized argument
  * @returns Layout mode used by KineticText preview and PostCard WordSequenceText
  */
 export function getKineticTextLayoutMode(
   text: string,
-  isVietnamese: boolean,
+  isPackedLines: boolean,
   wordCount: number,
   emphasized: Set<number>,
 ): KineticTextLayoutMode {
   const hasEmphasis = emphasized.size > 0;
   const seed = getStableNumber(text);
-  if (isVietnamese) return hasEmphasis && seed % 4 === 0 ? "left-spotlight" : "left";
+  if (isPackedLines) return hasEmphasis && seed % 4 === 0 ? "left-spotlight" : "left";
   if (wordCount <= 3) return "center";
   if (hasEmphasis && seed % 5 === 0) return "left-spotlight";
   return seed % 2 === 0 || wordCount >= 6 ? "left" : "center";
@@ -76,10 +76,10 @@ export function getWidestWordWidth(text: HTMLElement): number {
 /**
  * Measure the widest pre-packed line the text node holds, ignoring any transforms.
  *
- * The Vietnamese layout does not wrap: each line is its own no-wrap row
- * (`[data-kinetic-line]`) of segments chosen by a character-count estimate. So
- * there the unbreakable unit is the whole LINE, not the word, and a line carrying
- * an enlarged emphasised phrase can be wider than the estimate allowed for.
+ * Packed pages (Vietnamese syllables, Han characters) do not wrap: each line is its
+ * own no-wrap row (`[data-kinetic-line]`) of segments chosen by a character-count
+ * estimate. So there the unbreakable unit is the whole LINE, not the word, and a line
+ * carrying an enlarged emphasised phrase can be wider than the estimate allowed for.
  *
  * Built from layout widths (indent + segment widths + gaps) rather than bounding
  * rects, because words are mid-entrance — translated and scaled — when this runs.

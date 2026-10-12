@@ -10,7 +10,12 @@ import { motion } from "framer-motion";
 import { getCanvasEmphasisColor, getCanvasTextColor, type CanvasSpec } from "@/features/canvas";
 import { getKineticTextLayoutMode, hasVisibleStickerAccent } from "../lib/layout";
 import { getLoopAnimation } from "../lib/loop";
-import { getEmphasizedRunPhraseKeys, isLikelyVietnameseText } from "../lib/text-language";
+import {
+  getEmphasizedRunPhraseKeys,
+  getHanTokens,
+  isLikelyChineseText,
+  isLikelyVietnameseText,
+} from "../lib/text-language";
 import { getRunEmphasisStyle } from "../lib/emphasis";
 import { getWords } from "../lib/words";
 import { VietnameseLineBlock } from "./VietnameseLineBlock";
@@ -77,20 +82,27 @@ export function KineticText({
   background?: string | readonly string[] | null;
 }): ReactElement {
   const wordVariants = entranceVariants(spec.entrance, spec.rhythm);
-  const words = getWords(spec.text);
-  const isVietnamese = isLikelyVietnameseText(spec.text);
+  // A Han page must tokenize per character BEFORE any language check: whitespace
+  // splitting leaves a whole Chinese sentence as one token, which rendered as a
+  // single shrunken line. Once split, it packs through the Vietnamese staggered-line
+  // renderer — same font size, same cascade, same scene filled with words.
+  const isHan = isLikelyChineseText(spec.text);
+  const words = isHan ? getHanTokens(spec.text) : getWords(spec.text);
+  const isVietnamese = !isHan && isLikelyVietnameseText(spec.text);
+  const isPackedLines = isVietnamese || isHan;
   const emphasized = getPreviewEmphasizedWordIndexes(words);
   // A highlighted run reads as one word, so register it as a bound phrase: line packing then
   // keeps it together and every syllable hashes the same emphasis effect.
   const phraseKeys = getEmphasizedRunPhraseKeys(words, emphasized);
-  const visualScaleGuard = isVietnamese ? VIETNAMESE_SCALE_FIT_GUARD : 1;
-  const layoutMode = getKineticTextLayoutMode(spec.text, isVietnamese, words.length, emphasized);
+  const visualScaleGuard = isPackedLines ? VIETNAMESE_SCALE_FIT_GUARD : 1;
+  const layoutMode = getKineticTextLayoutMode(spec.text, isPackedLines, words.length, emphasized);
   const leftAnchoredText = layoutMode !== "center";
   const spotlightEmphasis = layoutMode === "left-spotlight";
   const tempo = tempoConfig[spec.tempo];
-  const { wrapperRef, textRef, previewSize, vietnameseLines } = useKineticTextFit({
+  const { wrapperRef, textRef, previewSize, packedLines } = useKineticTextFit({
     scaleToCanvas,
     isVietnamese,
+    isHan,
     words,
     visualScaleGuard,
     leftAnchoredText,
@@ -129,7 +141,7 @@ export function KineticText({
           fontWeight: spec.weight,
           letterSpacing: `${spec.letterSpacing}em`,
           transform: `rotate(${spec.rotation}deg)`,
-          lineHeight: isVietnamese ? 1.06 : 0.95,
+          lineHeight: isPackedLines ? 1.06 : 0.95,
           textAlign: leftAnchoredText ? "left" : "center",
           textShadow: "0 4px 40px rgba(0,0,0,0.45)",
           animation: loopAnimation
@@ -139,17 +151,17 @@ export function KineticText({
           wordBreak: "normal",
           overflowWrap: "normal",
           display: "flex",
-          flexDirection: isVietnamese ? "column" : undefined,
-          flexWrap: isVietnamese ? "nowrap" : "wrap",
-          alignItems: isVietnamese ? "stretch" : leftAnchoredText ? "baseline" : "center",
+          flexDirection: isPackedLines ? "column" : undefined,
+          flexWrap: isPackedLines ? "nowrap" : "wrap",
+          alignItems: isPackedLines ? "stretch" : leftAnchoredText ? "baseline" : "center",
           justifyContent: leftAnchoredText ? "flex-start" : "center",
-          columnGap: isVietnamese ? undefined : "0.34em",
-          rowGap: isVietnamese ? undefined : "0.1em",
+          columnGap: isPackedLines ? undefined : "0.34em",
+          rowGap: isPackedLines ? undefined : "0.1em",
         }}
       >
-        {isVietnamese ? (
+        {isPackedLines ? (
           <VietnameseLineBlock
-            lines={vietnameseLines}
+            lines={packedLines}
             playKey={playKey}
             wordVariants={wordVariants}
             spec={spec}

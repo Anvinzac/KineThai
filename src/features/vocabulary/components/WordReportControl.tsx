@@ -21,22 +21,8 @@ import {
   type ReportReasonId,
 } from "../lib/word-report";
 import { rememberReportedWord } from "../lib/reported-words";
-import { useLocale } from "../lib/useLocale";
-import { t, type CopyKey } from "../lib/ui-copy";
 
 type Phase = "choosing" | "sending" | "sent" | "failed";
-
-/** UI-copy key for each report reason id (labels localized; ids stay the wire contract). */
-const REASON_KEY: Record<ReportReasonId, CopyKey> = {
-  "meaning-wrong": "report.reason.meaning-wrong",
-  "clue-confusing": "report.reason.clue-confusing",
-  "clue-misleading": "report.reason.clue-misleading",
-  "example-wrong": "report.reason.example-wrong",
-  "vietnamese-unnatural": "report.reason.vietnamese-unnatural",
-  typo: "report.reason.typo",
-  "pronunciation-wrong": "report.reason.pronunciation-wrong",
-  "level-mismatch": "report.reason.level-mismatch",
-};
 
 /** How long the thank-you stays up before the panel closes itself. */
 const SENT_HOLD_MS = 1500;
@@ -60,7 +46,6 @@ export function WordReportButton({
   onToggle: () => void;
   buttonRef: Ref<HTMLButtonElement>;
 }) {
-  const locale = useLocale();
   return (
     <button
       ref={buttonRef}
@@ -70,12 +55,8 @@ export function WordReportButton({
       onClick={onToggle}
       aria-haspopup="dialog"
       aria-expanded={open}
-      aria-label={
-        reported
-          ? "You reported this word. Open the report panel"
-          : "Report a problem with this word"
-      }
-      title={t(locale, "report.title")}
+      aria-label={reported ? "Bạn đã báo lỗi từ này. Mở bảng báo lỗi" : "Báo lỗi từ này"}
+      title="Báo lỗi thẻ này"
     >
       <span className="vocab-report-face" aria-hidden="true">
         😕
@@ -111,7 +92,6 @@ export function WordReportPanel({
   onSent: () => void;
   onClose: () => void;
 }) {
-  const locale = useLocale();
   const [phase, setPhase] = useState<Phase>(alreadyReported ? "sent" : "choosing");
   const [selected, setSelected] = useState<ReportReasonId[]>([]);
   const panel = useRef<HTMLDivElement>(null);
@@ -184,28 +164,24 @@ export function WordReportPanel({
         inert={closing || undefined}
         role="dialog"
         aria-modal="true"
-        aria-label={t(locale, "report.title")}
-        lang={locale}
+        aria-label="Báo lỗi thẻ này"
+        lang="vi"
       >
         <header className="vocab-report-head">
-          <h2>{phase === "sent" ? t(locale, "report.sent") : t(locale, "report.prompt")}</h2>
-          <button
-            type="button"
-            className="vocab-report-close"
-            onClick={onClose}
-            aria-label={t(locale, "report.close")}
-          >
+          <h2>{phase === "sent" ? "Đã gửi. Cảm ơn bạn!" : "Thẻ này sai ở đâu?"}</h2>
+          <button type="button" className="vocab-report-close" onClick={onClose} aria-label="Đóng">
             <X size={18} />
           </button>
         </header>
         {phase === "sent" ? (
           <p className="vocab-report-note" role="status">
-            <Check size={16} /> {t(locale, "report.thanks")}
+            <Check size={16} /> Báo cáo ẩn danh của bạn đã tới người biên soạn.
           </p>
         ) : (
           <>
             <p className="vocab-report-note">
-              {t(locale, "report.selectHint", { max: MAX_REPORT_REASONS })}
+              Chạm để chọn (tối đa {MAX_REPORT_REASONS}). Báo cáo ẩn danh — không kèm thông tin nào
+              về bạn.
             </p>
             <div className="vocab-report-reasons">
               {REPORT_REASONS.map((reason) => (
@@ -216,13 +192,13 @@ export function WordReportPanel({
                   aria-pressed={selected.includes(reason.id)}
                   onClick={() => toggle(reason.id)}
                 >
-                  {t(locale, REASON_KEY[reason.id])}
+                  {reason.vi}
                 </button>
               ))}
             </div>
             {phase === "failed" && (
               <p className="vocab-report-error" role="alert">
-                {t(locale, "report.error")}
+                Chưa gửi được. Bạn thử lại nhé.
               </p>
             )}
             <button
@@ -231,7 +207,7 @@ export function WordReportPanel({
               onClick={() => void send()}
               disabled={!selected.length || phase === "sending"}
             >
-              {phase === "sending" ? t(locale, "report.sending") : t(locale, "report.send")}
+              {phase === "sending" ? "Đang gửi…" : "Gửi báo cáo ẩn danh"}
             </button>
           </>
         )}

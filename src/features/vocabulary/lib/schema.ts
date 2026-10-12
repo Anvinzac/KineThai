@@ -1,7 +1,13 @@
 /** WordCrawler validation and normalized catalog contract. Exports: schemas/types, normalizeDeck. Depends on: zod. */
 import { z } from "zod";
+import type { TargetLocale } from "./target-language";
 
-export const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+/** CEFR levels — used by the English (and ko/ja) vocabulary pages. */
+export const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+/** HSK 3.0 (2021) proficiency levels — the official Chinese word-frequency standard for the hoa domain. */
+export const HSK_LEVELS = ["HSK1", "HSK2", "HSK3", "HSK4", "HSK5", "HSK6", "HSK7", "HSK8", "HSK9"] as const;
+/** Master enum accepted by the word schema; covers both proficiency systems. */
+export const LEVELS = [...CEFR_LEVELS, ...HSK_LEVELS] as const;
 export const STYLE_IDS = ["detective", "speed", "confession", "minimal"] as const;
 const optionalText = (max: number) => z.string().trim().max(max).optional().default("");
 /** The localized leading phrases for one locale (lead / meaning / guess). */
@@ -44,9 +50,11 @@ const wordSchema = z.object({
   word: z
     .string()
     .trim()
-    .min(2)
+    .min(1)
     .max(64)
-    .regex(/^[a-zA-Z]+(?:['’-][a-zA-Z]+)*$/),
+    // An English headword (2+ chars, letters with inner ' or -) or a Chinese one
+    // (one or more Han characters) for a locale deck served on its own domain.
+    .regex(/^(?:(?=.{2})[a-zA-Z]+(?:['’-][a-zA-Z]+)*|\p{Script=Han}+)$/u),
   defVi: z.string().trim().min(2).max(400),
   leadVi: optionalText(240),
   anticipateVi: optionalText(180),
@@ -98,6 +106,12 @@ const deckSchema = z.object({
 export type VocabularyWord = z.infer<typeof wordSchema>;
 export type VocabularyLevel = (typeof LEVELS)[number];
 export type NarrativeStyle = (typeof STYLE_IDS)[number];
+export type LevelSystem = "cefr" | "hsk";
+
+/** Which proficiency standard applies to a deck locale. */
+export function levelSystemFor(locale: TargetLocale): LevelSystem {
+  return locale === "zh" ? "hsk" : "cefr";
+}
 export type Catalog = {
   revision: string;
   name: string;

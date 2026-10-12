@@ -1,5 +1,5 @@
 {
-  "revision": "b08acfb1cb299d5467e303d6",
+  "revision": "cf9b619a441686994501133b",
   "name": "WordCrawler deck batch 3",
   "count": 25,
   "topics": [
@@ -13,560 +13,560 @@
     "work"
   ],
   "levels": [
-    "A1",
-    "A2",
-    "B1"
+    "HSK1",
+    "HSK2",
+    "HSK3"
   ],
   "words": [
     {
       "id": "jealous",
-      "word": "jealous",
+      "word": "嫉妒",
       "defVi": "Khó chịu, /ghen tị/ khi người khác có thứ mình muốn.",
       "leadVi": "Bạn thân khoe điện thoại mới, lòng bỗng thấy hơi chua.",
       "anticipateVi": "Có ai đang nóng mắt không?",
       "pos": "adj",
-      "ipa": "/ˈdʒel.əs/",
+      "ipa": "jídù",
       "topic": "emotion",
       "topics": [
         "emotion"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "She felt _____ of her sister's success.",
+          "en": "她_____姐姐的成功。",
           "vi": "Cô ấy ghen tị với thành công của chị gái."
         }
       ],
-      "chars": 7,
-      "initial": "J"
+      "chars": 2,
+      "initial": "嫉"
     },
     {
       "id": "lonely",
-      "word": "lonely",
+      "word": "孤独",
       "defVi": "Thấy /cô đơn/, buồn vì không có ai bên cạnh.",
       "leadVi": "Tết ở lại thành phố, cả dãy trọ vắng tanh.",
       "anticipateVi": "Có mình ở đây rồi mà!",
       "pos": "adj",
-      "ipa": "/ˈloʊn.li/",
+      "ipa": "gūdú",
       "topic": "emotion",
       "topics": [
         "emotion"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "He felt _____ after moving to a new city.",
+          "en": "搬到新城市后，他觉得很_____。",
           "vi": "Anh ấy thấy cô đơn sau khi chuyển đến thành phố mới."
         }
       ],
-      "chars": 6,
-      "initial": "L"
+      "chars": 2,
+      "initial": "孤"
     },
     {
       "id": "proud",
-      "word": "proud",
+      "word": "骄傲",
       "defVi": "/Tự hào/ vì mình hay người thân làm được điều tốt.",
       "leadVi": "Con nhận giấy khen, bố mẹ chụp ảnh khoe khắp nơi.",
       "anticipateVi": "Ưỡn ngực lên nào!",
       "pos": "adj",
-      "ipa": "/praʊd/",
+      "ipa": "jiāo'ào",
       "topic": "emotion",
       "topics": [
         "emotion"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "We are so _____ of you.",
+          "en": "爸爸妈妈真为你感到_____。",
           "vi": "Bố mẹ rất tự hào về con."
         }
       ],
-      "chars": 5,
-      "initial": "P"
+      "chars": 2,
+      "initial": "骄"
     },
     {
       "id": "confused",
-      "word": "confused",
+      "word": "困惑",
       "defVi": "/Bối rối/, không hiểu chuyện gì đang xảy ra.",
       "leadVi": "Thầy giảng xong bài, cả lớp nhìn nhau ngơ ngác.",
       "anticipateVi": "Ủa, rồi sao nữa?",
       "pos": "adj",
-      "ipa": "/kənˈfjuːzd/",
+      "ipa": "kùnhuò",
       "topic": "emotion",
       "topics": [
         "emotion"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "I'm _____ about what to do next.",
+          "en": "我很_____，不知道接下来该做什么。",
           "vi": "Tôi đang rối, không biết làm gì tiếp theo."
         }
       ],
-      "chars": 8,
-      "initial": "C"
+      "chars": 2,
+      "initial": "困"
     },
     {
       "id": "exhausted",
-      "word": "exhausted",
+      "word": "精疲力尽",
       "defVi": "/Kiệt sức/, mệt đến mức không muốn làm gì nữa.",
       "leadVi": "Thức trắng ba đêm, vừa chạm gối là ngủ say.",
       "anticipateVi": "Ráng thêm chút, sắp xong rồi!",
       "pos": "adj",
-      "ipa": "/ɪɡˈzɑː.stɪd/",
+      "ipa": "jīngpí-lìjìn",
       "topic": "emotion",
       "topics": [
         "emotion"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "After the long hike, we were completely _____.",
+          "en": "爬了很久的山，我们都_____了。",
           "vi": "Sau chuyến leo núi dài, chúng tôi kiệt sức hoàn toàn."
         }
       ],
-      "chars": 9,
-      "initial": "E"
+      "chars": 4,
+      "initial": "精"
     },
     {
       "id": "honest",
-      "word": "honest",
+      "word": "老实",
       "defVi": "/Thật thà/, không nói dối hay gian lận ai.",
       "leadVi": "Nhặt được ví đầy tiền, mang ngay đến đồn công an.",
       "anticipateVi": "Nói thật đi, bạn biết rồi!",
       "pos": "adj",
-      "ipa": "/ˈɑː.nɪst/",
+      "ipa": "lǎoshi",
       "topic": "character",
       "topics": [
         "character"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "To be _____, I didn't like the movie.",
+          "en": "_____说，我不喜欢那部电影。",
           "vi": "Nói thật, tôi không thích bộ phim đó."
         }
       ],
-      "chars": 6,
-      "initial": "H"
+      "chars": 2,
+      "initial": "老"
     },
     {
       "id": "polite",
-      "word": "polite",
+      "word": "礼貌",
       "defVi": "Cư xử /lễ phép/, biết chào hỏi và nói cảm ơn.",
       "leadVi": "Gặp người lớn là khoanh tay, cúi đầu chào ạ.",
       "anticipateVi": "Mời bạn đoán trước ạ!",
       "pos": "adj",
-      "ipa": "/pəˈlaɪt/",
+      "ipa": "lǐmào",
       "topic": "character",
       "topics": [
         "character"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "It's _____ to say thank you.",
+          "en": "说“谢谢”是有_____的表现。",
           "vi": "Nói cảm ơn là phép lịch sự."
         }
       ],
-      "chars": 6,
-      "initial": "P"
+      "chars": 2,
+      "initial": "礼"
     },
     {
       "id": "lazy",
-      "word": "lazy",
+      "word": "懒",
       "defVi": "/Lười biếng/, ngại làm việc và thích nằm dài.",
       "leadVi": "Chuông báo thức reo lần ba, vẫn kéo chăn trùm đầu.",
       "anticipateVi": "Nghĩ thôi cũng thấy mệt…",
       "pos": "adj",
-      "ipa": "/ˈleɪ.zi/",
+      "ipa": "lǎn",
       "topic": "character",
       "topics": [
         "character"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "Don't be so _____, help me clean up!",
+          "en": "别这么_____，快帮我收拾！",
           "vi": "Đừng lười thế, phụ mình dọn dẹp đi!"
         }
       ],
-      "chars": 4,
-      "initial": "L"
+      "chars": 1,
+      "initial": "懒"
     },
     {
       "id": "brave",
-      "word": "brave",
+      "word": "勇敢",
       "defVi": "/Dũng cảm/, dám làm điều khó dù trong lòng sợ.",
       "leadVi": "Run cầm cập, nhưng vẫn bước lên sân khấu hát.",
       "anticipateVi": "Gan lì thì đoán đi!",
       "pos": "adj",
-      "ipa": "/breɪv/",
+      "ipa": "yǒnggǎn",
       "topic": "character",
       "topics": [
         "character"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "It was _____ of her to speak up.",
+          "en": "她敢站出来说话，真_____。",
           "vi": "Cô ấy thật can đảm khi dám lên tiếng."
         }
       ],
-      "chars": 5,
-      "initial": "B"
+      "chars": 2,
+      "initial": "勇"
     },
     {
       "id": "selfish",
-      "word": "selfish",
+      "word": "自私",
       "defVi": "/Ích kỷ/, chỉ nghĩ cho mình mà mặc kệ người khác.",
       "leadVi": "Đặt đồ ăn chung, giành ngay miếng ngon nhất cho mình.",
       "anticipateVi": "Đáp án này không chia đâu!",
       "pos": "adj",
-      "ipa": "/ˈsel.fɪʃ/",
+      "ipa": "zìsī",
       "topic": "character",
       "topics": [
         "character"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "It's _____ to keep all the snacks for yourself.",
+          "en": "把零食全留给自己太_____了。",
           "vi": "Giữ hết đồ ăn vặt cho riêng mình là ích kỷ."
         }
       ],
-      "chars": 7,
-      "initial": "S"
+      "chars": 2,
+      "initial": "自"
     },
     {
       "id": "complain",
-      "word": "complain",
+      "word": "抱怨",
       "defVi": "/Than phiền/ vì không hài lòng với điều gì đó.",
       "leadVi": "Món lên trễ, nguội ngắt, khách gọi ngay quản lý ra.",
       "anticipateVi": "Khó quá? Cứ thở dài đi!",
       "pos": "verb",
-      "ipa": "/kəmˈpleɪn/",
+      "ipa": "bàoyuàn",
       "topic": "communication",
       "topics": [
         "communication"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "Customers often _____ about the slow Wi-Fi.",
+          "en": "顾客经常_____Wi-Fi太慢。",
           "vi": "Khách hay phàn nàn về Wi-Fi chậm."
         }
       ],
-      "chars": 8,
-      "initial": "C"
+      "chars": 2,
+      "initial": "抱"
     },
     {
       "id": "explain",
-      "word": "explain",
+      "word": "解释",
       "defVi": "/Giải thích/ để người khác hiểu rõ một điều gì.",
       "leadVi": "Bà hỏi TikTok là gì, cháu ngồi nói cả buổi.",
       "anticipateVi": "Hiểu rồi thì nói luôn!",
       "pos": "verb",
-      "ipa": "/ɪkˈspleɪn/",
+      "ipa": "jiěshì",
       "topic": "communication",
       "topics": [
         "communication"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "Can you _____ this rule to me?",
+          "en": "你能给我_____一下这条规则吗？",
           "vi": "Bạn giải thích luật này cho mình được không?"
         }
       ],
-      "chars": 7,
-      "initial": "E"
+      "chars": 2,
+      "initial": "解"
     },
     {
       "id": "promise",
-      "word": "promise",
+      "word": "保证",
       "defVi": "Nói chắc với ai rằng mình /nhất định/ sẽ làm.",
       "leadVi": "Ngoéo tay rồi nhé, ai nuốt lời là thua!",
       "anticipateVi": "Đoán đúng, mình bao trà sữa!",
       "pos": "verb",
-      "ipa": "/ˈprɑː.mɪs/",
+      "ipa": "bǎozhèng",
       "topic": "communication",
       "topics": [
         "communication"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "I _____ I'll call you tonight.",
+          "en": "我_____今晚给你打电话。",
           "vi": "Mình hứa tối nay sẽ gọi cho bạn."
         }
       ],
-      "chars": 7,
-      "initial": "P"
+      "chars": 2,
+      "initial": "保"
     },
     {
       "id": "argue",
-      "word": "argue",
+      "word": "吵架",
       "defVi": "/Cãi nhau/ hoặc tranh luận vì không cùng ý kiến.",
       "leadVi": "Chỉ chọn phim tối nay mà hai người to tiếng mãi.",
       "anticipateVi": "Đừng to tiếng, nói nhỏ thôi!",
       "pos": "verb",
-      "ipa": "/ˈɑːrɡ.juː/",
+      "ipa": "chǎojià",
       "topic": "communication",
       "topics": [
         "communication"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "My brothers _____ about everything.",
+          "en": "我们兄弟几个不管什么事都会_____。",
           "vi": "Mấy anh em tôi cãi nhau đủ thứ chuyện."
         }
       ],
-      "chars": 5,
-      "initial": "A"
+      "chars": 2,
+      "initial": "吵"
     },
     {
       "id": "encourage",
-      "word": "encourage",
+      "word": "鼓励",
       "defVi": "/Động viên/ để ai đó thêm tự tin và cố gắng.",
       "leadVi": "Trước giờ thi, mẹ vỗ vai: \"Con làm được mà.\"",
       "anticipateVi": "Vỗ tay cho bạn trước nè!",
       "pos": "verb",
-      "ipa": "/ɪnˈkɝː.ɪdʒ/",
+      "ipa": "gǔlì",
       "topic": "communication",
       "topics": [
         "communication"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "Teachers should _____ students to ask questions.",
+          "en": "老师应该_____学生提问。",
           "vi": "Thầy cô nên khuyến khích học sinh đặt câu hỏi."
         }
       ],
-      "chars": 9,
-      "initial": "E"
+      "chars": 2,
+      "initial": "鼓"
     },
     {
       "id": "realize",
-      "word": "realize",
+      "word": "意识到",
       "defVi": "Chợt /nhận ra/ điều mà trước đó mình chưa thấy.",
       "leadVi": "Đi nửa đường mới thấy mang dép khác màu.",
       "anticipateVi": "Bóng đèn trong đầu sáng chưa?",
       "pos": "verb",
-      "ipa": "/ˈriː.ə.laɪz/",
+      "ipa": "yìshí dào",
       "topic": "thinking",
       "topics": [
         "thinking"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "I didn't _____ how late it was.",
+          "en": "我没_____已经这么晚了。",
           "vi": "Tôi không nhận ra là đã khuya đến thế."
         }
       ],
-      "chars": 7,
-      "initial": "R"
+      "chars": 3,
+      "initial": "意"
     },
     {
       "id": "decide",
-      "word": "decide",
+      "word": "决定",
       "defVi": "/Quyết định/ chọn một trong nhiều cách sau khi suy nghĩ.",
       "leadVi": "Trà sữa hay cà phê? Đứng trước quầy mười phút rồi.",
       "anticipateVi": "Chốt đơn đi bạn ơi!",
       "pos": "verb",
-      "ipa": "/dɪˈsaɪd/",
+      "ipa": "juédìng",
       "topic": "thinking",
       "topics": [
         "thinking"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "We need to _____ by Friday.",
+          "en": "这件事我们得在周五前_____。",
           "vi": "Chúng ta cần quyết định trước thứ Sáu."
         }
       ],
-      "chars": 6,
-      "initial": "D"
+      "chars": 2,
+      "initial": "决"
     },
     {
       "id": "forget",
-      "word": "forget",
+      "word": "忘记",
       "defVi": "/Quên mất/, không còn nhớ điều mình từng biết.",
       "leadVi": "Mở tủ lạnh ra rồi đứng đó, định lấy gì nhỉ?",
       "anticipateVi": "Ơ, mình đang làm gì đây?",
       "pos": "verb",
-      "ipa": "/fɚˈɡet/",
+      "ipa": "wàngjì",
       "topic": "thinking",
       "topics": [
         "thinking"
       ],
-      "level": "A1",
+      "level": "HSK1",
       "usage": [
         {
-          "en": "Don't _____ your umbrella.",
+          "en": "别_____带伞。",
           "vi": "Đừng quên mang ô nhé."
         }
       ],
-      "chars": 6,
-      "initial": "F"
+      "chars": 2,
+      "initial": "忘"
     },
     {
       "id": "habit",
-      "word": "habit",
+      "word": "习惯",
       "defVi": "/Thói quen/, việc làm đều đặn đến mức không cần nghĩ.",
       "leadVi": "Vừa mở mắt, tay đã tự tìm điện thoại.",
       "anticipateVi": "Ngày nào cũng vậy mà!",
       "pos": "noun",
-      "ipa": "/ˈhæb.ɪt/",
+      "ipa": "xíguàn",
       "topic": "daily",
       "topics": [
         "daily"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "Biting your nails is a bad _____.",
+          "en": "咬指甲是个坏_____。",
           "vi": "Cắn móng tay là một thói quen xấu."
         }
       ],
-      "chars": 5,
-      "initial": "H"
+      "chars": 2,
+      "initial": "习"
     },
     {
       "id": "neighbor",
-      "word": "neighbor",
+      "word": "邻居",
       "defVi": "Người sống /sát vách/ hoặc ở gần nhà mình.",
       "leadVi": "Nhà bên nấu canh chua, mùi bay sang tận bếp mình.",
       "anticipateVi": "Bán anh em xa, mua…?",
       "pos": "noun",
-      "ipa": "/ˈneɪ.bɚ/",
+      "ipa": "línjū",
       "topic": "daily",
       "topics": [
         "daily"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "My _____ often waters my plants when I travel.",
+          "en": "我出远门时，_____常帮我浇花。",
           "vi": "Bác hàng xóm hay tưới cây giúp khi tôi đi xa."
         }
       ],
-      "chars": 8,
-      "initial": "N"
+      "chars": 2,
+      "initial": "邻"
     },
     {
       "id": "rush",
-      "word": "rush",
+      "word": "着急",
       "defVi": "Làm thật /vội vàng/ vì sắp hết thời gian.",
       "leadVi": "Còn năm phút vào lớp, vừa chạy vừa cài cúc áo.",
       "anticipateVi": "Từ từ thôi, kịp mà!",
       "pos": "verb",
-      "ipa": "/rʌʃ/",
+      "ipa": "zháojí",
       "topic": "time",
       "topics": [
         "time"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "There's no need to _____, we have time.",
+          "en": "不用_____，我们还有时间。",
           "vi": "Không cần vội đâu, mình còn thời gian."
         }
       ],
-      "chars": 4,
-      "initial": "R"
+      "chars": 2,
+      "initial": "着"
     },
     {
       "id": "afford",
-      "word": "afford",
+      "word": "买得起",
       "defVi": "Có /đủ tiền/ để mua hay chi trả cho thứ gì.",
       "leadVi": "Ngắm đôi giày mãi, liếc thấy giá, lặng lẽ đặt xuống.",
       "anticipateVi": "Đoán miễn phí, khỏi trả tiền!",
       "pos": "verb",
-      "ipa": "/əˈfɔːrd/",
+      "ipa": "mǎi de qǐ",
       "topic": "money",
       "topics": [
         "money"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "I can't _____ a new laptop right now.",
+          "en": "我现在哪_____新笔记本电脑啊。",
           "vi": "Giờ tôi chưa đủ tiền mua laptop mới."
         }
       ],
-      "chars": 6,
-      "initial": "A"
+      "chars": 3,
+      "initial": "买"
     },
     {
       "id": "borrow",
-      "word": "borrow",
+      "word": "借",
       "defVi": "Dùng tạm đồ của người khác rồi /trả lại/ sau.",
       "leadVi": "\"Cho mình dùng ké cây bút, xíu trả liền nha!\"",
       "anticipateVi": "Cái gì đi rồi phải về?",
       "pos": "verb",
-      "ipa": "/ˈbɑːr.oʊ/",
+      "ipa": "jiè",
       "topic": "money",
       "topics": [
         "money"
       ],
-      "level": "A2",
+      "level": "HSK2",
       "usage": [
         {
-          "en": "Can I _____ your charger?",
+          "en": "我能_____一下你的充电器吗？",
           "vi": "Mình mượn cục sạc của bạn được không?"
         }
       ],
-      "chars": 6,
-      "initial": "B"
+      "chars": 1,
+      "initial": "借"
     },
     {
       "id": "budget",
-      "word": "budget",
+      "word": "预算",
       "defVi": "Số tiền /dự tính/ được chi cho một việc nào đó.",
       "leadVi": "Đầu tháng chia ngay: tiền nhà, tiền ăn, tiền tiết kiệm.",
       "anticipateVi": "Tiêu chữ cái cho khéo nhé!",
       "pos": "noun",
-      "ipa": "/ˈbʌdʒ.ɪt/",
+      "ipa": "yùsuàn",
       "topic": "money",
       "topics": [
         "money"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "We're planning a trip on a tight _____.",
+          "en": "我们_____有限，正在计划一次省钱的旅行。",
           "vi": "Chúng tôi lên kế hoạch đi chơi với ngân sách eo hẹp."
         }
       ],
-      "chars": 6,
-      "initial": "B"
+      "chars": 2,
+      "initial": "预"
     },
     {
       "id": "salary",
-      "word": "salary",
+      "word": "工资",
       "defVi": "Khoản /tiền lương/ được trả cố định mỗi tháng.",
       "leadVi": "Ngày mùng năm, điện thoại ting ting, cả phòng reo hò.",
       "anticipateVi": "Cuối tháng nào cũng mong!",
       "pos": "noun",
-      "ipa": "/ˈsæl.ɚ.i/",
+      "ipa": "gōngzī",
       "topic": "work",
       "topics": [
         "work"
       ],
-      "level": "B1",
+      "level": "HSK3",
       "usage": [
         {
-          "en": "She asked for a higher _____.",
+          "en": "她提出要涨_____。",
           "vi": "Cô ấy đề nghị được tăng lương."
         }
       ],
-      "chars": 6,
-      "initial": "S"
+      "chars": 2,
+      "initial": "工"
     }
   ]
 }

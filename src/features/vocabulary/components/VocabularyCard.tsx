@@ -1,5 +1,7 @@
-/** One independent vocabulary learning card; clue navigation and heart/bookmark reactions stay on-device, and the reveal is followed by a letter-by-letter spelling coda. Exports: VocabularyCard. Depends on: presets, playback, VocabularyStage, SpellingAnimation, reactions. */
+/** One independent vocabulary learning card; clue navigation and heart/bookmark reactions stay on-device, and the reveal is followed by a spelling coda (letter-by-letter for Latin, stroke-by-stroke for Han). Exports: VocabularyCard. Depends on: presets, playback, VocabularyStage, SpellingAnimation, HanziStrokeSpelling, reactions. */
 import {
+  lazy,
+  Suspense,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -24,16 +26,14 @@ import {
   type Variants,
 } from "framer-motion";
 import { SPRING, getBeatSeconds } from "@/lib/motion";
-import { Bookmark, Heart } from "lucide-react";
+import { Bookmark, Heart, Pause, Play } from "lucide-react";
 import { buildVocabularyCanvas, choosePresentation, fitVocabularyTextSize } from "../lib/presets";
 import { buildStages } from "../lib/stages";
-import { resolveClue } from "../lib/clues";
-import { useLocale } from "../lib/useLocale";
-import { t } from "../lib/ui-copy";
 import { getExportStageBox, type CardExportLayout } from "../lib/export-layout";
 import { hasReportedWord } from "../lib/reported-words";
 import { sceneSkipLimiter } from "../lib/skip-limiter";
 import { getSpellingDurationMs, pickSpellingVariant } from "../lib/spelling";
+import { getStrokeSpellingDurationMs, isHanAnswer } from "../lib/hanzi";
 import {
   REACTIONS_EVENT,
   REACTIONS_KEY,
@@ -47,14 +47,25 @@ import {
 import { EMOJI_PALETTE, formatEmojiTotal, mockEmojiTotals, withLocalEmojis } from "../lib/emoji";
 import { useLearningPlayback } from "../hooks/useLearningPlayback";
 import { usePresence } from "@/hooks/use-presence";
-import type { FeedEntry, Presentation } from "../types";
+import type { FeedEntry, Presentation, ReadingPace } from "../types";
 import { EmojiBurst } from "./EmojiBurst";
 import { SpellingAnimation } from "./SpellingAnimation";
 import { VocabularyStage } from "./VocabularyStage";
 import { WordReportButton, WordReportPanel } from "./WordReportControl";
 
+/**
+ * The CJK stroke coda is lazy: Hanzi Writer plus the vendored stroke dataset load only
+ * when a Han answer actually reaches its coda, so the English feed chunk never carries
+ * them. The named export is re-exposed as a default for React.lazy.
+ */
+const HanziStrokeSpelling = lazy(() =>
+  import("./HanziStrokeSpelling").then((module) => ({ default: module.HanziStrokeSpelling })),
+);
+
 /** Matches the report panel's exit keyframes (--dur-quick) in vocabulary.css. */
 const REPORT_EXIT_MS = 180;
+/** Clue-page duration multipliers; "fast" is the stream's native timing. */
+const PACE_FACTOR: Record<ReadingPace, number> = { slow: 1.75, normal: 1.35, fast: 1 };
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 const EASE_IN = [0.5, 0, 0.75, 0] as const;
@@ -142,6 +153,7 @@ export function VocabularyCard({
   entry,
   presentation,
   active,
+  current = active,
   reducedMotion,
   matching,
   canAdvance,
@@ -149,10 +161,19 @@ export function VocabularyCard({
   onWordEnding,
   exportLayout,
   revealButtonLabel,
+  onToggleAutoplay,
 }: {
   entry: FeedEntry;
   presentation: Presentation;
+  /** This card is the word on screen AND nothing is covering the feed: it plays. */
   active: boolean;
+  /**
+   * This card is the word on screen, whether or not it is playing. It stays true while a
+   * sheet, the saved drawer or the rotate gate covers the feed — which is how the card
+   * tells "paused" (hold everything exactly where it is) from "the reader moved on".
+   * Defaults to `active` for callers with nothing that can cover the card.
+   */
+  current?: boolean;
   reducedMotion: boolean;
   matching: number;
   canAdvance: boolean;
@@ -171,13 +192,11 @@ export function VocabularyCard({
   exportLayout?: CardExportLayout;
   /** Custom label for the reveal button, from admin wording presets. */
   revealButtonLabel?: string;
+  /** Toggle autoplay from the center tap zone; threads up to the page-level presentation state. */
+  onToggleAutoplay?: () => void;
 }) {
   const { theme, style } = choosePresentation(entry.occurrenceId, presentation, entry.position);
-  const locale = useLocale();
-  const stages = useMemo(
-    () => buildStages(entry.word, style.id, locale),
-    [entry.word, style.id, locale],
-  );
+  const stages = useMemo(() => buildStages(entry.word, style.id), [entry.word, style.id]);
   const canvas = useMemo(() => buildVocabularyCanvas(theme, style), [theme, style]);
   // The spelling coda is one extra page appended after the reveal stage, so the
   // playback timer — not the animation component — decides when the card ends.
@@ -185,12 +204,23 @@ export function VocabularyCard({
     () => pickSpellingVariant(entry.occurrenceId),
     [entry.occurrenceId],
   );
+  // A Han answer draws stroke-by-stroke instead of popping letters. The branch is decided
+  // by pure script detection (lib/hanzi imports no stroke data), so this card chunk stays
+  // lean for the English feed and the coda duration needs only the character count.
+  const isHan = isHanAnswer(entry.word.word);
   const spellingDuration = useMemo(
-    () => getSpellingDurationMs(entry.word.word, spellingVariant, reducedMotion),
-    [entry.word.word, spellingVariant, reducedMotion],
+    () =>
+      isHan
+        ? getStrokeSpellingDurationMs(entry.word.word, reducedMotion)
+        : getSpellingDurationMs(entry.word.word, spellingVariant, reducedMotion),
+    [isHan, entry.word.word, spellingVariant, reducedMotion],
   );
+  // Warm the lazy stroke chunk as soon as a Han card mounts, so the coda never waits on a
+  // dynamic import mid-animation; the clue pages give it ample time to arrive.
+  useEffect(() => {
+    if (isHan) void import("./HanziStrokeSpelling");
+  }, [isHan]);
   const revealPage = stages.length - 1;
-  const defText = resolveClue(entry.word, "def", locale);
   const pageCount = stages.length + 1;
   /** Progress-bar keys: one per clue stage plus the trailing spelling coda. */
   const pageKeys = useMemo(() => [...stages.map((item) => item.id), "spelling"], [stages]);
@@ -207,23 +237,35 @@ export function VocabularyCard({
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
+  // Pace stretches the clue pages twice over, in step: how long each page stays up, and
+  // how slowly its words are read out onto it. The spelling coda keeps its own timing.
+  const paceFactor = exportLayout ? 1 : PACE_FACTOR[presentation.pace ?? "fast"];
   /** One duration per page: every clue stage plus the trailing spelling coda. */
   const pageDurations = useMemo(
     () => [
       ...stages.map((stage) =>
-        getPageDuration(
-          [stage.text, stage.reveal ? defText : ""].filter(Boolean).join(" "),
-          style.tempo,
-          style.rhythm,
+        Math.round(
+          getPageDuration(
+            [stage.text, stage.reveal ? entry.word.defVi : ""].filter(Boolean).join(" "),
+            style.tempo,
+            style.rhythm,
+          ) * paceFactor,
         ),
       ),
       spellingDuration,
     ],
-    [stages, defText, style.tempo, style.rhythm, spellingDuration],
+    [stages, entry.word.defVi, style.tempo, style.rhythm, spellingDuration, paceFactor],
   );
+  const looping = presentation.advance === false && !exportLayout;
   // While the report panel is open the card holds still: the reader is describing
   // THIS page, and the stream must not move on underneath them.
   const [reportOpen, setReportOpen] = useState(false);
+  // Visual feedback for the side zones of the three-zone tap: briefly washes the
+  // tapped side (left = rewind, right = fast-forward) for 350ms.
+  const [tapZone, setTapZone] = useState<"left" | "right" | null>(null);
+  // Bumped by a center tap that pauses: keys the pause icon that pops out and vanishes.
+  const [pausePop, setPausePop] = useState(0);
+  const tapZoneTimer = useRef<number | undefined>(undefined);
   const [reported, setReported] = useState(() => hasReportedWord(entry.word.id));
   const reportButton = useRef<HTMLButtonElement>(null);
   const closeReport = useCallback(() => {
@@ -250,6 +292,24 @@ export function VocabularyCard({
     }, STRIP_EXIT_MS);
   }, [reducedMotion, canAdvance, exportLayout, onAdvance]);
   useEffect(() => () => window.clearTimeout(leaveTimer.current), []);
+  // An overlay opening mid-exit must not let the timer carry the stream on to the next
+  // word underneath it. Drop the exit; the playback clock for this page is already spent,
+  // so it asks to advance again the moment the card is playing.
+  useEffect(() => {
+    if (active || leaveTimer.current === undefined) return;
+    window.clearTimeout(leaveTimer.current);
+    leaveTimer.current = undefined;
+    setLeaving(false);
+  }, [active]);
+  // The page's text is on stage from the first moment this card PLAYS and stays there
+  // until the reader leaves the word. It used to be tied straight to `active`, so anything
+  // that paused the feed (the options sheet, the saved drawer) unmounted the text and its
+  // return re-ran the page's whole entrance — the scene "starting again". Waiting for the
+  // first play, rather than for `current`, is what still holds the opening word back
+  // until its typeface is ready.
+  const [started, setStarted] = useState(active);
+  if (active && !started) setStarted(true);
+  if (!current && started) setStarted(false);
   // The default row makes its entrance the first time this card is the word on screen,
   // not on mount: neighbours are pre-rendered off screen, where it would go unseen.
   const [entered, setEntered] = useState(active);
@@ -259,11 +319,13 @@ export function VocabularyCard({
   const playback = useLearningPlayback({
     count: pageCount,
     active,
+    current,
     autoplay: presentation.autoplay && !reportOpen,
     reducedMotion,
     durations: pageDurations,
     canAdvance,
     revealPage,
+    loop: looping,
     onFinish: advanceWithExit,
   });
   // Which way the reader last moved, derived during render so the outgoing page
@@ -273,7 +335,7 @@ export function VocabularyCard({
     setNav({ page: playback.page, direction: playback.page > nav.page ? 1 : -1 });
   }
   const isSpelling = playback.page > revealPage;
-  const autoAdvancing = playback.playing && canAdvance;
+  const autoAdvancing = playback.playing && canAdvance && !looping;
   useEffect(() => {
     if (!active || !isSpelling) return;
     onWordEnding?.(autoAdvancing ? spellingDuration : 0);
@@ -340,7 +402,9 @@ export function VocabularyCard({
   // Only the single active card animates the sweeping transition backdrop. Inactive
   // neighbours keep a static gradient, so a transient active-index flip can never make
   // every visible background strobe at once.
-  const sweep = !!sliding && !reducedMotion && active;
+  // Keyed to `started`, not `active`: a pause must not switch the backdrop back to its
+  // static form and then restart the drift from its first frame when playback resumes.
+  const sweep = !!sliding && !reducedMotion && started;
   const cluePages = stages.filter((item) => !item.reveal).map((item) => item.text);
   // In an export the text lives in the frame's clear zone, so that zone — not the
   // whole card — is the width and height everything is fitted to.
@@ -465,21 +529,29 @@ export function VocabularyCard({
         const rect = cardRef.current?.getBoundingClientRect();
         if (!rect) return;
         const relX = clientX - rect.left;
-        const leftZone = rect.width * 0.33;
-        const rightZone = rect.width * 0.66;
+        const leftZone = rect.width * 0.35;
+        const rightZone = rect.width * 0.65;
+        // Determine which zone was tapped and show visual feedback.
+        let zone: "left" | "right";
         if (relX < leftZone) {
+          zone = "left";
           playback.previous();
         } else if (relX > rightZone) {
-          if (stage.reveal) playback.restart();
-          else if (canSkip()) playback.next();
+          zone = "right";
+          playback.next();
         } else {
-          // Center tap reveals or restarts
-          if (stage.reveal) playback.restart();
-          else if (canSkip()) playback.reveal();
+          // The center answers with the pause pop and the resting play button, not a wash.
+          if (presentation.autoplay) setPausePop((count) => count + 1);
+          onToggleAutoplay?.();
+          return;
         }
+        // Flash the zone highlight for 350ms.
+        clearTimeout(tapZoneTimer.current);
+        setTapZone(zone);
+        tapZoneTimer.current = window.setTimeout(() => setTapZone(null), 350);
       }
     },
-    [playback, stage.reveal, isSpelling, advanceWithExit, releaseDrag],
+    [playback, isSpelling, advanceWithExit, releaseDrag, onToggleAutoplay, presentation.autoplay],
   );
 
   void matching;
@@ -568,14 +640,39 @@ export function VocabularyCard({
   // The last emoji tapped and how many taps there have been, so that emoji alone
   // replays its bounce and floats a "+1" — feedback the strip never gave before.
   const [emojiTap, setEmojiTap] = useState<{ emoji: string; count: number }>();
+  // Every tap launches its OWN emoji into the scene, so tapping 🔥 five times sends five
+  // 🔥 rising from the button rather than swapping a single stamp. Each flight is tagged
+  // with a process-wide sequence id (so reusing the same emoji still gets a distinct key)
+  // and retires itself the moment its animation ends, keeping the mounted set bounded.
+  const [emojiFlights, setEmojiFlights] = useState<
+    Array<{ id: number; emoji: string; origin: { x: number; y: number } }>
+  >([]);
+  const flightSeq = useRef(0);
   const handleEmojiTap = useCallback(
-    (emoji: string) => {
+    (emoji: string, button: HTMLElement) => {
       addEmojiComment(wordId, emoji);
       setEmojiComments(getEmojiComments(wordId));
+      // Measure the tapped button's own card-local centre so this reader's emoji rises
+      // from the exact glyph they pressed — not the shared action-bar fallback, which is
+      // what makes it read as "mine", not the community puff.
+      const cardRect = cardRef.current?.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
+      const origin = cardRect
+        ? {
+            x: buttonRect.left - cardRect.left + buttonRect.width / 2,
+            y: buttonRect.top - cardRect.top + buttonRect.height / 2,
+          }
+        : (emojiOrigins[emoji] ?? burstOrigin);
+      const id = (flightSeq.current += 1);
       setEmojiTap((current) => ({ emoji, count: (current?.count ?? 0) + 1 }));
+      setEmojiFlights((current) => [...current, { id, emoji, origin }]);
     },
-    [wordId],
+    [wordId, emojiOrigins, burstOrigin],
   );
+  // Drop a flight from the mounted set once its rise finishes, so held taps don't pile up.
+  const retireEmojiFlight = useCallback((id: number) => {
+    setEmojiFlights((current) => current.filter((flight) => flight.id !== id));
+  }, []);
 
   return (
     <article
@@ -584,12 +681,13 @@ export function VocabularyCard({
       style={colors}
       data-theme={theme.id}
       data-tone={theme.tone}
+      data-dialect={presentation.dialect === "douyin" ? "douyin" : undefined}
       data-export={exportLayout ? "" : undefined}
       data-export-progress={exportLayout?.showProgress || undefined}
       data-stage={isSpelling ? "spelling" : stage.id}
       inert={!active}
       aria-hidden={!active}
-      aria-label={`Vocabulary card ${entry.position + 1}`}
+      aria-label={`Thẻ từ vựng ${entry.position + 1}`}
       aria-posinset={entry.position + 1}
       aria-setsize={-1}
       onTouchStart={(e) => {
@@ -631,12 +729,57 @@ export function VocabularyCard({
           />
         </div>
       </div>
+      {tapZone && !exportLayout && (
+        <div className="vocab-tap-zone-highlight" data-zone={tapZone} aria-hidden="true" />
+      )}
+      {!exportLayout && (
+        <>
+          <AnimatePresence>
+            {pausePop > 0 && !presentation.autoplay && (
+              <motion.div
+                key={`pop-${pausePop}`}
+                className="vocab-pause-pop"
+                aria-hidden="true"
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: [0, 1, 0], scale: [0.6, 1.08, 1.32] }}
+                transition={{ duration: 0.52, times: [0, 0.3, 1], ease: "easeOut" }}
+                onAnimationComplete={() => setPausePop(0)}
+              >
+                <Pause size={30} fill="currentColor" strokeWidth={0} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {current && !presentation.autoplay && !reducedMotion && pausePop === 0 && (
+              <motion.button
+                key="resume"
+                type="button"
+                className="vocab-resume"
+                aria-label="Tiếp tục phát"
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1, transition: SPRING.gentle }}
+                exit={{ opacity: 0, scale: 1.25, transition: { duration: 0.2, ease: "easeIn" } }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => onToggleAutoplay?.()}
+              >
+                <Play size={30} fill="currentColor" strokeWidth={0} />
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </>
+      )}
       {isSpelling ? (
-        <SpellingAnimation
-          word={entry.word.word}
-          variant={spellingVariant}
-          reducedMotion={reducedMotion}
-        />
+        isHan ? (
+          <Suspense fallback={null}>
+            <HanziStrokeSpelling word={entry.word.word} reducedMotion={reducedMotion} />
+          </Suspense>
+        ) : (
+          <SpellingAnimation
+            word={entry.word.word}
+            variant={spellingVariant}
+            reducedMotion={reducedMotion}
+          />
+        )
       ) : (
         <VocabularyStage
           stage={stage}
@@ -645,6 +788,7 @@ export function VocabularyCard({
           background={theme.background}
           canvasWidth={textWidth}
           active={active}
+          staged={started}
           playing={playback.playing}
           reducedMotion={reducedMotion}
           playKey={playKey}
@@ -652,6 +796,7 @@ export function VocabularyCard({
           dragX={dragX}
           allowFrameEmphasis={!landscape}
           revealY={wideCard ? WIDE_REVEAL_Y : PORTRAIT_REVEAL_Y}
+          timeScale={paceFactor}
         />
       )}
       {isRevealed && (
@@ -667,18 +812,64 @@ export function VocabularyCard({
           reducedMotion={reducedMotion}
         />
       )}
+      {/* The reader's OWN reaction, kept separate from the community smoke: the burst
+          above is keyed to the mocked crowd totals and deliberately ignores taps, so a
+          tap used to only hop the strip badge. Each tap stamps the tapped emoji straight
+          into the scene — crisp (no blur), larger, near-fully opaque. Every flight mounts
+          and retires on its own, so tapping 🔥 five times sends five 🔥, not one redraw.
+          A deterministic per-flight horizontal drift fans simultaneous taps out so the
+          count reads as several distinct glyphs instead of one overlapping stack. */}
+      {isRevealed &&
+        emojiFlights.map((flight) => {
+          const drift = ((flight.id % 5) - 2) * 9;
+          return (
+            <motion.span
+              key={`emoji-self-${flight.id}`}
+              className="vocab-emoji-self"
+              style={{ left: flight.origin.x, top: flight.origin.y }}
+              initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+              animate={
+                reducedMotion
+                  ? {
+                      opacity: [0, 1, 1, 0],
+                      scale: [0.5, 1.12, 1.12, 1],
+                      x: [0, drift * 0.4, drift, drift],
+                      y: 0,
+                    }
+                  : {
+                      opacity: [0, 1, 1, 0],
+                      scale: [0.5, 1.35, 1.22, 1.06],
+                      x: [0, drift * 0.4, drift, drift],
+                      y: [0, -height * 0.12, -height * 0.3, -height * 0.44],
+                    }
+              }
+              transition={{
+                duration: reducedMotion ? 0.6 : 1.25,
+                ease: "easeOut",
+                times: [0, 0.2, 0.7, 1],
+              }}
+              onAnimationComplete={() => retireEmojiFlight(flight.id)}
+              aria-hidden="true"
+            >
+              {flight.emoji}
+            </motion.span>
+          );
+        })}
       {exportLayout?.showBrand && (
         <p className="vocab-export-brand" aria-hidden="true">
           anh.chay<span>Lá</span>
         </p>
       )}
       {!isSpelling && <p className="vocab-stage-label">{stage.label}</p>}
-      <div className="vocab-progress" aria-label={`Page ${playback.page + 1} of ${pageCount}`}>
+      <div className="vocab-progress" aria-label={`Trang ${playback.page + 1} / ${pageCount}`}>
         {pageKeys.map((key, index) => (
           <span key={key} data-complete={index < playback.page}>
             {index === playback.page && (
               <i
-                key={`${playKey}-${playback.playing}`}
+                // Keyed on the page alone. `playing` used to be part of the key, which
+                // remounted the bar — refilling it from empty — on every pause and resume;
+                // animation-play-state below is what actually holds it in place.
+                key={playKey}
                 style={{
                   animationDuration: `${playback.duration}ms`,
                   animationPlayState: playback.playing ? "running" : "paused",
@@ -744,7 +935,7 @@ export function VocabularyCard({
                           type="button"
                           className="vocab-emoji-strip-btn"
                           data-emoji={emoji}
-                          onClick={() => handleEmojiTap(emoji)}
+                          onClick={(e) => handleEmojiTap(emoji, e.currentTarget)}
                           aria-label={`React with ${emoji}${count ? `, ${count} so far` : ""}`}
                         >
                           <span
@@ -794,9 +985,7 @@ export function VocabularyCard({
                       className="vocab-emoji-strip-btn vocab-reaction-heart"
                       data-on={reactions.heart || undefined}
                       onClick={() => toggleReaction("heart")}
-                      aria-label={
-                        reactions.heart ? "Remove your heart from this word" : "Heart this word"
-                      }
+                      aria-label={reactions.heart ? "Bỏ yêu thích cho từ này" : "Yêu thích từ này"}
                     >
                       <span
                         key={pops.heart}
@@ -817,9 +1006,7 @@ export function VocabularyCard({
                       className="vocab-emoji-strip-btn vocab-reaction-bookmark"
                       data-on={reactions.bookmark || undefined}
                       onClick={() => toggleReaction("bookmark")}
-                      aria-label={
-                        reactions.bookmark ? "Remove this word from saved" : "Save this word"
-                      }
+                      aria-label={reactions.bookmark ? "Bỏ lưu từ này" : "Lưu từ này"}
                     >
                       <span
                         key={pops.bookmark}
@@ -846,9 +1033,9 @@ export function VocabularyCard({
                         type="button"
                         className="vocab-reveal-button vocab-reveal-pill"
                         onClick={playback.reveal}
-                        aria-label="Reveal word"
+                        aria-label="Lộ đáp án"
                       >
-                        {revealButtonLabel || t(locale, "card.reveal")}
+                        {revealButtonLabel || "Ê, từ này biết nè"}
                       </button>
                     </motion.span>
                   )}
@@ -858,9 +1045,7 @@ export function VocabularyCard({
                       className="vocab-reaction-button vocab-reaction-heart"
                       data-on={reactions.heart || undefined}
                       onClick={() => toggleReaction("heart")}
-                      aria-label={
-                        reactions.heart ? "Remove your heart from this word" : "Heart this word"
-                      }
+                      aria-label={reactions.heart ? "Bỏ yêu thích cho từ này" : "Yêu thích từ này"}
                     >
                       <span
                         key={pops.heart}
@@ -880,9 +1065,7 @@ export function VocabularyCard({
                       className="vocab-reaction-button vocab-reaction-bookmark"
                       data-on={reactions.bookmark || undefined}
                       onClick={() => toggleReaction("bookmark")}
-                      aria-label={
-                        reactions.bookmark ? "Remove this word from saved" : "Save this word"
-                      }
+                      aria-label={reactions.bookmark ? "Bỏ lưu từ này" : "Lưu từ này"}
                     >
                       <span
                         key={pops.bookmark}
