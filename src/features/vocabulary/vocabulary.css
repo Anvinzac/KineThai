@@ -2148,6 +2148,10 @@
   padding: 100px 28px;
   text-align: center;
 }
+/* The closing page sits in a feed slot, so it takes the slot's height, not the screen's. */
+.vocab-feed-end {
+  height: 100%;
+}
 .vocab-empty h1 {
   font-size: clamp(24px, 5vw, 38px);
   font-weight: 700;
@@ -5072,7 +5076,9 @@
    - a cyan-into-red neon halo.
    Static paints only — nothing here animates on its own, so the reduced-motion
    kill-switch at the file tail still covers every moving part. */
-.vocab-card[data-dialect="douyin"] .kinetic-emphasis-mark {
+/* Not on a run wrapper: its syllables already carry the split, and a second filter
+   around them would double the offset. */
+.vocab-card[data-dialect="douyin"] .kinetic-emphasis-mark:not(.kinetic-emphasis-run) {
   filter: drop-shadow(-0.035em 0 0 rgba(37, 244, 238, 0.8))
     drop-shadow(0.035em 0 0 rgba(254, 44, 85, 0.8));
 }

@@ -16,6 +16,9 @@ const ExportStudio = lazy(() =>
 /** How long a word must hold the screen before it counts as seen. */
 const VIEW_DWELL_MS = 900;
 
+/** Row id of the page that closes the stream once every word in the pool has been shown. */
+const FEED_END_ID = "feed-end";
+
 /** Render a single mounted session; remount on shuffle/filter changes. @param props Session and UI choices. @returns Virtualized feed. */
 export function VocabularyStream({
   seed,
@@ -82,10 +85,6 @@ export function VocabularyStream({
     return out;
   }, [query.entries, history, now]);
 
-  // Suspended means something is covering the feed, so the neighbouring words
-  // cannot be seen. Dropping overscan unmounts them and hands back their DOM and
-  // their decoded art for as long as the overlay is up.
-  const windowState = useVocabularyWindow(visibleEntries, suspended ? 0 : 2);
   // Paging ceiling: the endpoint permutes the same pool forever, so hasNextPage stays
   // true even when every word it can offer is already buffered (and blocked by the
   // day history). Without this bound the backfill effect below re-arms on every
@@ -96,6 +95,19 @@ export function VocabularyStream({
     query.metadata?.matching ?? 0,
     getWalkedPositions(query.entries),
   );
+  // Every word the pool holds is buffered: the stream ends on a page of its own after
+  // the last word, rather than a toast that can only restart the feed.
+  const poolDone =
+    visibleEntries.length > 0 && (!query.hasNextPage || !canFetchMorePositions);
+  const rows = useMemo(
+    () => (poolDone ? [...visibleEntries, { occurrenceId: FEED_END_ID }] : visibleEntries),
+    [poolDone, visibleEntries],
+  );
+
+  // Suspended means something is covering the feed, so the neighbouring words
+  // cannot be seen. Dropping overscan unmounts them and hands back their DOM and
+  // their decoded art for as long as the overlay is up.
+  const windowState = useVocabularyWindow(rows, suspended ? 0 : 2);
   const feedForPaging = useMemo(
     () => ({ ...query, entries: visibleEntries }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,10 +242,6 @@ export function VocabularyStream({
   const backfillInFlight = query.isFetching && canFetchMorePositions;
   const allBlocked =
     query.entries.length > 0 && visibleEntries.length === 0 && !backfillInFlight && !initialError;
-  const exhausted =
-    visibleEntries.length > 0 &&
-    (!query.hasNextPage || !canFetchMorePositions) &&
-    activeIndex === visibleEntries.length - 1;
   const nextUnlock = useMemo(() => {
     if (!allBlocked) return null;
     const ids = new Set(query.entries.map((entry) => entry.word.id));
@@ -296,7 +304,7 @@ export function VocabularyStream({
               <button
                 type="button"
                 className="vocab-light-button"
-                onClick={query.catalogChanged || exhausted ? onRestart : retry}
+                onClick={query.catalogChanged ? onRestart : retry}
               >
                 {query.catalogChanged ? "Bắt đầu dòng mới" : "Thử lại"}
               </button>
@@ -315,6 +323,34 @@ export function VocabularyStream({
         )}
         <div className="vocab-virtual-track" style={{ height: virtualizer.getTotalSize() }}>
           {virtualizer.getVirtualItems().map((item) => {
+            if (rows[item.index]?.occurrenceId === FEED_END_ID) {
+              return (
+                <div
+                  key={item.key}
+                  className="vocab-slot"
+                  style={{ height, transform: `translateY(${item.start}px)` }}
+                >
+                  <div className="vocab-empty vocab-feed-end" role="status">
+                    <p className="vocab-eyebrow">Hết dòng từ</p>
+                    <h1>Bạn đã xem hết mọi từ rồi.</h1>
+                    <p>
+                      Bộ nhớ trên thiết bị giữ mỗi từ ở mức một lần mỗi ngày, hai lần trong ba
+                      ngày, ba lần mỗi tuần. Xóa lịch sử xem để mọi từ quay lại ngay.
+                    </p>
+                    <button
+                      type="button"
+                      className="vocab-light-button"
+                      onClick={() => {
+                        onClearHistory();
+                        onRestart();
+                      }}
+                    >
+                      Xóa lịch sử xem
+                    </button>
+                  </div>
+                </div>
+              );
+            }
             const entry = visibleEntries[item.index];
             if (!entry) return null;
             return (
@@ -335,7 +371,7 @@ export function VocabularyStream({
                   presentation={presentation}
                   reducedMotion={reducedMotion}
                   matching={query.metadata?.matching ?? 0}
-                  canAdvance={activeIndex < visibleEntries.length - 1}
+                  canAdvance={activeIndex < rows.length - 1}
                   onAdvance={() => advanceFrom(entry.occurrenceId)}
                   onWordEnding={onWordEnding}
                   revealButtonLabel={revealButtonLabel}
@@ -353,23 +389,21 @@ export function VocabularyStream({
       )}
       {visibleEntries.length > 0 && (
         <>
-          {(query.error || query.isPaused || exhausted) && (
+          {(query.error || query.isPaused) && (
             <div className="vocab-stream-status" role="status">
               <span>
                 {query.catalogChanged
                   ? "Có bộ từ mới. Khởi động lại để tải."
-                  : exhausted
-                    ? "Sẵn sàng trộn lần nữa? Bắt đầu dòng mới."
-                    : query.isPaused
-                      ? "Mất mạng — các từ đã tải vẫn xem được."
-                      : "Không tải thêm từ được."}
+                  : query.isPaused
+                    ? "Mất mạng — các từ đã tải vẫn xem được."
+                    : "Không tải thêm từ được."}
               </span>
               <button
                 type="button"
-                onClick={query.catalogChanged || exhausted ? onRestart : retry}
+                onClick={query.catalogChanged ? onRestart : retry}
                 disabled={query.isFetching}
               >
-                {query.catalogChanged || exhausted ? "Khởi động lại" : "Thử lại"}
+                {query.catalogChanged ? "Khởi động lại" : "Thử lại"}
               </button>
             </div>
           )}

@@ -301,7 +301,8 @@ export function difficultyLevels(
 }
 
 /**
- * Human-readable band for a dropdown row, e.g. "A1–A2", "HSK1–HSK2" or "B2".
+ * Human-readable band for a dropdown row, e.g. "A1–A2", "HSK1–3" or "B2".
+ * Every HSK level shares the "HSK" prefix, so the upper bound drops it.
  * @param levels The track's level band
  * @returns A compact band label
  * @pure true
@@ -312,7 +313,9 @@ export function formatLevelBand(levels: readonly VocabularyLevel[]): string {
   const ordered = LEVELS.filter((level) => levels.includes(level));
   const first = ordered[0];
   const last = ordered[ordered.length - 1];
-  return first && last && first !== last ? `${first}–${last}` : (first ?? "");
+  if (!first || !last || first === last) return first ?? "";
+  const hskTop = /^HSK(\d+)$/.exec(last)?.[1];
+  return first.startsWith("HSK") && hskTop ? `${first}–${hskTop}` : `${first}–${last}`;
 }
 
 /**

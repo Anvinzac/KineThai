@@ -930,7 +930,7 @@ export function FeedControls({
             {metadata
               ? `Danh mục này có ${metadata.total.toLocaleString("vi-VN")} từ khác nhau.`
               : "Luồng từ vựng của bạn đang tải."}{" "}
-            Hết một vòng là xáo trộn lại từ đầu.
+            Xem hết mọi từ, bạn có thể xóa lịch sử xem để bắt đầu lại.
           </p>
           <div className="vocab-options-secondary">
             <span className="vocab-group-label">Chủ đề, giao diện và cách hiện đáp án</span>

@@ -291,6 +291,80 @@ function pageKeys(words: string[], emphasized: Set<number>, dataEmphasis?: strin
   );
 }
 
+// ── 6. A page with an answer blank never underlines a word ─────────────────────
+// The card draws the blank as a slot with its own baseline bar; an underlined
+// neighbour lands a few px from it and the two read as one tangled stroke.
+{
+  const underlinesOn = (words: string[]) => {
+    const text = words.join(" ");
+    let underlines = 0;
+    for (let index = 0; index < words.length; index += 1) {
+      for (const color of [EMPHASIS_COLOR, "#3a0ca3"]) {
+        const shared = { words, text, emphasized: new Set([index]), emphasisColor: color };
+        const lone = resolveWordEmphasisVariant({ ...shared, word: words[index]!, index, inRun: false });
+        const boxless = resolveWordEmphasisVariant({
+          ...shared,
+          word: words[index]!,
+          index,
+          inRun: false,
+          allowFrame: false,
+        });
+        if (lone === "underline" || boxless === "underline") underlines += 1;
+        if (index + 1 < words.length) {
+          const pair = new Set([index, index + 1]);
+          const run = getRunEmphasis([index, index + 1], { ...shared, emphasized: pair });
+          if (run?.style === "underline") underlines += 1;
+        }
+      }
+    }
+    return underlines;
+  };
+  const sentences = [
+    "She proved more _____ than anyone expected.",
+    "Cô ấy luôn _____ trước mọi thử thách khó khăn.",
+    "He spoke with a calm _____, even under pressure.",
+    "Đừng _____ quá sớm khi kết quả chưa rõ ràng.",
+    "我们 都 很 _____ 。",
+  ].map((sentence) => sentence.split(" "));
+  check(
+    "without a blank the same pages do pick underlines (non-vacuous)",
+    sentences.some((words) => underlinesOn(words.filter((word) => !word.includes("_"))) > 0),
+  );
+  check(
+    "a page carrying a blank resolves no word or run to an underline",
+    sentences.every((words) => underlinesOn(words) === 0),
+  );
+
+  const entries = (catalog as unknown as { words: VocabularyWord[] }).words;
+  let blankPages = 0;
+  let offending = 0;
+  for (const entry of entries) {
+    for (const stage of buildStages(entry, "minimal")) {
+      if (!stage.text || !/_{2,}/.test(stage.text)) continue;
+      blankPages += 1;
+      const words = getWords(stage.text);
+      const emphasized = getEmphasizedWordIndexes(words, stage.dataEmphasis);
+      for (const index of emphasized) {
+        const variant = resolveWordEmphasisVariant({
+          word: words[index] ?? "",
+          index,
+          words,
+          text: stage.text,
+          emphasized,
+          emphasisColor: EMPHASIS_COLOR,
+          inRun: false,
+          allowFrame: false,
+        });
+        if (variant === "underline") offending += 1;
+      }
+    }
+  }
+  check(
+    `no deck page with a blank underlines a word (${blankPages} pages, ${offending} bad)`,
+    blankPages > 0 && offending === 0,
+  );
+}
+
 console.log(checks.join("\n"));
 if (process.exitCode) {
   console.error("\nemphasis run guard FAILED");

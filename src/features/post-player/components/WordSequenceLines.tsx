@@ -8,7 +8,7 @@
 import type { ReactElement } from "react";
 import { motion } from "framer-motion";
 import type { CSSProperties, ReactNode } from "react";
-import type { CanvasSpec } from "@/features/canvas";
+import { getCanvasEmphasisWordColor, type CanvasSpec } from "@/features/canvas";
 import {
   getAuraColor,
   getEmphasisInnerAnimation,
@@ -225,10 +225,20 @@ export function WordSequenceLines({
           <span
             data-kinetic-run={lift}
             className={`kinetic-emphasis-mark kinetic-emphasis-run${
-              lift === "halo" ? " kinetic-emph-halo" : lift === "sweep" ? " kinetic-emph-sweep" : ""
+              lift === "halo"
+                ? " kinetic-emph-halo"
+                : lift === "sweep"
+                  ? " kinetic-emph-sweep"
+                  : lift === "underline"
+                    ? " kinetic-emph-underline"
+                    : ""
             }${staticRender ? "" : " is-animated"}`}
             style={
               {
+                // The bar paints in currentColor, which must be the syllables' emphasis color.
+                ...(lift === "underline"
+                  ? { color: getCanvasEmphasisWordColor(lift, textColor, emphasisColor) }
+                  : {}),
                 "--kinetic-emphasis-delay": `${effectDelay.delay + effectDelay.duration + 0.18}s`,
                 ...(lift === "halo" || lift === "glow"
                   ? { "--kinetic-aura-color": getAuraColor(textColor) }

@@ -8,7 +8,7 @@
  * effects running side by side instead of one passing over the word. Those effects
  * are lifted to the run: one sweep from the first syllable to the last.
  *
- * Exports: resolveWordEmphasisVariant, getRunEmphasis, RUN_LEVEL_VARIANTS
+ * Exports: resolveWordEmphasisVariant, getRunEmphasis, avoidBlankUnderline, RUN_LEVEL_VARIANTS
  * Depends on: kinetic-text emphasis + bound-phrase helpers
  */
 
@@ -23,9 +23,10 @@ import {
 
 /**
  * Effects that are drawn once across a whole run instead of once per syllable.
- * `underline` is absent because joined syllables already draw one continuous bar,
- * `frame` because a grouped frame is shown as that underline, and `color` because
- * it does not move.
+ * `underline` is here because per-syllable bars read as separate strokes — a gradient
+ * bar (the Douyin dialect) restarts its colors on every syllable. `frame` is absent
+ * because a grouped frame is shown as that underline, and `color` because it does
+ * not move.
  */
 export const RUN_LEVEL_VARIANTS: readonly EmphasisVariant[] = [
   "sweep",
@@ -33,7 +34,32 @@ export const RUN_LEVEL_VARIANTS: readonly EmphasisVariant[] = [
   "glow",
   "pulse",
   "jiggle",
+  "underline",
 ];
+
+/** A masked answer slot ("_____"), which the vocabulary card draws with its own baseline bar. */
+const BLANK_TOKEN = /_{2,}/;
+
+/** What an underline becomes on a page that carries a blank: a shine, not another line. */
+const BLANK_PAGE_UNDERLINE_SUBSTITUTE: EmphasisVariant = "sweep";
+
+/**
+ * Keep a page with an answer blank free of underline emphasis. The blank's slot bar and
+ * an underlined neighbour sit on the same baseline a few px apart and read as one
+ * tangled stroke, so the underline gives way to a non-linear effect.
+ * @param variant - the effect resolved for a word or run
+ * @param words - every token on the page
+ * @returns The variant to draw
+ * @pure true
+ */
+export function avoidBlankUnderline(
+  variant: EmphasisVariant,
+  words: readonly string[],
+): EmphasisVariant {
+  return variant === "underline" && words.some((word) => BLANK_TOKEN.test(word))
+    ? BLANK_PAGE_UNDERLINE_SUBSTITUTE
+    : variant;
+}
 
 export type WordEmphasisInput = {
   word: string;
@@ -81,7 +107,7 @@ export function resolveWordEmphasisVariant(input: WordEmphasisInput): EmphasisVa
           !isDimEmphasisColor(input.emphasisColor),
         );
   const boxed = variant === "frame" && !input.inRun && input.allowFrame !== false;
-  return variant === "frame" && !boxed ? "underline" : variant;
+  return avoidBlankUnderline(variant === "frame" && !boxed ? "underline" : variant, words);
 }
 
 /**
@@ -127,8 +153,9 @@ export function getRunEmphasis(
   if (perWord.some((variant) => variant === null)) return null;
 
   const agreed = perWord.every((variant) => variant === perWord[0]) ? perWord[0] : undefined;
-  const style = agreed ?? getRunAnchoredVariant(indexes, shared);
-  if (!style) return null;
+  const anchored = agreed ?? getRunAnchoredVariant(indexes, shared);
+  if (!anchored) return null;
+  const style = avoidBlankUnderline(anchored, shared.words);
   return { style, lift: RUN_LEVEL_VARIANTS.includes(style) ? style : null };
 }
 

@@ -80,7 +80,10 @@ function resolveActiveIndex(frac: number, current: number, count: number): numbe
  *   covers the feed, where the neighbours cannot be seen and only cost memory.
  * @returns Viewport bindings.
  */
-export function useVocabularyWindow(entries: FeedEntry[], overscan = 2) {
+export function useVocabularyWindow(
+  entries: readonly Pick<FeedEntry, "occurrenceId">[],
+  overscan = 2,
+) {
   const viewport = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(() =>
     typeof window === "undefined" ? 800 : window.innerHeight,

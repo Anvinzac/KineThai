@@ -243,11 +243,9 @@ export function WordSequenceWord({
                         // downgraded to `underline` via displayVariant above.
                         " kinetic-emph-frame"
                       : ownEffect === "underline"
-                        ? // A syllable inside a shared run joins its bar across the column
-                          // gap, so a compound never shows an underline broken mid-word.
-                          skipFrame
-                          ? " kinetic-emph-underline is-joined"
-                          : " kinetic-emph-underline"
+                        ? // Lone words only: a shared run draws one bar across the whole
+                          // compound on its wrapper (see RUN_LEVEL_VARIANTS).
+                          " kinetic-emph-underline"
                         : ownEffect === "sweep"
                           ? " kinetic-emph-sweep"
                           : ""

@@ -1,0 +1,22 @@
+---
+description: A page that shows the masked answer blank never underlines another word
+globs: src/features/kinetic-text/**/*,src/features/post-player/**/*,src/features/vocabulary/**/*,scripts/check-emphasis*.ts
+alwaysApply: false
+---
+
+# Blank-page emphasis
+
+The vocabulary card masks the answer in clue text as `_____` and draws it as a live slot (`[data-kinetic-blank]` in `vocabulary.css`) with its own **baseline bar**. An underlined word next to it puts a second bar on the same baseline a few px away, and the two read as one tangled stroke.
+
+**On any page whose tokens contain a blank (`/_{2,}/`), no word and no run may be drawn with `underline`.**
+
+- That includes the cases where `frame` becomes an underline: inside a shared run, and where `allowFrame` is false (landscape cards).
+- Enforcement lives in `avoidBlankUnderline` (`features/post-player/lib/emphasis-variant.ts`). It swaps `underline` for `sweep`, which is a shine rather than a line. Both `resolveWordEmphasisVariant` and `getRunEmphasis` pass their final variant through it.
+- Any new emphasis-variant resolver, or a caller-forced `secondaryVariant`, must go through the same guard. Never add a line-shaped effect (underline, strike, bottom border) next to the blank.
+- The blank itself is never emphasized: it has no letter or digit, so the resolvers return `null` for it, and it breaks runs.
+
+Bad: `She proved more _____ than anyone expected.` with `expected` underlined under the slot bar.
+
+Good: the same page with `expected` drawn in `sweep`, `color`, `halo`, or any other non-line effect.
+
+Verify with `npx tsx scripts/check-emphasis-runs.ts` (section 6).

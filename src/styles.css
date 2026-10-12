@@ -276,6 +276,12 @@
     transform: scaleX(1);
   }
 }
+/* A run draws ONE bar under every syllable, on the run itself. The run sits at the
+   page's base size while its syllables are enlarged by EMPHASIS_FONT_SCALE (1.12), so
+   the bar is thickened to match a single emphasised word's. */
+.kinetic-emphasis-run.kinetic-emph-underline::after {
+  height: 0.09em;
+}
 
 /* HALO — a soft luminous aura blooming behind the word (no box). */
 .kinetic-emph-halo {
