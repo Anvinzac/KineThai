@@ -239,7 +239,7 @@ export function VocabularyCard({
   }, []);
   // Pace stretches the clue pages twice over, in step: how long each page stays up, and
   // how slowly its words are read out onto it. The spelling coda keeps its own timing.
-  const paceFactor = exportLayout ? 1 : PACE_FACTOR[presentation.pace ?? "fast"];
+  const paceFactor = exportLayout ? 1 : PACE_FACTOR[presentation.pace ?? "normal"];
   /** One duration per page: every clue stage plus the trailing spelling coda. */
   const pageDurations = useMemo(
     () => [
@@ -506,13 +506,25 @@ export function VocabularyCard({
       const ay = Math.abs(dy);
       // Forward skips share one limiter; once it trips, the gesture is swallowed silently.
       const canSkip = () => sceneSkipLimiter.tryConsume();
+      // Rewinding or skipping is a request to watch, so it ends a pause: the page must
+      // never move on while the resting play button still says the stream is stopped.
+      const resume = () => {
+        if (!presentation.autoplay && !reducedMotion) onToggleAutoplay?.();
+      };
       // Horizontal swipe
       if ((ax > 44 || ay > 44) && ax > ay) {
         if (dx < -44) {
           if (isSpelling) {
-            if (canSkip()) advanceWithExit();
-          } else if (!stage.reveal && canSkip()) playback.next();
+            if (canSkip()) {
+              resume();
+              advanceWithExit();
+            }
+          } else if (!stage.reveal && canSkip()) {
+            resume();
+            playback.next();
+          }
         } else if (dx > 44) {
+          resume();
           playback.previous();
         }
         return;
@@ -523,7 +535,10 @@ export function VocabularyCard({
       if (dt < 600 && ax < 16 && ay < 16) {
         // During the spelling coda a tap means "I have it" — skip to the next word.
         if (isSpelling) {
-          if (canSkip()) advanceWithExit();
+          if (canSkip()) {
+            resume();
+            advanceWithExit();
+          }
           return;
         }
         const rect = cardRef.current?.getBoundingClientRect();
@@ -535,9 +550,11 @@ export function VocabularyCard({
         let zone: "left" | "right";
         if (relX < leftZone) {
           zone = "left";
+          resume();
           playback.previous();
         } else if (relX > rightZone) {
           zone = "right";
+          resume();
           playback.next();
         } else {
           // The center answers with the pause pop and the resting play button, not a wash.
@@ -551,7 +568,16 @@ export function VocabularyCard({
         tapZoneTimer.current = window.setTimeout(() => setTapZone(null), 350);
       }
     },
-    [playback, isSpelling, advanceWithExit, releaseDrag, onToggleAutoplay, presentation.autoplay],
+    [
+      playback,
+      isSpelling,
+      advanceWithExit,
+      releaseDrag,
+      onToggleAutoplay,
+      presentation.autoplay,
+      reducedMotion,
+      stage.reveal,
+    ],
   );
 
   void matching;

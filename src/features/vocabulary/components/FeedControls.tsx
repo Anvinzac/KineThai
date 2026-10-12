@@ -993,7 +993,7 @@ export function FeedControls({
             <span className="vocab-pace-label">Tốc độ</span>
             <div className="vocab-pace-options">
               {PACE_OPTIONS.map((option) => {
-                const on = (presentation.pace ?? "fast") === option.id;
+                const on = (presentation.pace ?? "normal") === option.id;
                 return (
                   <button
                     key={option.id}

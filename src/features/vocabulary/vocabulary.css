@@ -2476,6 +2476,44 @@
     clip-path: inset(0 0 0 0);
   }
 }
+/* A completed hold only OFFERS removal: the card dims under a bar holding the removal
+   button and a way back, and nothing is taken off the list until one is pressed. */
+.vocab-saved-confirm {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--shell-surface) 82%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: vocab-saved-confirm-in var(--dur-quick) var(--ease-out);
+}
+.vocab-saved-confirm button {
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 800;
+}
+.vocab-saved-confirm-remove {
+  background: #ff5f6d;
+  color: #fff;
+}
+.vocab-saved-confirm-keep {
+  border: 1px solid var(--shell-line-strong);
+  color: var(--shell-text-soft);
+}
+@keyframes vocab-saved-confirm-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
 .vocab-saved-word-row {
   display: flex;
   align-items: baseline;

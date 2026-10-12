@@ -107,12 +107,16 @@ const REMOVE_COPY: Record<TabKind, { flag: string; undo: string }> = {
 
 /** How far a row has to travel sideways before it counts as a swipe. */
 const SWIPE_PX = 56;
-/** How long a held touch counts as a long-press before it removes the row. */
+/** How long a held touch counts as a long-press before it offers to remove the row. */
 const LONG_PRESS_MS = 500;
 /** How long the undo offer stays up after a removal. */
 const UNDO_MS = 6000;
 
-/** One kept word. Swipe it sideways, hold it, or press Delete to take it off the list. */
+/**
+ * One kept word. Swipe it sideways or press Delete to take it off the list. Holding it
+ * only offers removal: a reader pressing around to see what the row does must not lose
+ * the word, so the hold opens a confirm bar and the removal waits for its button.
+ */
 function SavedRow({
   entry,
   flag,
@@ -128,9 +132,28 @@ function SavedRow({
   const [shift, setShift] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [pressing, setPressing] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const rowRef = useRef<HTMLLIElement>(null);
+  const confirmRef = useRef<HTMLButtonElement>(null);
   const origin = useRef<{ x: number; y: number } | null>(null);
   const timer = useRef<number | null>(null);
   const settled = useRef(true);
+
+  // The offer stands until it is answered or the reader touches anything outside the row.
+  useEffect(() => {
+    if (!confirming) return;
+    confirmRef.current?.focus();
+    function onOutside(event: globalThis.PointerEvent) {
+      if (!rowRef.current?.contains(event.target as Node)) setConfirming(false);
+    }
+    document.addEventListener("pointerdown", onOutside);
+    return () => document.removeEventListener("pointerdown", onOutside);
+  }, [confirming]);
+
+  function cancelConfirm() {
+    setConfirming(false);
+    rowRef.current?.focus();
+  }
 
   function clearTimer() {
     if (timer.current !== null) {
@@ -139,13 +162,22 @@ function SavedRow({
     }
   }
 
-  function fire() {
+  function settle() {
     clearTimer();
     settled.current = true;
     origin.current = null;
     setPressing(false);
     setShift(0);
+  }
+
+  function fire() {
+    settle();
     onRemove();
+  }
+
+  function offer() {
+    settle();
+    setConfirming(true);
   }
 
   function reset() {
@@ -161,6 +193,8 @@ function SavedRow({
 
   function onPointerDown(event: PointerEvent<HTMLLIElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
+    // While the offer is up the row is still; its buttons take the taps.
+    if (confirming) return;
     settled.current = false;
     origin.current = { x: event.clientX, y: event.clientY };
     clearTimer();
@@ -170,7 +204,7 @@ function SavedRow({
     // commits.
     if (event.pointerType !== "mouse") {
       setPressing(true);
-      timer.current = window.setTimeout(fire, LONG_PRESS_MS);
+      timer.current = window.setTimeout(offer, LONG_PRESS_MS);
     }
     // Track the finger even when it slides off the row's own box. Kept last: a browser
     // that rejects the pointer id then cannot cost the rest of the gesture.
@@ -198,8 +232,8 @@ function SavedRow({
   }
 
   function onPointerUp() {
-    // A tap is what is LEFT once the two destructive gestures are ruled out: the
-    // long-press already fired (settled) or the finger travelled far enough to be
+    // A tap is what is LEFT once the other gestures are ruled out: the long-press
+    // already opened its offer (settled) or the finger travelled far enough to be
     // a swipe. Only then does it mean "show me the meaning".
     const tapped = compact && !settled.current && Math.abs(shift) <= 8;
     reset();
@@ -207,6 +241,13 @@ function SavedRow({
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLLIElement>) {
+    if (confirming) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        cancelConfirm();
+      }
+      return;
+    }
     if (event.key === "Delete" || event.key === "Backspace") {
       event.preventDefault();
       onRemove();
@@ -225,8 +266,10 @@ function SavedRow({
 
   return (
     <li
+      ref={rowRef}
       className="vocab-saved-item"
       data-pressing={pressing || undefined}
+      data-confirming={confirming || undefined}
       data-shifted={shifted || undefined}
       data-reveal={shifted ? (shift < 0 ? "right" : "left") : undefined}
       style={{ "--row-shift": `${shift}px` } as CSSProperties}
@@ -249,6 +292,28 @@ function SavedRow({
       <span className="vocab-saved-row-flag" aria-hidden="true">
         {flag}
       </span>
+      {confirming && (
+        <div
+          className="vocab-saved-confirm"
+          role="group"
+          aria-label={`${flag} ${entry.word.word}?`}
+        >
+          <button
+            ref={confirmRef}
+            type="button"
+            className="vocab-saved-confirm-remove"
+            onClick={() => {
+              setConfirming(false);
+              onRemove();
+            }}
+          >
+            {flag}
+          </button>
+          <button type="button" className="vocab-saved-confirm-keep" onClick={cancelConfirm}>
+            Giữ lại
+          </button>
+        </div>
+      )}
       <div className="vocab-saved-row-body">
         <div className="vocab-saved-word-row">
           <h3 className="vocab-saved-word" lang="en">
