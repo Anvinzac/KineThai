@@ -21,6 +21,7 @@ import {
   getAmbientPlayer,
   refreshRemoteTracks,
   setAmbientEnabled,
+  type AmbientScope,
 } from "../lib/ambient";
 import { AMBIENT_OWNER_KEY, getAmbientOwnership, shouldPlayAmbient } from "../lib/ambientOwnership";
 
@@ -29,10 +30,14 @@ const PREF_KEY = "kinetic.vocab.ambient";
 
 /**
  * Toggle and control ambient background music.
+ * @param scope The pool family this context may play from: the Chinese feed passes
+ *   "zh" so only traditional Chinese instrumentals sound there, and they can never
+ *   surface under the main feed. Re-asserted on every reconcile, before any play
+ *   decision, so a persisted preference can never start a track from the wrong pool.
  * Returns the current enabled state, a toggle, a track-skip helper, and the playing
  * track's name (null while silent).
  */
-export function useAmbientSound(): {
+export function useAmbientSound(scope: AmbientScope = "default"): {
   enabled: boolean;
   toggle: () => void;
   nextTrack: () => void;
@@ -46,6 +51,9 @@ export function useAmbientSound(): {
   // heartbeats) cannot restart the music mid-track.
   const reconcile = useCallback(() => {
     const player = getAmbientPlayer();
+    // Bind the pool family BEFORE any play decision: the scope is what makes a
+    // persisted "sound on" preference safe to honour on a host whose music differs.
+    player.setScope(scope);
     const ownership = getAmbientOwnership();
     const isEnabled = getAmbientEnabled();
     const visible = typeof document !== "undefined" && document.visibilityState === "visible";
@@ -61,7 +69,7 @@ export function useAmbientSound(): {
       ownership.release();
       setTrackName(null);
     }
-  }, []);
+  }, [scope]);
 
   // React to the same-tab custom event, cross-tab preference changes, cross-context
   // ownership changes, and this tab's own visibility flips.

@@ -5,11 +5,23 @@
  * Guarantees only one stream plays at a time, and that a track change always lands on
  * a DIFFERENT track from the one that was just playing.
  *
- * Exports: AmbientPlayer, AMBIENT_SOURCES, FALLBACK_SOURCES, WORDS_PER_TRACK, FADE_OUT_MS
+ * Pools are scoped: the Chinese (hoa.*) feed plays ONLY the traditional-instrument
+ * pool below, and the default feed can never reach it — see AmbientScope.
+ *
+ * Exports: AmbientPlayer, AmbientScope, AMBIENT_SOURCES, FALLBACK_SOURCES, ZH_AMBIENT_SOURCES, WORDS_PER_TRACK, FADE_OUT_MS
  * Depends on: none (pure browser Audio API)
  */
 
 type AudioSource = { url: string; name: string; bpm: number };
+
+/**
+ * Which pool family this browsing context may play from. `zh` is the Chinese deck
+ * (hoa.* hosts): traditional Chinese instrumentals only. `default` is every other
+ * host: the DB/fallback pool only. The two families are disjoint and neither tier
+ * switch crosses between them, so a Chinese track can never surface under the main
+ * feed and vice versa.
+ */
+export type AmbientScope = "default" | "zh";
 
 /**
  * Hardcoded fallback sources — always available even when the DB is empty
@@ -60,6 +72,98 @@ export const FALLBACK_SOURCES: AudioSource[] = [
 
 /** Active source pool — starts as fallback, replaced by DB tracks when loaded. */
 export const AMBIENT_SOURCES: AudioSource[] = [...FALLBACK_SOURCES];
+
+/**
+ * The Chinese feed's own pool: traditional Chinese instrumental music, hotlinked as
+ * direct MP3s from Wikimedia Commons (which serves them with
+ * `access-control-allow-origin: *`, so an <audio> element can stream them anywhere).
+ * Every URL was HEAD-verified as 200 audio/mpeg before landing here. Licences are
+ * CC0 / CC-BY / CC-BY-SA, so the artist rides in the displayed name as attribution.
+ * Ogg/opus originals are played through Commons' stable `/transcoded/…mp3` derivatives.
+ * This pool is zh-only: the default feed's tiers never include it, and this pool
+ * never falls back to them.
+ */
+export const ZH_AMBIENT_SOURCES: AudioSource[] = [
+  // Guofeng ensemble BGM — PeriTune, CC BY 3.0.
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c2/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E4%B8%AD%E8%8F%AF%E9%A2%A8%E3%81%AE%E5%84%AA%E9%9B%85%E3%81%AABGM%E3%80%8CShenxian%E3%80%8D.opus/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E4%B8%AD%E8%8F%AF%E9%A2%A8%E3%81%AE%E5%84%AA%E9%9B%85%E3%81%AABGM%E3%80%8CShenxian%E3%80%8D.opus.mp3",
+    name: "Shenxian · PeriTune",
+    bpm: 92,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c3/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E4%B8%AD%E8%8F%AF%E9%A2%A8%E3%81%AE%E7%A9%8F%E3%82%84%E3%81%8B%E3%81%AABGM%E3%80%8CTaohua%E3%80%8D.opus/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E4%B8%AD%E8%8F%AF%E9%A2%A8%E3%81%AE%E7%A9%8F%E3%82%84%E3%81%8B%E3%81%AABGM%E3%80%8CTaohua%E3%80%8D.opus.mp3",
+    name: "Taohua · PeriTune",
+    bpm: 80,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/76/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E4%B8%AD%E8%8F%AF%E9%A2%A8%E3%81%AE%E5%8B%87%E5%A3%AE%E3%81%AA%E3%82%AA%E3%83%BC%E3%82%B1%E3%82%B9%E3%83%88%E3%83%A9%E6%9B%B2%E3%80%8CWuxia%E3%80%8D.ogg/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E4%B8%AD%E8%8F%AF%E9%A2%A8%E3%81%AE%E5%8B%87%E5%A3%AE%E3%81%AA%E3%82%AA%E3%83%BC%E3%82%B1%E3%82%B9%E3%83%88%E3%83%A9%E6%9B%B2%E3%80%8CWuxia%E3%80%8D.ogg.mp3",
+    name: "Wuxia · PeriTune",
+    bpm: 120,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/7/7c/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E4%B8%AD%E8%8F%AF%E9%A2%A8%E3%81%AE%E5%8B%87%E5%A3%AE%E3%81%AA%E3%82%AA%E3%83%BC%E3%82%B1%E3%82%B9%E3%83%88%E3%83%A9%E6%9B%B2%E3%80%8CWuxia3%E3%80%8D.opus/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E4%B8%AD%E8%8F%AF%E9%A2%A8%E3%81%AE%E5%8B%87%E5%A3%AE%E3%81%AA%E3%82%AA%E3%83%BC%E3%82%B1%E3%82%B9%E3%83%88%E3%83%A9%E6%9B%B2%E3%80%8CWuxia3%E3%80%8D.opus.mp3",
+    name: "Wuxia III · PeriTune",
+    bpm: 128,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/8/87/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E3%81%8B%E3%81%A3%E3%81%93%E3%81%84%E3%81%84%E3%82%AA%E3%83%AA%E3%82%A8%E3%83%B3%E3%82%BF%E3%83%AB%E6%9B%B2%E3%80%8CNumina%E3%80%8D.opus/%E3%80%90%E7%84%A1%E6%96%99%E3%83%95%E3%83%AA%E3%83%BCBGM%E3%80%91%E3%81%8B%E3%81%A3%E3%81%93%E3%81%84%E3%81%84%E3%82%AA%E3%83%AA%E3%82%A8%E3%83%B3%E3%82%BF%E3%83%AB%E6%9B%B2%E3%80%8CNumina%E3%80%8D.opus.mp3",
+    name: "Numina · PeriTune",
+    bpm: 110,
+  },
+  // Guqin, traditional repertoire — CharlieHuang, CC BY-SA 3.0 / CC BY 2.5.
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/6/60/Guqin-Yangguan_Sandie.ogg/Guqin-Yangguan_Sandie.ogg.mp3",
+    name: "Yangguan Sandie · guqin",
+    bpm: 60,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/5/52/Guqin-Zuiyu_Changwan.ogg/Guqin-Zuiyu_Changwan.ogg.mp3",
+    name: "Zuiyu Changwan · guqin",
+    bpm: 56,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/5/5a/Pingsha_Luoyan.ogg/Pingsha_Luoyan.ogg.mp3",
+    name: "Pingsha Luoyan · guqin",
+    bpm: 64,
+  },
+  // Guzheng and pipa — Antti Luode, CC BY 3.0. Native MP3s on Commons.
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/a/aa/Guzheng_Morning_%28Antti_Luode%29.mp3",
+    name: "Guzheng Morning · Antti Luode",
+    bpm: 112,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/b/be/Senor_Guzheng_and_the_Happy_Monks_%28Antti_Luode%29.mp3",
+    name: "Senor Guzheng · Antti Luode",
+    bpm: 118,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/9/99/My_name_is_Zheng_Zheng_GuZheng_%28Antti_Luode%29.mp3",
+    name: "Zheng Zheng GuZheng · Antti Luode",
+    bpm: 108,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Pop_Pipa_%28Antti_Luode%29.mp3",
+    name: "Pop Pipa · Antti Luode",
+    bpm: 120,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Sweet_Pipa_Of_Mine_%28Antti_Luode%29.mp3",
+    name: "Sweet Pipa Of Mine · Antti Luode",
+    bpm: 116,
+  },
+  // Mo Li Hua, the traditional folk melody — synthesizer demonstrations, CC0.
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c6/%E8%8C%89%E8%8E%89%E8%8A%B1-KS%E6%BC%94%E7%A4%BA.opus/%E8%8C%89%E8%8E%89%E8%8A%B1-KS%E6%BC%94%E7%A4%BA.opus.mp3",
+    name: "Mo Li Hua (KS)",
+    bpm: 100,
+  },
+  {
+    url: "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f0/%E8%8C%89%E8%8E%89%E8%8A%B1-FM%E6%BC%94%E7%A4%BA.opus/%E8%8C%89%E8%8E%89%E8%8A%B1-FM%E6%BC%94%E7%A4%BA.opus.mp3",
+    name: "Mo Li Hua (FM)",
+    bpm: 104,
+  },
+];
 
 /** The feed rotates to a new track after this many words. */
 export const WORDS_PER_TRACK = 5;
@@ -168,12 +272,38 @@ export class AmbientPlayer {
   trackSerial = 0;
   /** Whether we are currently drawing from the fallback pool. */
   private usingFallback = false;
+  /**
+   * Which pool family this context plays from. Set once per browsing context from the
+   * visited host's locale; a change mid-playback silences first, because a track from
+   * the old family must never keep sounding under the new one.
+   */
+  private scope: AmbientScope = "default";
+
+  /** The pool family this player is currently bound to. */
+  get currentScope(): AmbientScope {
+    return this.scope;
+  }
+
+  /**
+   * Bind the player to a pool family. Idempotent: reconciles re-assert the scope on
+   * every policy pass, so only a real change does anything. A real change while
+   * audible stops first — the caller's reconcile then starts a track from the pool
+   * this context actually belongs to.
+   */
+  setScope(next: AmbientScope): void {
+    if (next === this.scope) return;
+    this.scope = next;
+    this.usingFallback = false;
+    if (!this.stopped) this.stop();
+  }
 
   /** Target volume (0–1). Background music stays subtle. */
   volume = 0.18;
 
-  /** The pool currently being played from. */
-  private get pool(): AudioSource[] {
+  /** The pool currently being played from. The zh family is a single tier: it holds
+   *  only traditional Chinese instrumentals and never borrows from the other side. */
+  private get pool(): readonly AudioSource[] {
+    if (this.scope === "zh") return ZH_AMBIENT_SOURCES;
     return this.usingFallback ? FALLBACK_SOURCES : AMBIENT_SOURCES;
   }
 
@@ -388,8 +518,10 @@ export class AmbientPlayer {
     return candidates[Math.floor(Math.random() * candidates.length)] ?? 0;
   }
 
-  /** Replace the primary source pool (used when DB tracks are loaded). */
+  /** Replace the primary source pool (used when DB tracks are loaded). The zh pool is
+   *  authored, not administered, so DB tracks never reach a Chinese feed. */
   setSources(sources: AudioSource[]): void {
+    if (this.scope === "zh") return;
     AMBIENT_SOURCES.length = 0;
     AMBIENT_SOURCES.push(...sources);
     // If we were using the primary pool, reset index if out of bounds.
@@ -473,8 +605,14 @@ export class AmbientPlayer {
     }, 300);
   }
 
-  /** Switch between primary and fallback pools. */
+  /** Switch between primary and fallback pools. The zh family has no second tier to
+   *  fall back to — a Chinese feed that exhausts its own pool goes silent rather than
+   *  borrowing the main feed's music. */
   private switchPool(): void {
+    if (this.scope === "zh") {
+      this.stop();
+      return;
+    }
     this.usingFallback = !this.usingFallback;
     this.consecutiveErrors = 0;
     const pool = this.pool;
@@ -530,6 +668,9 @@ let fetchInFlight: Promise<void> | null = null;
 export async function refreshRemoteTracks(): Promise<void> {
   if (remoteTracks) return; // already loaded
   if (fetchInFlight) return fetchInFlight;
+  // DB tracks are the main feed's primary tier; the Chinese feed plays its authored
+  // pool only, so it never even asks.
+  if (getAmbientPlayer().currentScope === "zh") return;
   fetchInFlight = (async () => {
     try {
       const { listAmbientTracks } = await import("@/features/admin/api/ambient.functions");

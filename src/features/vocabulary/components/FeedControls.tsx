@@ -727,7 +727,9 @@ export function FeedControls({
   const panelId = useId();
   const toggleButton = useRef<HTMLButtonElement>(null);
   const toolbar = useRef<HTMLElement>(null);
-  const ambient = useAmbientSound();
+  // The Chinese host plays the traditional-instrument pool only; every other host
+  // keeps the administered/default pool and can never reach the Chinese tracks.
+  const ambient = useAmbientSound(locale === "zh" ? "zh" : "default");
   const close = () => {
     onOpen(false);
     toggleButton.current?.focus();
