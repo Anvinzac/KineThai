@@ -18,6 +18,16 @@ const ExportStudio = lazy(() =>
 /** How long a word must hold the screen before it counts as seen. */
 const VIEW_DWELL_MS = 900;
 
+/**
+ * TEMPORARY, KineThai-only: never park on a dead end. The ja/th listings are
+ * small, so a reader burns through every word and the repeat caps then block
+ * the whole pool ("seen everything" + countdown) or the walk ends at the
+ * restart panel. While this is on, blocked words keep showing (repeats) and a
+ * finished walk reshuffles itself, so the feed runs endlessly. Revert when the
+ * listing grows; never merge upstream.
+ */
+const ENDLESS_STREAM = true;
+
 /** Row id of the page that closes the stream once every word in the pool has been shown. */
 const FEED_END_ID = "feed-end";
 
@@ -85,6 +95,11 @@ export function VocabularyStream({
         admitted.current.add(entry.occurrenceId);
         out.push(entry);
       }
+    }
+    // Endless mode: when caps would block the whole buffer, show it anyway
+    // (repeats) instead of stranding the reader on the seen-everything panel.
+    if (ENDLESS_STREAM && out.length === 0 && query.entries.length > 0) {
+      return query.entries;
     }
     return out;
   }, [query.entries, history, now]);
@@ -161,6 +176,18 @@ export function VocabularyStream({
   useEffect(() => {
     if (exportOpen && !activeEntry) onCloseExport?.();
   }, [exportOpen, activeEntry, onCloseExport]);
+
+  // Endless mode: walking onto the feed-end card reshuffles (same as its button:
+  // clear history, restart) instead of parking. Once per mount; never while an
+  // overlay covers the feed, so a sheet never closes onto a swapped word.
+  const restartedAtEnd = useRef(false);
+  useEffect(() => {
+    if (!ENDLESS_STREAM || suspended || restartedAtEnd.current) return;
+    if (rows[activeIndex]?.occurrenceId !== FEED_END_ID) return;
+    restartedAtEnd.current = true;
+    onClearHistory();
+    onRestart();
+  }, [activeIndex, rows, suspended, onClearHistory, onRestart]);
 
   // Lift the on-screen card's palette accent onto the shared .vocabulary-shell so the
   // difficulty popover — a sibling of the stream, not a descendant of the card — can
