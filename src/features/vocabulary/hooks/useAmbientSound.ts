@@ -34,10 +34,17 @@ const PREF_KEY = "kinetic.vocab.ambient";
  *   "zh" so only traditional Chinese instrumentals sound there, and they can never
  *   surface under the main feed. Re-asserted on every reconcile, before any play
  *   decision, so a persisted preference can never start a track from the wrong pool.
+ * @param paused The feed's transport pause. When true the audio stream is stopped even
+ *   though the music preference stays on — pausing the words pauses the music too, and
+ *   resuming picks it back up. The toolbar's own music icon keeps reflecting `enabled`,
+ *   not this, so a pause never looks like the reader turned the sound off.
  * Returns the current enabled state, a toggle, a track-skip helper, and the playing
  * track's name (null while silent).
  */
-export function useAmbientSound(scope: AmbientScope = "default"): {
+export function useAmbientSound(
+  scope: AmbientScope = "default",
+  paused = false,
+): {
   enabled: boolean;
   toggle: () => void;
   nextTrack: () => void;
@@ -55,12 +62,13 @@ export function useAmbientSound(scope: AmbientScope = "default"): {
     // persisted "sound on" preference safe to honour on a host whose music differs.
     player.setScope(scope);
     const ownership = getAmbientOwnership();
-    const isEnabled = getAmbientEnabled();
+    // A transport pause silences the stream without touching the stored preference.
+    const wantSound = getAmbientEnabled() && !paused;
     const visible = typeof document !== "undefined" && document.visibilityState === "visible";
     // Only attempt the (read-modify-write) claim when we would otherwise want sound.
-    const owner = isEnabled && visible ? ownership.tryClaim() : false;
+    const owner = wantSound && visible ? ownership.tryClaim() : false;
 
-    if (shouldPlayAmbient({ enabled: isEnabled, visible, owner })) {
+    if (shouldPlayAmbient({ enabled: wantSound, visible, owner })) {
       refreshRemoteTracks(); // load DB tracks in the background (no-op once loaded)
       if (!player.currentSource) player.play();
       setTrackName(player.currentSource);
@@ -69,7 +77,7 @@ export function useAmbientSound(scope: AmbientScope = "default"): {
       ownership.release();
       setTrackName(null);
     }
-  }, [scope]);
+  }, [scope, paused]);
 
   // React to the same-tab custom event, cross-tab preference changes, cross-context
   // ownership changes, and this tab's own visibility flips.
@@ -100,11 +108,11 @@ export function useAmbientSound(scope: AmbientScope = "default"): {
     reconcile();
   }, [enabled, reconcile]);
 
-  // Heartbeat: while enabled and visible, keep the lease fresh and the shown track name
-  // in sync. A failed renew means another context took over (we were demoted) → go
-  // silent; a missing lease while we still want sound means it is free → take it.
+  // Heartbeat: while enabled, unpaused and visible, keep the lease fresh and the shown
+  // track name in sync. A failed renew means another context took over (we were demoted)
+  // → go silent; a missing lease while we still want sound means it is free → take it.
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || paused) return;
     const ownership = getAmbientOwnership();
     const interval = setInterval(() => {
       if (typeof document !== "undefined" && document.visibilityState !== "visible") return;
@@ -120,7 +128,7 @@ export function useAmbientSound(scope: AmbientScope = "default"): {
       setTrackName(getAmbientPlayer().currentSource);
     }, ownership.LEASE_HEARTBEAT_MS);
     return () => clearInterval(interval);
-  }, [enabled, reconcile]);
+  }, [enabled, paused, reconcile]);
 
   // Tear the player down and relinquish the lease when this view unmounts, so a
   // navigating reader never leaves sound playing with no owner to control it.
@@ -139,7 +147,12 @@ export function useAmbientSound(scope: AmbientScope = "default"): {
     if (!getAmbientEnabled()) return;
     // A requested change fades the old track out and the new one in, and always lands
     // on a different track; the hard-cutting next() is for tracks that ended or failed.
-    getAmbientPlayer().changeTrack();
+    const player = getAmbientPlayer();
+    player.changeTrack();
+    // Reflect the new song at once: changeTrack commits its target immediately, so
+    // currentSource already names the upcoming track and the title does not have to wait
+    // for the crossfade (or the next heartbeat) to update.
+    setTrackName(player.currentSource);
   }, []);
 
   return { enabled, toggle, nextTrack, trackName };

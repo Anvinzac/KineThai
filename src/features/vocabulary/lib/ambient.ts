@@ -240,6 +240,11 @@ function isDev(): boolean {
 export class AmbientPlayer {
   private audio: HTMLAudioElement | null = null;
   private sourceIndex = -1;
+  /** The track a change has already committed to while the current one fades out.
+   *  Held separately from `sourceIndex` so `currentSource` can name the UPCOMING song
+   *  the instant a change is requested, instead of lingering on the fading one until the
+   *  crossfade lands. Cleared once that track actually starts (or on stop/teardown). */
+  private pendingIndex: number | null = null;
   private consecutiveErrors = 0;
   private fadeTimer: ReturnType<typeof setInterval> | null = null;
   /** The pending "skip to next source after an error" timer, kept so teardown can cancel it. */
@@ -307,10 +312,13 @@ export class AmbientPlayer {
     return this.usingFallback ? FALLBACK_SOURCES : AMBIENT_SOURCES;
   }
 
-  /** Currently playing source name, or null if stopped. */
+  /** Currently playing source name, or null if stopped. When a change is mid-fade,
+   *  this already names the track that is about to start, so the UI can swap song
+   *  titles at once instead of after the crossfade finishes. */
   get currentSource(): string | null {
     if (this.stopped || this.sourceIndex < 0) return null;
-    return this.pool[this.sourceIndex]?.name ?? null;
+    const index = this.pendingIndex ?? this.sourceIndex;
+    return this.pool[index]?.name ?? null;
   }
 
   /**
@@ -371,6 +379,9 @@ export class AmbientPlayer {
       return this.trackSerial + 1;
     }
     if (this.nextFreshIndex() < 0) return null;
+    // Commit to the next track now, so `currentSource` names it immediately while the
+    // old one eases out; `startNext` will consume this pending choice when the fade ends.
+    this.pendingIndex = this.nextFreshIndex();
     this.leave("start", QUICK_FADE_OUT_MS);
     return this.trackSerial + 1;
   }
@@ -417,7 +428,11 @@ export class AmbientPlayer {
       this.switchPool();
       return;
     }
-    const fresh = this.nextFreshIndex();
+    // A change committed to a track before the fade started; honour that exact choice
+    // rather than advancing again (which would silently skip one track).
+    const pending = this.pendingIndex;
+    this.pendingIndex = null;
+    const fresh = pending ?? this.nextFreshIndex();
     this.sourceIndex = fresh >= 0 ? fresh : (this.sourceIndex + 1) % pool.length;
     this.consecutiveErrors = 0;
     this.loadAndPlay();
@@ -438,6 +453,7 @@ export class AmbientPlayer {
       this.audio.removeAttribute("src");
       this.audio.load(); // flush pipeline, guarantees no buffered audio plays
     }
+    this.pendingIndex = null;
     this.sourceIndex = -1;
     this.consecutiveErrors = 0;
   }
@@ -470,6 +486,7 @@ export class AmbientPlayer {
     this.timeUpdateHandler = null;
     this.endedHandler = null;
     this.errorHandler = null;
+    this.pendingIndex = null;
     this.sourceIndex = -1;
     this.consecutiveErrors = 0;
     this.lastUrl = null;

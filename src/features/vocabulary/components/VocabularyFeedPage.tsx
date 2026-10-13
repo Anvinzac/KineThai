@@ -171,7 +171,6 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
           setSeed(newSeed());
         }}
         onPresentation={handlePresentation}
-        onShuffle={shuffle}
         open={optionsOpen}
         onOpen={setOptionsOpen}
         reducedMotion={reducedMotion}

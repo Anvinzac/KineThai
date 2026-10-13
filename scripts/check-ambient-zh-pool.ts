@@ -174,7 +174,7 @@ async function main(): Promise<void> {
   const hookSrc = read("src/features/vocabulary/hooks/useAmbientSound.ts");
   check(
     "source: the hook takes a scope and binds it before any play decision",
-    hookSrc.includes('export function useAmbientSound(scope: AmbientScope = "default")') &&
+    hookSrc.includes('export function useAmbientSound(\n  scope: AmbientScope = "default",') &&
       hookSrc.indexOf("player.setScope(scope);") > -1 &&
       hookSrc.indexOf("player.setScope(scope);") < hookSrc.indexOf("shouldPlayAmbient("),
   );
@@ -182,7 +182,9 @@ async function main(): Promise<void> {
   const controlsSrc = read("src/features/vocabulary/components/FeedControls.tsx");
   check(
     "source: FeedControls binds the scope from the visited host's locale",
-    controlsSrc.includes('useAmbientSound(locale === "zh" ? "zh" : "default")'),
+    // The call now also carries the transport-pause arg, so match the scope argument by
+    // its prefix (through the ternary's closing quote) rather than a full one-line call.
+    controlsSrc.includes('useAmbientSound(locale === "zh" ? "zh" : "default"'),
   );
 }
 

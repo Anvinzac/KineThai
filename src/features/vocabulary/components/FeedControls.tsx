@@ -699,7 +699,6 @@ export function FeedControls({
   presentation,
   onFilters,
   onPresentation,
-  onShuffle,
   open,
   onOpen,
   reducedMotion,
@@ -713,7 +712,6 @@ export function FeedControls({
   presentation: Presentation;
   onFilters: (value: VocabularyFilters) => void;
   onPresentation: (value: Presentation) => void;
-  onShuffle: () => void;
   open: boolean;
   onOpen: (value: boolean) => void;
   reducedMotion: boolean;
@@ -729,7 +727,8 @@ export function FeedControls({
   const toolbar = useRef<HTMLElement>(null);
   // The Chinese host plays the traditional-instrument pool only; every other host
   // keeps the administered/default pool and can never reach the Chinese tracks.
-  const ambient = useAmbientSound(locale === "zh" ? "zh" : "default");
+  // The transport pause stops the audio stream too: pausing the words pauses the music.
+  const ambient = useAmbientSound(locale === "zh" ? "zh" : "default", !presentation.autoplay);
   const close = () => {
     onOpen(false);
     toggleButton.current?.focus();
@@ -814,11 +813,36 @@ export function FeedControls({
     const host = toolbar.current;
     if (!host) return;
     const corner = host.querySelector<HTMLElement>(".vocab-corner-button, .eco-trigger");
+    const controls = host.querySelector<HTMLElement>(".vocab-player-controls");
+    const tagline = host.querySelector<HTMLElement>(".vocab-brand small");
     if (!corner) return;
-    const sync = () => host.style.setProperty("--vocab-corner", `${corner.offsetWidth}px`);
+    const sync = () => {
+      host.style.setProperty("--vocab-corner", `${corner.offsetWidth}px`);
+      // The now-playing ticker is sized off the real width of the three transport
+      // buttons, so it stays proportionate through every compaction tier instead of
+      // stretching a fixed share of the screen.
+      if (controls) {
+        host.style.setProperty("--vocab-controls-w", `${controls.offsetWidth}px`);
+      }
+      // And it is placed off the difficulty sub-text's own box: its right edge (the
+      // trailing caret) becomes the crawl's end boundary, and its vertical centre lines
+      // the two up on the same row. Measured relative to the toolbar so the absolute
+      // ticker lands exactly on the tagline's line as the label grows/shrinks.
+      if (tagline) {
+        const hostBox = host.getBoundingClientRect();
+        const tagBox = tagline.getBoundingClientRect();
+        host.style.setProperty("--vocab-tagline-right", `${tagBox.right - hostBox.left}px`);
+        host.style.setProperty(
+          "--vocab-tagline-mid",
+          `${(tagBox.top + tagBox.bottom) / 2 - hostBox.top}px`,
+        );
+      }
+    };
     sync();
     const observer = new ResizeObserver(sync);
     observer.observe(corner);
+    if (controls) observer.observe(controls);
+    if (tagline) observer.observe(tagline);
     return () => observer.disconnect();
   }, []);
 
@@ -870,11 +894,8 @@ export function FeedControls({
           <button
             className="vocab-icon-button"
             type="button"
-            onClick={() => {
-              onShuffle();
-              ambient.nextTrack();
-            }}
-            aria-label="Trộn từ và bắt đầu dòng mới"
+            onClick={ambient.nextTrack}
+            aria-label="Đổi bài hát nền"
           >
             <Shuffle size={19} />
           </button>
@@ -916,6 +937,16 @@ export function FeedControls({
           </button>
         )}
       </div>
+      {/* Now-playing: the shuffle control changes only the background track, so the song's
+          name runs ONCE beneath the controls like a news ticker — never looping, fading out
+          at both edges. Keyed on the name so each new track replays a single pass. */}
+      {ambient.trackName && (
+        <div className="vocab-now-playing">
+          <span className="vocab-now-playing-run" key={ambient.trackName}>
+            {ambient.trackName}
+          </span>
+        </div>
+      )}
       {options.mounted && <PopupScrim closing={options.closing} onDismiss={() => onOpen(false)} />}
       {options.mounted && (
         <section
