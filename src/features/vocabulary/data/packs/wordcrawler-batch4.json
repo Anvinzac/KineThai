@@ -18,9 +18,19 @@
       "usage": [
         {
           "en": "I'm so _____, let's get some pho.",
-          "vi": "Mình đói quá, đi ăn phở đi."
+          "vi": "Mình đói quá, đi ăn phở đi.",
+          "glosses": {
+            "ja": "お腹 空いた フォーを 食べに 行こう"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "まだ 朝 十時なのに お腹が グーグー",
+          "def": "/お腹が 空い/て 久しく 食べて ないから 食べたい",
+          "guess": "文字を つまみ食い する"
+        }
+      }
     },
     {
       "id": "thirsty",
@@ -37,9 +47,19 @@
       "usage": [
         {
           "en": "Can I have some water? I'm really _____.",
-          "vi": "Cho mình xin ít nước, mình khát quá."
+          "vi": "Cho mình xin ít nước, mình khát quá.",
+          "glosses": {
+            "ja": "水を 少し ください 喉が 渇いた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "昼の 日差しで 走り 帰って 水筒を 飲み干す",
+          "def": "/喉が 渇い/て 喉が 乾き とても 飲みたい",
+          "guess": "冷たい お茶 一杯 どう"
+        }
+      }
     },
     {
       "id": "tired",
@@ -56,9 +76,19 @@
       "usage": [
         {
           "en": "I'm too _____ to cook tonight.",
-          "vi": "Tối nay mình mệt quá, chẳng muốn nấu nướng."
+          "vi": "Tối nay mình mệt quá, chẳng muốn nấu nướng.",
+          "glosses": {
+            "ja": "今夜は 疲れ すぎて 作りたく ない"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "仕事 終わり 椅子に 座れば 立ちたく ない",
+          "def": "/疲れて/ 沢山 働いた あと 休みたい だけ",
+          "guess": "目が とろんと してる"
+        }
+      }
     },
     {
       "id": "angry",
@@ -75,9 +105,19 @@
       "usage": [
         {
           "en": "Mom gets _____ when I come home late.",
-          "vi": "Mẹ nổi giận mỗi khi tôi về nhà muộn."
+          "vi": "Mẹ nổi giận mỗi khi tôi về nhà muộn.",
+          "glosses": {
+            "ja": "母は 私が 遅く 帰ると 怒る"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "駐車場を 取られ 顔が 真っ赤",
+          "def": "誰かの 悪い 行いに /腹を 立て/て 不快",
+          "guess": "深呼吸 十まで 数えて"
+        }
+      }
     },
     {
       "id": "afraid",
@@ -94,9 +134,19 @@
       "usage": [
         {
           "en": "My little brother is _____ of the dark.",
-          "vi": "Em trai tôi sợ bóng tối."
+          "vi": "Em trai tôi sợ bóng tối.",
+          "glosses": {
+            "ja": "弟は 暗闇が 怖い"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "夜中に 停電 ドアが ギーギー",
+          "def": "/怖く/て 悪いことが 起きそうで 心配",
+          "guess": "電気を つけて"
+        }
+      }
     },
     {
       "id": "bored",
@@ -113,9 +163,19 @@
       "usage": [
         {
           "en": "The kids got _____ during the long drive.",
-          "vi": "Bọn trẻ thấy chán trong chuyến xe dài."
+          "vi": "Bọn trẻ thấy chán trong chuyến xe dài.",
+          "glosses": {
+            "ja": "子供たちは 長い ドライブで 飽きた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "一日中 雨 携帯を 見続け 見尽くす",
+          "def": "楽しい ことが なくて /退屈/する",
+          "guess": "もう あくび 出た"
+        }
+      }
     },
     {
       "id": "busy",
@@ -132,9 +192,19 @@
       "usage": [
         {
           "en": "Sorry, I'm _____ right now. Can I call you back?",
-          "vi": "Xin lỗi, giờ mình đang bận. Lát mình gọi lại nhé?"
+          "vi": "Xin lỗi, giờ mình đang bận. Lát mình gọi lại nhé?",
+          "glosses": {
+            "ja": "ごめん 今 忙しい あとで 電話するね"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "コーヒーに 誘えば いつも 来週ねと",
+          "def": "/忙しく/て 一度に やることが 多すぎる",
+          "guess": "暇なら 猜って"
+        }
+      }
     },
     {
       "id": "cheap",
@@ -151,9 +221,19 @@
       "usage": [
         {
           "en": "This street food is tasty and _____.",
-          "vi": "Món ăn đường phố này ngon mà rẻ."
+          "vi": "Món ăn đường phố này ngon mà rẻ.",
+          "glosses": {
+            "ja": "この 屋台 飯は 美味しくて 安い"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "Tシャツ 均一 三十 誰もが 立ち寄る",
+          "def": "/安く/て お金が 少なくても 買える",
+          "guess": "一つ 買えば 一つ おまけ"
+        }
+      }
     },
     {
       "id": "expensive",
@@ -170,9 +250,19 @@
       "usage": [
         {
           "en": "Rent in the city center is very _____.",
-          "vi": "Tiền thuê nhà ở trung tâm rất đắt."
+          "vi": "Tiền thuê nhà ở trung tâm rất đắt.",
+          "glosses": {
+            "ja": "都心の 家賃は とても 高い"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "店の 請求書を 見て 財布が 軽く 感じる",
+          "def": "/高く/て 普通より ずっと 値段が 上",
+          "guess": "値段を 聞けば 倒れそう"
+        }
+      }
     },
     {
       "id": "delicious",
@@ -189,9 +279,19 @@
       "usage": [
         {
           "en": "Grandma's spring rolls are _____.",
-          "vi": "Chả giò bà làm ngon tuyệt."
+          "vi": "Chả giò bà làm ngon tuyệt.",
+          "glosses": {
+            "ja": "おばあちゃんの 春巻きは 絶品だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "スープを すすれば 皆 うなずき 黙る",
+          "def": "/とても 美味/しく 食べれば また 食べたく なる",
+          "guess": "いい 香り よだれ 出る"
+        }
+      }
     },
     {
       "id": "dangerous",
@@ -208,9 +308,19 @@
       "usage": [
         {
           "en": "It's _____ to swim here at night.",
-          "vi": "Bơi ở đây vào ban đêm rất nguy hiểm."
+          "vi": "Bơi ở đây vào ban đêm rất nguy hiểm.",
+          "glosses": {
+            "ja": "夜 ここで 泳ぐのは 危険だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "髑髏の 看板が 門の 前に 掛かる",
+          "def": "/危険/で 事故や 怪我を 起こし やすい",
+          "guess": "下がって 下がって"
+        }
+      }
     },
     {
       "id": "famous",
@@ -227,9 +337,19 @@
       "usage": [
         {
           "en": "Hoi An is _____ for its lanterns.",
-          "vi": "Hội An nổi tiếng với những chiếc đèn lồng."
+          "vi": "Hội An nổi tiếng với những chiếc đèn lồng.",
+          "glosses": {
+            "ja": "ホイアンは 提灯で 有名だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "一曲 歌えば 翌朝 国中が 名を 知る",
+          "def": "/有名/で とても 多くの 人に 知られる",
+          "guess": "サイン ちょうだい"
+        }
+      }
     },
     {
       "id": "quiet",
@@ -246,9 +366,19 @@
       "usage": [
         {
           "en": "Please be _____, the baby is sleeping.",
-          "vi": "Làm ơn giữ yên lặng, em bé đang ngủ."
+          "vi": "Làm ơn giữ yên lặng, em bé đang ngủ.",
+          "glosses": {
+            "ja": "静かに して 赤ちゃんが 寝て いる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "朝 六時の 図書館 ページを めくる 音が 聞こえる",
+          "def": "/静か/で 騒音も 話し声も ない",
+          "guess": "シー 内緒で 猜って"
+        }
+      }
     },
     {
       "id": "dirty",
@@ -265,9 +395,19 @@
       "usage": [
         {
           "en": "Take off your _____ shoes before coming in.",
-          "vi": "Cởi đôi giày dơ ra trước khi vào nhà nhé."
+          "vi": "Cởi đôi giày dơ ra trước khi vào nhà nhé.",
+          "glosses": {
+            "ja": "汚い 靴を 脱いで から 入ってね"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "雨の サッカー 終わり 白シャツが 茶シャツ",
+          "def": "/汚れて/ 土埃や 染みが いっぱい",
+          "guess": "手を 洗って から 猜って"
+        }
+      }
     },
     {
       "id": "funny",
@@ -284,9 +424,19 @@
       "usage": [
         {
           "en": "My uncle tells really _____ stories.",
-          "vi": "Chú tôi kể chuyện rất buồn cười."
+          "vi": "Chú tôi kể chuyện rất buồn cười.",
+          "glosses": {
+            "ja": "おじの 話は とても おかしい"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "彼の 話を 聞けば テーブル中 涙 流し 笑う",
+          "def": "/おかしく/て 人を 楽しませる ユーモア",
+          "guess": "笑いを 堪えられる かな"
+        }
+      }
     },
     {
       "id": "excited",
@@ -303,9 +453,19 @@
       "usage": [
         {
           "en": "The children are _____ about the trip.",
-          "vi": "Bọn trẻ đang háo hức về chuyến đi."
+          "vi": "Bọn trẻ đang háo hức về chuyến đi.",
+          "glosses": {
+            "ja": "子供たちは 旅行に わくわく してる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "明日 海へ 今夜 なかなか 眠れない",
+          "def": "来ることを 待ち望み /わくわく/ 嬉しい",
+          "guess": "心臓 どきどき してる"
+        }
+      }
     },
     {
       "id": "friendly",
@@ -322,9 +482,19 @@
       "usage": [
         {
           "en": "The staff at this hotel are very _____.",
-          "vi": "Nhân viên khách sạn này rất thân thiện."
+          "vi": "Nhân viên khách sạn này rất thân thiện.",
+          "glosses": {
+            "ja": "この ホテルの 従業員は とても 親切だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "越して 来たばかり 隣の おばさんが おこわを 持って",
+          "def": "/親切/で 開かれ 誰とでも 話しやすい",
+          "guess": "笑って みて"
+        }
+      }
     },
     {
       "id": "healthy",
@@ -341,9 +511,19 @@
       "usage": [
         {
           "en": "Eating vegetables keeps you _____.",
-          "vi": "Ăn rau giúp bạn khỏe mạnh."
+          "vi": "Ăn rau giúp bạn khỏe mạnh.",
+          "glosses": {
+            "ja": "野菜を 食べれば 健康に なる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "七十の おじいさん 毎朝 湖の 周りを 走る",
+          "def": "/健康/で 体が 良く めったに 病気に ならない",
+          "guess": "深呼吸 猜って みて"
+        }
+      }
     },
     {
       "id": "umbrella",
@@ -360,9 +540,19 @@
       "usage": [
         {
           "en": "Take an _____, it might rain.",
-          "vi": "Mang theo cây dù nhé, trời có thể mưa."
+          "vi": "Mang theo cây dù nhé, trời có thể mưa.",
+          "glosses": {
+            "ja": "傘を 持って 雨かも"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "サイゴンの 空 快晴から 突然 雨",
+          "def": "雨や 日差しを /防ぐ/ 道具 折りたためる",
+          "guess": "広げれば 濡れない"
+        }
+      }
     },
     {
       "id": "passport",
@@ -379,9 +569,19 @@
       "usage": [
         {
           "en": "You need a _____ to travel abroad.",
-          "vi": "Bạn cần hộ chiếu để ra nước ngoài."
+          "vi": "Bạn cần hộ chiếu để ra nước ngoài.",
+          "glosses": {
+            "ja": "海外 旅行には パスポートが 要る"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "空港に 着いて 慌てる 小さな 手帳は どこ",
+          "def": "海外へ 行くとき 使う /身分/ 証明書",
+          "guess": "提示して ください"
+        }
+      }
     },
     {
       "id": "breakfast",
@@ -398,9 +598,19 @@
       "usage": [
         {
           "en": "I usually have pho for _____.",
-          "vi": "Bữa sáng tôi hay ăn phở."
+          "vi": "Bữa sáng tôi hay ăn phở.",
+          "glosses": {
+            "ja": "朝ごはんは よく フォーを 食べる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "熱々 サクサク パンと 甘い アイスコーヒー",
+          "def": "一日の 最初の 食事 /朝ごはん/",
+          "guess": "パンか おこわ どっち"
+        }
+      }
     },
     {
       "id": "birthday",
@@ -417,9 +627,19 @@
       "usage": [
         {
           "en": "Happy _____! How old are you now?",
-          "vi": "Chúc mừng sinh nhật! Giờ bạn bao nhiêu tuổi rồi?"
+          "vi": "Chúc mừng sinh nhật! Giờ bạn bao nhiêu tuổi rồi?",
+          "glosses": {
+            "ja": "誕生日 おめでとう 今 何歳"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "蝋燭を 吹き消し 家族で お馴染みの 歌",
+          "def": "誰かの /生まれ/た 日 ケーキや 贈り物",
+          "guess": "願い事 して"
+        }
+      }
     },
     {
       "id": "kitchen",
@@ -436,9 +656,19 @@
       "usage": [
         {
           "en": "Mom is cooking dinner in the _____.",
-          "vi": "Mẹ đang nấu bữa tối trong bếp."
+          "vi": "Mẹ đang nấu bữa tối trong bếp.",
+          "glosses": {
+            "ja": "母は 台所で 夕ご飯を 作って いる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "揚げ ネギの 香り 家の 奥から",
+          "def": "家で /料理/する 部屋 コンロや 食器",
+          "guess": "誰が 何を 作って いい香り"
+        }
+      }
     },
     {
       "id": "holiday",
@@ -455,9 +685,19 @@
       "usage": [
         {
           "en": "We spent our summer _____ in Nha Trang.",
-          "vi": "Chúng tôi nghỉ hè ở Nha Trang."
+          "vi": "Chúng tôi nghỉ hè ở Nha Trang.",
+          "glosses": {
+            "ja": "夏休みを ニャチャンで 過ごした"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "長い 連休 家族で バリを 持って ダラット",
+          "def": "/休み/の 日 学校も 仕事も 行かない",
+          "guess": "バリの 支度 できた"
+        }
+      }
     },
     {
       "id": "homework",
@@ -474,9 +714,19 @@
       "usage": [
         {
           "en": "Have you finished your _____ yet?",
-          "vi": "Con làm xong bài tập chưa?"
+          "vi": "Con làm xong bài tập chưa?",
+          "glosses": {
+            "ja": "宿題は 終わった かな"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "日曜の 夜 やっと ノートを 出し 慌てて 写す",
+          "def": "先生が 家で やるよう 出す /宿題/",
+          "guess": "期限 までに 出してね"
+        }
+      }
     },
     {
       "id": "weekend",
@@ -493,9 +743,19 @@
       "usage": [
         {
           "en": "What are you doing this _____?",
-          "vi": "Cuối tuần này bạn làm gì?"
+          "vi": "Cuối tuần này bạn làm gì?",
+          "glosses": {
+            "ja": "今週末は 何する"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "土曜の 朝 目覚ましを 消し 昼まで 寝坊",
+          "def": "/週末/ 土曜と 日曜",
+          "guess": "金曜だ 楽しんで"
+        }
+      }
     },
     {
       "id": "island",
@@ -512,9 +772,19 @@
       "usage": [
         {
           "en": "We took a boat to a small _____.",
-          "vi": "Chúng tôi đi thuyền ra một hòn đảo nhỏ."
+          "vi": "Chúng tôi đi thuyền ra một hòn đảo nhỏ.",
+          "glosses": {
+            "ja": "小舟で 小さな 島へ 行った"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "船に 三時間 乗り 周りは 青い 海だけ",
+          "def": "四方を 水に 囲まれた 土地 フーコック みたい",
+          "guess": "ぷかぷか して"
+        }
+      }
     },
     {
       "id": "library",
@@ -531,9 +801,19 @@
       "usage": [
         {
           "en": "I borrowed this book from the _____.",
-          "vi": "Tôi mượn cuốn sách này ở thư viện."
+          "vi": "Tôi mượn cuốn sách này ở thư viện.",
+          "glosses": {
+            "ja": "この 本は 図書館で 借りた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "くしゃみ 一つ 読書中の 部屋が 振り向く",
+          "def": "/沢山の 本/が ある場所 読み 借りる",
+          "guess": "本を 開けて"
+        }
+      }
     },
     {
       "id": "ticket",
@@ -550,9 +830,19 @@
       "usage": [
         {
           "en": "I bought a _____ for the 8 p.m. show.",
-          "vi": "Tôi đã mua vé suất chiếu 8 giờ tối."
+          "vi": "Tôi đã mua vé suất chiếu 8 giờ tối.",
+          "glosses": {
+            "ja": "夜 八時の 回の 切符を 買った"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "正月 近く 真夜中に 起き 帰省の 席を 争う",
+          "def": "門に 入り 車に 乗る 小さな 紙 /切符/",
+          "guess": "ご乗車 どうぞ"
+        }
+      }
     },
     {
       "id": "traffic",
@@ -569,9 +859,19 @@
       "usage": [
         {
           "en": "The _____ is terrible this morning.",
-          "vi": "Sáng nay đường kẹt kinh khủng."
+          "vi": "Sáng nay đường kẹt kinh khủng.",
+          "glosses": {
+            "ja": "今朝は 道が ひどく 混んで いる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "夕 六時 交差点が 詰まり 車が 少しずつ",
+          "def": "街を 行き交う /車/ の流れ",
+          "guess": "クラクションも 無駄"
+        }
+      }
     },
     {
       "id": "hobby",
@@ -588,9 +888,19 @@
       "usage": [
         {
           "en": "My _____ is playing the guitar.",
-          "vi": "Sở thích của tôi là chơi đàn guitar."
+          "vi": "Sở thích của tôi là chơi đàn guitar.",
+          "glosses": {
+            "ja": "私の 趣味は ギターだ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "週末は カメラを 抱え 街を 撮り歩く",
+          "def": "/趣味/ 暇なとき 楽しみに よくやる こと",
+          "guess": "何に 夢中 かな"
+        }
+      }
     },
     {
       "id": "menu",
@@ -607,9 +917,19 @@
       "usage": [
         {
           "en": "Could we see the _____, please?",
-          "vi": "Cho chúng tôi xem thực đơn được không?"
+          "vi": "Cho chúng tôi xem thực đơn được không?",
+          "glosses": {
+            "ja": "献立を 見せて ください"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "座る なり 店員が 写真 満載の 冊子",
+          "def": "店の 料理と 値段の 一覧 /献立/",
+          "guess": "注文は 決まった"
+        }
+      }
     },
     {
       "id": "market",
@@ -626,9 +946,19 @@
       "usage": [
         {
           "en": "Mom goes to the _____ every morning.",
-          "vi": "Sáng nào mẹ cũng đi chợ."
+          "vi": "Sáng nào mẹ cũng đi chợ.",
+          "glosses": {
+            "ja": "母は 毎朝 市場へ 行く"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "早朝 魚売りの おばさん 威勢よく 新鮮だよ",
+          "def": "多くの 人が 集まり 野菜 肉 魚を /売買/する 場所",
+          "guess": "値切って みて"
+        }
+      }
     },
     {
       "id": "festival",
@@ -645,9 +975,19 @@
       "usage": [
         {
           "en": "The flower _____ in Da Lat is beautiful.",
-          "vi": "Lễ hội hoa ở Đà Lạt rất đẹp."
+          "vi": "Lễ hội hoa ở Đà Lạt rất đẹp.",
+          "glosses": {
+            "ja": "ダラットの 花祭りは 美しい"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "八月 十五日 街は 提灯と 獅子舞で 混雑",
+          "def": "多くの 人が 共に 遊び 踊る /祭り/",
+          "guess": "ドンドン ジャン"
+        }
+      }
     },
     {
       "id": "airport",
@@ -664,9 +1004,19 @@
       "usage": [
         {
           "en": "We need to be at the _____ by 6 a.m.",
-          "vi": "Chúng ta phải có mặt ở sân bay trước 6 giờ sáng."
+          "vi": "Chúng ta phải có mặt ở sân bay trước 6 giờ sáng.",
+          "glosses": {
+            "ja": "朝 六時 までに 空港へ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "バリを 引き 保安を 通り 放送が 呼ぶ",
+          "def": "飛行機が /飛び立ち/ 着陸する 場所",
+          "guess": "シートベルト 締めて"
+        }
+      }
     },
     {
       "id": "mistake",
@@ -683,9 +1033,19 @@
       "usage": [
         {
           "en": "I made a big _____ in my report.",
-          "vi": "Tôi mắc một lỗi to trong bản báo cáo."
+          "vi": "Tôi mắc một lỗi to trong bản báo cáo.",
+          "glosses": {
+            "ja": "報告書で 大きな ミスを した"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "答案 出して 気づく 二足す二が 五",
+          "def": "/間違い/ やった 言ったことが 正しく ない",
+          "guess": "打ち間違え してる"
+        }
+      }
     },
     {
       "id": "advice",
@@ -702,9 +1062,19 @@
       "usage": [
         {
           "en": "Can you give me some _____?",
-          "vi": "Bạn cho mình vài lời khuyên được không?"
+          "vi": "Bạn cho mình vài lời khuyên được không?",
+          "glosses": {
+            "ja": "助言を 少し くれる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "退職 迷い 姉に 電話で 相談",
+          "def": "誰かに 何を すべきか 教える /助言/",
+          "guess": "私の 話を 聞いて"
+        }
+      }
     },
     {
       "id": "dictionary",
@@ -721,9 +1091,19 @@
       "usage": [
         {
           "en": "Look up the word in a _____.",
-          "vi": "Hãy tra từ đó trong từ điển."
+          "vi": "Hãy tra từ đó trong từ điển.",
+          "glosses": {
+            "ja": "その 言葉を 辞書で 調べて"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "知らない 字に 分厚い 本を めくる",
+          "def": "言葉の 意味を /調べる/ 本 五十音順",
+          "guess": "この 字を 調べて みて"
+        }
+      }
     },
     {
       "id": "arrive",
@@ -740,9 +1120,19 @@
       "usage": [
         {
           "en": "What time does the train _____?",
-          "vi": "Mấy giờ tàu tới nơi?"
+          "vi": "Mấy giờ tàu tới nơi?",
+          "glosses": {
+            "ja": "電車は 何時に 着く"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "車が 停まり 運転手 終点だよと",
+          "def": "道を 進んだ 末に /着く/",
+          "guess": "もうすぐ 着く かな"
+        }
+      }
     },
     {
       "id": "laugh",
@@ -759,9 +1149,19 @@
       "usage": [
         {
           "en": "Her jokes always make me _____.",
-          "vi": "Mấy câu đùa của cô ấy lúc nào cũng làm tôi cười."
+          "vi": "Mấy câu đùa của cô ấy lúc nào cũng làm tôi cười.",
+          "glosses": {
+            "ja": "彼女の 冗談は いつも 私を 笑わせる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "喜劇を 見て 家族で お腹を 抱え 大笑い",
+          "def": "嬉しく おかしくて 声を 出して /笑う/",
+          "guess": "ハハ 当たった かな"
+        }
+      }
     },
     {
       "id": "climb",
@@ -778,9 +1178,19 @@
       "usage": [
         {
           "en": "Let's _____ to the top of the hill.",
-          "vi": "Mình leo lên đỉnh đồi nhé."
+          "vi": "Mình leo lên đỉnh đồi nhé.",
+          "glosses": {
+            "ja": "丘の 頂上に 登ろう"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "ファンシパン 踏破 頂上で 息も 絶え絶え",
+          "def": "手足で 高く /登る/",
+          "guess": "もう少し 高く"
+        }
+      }
     },
     {
       "id": "share",
@@ -797,9 +1207,19 @@
       "usage": [
         {
           "en": "Can I _____ your table?",
-          "vi": "Mình ngồi chung bàn với bạn được không?"
+          "vi": "Mình ngồi chung bàn với bạn được không?",
+          "glosses": {
+            "ja": "テーブルを 共用 しても いい"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "スナック 一袋 開け テーブルで 分ける",
+          "def": "/分け合い/ 共に 使い 他人に 配る",
+          "guess": "一人 一切れね"
+        }
+      }
     },
     {
       "id": "wait",
@@ -816,9 +1236,19 @@
       "usage": [
         {
           "en": "Please _____ here for a moment.",
-          "vi": "Vui lòng đợi ở đây một lát."
+          "vi": "Vui lòng đợi ở đây một lát.",
+          "glosses": {
+            "ja": "ここで 少し 待って ください"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "注文 終え 五分 ごとに アプリを 開く",
+          "def": "人や ことが 来るまで /待つ/",
+          "guess": "ちょっと 待って もうすぐ"
+        }
+      }
     },
     {
       "id": "choose",
@@ -835,9 +1265,19 @@
       "usage": [
         {
           "en": "You can _____ any color you like.",
-          "vi": "Bạn có thể chọn bất kỳ màu nào bạn thích."
+          "vi": "Bạn có thể chọn bất kỳ màu nào bạn thích.",
+          "glosses": {
+            "ja": "好きな 色を 選んで いいよ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "ガラス棚の 前で 指さし この ケーキ ください",
+          "def": "多くの中から 一番 好きな 一つを /選ぶ/",
+          "guess": "一つ 二つ それとも 三つ"
+        }
+      }
     },
     {
       "id": "believe",
@@ -854,9 +1294,19 @@
       "usage": [
         {
           "en": "I can't _____ it's already October!",
-          "vi": "Không thể tin là đã tháng Mười rồi!"
+          "vi": "Không thể tin là đã tháng Mười rồi!",
+          "glosses": {
+            "ja": "もう 十月だなんて 信じられない"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "子供は サンタの 話に 皆 うなずく",
+          "def": "何かが 本当 正しいと /信じる/",
+          "guess": "本当か 冗談か"
+        }
+      }
     },
     {
       "id": "enjoy",
@@ -873,9 +1323,19 @@
       "usage": [
         {
           "en": "Did you _____ the party?",
-          "vi": "Bạn có vui ở bữa tiệc không?"
+          "vi": "Bạn có vui ở bữa tiệc không?",
+          "glosses": {
+            "ja": "パーティは 楽しかった"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "ハンモック 海風 涼しく 手に ココナッツ",
+          "def": "/楽しみ/ 何かを して 嬉しく 思う",
+          "guess": "気持ち いいでしょう"
+        }
+      }
     },
     {
       "id": "relax",
@@ -892,9 +1352,19 @@
       "usage": [
         {
           "en": "Sit down and _____ for a bit.",
-          "vi": "Ngồi xuống nghỉ ngơi chút đi."
+          "vi": "Ngồi xuống nghỉ ngơi chút đi.",
+          "glosses": {
+            "ja": "座って 少し 休んで"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "携帯を 消し 穏やか 音楽 足湯",
+          "def": "/くつろぎ/ 頭を 軽く 休める",
+          "guess": "肩の 力を 抜いて"
+        }
+      }
     },
     {
       "id": "spend",
@@ -911,9 +1381,19 @@
       "usage": [
         {
           "en": "How much did you _____ on that phone?",
-          "vi": "Bạn đã tốn bao nhiêu tiền cho cái điện thoại đó?"
+          "vi": "Bạn đã tốn bao nhiêu tiền cho cái điện thoại đó?",
+          "glosses": {
+            "ja": "その 携帯に いくら 使った"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "給料 入り 三日 後 口座は 端数だけ",
+          "def": "何かに /お金/や 時間を 使う",
+          "guess": "財布よ 頑張れ"
+        }
+      }
     },
     {
       "id": "wake",
@@ -930,9 +1410,19 @@
       "usage": [
         {
           "en": "I usually _____ up at six.",
-          "vi": "Tôi thường dậy lúc sáu giờ."
+          "vi": "Tôi thường dậy lúc sáu giờ.",
+          "glosses": {
+            "ja": "いつも 六時に 起きる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "庭の 鶏の 声 うつらうつら 起きる",
+          "def": "眠りの あと /目覚め/ 朝に 目を 開く",
+          "guess": "リンリン リン"
+        }
+      }
     },
     {
       "id": "travel",
@@ -949,9 +1439,19 @@
       "usage": [
         {
           "en": "I want to _____ around Vietnam by motorbike.",
-          "vi": "Tôi muốn đi du lịch vòng quanh Việt Nam bằng xe máy."
+          "vi": "Tôi muốn đi du lịch vòng quanh Việt Nam bằng xe máy.",
+          "glosses": {
+            "ja": "バイクで ベトナムを 一周 したい"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "リュック 背負い 毎年 新しい 省を 開拓",
+          "def": "遊び 仕事で 遠く 別の 場所へ /行く/",
+          "guess": "リュック 背負い 出発"
+        }
+      }
     },
     {
       "id": "nervous",
@@ -968,9 +1468,19 @@
       "usage": [
         {
           "en": "I always get _____ before exams.",
-          "vi": "Tôi lúc nào cũng hồi hộp trước kỳ thi."
+          "vi": "Tôi lúc nào cũng hồi hộp trước kỳ thi.",
+          "glosses": {
+            "ja": "試験の 前は いつも 緊張する"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "面接 待ち 手が 冷たく 心臓 バクバク",
+          "def": "大事な ことの 前に /そわそわ/ 心配",
+          "guess": "手が 震えて るでしょう"
+        }
+      }
     },
     {
       "id": "lucky",
@@ -987,9 +1497,19 @@
       "usage": [
         {
           "en": "You're _____ to have such good friends.",
-          "vi": "Bạn thật may mắn khi có những người bạn tốt như vậy."
+          "vi": "Bạn thật may mắn khi có những người bạn tốt như vậy.",
+          "glosses": {
+            "ja": "良い 友に 恵まれ 幸せだね"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "最後の 一枚 宝くじ 翌朝 当選",
+          "def": "/運が 良く/て 努力せず 良いことに 会う",
+          "guess": "運試し 猜って みて"
+        }
+      }
     },
     {
       "id": "careful",
@@ -1006,9 +1526,19 @@
       "usage": [
         {
           "en": "Be _____, the floor is wet.",
-          "vi": "Cẩn thận nhé, sàn nhà đang ướt."
+          "vi": "Cẩn thận nhé, sàn nhà đang ướt.",
+          "glosses": {
+            "ja": "床が 濡れて るよ 気をつけて"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "熱い スープ 運び ゆっくり 一歩ずつ",
+          "def": "/注意/して ミスや 事故を 起こさない",
+          "guess": "一文字ずつ ね"
+        }
+      }
     },
     {
       "id": "clever",
@@ -1025,9 +1555,19 @@
       "usage": [
         {
           "en": "What a _____ idea!",
-          "vi": "Ý tưởng thông minh quá!"
+          "vi": "Ý tưởng thông minh quá!",
+          "glosses": {
+            "ja": "なんて 賢い アイデア"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "五歳で 父の 携帯を 自分で 開錠",
+          "def": "/賢く/て 飲み込み 速く 良い 策を 思いつく",
+          "guess": "この 頭 冴えて るね"
+        }
+      }
     },
     {
       "id": "crowded",
@@ -1044,9 +1584,19 @@
       "usage": [
         {
           "en": "The bus was so _____ that I had to stand.",
-          "vi": "Xe buýt đông đến mức tôi phải đứng."
+          "vi": "Xe buýt đông đến mức tôi phải đứng.",
+          "glosses": {
+            "ja": "バスが 混み すぎて 立った"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "大晦日の 歩行者 天国 肩が 触れ合う",
+          "def": "/混み合い/ 人で 満ち 押し合い",
+          "guess": "混雑 すごい"
+        }
+      }
     },
     {
       "id": "empty",
@@ -1063,9 +1613,19 @@
       "usage": [
         {
           "en": "The streets are _____ during Tet.",
-          "vi": "Ngày Tết đường phố vắng tanh."
+          "vi": "Ngày Tết đường phố vắng tanh.",
+          "glosses": {
+            "ja": "正月は 通りが がらんと してる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "月末 貯金箱を 振れど 音なし",
+          "def": "/空っぽ/で 中に 何も 誰も いない",
+          "guess": "ここには 何も ない"
+        }
+      }
     },
     {
       "id": "noisy",
@@ -1082,9 +1642,19 @@
       "usage": [
         {
           "en": "This café is too _____ to work in.",
-          "vi": "Quán cà phê này ồn quá, không làm việc được."
+          "vi": "Quán cà phê này ồn quá, không làm việc được.",
+          "glosses": {
+            "ja": "この カフェは 騒がし すぎて 仕事に ならない"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "隣が 昼から 夜中まで カラオケ",
+          "def": "/騒がしく/て 大きな 音が沢山 不快",
+          "guess": "耳を 塞いで 猜って"
+        }
+      }
     },
     {
       "id": "rude",
@@ -1101,9 +1671,19 @@
       "usage": [
         {
           "en": "It's _____ to talk with your mouth full.",
-          "vi": "Vừa nhai vừa nói là bất lịch sự."
+          "vi": "Vừa nhai vừa nói là bất lịch sự.",
+          "glosses": {
+            "ja": "頬張り お喋りは 無礼だよ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "列に 割り込み 注意され 睨み返す",
+          "def": "/無礼/で 他人を 敬わない 振る舞い",
+          "guess": "言葉遣いに 気をつけて"
+        }
+      }
     },
     {
       "id": "worried",
@@ -1120,9 +1700,19 @@
       "usage": [
         {
           "en": "My parents get _____ when I travel alone.",
-          "vi": "Bố mẹ lo lắng mỗi khi tôi đi một mình."
+          "vi": "Bố mẹ lo lắng mỗi khi tôi đi một mình.",
+          "glosses": {
+            "ja": "一人旅の たびに 両親は 心配する"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "夜 十時 子が 帰らず 母は 電話 かけ続け",
+          "def": "/心配/で 悪いことが 来そうと 考え続け",
+          "guess": "眉間の 皺 伸ばして"
+        }
+      }
     },
     {
       "id": "strange",
@@ -1139,9 +1729,19 @@
       "usage": [
         {
           "en": "I heard a _____ noise outside.",
-          "vi": "Tôi nghe thấy một tiếng động lạ bên ngoài."
+          "vi": "Tôi nghe thấy một tiếng động lạ bên ngoài.",
+          "glosses": {
+            "ja": "外で 変な 物音が した"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "真夜中 チャイム 鳴るも 外に 誰も",
+          "def": "/変/で 普通と 違い 不思議に 思うほど",
+          "guess": "少し おかしい ね"
+        }
+      }
     },
     {
       "id": "huge",
@@ -1158,9 +1758,19 @@
       "usage": [
         {
           "en": "They live in a _____ house.",
-          "vi": "Họ sống trong một căn nhà rất lớn."
+          "vi": "Họ sống trong một căn nhà rất lớn.",
+          "glosses": {
+            "ja": "彼らは とても 大きな 家に 住む"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "洗面器 ほど フォー 二人でも 食べきれない",
+          "def": "/巨大/で 普通より ずっと 大きい",
+          "guess": "どれほど 大きい かな"
+        }
+      }
     },
     {
       "id": "fresh",
@@ -1177,9 +1787,19 @@
       "usage": [
         {
           "en": "These vegetables are really _____.",
-          "vi": "Rau này tươi thật."
+          "vi": "Rau này tươi thật.",
+          "glosses": {
+            "ja": "この 野菜は 本当に 新鮮だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "庭で 摘んだ 野菜 朝露が 残る",
+          "def": "/新鮮/で 採った 作った ばかり 置いて ない",
+          "guess": "焼き立て だよ"
+        }
+      }
     },
     {
       "id": "comfortable",
@@ -1196,9 +1816,19 @@
       "usage": [
         {
           "en": "These shoes are very _____.",
-          "vi": "Đôi giày này đi rất êm chân."
+          "vi": "Đôi giày này đi rất êm chân.",
+          "glosses": {
+            "ja": "この 靴は とても 歩きやすい"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "家に 帰り 部屋着 柔らか ソファに ごろり",
+          "def": "/快適/で 楽 窮屈 痛み なし",
+          "guess": "楽に なった かな"
+        }
+      }
     },
     {
       "id": "surprised",
@@ -1215,9 +1845,19 @@
       "usage": [
         {
           "en": "I was _____ to see him at the party.",
-          "vi": "Tôi ngạc nhiên khi thấy anh ấy ở bữa tiệc."
+          "vi": "Tôi ngạc nhiên khi thấy anh ấy ở bữa tiệc.",
+          "glosses": {
+            "ja": "パーティで 彼に 会い 驚いた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "扉を 開け 友達 一斉 ケーキと 叫び",
+          "def": "全く 思わぬ ことに 会い /驚く/",
+          "guess": "ぽかんと した かな"
+        }
+      }
     },
     {
       "id": "tidy",
@@ -1234,9 +1874,19 @@
       "usage": [
         {
           "en": "Keep your room _____, please.",
-          "vi": "Con giữ phòng gọn gàng nhé."
+          "vi": "Con giữ phòng gọn gàng nhé.",
+          "glosses": {
+            "ja": "部屋を 綺麗に してね"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "机に 紙 一枚 乱れず ペン 整列",
+          "def": "/整頓/され 皆 定位置 きちんと",
+          "guess": "皆 定位置 につけ"
+        }
+      }
     },
     {
       "id": "accident",
@@ -1253,9 +1903,19 @@
       "usage": [
         {
           "en": "He broke his leg in a car _____.",
-          "vi": "Anh ấy bị gãy chân trong một vụ tai nạn ô tô."
+          "vi": "Anh ấy bị gãy chân trong một vụ tai nạn ô tô.",
+          "glosses": {
+            "ja": "彼は 車の 事故で 足を 折った"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "道 滑り バイク 二台 擦れ 人が 倒れる",
+          "def": "/事故/ 不意の 災い 怪我させる",
+          "guess": "ゆっくり 走ってね"
+        }
+      }
     },
     {
       "id": "adventure",
@@ -1272,9 +1932,19 @@
       "usage": [
         {
           "en": "Our trip to Ha Giang was a real _____.",
-          "vi": "Chuyến đi Hà Giang thật sự là một cuộc phiêu lưu."
+          "vi": "Chuyến đi Hà Giang thật sự là một cuộc phiêu lưu.",
+          "glosses": {
+            "ja": "ハザン 旅行は 本当の 冒険だった"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "森 三日 抜け 地図と コンパス だけ",
+          "def": "/冒険/ 楽しく 少し 危険",
+          "guess": "探検の 支度 できた"
+        }
+      }
     },
     {
       "id": "gift",
@@ -1291,9 +1961,19 @@
       "usage": [
         {
           "en": "This watch was a _____ from my dad.",
-          "vi": "Chiếc đồng hồ này là quà bố tặng tôi."
+          "vi": "Chiếc đồng hồ này là quà bố tặng tôi.",
+          "glosses": {
+            "ja": "この 時計は 父からの 贈り物だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "小さな 箱 赤リボン 振れば カタカタ",
+          "def": "気持ちを 表す 誰かへの /贈り物/",
+          "guess": "開けて みて"
+        }
+      }
     },
     {
       "id": "recipe",
@@ -1310,9 +1990,19 @@
       "usage": [
         {
           "en": "Can you send me your _____ for this soup?",
-          "vi": "Bạn gửi mình công thức nấu món canh này được không?"
+          "vi": "Bạn gửi mình công thức nấu món canh này được không?",
+          "glosses": {
+            "ja": "この スープの 作り方を 送って"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "おばあちゃん 手書き 古い ノート ヌクマム 砂糖 ニンニク",
+          "def": "料理の /作り方/ 材料と 手順 書き",
+          "guess": "秘伝 ここに あり"
+        }
+      }
     },
     {
       "id": "invitation",
@@ -1329,9 +2019,19 @@
       "usage": [
         {
           "en": "Thanks for the _____ to your party.",
-          "vi": "Cảm ơn bạn đã mời mình dự tiệc."
+          "vi": "Cảm ơn bạn đã mời mình dự tiệc.",
+          "glosses": {
+            "ja": "パーティの 招待 ありがとう"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "赤い 封筒 喜の 字 手書きの 名前",
+          "def": "宴や 行事に 来るよう 誘う /招き/",
+          "guess": "時間 どおり 来てね"
+        }
+      }
     },
     {
       "id": "wedding",
@@ -1348,9 +2048,19 @@
       "usage": [
         {
           "en": "We're going to my cousin's _____ on Sunday.",
-          "vi": "Chủ nhật này chúng tôi đi đám cưới em họ."
+          "vi": "Chủ nhật này chúng tôi đi đám cưới em họ.",
+          "glosses": {
+            "ja": "日曜 従妹の 結婚式へ 行く"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "音楽 賑やか 丸テーブル ご馳走 皆 乾杯",
+          "def": "/結婚式/ 花嫁 花婿の 結婚の 儀",
+          "guess": "一 二 三 乾杯"
+        }
+      }
     },
     {
       "id": "headache",
@@ -1367,9 +2077,19 @@
       "usage": [
         {
           "en": "I have a terrible _____ today.",
-          "vi": "Hôm nay tôi đau đầu kinh khủng."
+          "vi": "Hôm nay tôi đau đầu kinh khủng.",
+          "glosses": {
+            "ja": "今日は ひどい 頭痛だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "一日 パソコン 両こめかみ ずきずき",
+          "def": "/頭痛/ 頭の 辺り ずきずき 不快",
+          "guess": "涼しい 油 塗って"
+        }
+      }
     },
     {
       "id": "memory",
@@ -1386,9 +2106,19 @@
       "usage": [
         {
           "en": "That trip is my favorite childhood _____.",
-          "vi": "Chuyến đi ấy là kỷ niệm tuổi thơ tôi thích nhất."
+          "vi": "Chuyến đi ấy là kỷ niệm tuổi thơ tôi thích nhất.",
+          "glosses": {
+            "ja": "あの 旅行は 一番の 子供の 頃の 思い出だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "古い アルバム めくり 幼い 自分 アオザイ",
+          "def": "/思い出/ 昔から 覚えて いること",
+          "guess": "あの 頃 覚えてる"
+        }
+      }
     },
     {
       "id": "secret",
@@ -1405,9 +2135,19 @@
       "usage": [
         {
           "en": "Can you keep a _____?",
-          "vi": "Bạn giữ bí mật được không?"
+          "vi": "Bạn giữ bí mật được không?",
+          "glosses": {
+            "ja": "秘密を 守れる かな"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "親友に 耳打ち 誰にも 言わないでね",
+          "def": "/秘密/ 隠して 誰にも 知られたく ない",
+          "guess": "君だけが 知ってる"
+        }
+      }
     },
     {
       "id": "joke",
@@ -1424,9 +2164,19 @@
       "usage": [
         {
           "en": "He told a _____ and everyone laughed.",
-          "vi": "Anh ấy kể một câu đùa và mọi người đều cười."
+          "vi": "Anh ấy kể một câu đùa và mọi người đều cười.",
+          "glosses": {
+            "ja": "彼の 冗談に 皆 笑った"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "ヤギ頭 カタツムリ 体 何だ テーブル ぽかん",
+          "def": "皆を 笑わせる /冗談/や 楽しい 話",
+          "guess": "聞いたら 笑ってね"
+        }
+      }
     },
     {
       "id": "prize",
@@ -1443,9 +2193,19 @@
       "usage": [
         {
           "en": "She won first _____ in the singing contest.",
-          "vi": "Cô ấy đoạt giải nhất cuộc thi hát."
+          "vi": "Cô ấy đoạt giải nhất cuộc thi hát.",
+          "glosses": {
+            "ja": "彼女は 歌大会で 一等賞を 取った"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "忘年会 末等 くじ 自転車 当たり",
+          "def": "大会の 勝者に 贈る /賞/",
+          "guess": "おめでとう"
+        }
+      }
     },
     {
       "id": "guest",
@@ -1462,9 +2222,19 @@
       "usage": [
         {
           "en": "Our _____ will arrive at seven.",
-          "vi": "Khách của chúng tôi sẽ đến lúc bảy giờ."
+          "vi": "Khách của chúng tôi sẽ đến lúc bảy giờ.",
+          "glosses": {
+            "ja": "客は 七時に 着く"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "チャイム 鳴れば 母は 急いで お茶 果物",
+          "def": "家 宴に /招かれた/ 人",
+          "guess": "どうぞ お入り"
+        }
+      }
     },
     {
       "id": "pocket",
@@ -1481,9 +2251,19 @@
       "usage": [
         {
           "en": "My keys are in my _____.",
-          "vi": "Chìa khóa ở trong túi tôi."
+          "vi": "Chìa khóa ở trong túi tôi.",
+          "glosses": {
+            "ja": "鍵は ポケットの 中だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "洗濯 終え 気づく 皺くちゃ 紙幣 中に",
+          "def": "小さな ものを 入れる /ポケット/",
+          "guess": "手を 入れて みて"
+        }
+      }
     },
     {
       "id": "mirror",
@@ -1500,9 +2280,19 @@
       "usage": [
         {
           "en": "She looked at herself in the _____.",
-          "vi": "Cô ấy ngắm mình trong gương."
+          "vi": "Cô ấy ngắm mình trong gương.",
+          "glosses": {
+            "ja": "彼女は 鏡で 自分を 眺めた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "出かける 前 左右 回り 眺める",
+          "def": "顔 姿を 見る /鏡/",
+          "guess": "世界で 誰が 一番 綺麗"
+        }
+      }
     },
     {
       "id": "fridge",
@@ -1519,9 +2309,19 @@
       "usage": [
         {
           "en": "Put the milk back in the _____.",
-          "vi": "Cất sữa lại vào tủ lạnh đi."
+          "vi": "Cất sữa lại vào tủ lạnh đi.",
+          "glosses": {
+            "ja": "牛乳を 冷蔵庫に 戻して"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "夜中 お腹 空き 開ければ 明かり",
+          "def": "食べ物を 涼しく 長持ち させる /冷蔵庫/",
+          "guess": "体ごと 冷える"
+        }
+      }
     },
     {
       "id": "rubbish",
@@ -1538,9 +2338,19 @@
       "usage": [
         {
           "en": "Please put your _____ in the bin.",
-          "vi": "Vui lòng bỏ rác vào thùng."
+          "vi": "Vui lòng bỏ rác vào thùng.",
+          "glosses": {
+            "ja": "ゴミは ゴミ箱に 捨てて"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "夜 八時 荷車 チリンチリン 路地 過ぎる",
+          "def": "箱 空袋 紙くず など /捨てる/ もの",
+          "guess": "決まった 場所に 捨ててね"
+        }
+      }
     },
     {
       "id": "uniform",
@@ -1557,9 +2367,19 @@
       "usage": [
         {
           "en": "Students must wear a _____ at my school.",
-          "vi": "Ở trường tôi, học sinh phải mặc đồng phục."
+          "vi": "Ở trường tôi, học sinh phải mặc đồng phục.",
+          "glosses": {
+            "ja": "私の 学校では 制服が 要る"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "月曜 学校中 白シャツ 青ズボン 皆 同じ",
+          "def": "学校 会社 皆 同じ /制服/",
+          "guess": "皆 同じだね"
+        }
+      }
     },
     {
       "id": "thief",
@@ -1576,9 +2396,19 @@
       "usage": [
         {
           "en": "The police caught the _____.",
-          "vi": "Cảnh sát đã bắt được tên trộm."
+          "vi": "Cảnh sát đã bắt được tên trộm.",
+          "glosses": {
+            "ja": "警察は 泥棒を 捕まえた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "市場 混雑 振り向けば 財布 忽然",
+          "def": "他人の ものを 盗む /泥棒/",
+          "guess": "捕まえろ"
+        }
+      }
     },
     {
       "id": "celebrity",
@@ -1595,9 +2425,19 @@
       "usage": [
         {
           "en": "She became a _____ after the TV show.",
-          "vi": "Cô ấy trở thành người nổi tiếng sau chương trình truyền hình đó."
+          "vi": "Cô ấy trở thành người nổi tiếng sau chương trình truyền hình đó.",
+          "glosses": {
+            "ja": "彼女は 番組の あと 有名人と なった"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "ファンが 早朝 並び 写真 だけに",
+          "def": "/有名人/ 歌手 俳優 であること 多し",
+          "guess": "レッドカーペット 待ち"
+        }
+      }
     },
     {
       "id": "charity",
@@ -1614,9 +2454,19 @@
       "usage": [
         {
           "en": "She gives money to _____ every month.",
-          "vi": "Tháng nào cô ấy cũng quyên góp cho tổ chức từ thiện."
+          "vi": "Tháng nào cô ấy cũng quyên góp cho tổ chức từ thiện.",
+          "glosses": {
+            "ja": "彼女は 毎月 慈善に 寄付する"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "中部 洪水 クラスで お金 服 集める",
+          "def": "困る 人を 助ける 寄付の /慈善/ 団体",
+          "guess": "助け合いの 心"
+        }
+      }
     },
     {
       "id": "permission",
@@ -1633,9 +2483,19 @@
       "usage": [
         {
           "en": "You need _____ to park here.",
-          "vi": "Bạn cần được cho phép mới đỗ xe ở đây."
+          "vi": "Bạn cần được cho phép mới đỗ xe ở đây.",
+          "glosses": {
+            "ja": "ここに 駐車 するには 許可が 要る"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "お母さん 十時まで 遊びに 行って いい",
+          "def": "何かを して いいという /許可/",
+          "guess": "いい かな"
+        }
+      }
     },
     {
       "id": "pet",
@@ -1652,9 +2512,19 @@
       "usage": [
         {
           "en": "My cat is the best _____ ever.",
-          "vi": "Con mèo của tôi là thú cưng tuyệt nhất."
+          "vi": "Con mèo của tôi là thú cưng tuyệt nhất.",
+          "glosses": {
+            "ja": "うちの 猫は 最高の ペットだ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "帰宅 開けた 瞬間 尻尾 振る子",
+          "def": "友に する 家で 飼う /ペット/",
+          "guess": "ニャー ワン"
+        }
+      }
     },
     {
       "id": "avoid",
@@ -1671,9 +2541,19 @@
       "usage": [
         {
           "en": "Try to _____ eating too much sugar.",
-          "vi": "Cố tránh ăn quá nhiều đường."
+          "vi": "Cố tránh ăn quá nhiều đường.",
+          "glosses": {
+            "ja": "砂糖の 摂りすぎを 避けて"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "路地に 借金取り 見て 別道へ",
+          "def": "/避けて/ 会わず せずに 済ませようと する",
+          "guess": "避けられる なら 避けて"
+        }
+      }
     },
     {
       "id": "celebrate",
@@ -1690,9 +2570,19 @@
       "usage": [
         {
           "en": "Let's _____ your new job tonight!",
-          "vi": "Tối nay mình ăn mừng công việc mới của bạn nhé!"
+          "vi": "Tối nay mình ăn mừng công việc mới của bạn nhé!",
+          "glosses": {
+            "ja": "今夜 新しい 仕事を 祝おう"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "贔屓 勝利 街中 通りに 出て 歓声",
+          "def": "嬉しい 機会 記念を /祝う/",
+          "guess": "皆で 騒ごう"
+        }
+      }
     },
     {
       "id": "earn",
@@ -1709,9 +2599,19 @@
       "usage": [
         {
           "en": "How much do you _____ a month?",
-          "vi": "Mỗi tháng bạn kiếm được bao nhiêu?"
+          "vi": "Mỗi tháng bạn kiếm được bao nhiêu?",
+          "glosses": {
+            "ja": "月に いくら 稼ぐ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "昼は 学校 夜は バイク 便乗 稼ぎ",
+          "def": "働き 努力で /稼ぐ/",
+          "guess": "もう少し 稼ごう"
+        }
+      }
     },
     {
       "id": "lend",
@@ -1728,9 +2628,19 @@
       "usage": [
         {
           "en": "Can you _____ me your pen?",
-          "vi": "Bạn cho mình mượn cây bút được không?"
+          "vi": "Bạn cho mình mượn cây bút được không?",
+          "glosses": {
+            "ja": "ペンを 貸して くれる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "財布 忘れた 友 すぐ 十万 出し 持ってけ",
+          "def": "もの お金を /貸し/ あとで 返して もらう",
+          "guess": "返すの 忘れる なよ"
+        }
+      }
     },
     {
       "id": "hide",
@@ -1747,9 +2657,19 @@
       "usage": [
         {
           "en": "The cat likes to _____ under the bed.",
-          "vi": "Con mèo thích trốn dưới gầm giường."
+          "vi": "Con mèo thích trốn dưới gầm giường.",
+          "glosses": {
+            "ja": "猫は ベッド下に 隠れる のが 好き"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "かくれんぼ ベッド下 潜り 息殺す",
+          "def": "/隠し/ 見つからぬ よう 逃げる",
+          "guess": "ばあ 見つけたよ"
+        }
+      }
     },
     {
       "id": "steal",
@@ -1766,9 +2686,19 @@
       "usage": [
         {
           "en": "Someone tried to _____ my bike.",
-          "vi": "Có người định lấy trộm xe đạp của tôi."
+          "vi": "Có người định lấy trộm xe đạp của tôi.",
+          "glosses": {
+            "ja": "誰かが 私の 自転車を 盗もうと した"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "カメラ 映る 誰か バイク 連れ去り",
+          "def": "人が 知らぬ 間に 他人の ものを /盗む/",
+          "guess": "持ち物を しっかり 持って"
+        }
+      }
     },
     {
       "id": "repair",
@@ -1785,9 +2715,19 @@
       "usage": [
         {
           "en": "How much does it cost to _____ the TV?",
-          "vi": "Sửa cái tivi tốn bao nhiêu tiền?"
+          "vi": "Sửa cái tivi tốn bao nhiêu tiền?",
+          "glosses": {
+            "ja": "テレビの 修理は いくら"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "道で パンク 幸い 角に 修理屋",
+          "def": "壊れた ものを /直し/ また 使えるよう",
+          "guess": "レンチ 持ってきて"
+        }
+      }
     },
     {
       "id": "refuse",
@@ -1804,9 +2744,19 @@
       "usage": [
         {
           "en": "I can't _____ such a kind offer.",
-          "vi": "Tôi không nỡ từ chối lời đề nghị tử tế như vậy."
+          "vi": "Tôi không nỡ từ chối lời đề nghị tử tế như vậy.",
+          "glosses": {
+            "ja": "優しい 誘いを 断れ ない"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "もう 一杯 誘われ 手を 振り もう もう",
+          "def": "/断り/ 誘い 求めに いいえと 言う",
+          "guess": "首を 横に ブンブン"
+        }
+      }
     },
     {
       "id": "recommend",
@@ -1823,9 +2773,19 @@
       "usage": [
         {
           "en": "Can you _____ a good restaurant nearby?",
-          "vi": "Bạn gợi ý giúp mình một quán ngon gần đây được không?"
+          "vi": "Bạn gợi ý giúp mình một quán ngon gần đây được không?",
+          "glosses": {
+            "ja": "近くの 良い 店を 勧めて"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "美味い 店 聞けば 友が 長い 名簿",
+          "def": "良いと 思う ものを 他人に /勧める/",
+          "guess": "信じて 試して みて"
+        }
+      }
     },
     {
       "id": "shout",
@@ -1842,9 +2802,19 @@
       "usage": [
         {
           "en": "Don't _____ at me!",
-          "vi": "Đừng quát mình!"
+          "vi": "Đừng quát mình!",
+          "glosses": {
+            "ja": "私に 怒鳴らないで"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "庭から 五階へ ご飯だよと 呼ぶ",
+          "def": "/大声/で 他人に 聞こえる よう 言う",
+          "guess": "大きく 言って みて"
+        }
+      }
     },
     {
       "id": "pack",
@@ -1861,9 +2831,19 @@
       "usage": [
         {
           "en": "Don't forget to _____ your swimsuit.",
-          "vi": "Nhớ mang theo đồ bơi nhé."
+          "vi": "Nhớ mang theo đồ bơi nhé.",
+          "glosses": {
+            "ja": "水着を 詰める のを 忘れる なよ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "便の 前夜 バリに 座り 閉める",
+          "def": "旅の 前に 服 道具を /鞄/に 詰める",
+          "guess": "まだ 詰める かな"
+        }
+      }
     },
     {
       "id": "disappear",
@@ -1880,9 +2860,19 @@
       "usage": [
         {
           "en": "My socks always _____ in the washing machine.",
-          "vi": "Tất của tôi cứ biến mất trong máy giặt."
+          "vi": "Tất của tôi cứ biến mất trong máy giặt.",
+          "glosses": {
+            "ja": "靴下は 洗濯機で 消える"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "皿 置き 振り返れば ぺろり なし",
+          "def": "/消えて/ 突然 どこにも 見えなく なる",
+          "guess": "あれ どこ 行った"
+        }
+      }
     },
     {
       "id": "cry",
@@ -1899,9 +2889,19 @@
       "usage": [
         {
           "en": "The baby started to _____.",
-          "vi": "Em bé bắt đầu khóc."
+          "vi": "Em bé bắt đầu khóc.",
+          "glosses": {
+            "ja": "赤ちゃんが 泣き始めた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "映画 終盤 館中 すすり 目 拭う",
+          "def": "/涙を 流し/ 悲し 痛み 感動で",
+          "guess": "ティッシュ 持ってきて"
+        }
+      }
     }
   ]
 }

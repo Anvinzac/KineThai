@@ -18,9 +18,19 @@
       "usage": [
         {
           "en": "She felt _____ of her sister's success.",
-          "vi": "Cô ấy ghen tị với thành công của chị gái."
+          "vi": "Cô ấy ghen tị với thành công của chị gái.",
+          "glosses": {
+            "ja": "彼女は 姉の 成功に 嫉妬した"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "親友が 新しい 携帯を 自慢 心が 少し 酸っぱい",
+          "def": "他人が 自分の 欲しいものを 持つと /嫉妬/する",
+          "guess": "誰か 目が 熱い かな"
+        }
+      }
     },
     {
       "id": "lonely",
@@ -37,9 +47,19 @@
       "usage": [
         {
           "en": "He felt _____ after moving to a new city.",
-          "vi": "Anh ấy thấy cô đơn sau khi chuyển đến thành phố mới."
+          "vi": "Anh ấy thấy cô đơn sau khi chuyển đến thành phố mới.",
+          "glosses": {
+            "ja": "彼は 新しい 街に 越して 寂しかった"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "正月に 街に 残り 寮の 通りは がらんと",
+          "def": "/寂しさ/を 感じ 誰も そばに いない",
+          "guess": "ここに 私が いるよ"
+        }
+      }
     },
     {
       "id": "proud",
@@ -56,9 +76,19 @@
       "usage": [
         {
           "en": "We are so _____ of you.",
-          "vi": "Bố mẹ rất tự hào về con."
+          "vi": "Bố mẹ rất tự hào về con.",
+          "glosses": {
+            "ja": "両親は 子を とても 誇りに 思う"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "子が 賞状を もらい 両親は 写真を 撮り 自慢",
+          "def": "自分や 身内が 良いことを して /誇らしい/",
+          "guess": "胸を 張って"
+        }
+      }
     },
     {
       "id": "confused",
@@ -75,9 +105,19 @@
       "usage": [
         {
           "en": "I'm _____ about what to do next.",
-          "vi": "Tôi đang rối, không biết làm gì tiếp theo."
+          "vi": "Tôi đang rối, không biết làm gì tiếp theo.",
+          "glosses": {
+            "ja": "私は 次に 何を すれば いいか 混乱して いる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "先生が 授業を 終え クラス中が 顔を 見合わせ",
+          "def": "/混乱/して 何が 起きて いるか わからない",
+          "guess": "えっ それで どうなる"
+        }
+      }
     },
     {
       "id": "exhausted",
@@ -94,9 +134,19 @@
       "usage": [
         {
           "en": "After the long hike, we were completely _____.",
-          "vi": "Sau chuyến leo núi dài, chúng tôi kiệt sức hoàn toàn."
+          "vi": "Sau chuyến leo núi dài, chúng tôi kiệt sức hoàn toàn.",
+          "glosses": {
+            "ja": "長い ハイキングの あと 私たちは 完全に 疲れ果てた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "三晩 徹夜 枕に 触れた 瞬間 熟睡",
+          "def": "/疲れ果て/て 何も したく ないほど",
+          "guess": "もう少し 頑張れ 終わるよ"
+        }
+      }
     },
     {
       "id": "honest",
@@ -113,9 +163,19 @@
       "usage": [
         {
           "en": "To be _____, I didn't like the movie.",
-          "vi": "Nói thật, tôi không thích bộ phim đó."
+          "vi": "Nói thật, tôi không thích bộ phim đó.",
+          "glosses": {
+            "ja": "正直に 言うと その 映画は 好きじゃ なかった"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "財布を 拾い すぐ 交番に 届ける",
+          "def": "/正直/で 嘘も ごまかしも ない",
+          "guess": "本当の ことを 言って 知ってるでしょう"
+        }
+      }
     },
     {
       "id": "polite",
@@ -132,9 +192,19 @@
       "usage": [
         {
           "en": "It's _____ to say thank you.",
-          "vi": "Nói cảm ơn là phép lịch sự."
+          "vi": "Nói cảm ơn là phép lịch sự.",
+          "glosses": {
+            "ja": "ありがとうと 言うのは 礼儀だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "目上に 会えば 手を 組み 頭を 下げ 挨拶",
+          "def": "/礼儀正/しく 挨拶や 感謝が できる",
+          "guess": "どうぞ 先に 猜って"
+        }
+      }
     },
     {
       "id": "lazy",
@@ -151,9 +221,19 @@
       "usage": [
         {
           "en": "Don't be so _____, help me clean up!",
-          "vi": "Đừng lười thế, phụ mình dọn dẹp đi!"
+          "vi": "Đừng lười thế, phụ mình dọn dẹp đi!",
+          "glosses": {
+            "ja": "怠ける なよ 掃除を 手伝って"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "目覚ましが 三度 鳴っても 布団を 被る",
+          "def": "/怠け/て 働くのを 嫌がり ごろごろ する",
+          "guess": "考える だけでも 疲れる"
+        }
+      }
     },
     {
       "id": "brave",
@@ -170,9 +250,19 @@
       "usage": [
         {
           "en": "It was _____ of her to speak up.",
-          "vi": "Cô ấy thật can đảm khi dám lên tiếng."
+          "vi": "Cô ấy thật can đảm khi dám lên tiếng.",
+          "glosses": {
+            "ja": "彼女が 声を 上げたのは 勇敢だった"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "震え ながらも 舞台に 上がり 歌う",
+          "def": "/勇敢/で 心は 怖くても 難しいことに 挑む",
+          "guess": "度胸が あるなら 猜って"
+        }
+      }
     },
     {
       "id": "selfish",
@@ -189,9 +279,19 @@
       "usage": [
         {
           "en": "It's _____ to keep all the snacks for yourself.",
-          "vi": "Giữ hết đồ ăn vặt cho riêng mình là ích kỷ."
+          "vi": "Giữ hết đồ ăn vặt cho riêng mình là ích kỷ.",
+          "glosses": {
+            "ja": "おやつを 独り占め するのは 自分勝手だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "皆の 料理で 一番 美味しい 一切れを 取る",
+          "def": "/自分勝手/で 自分の ことだけ 考え 他人を 無視",
+          "guess": "この 答えは 分けないよ"
+        }
+      }
     },
     {
       "id": "complain",
@@ -208,9 +308,19 @@
       "usage": [
         {
           "en": "Customers often _____ about the slow Wi-Fi.",
-          "vi": "Khách hay phàn nàn về Wi-Fi chậm."
+          "vi": "Khách hay phàn nàn về Wi-Fi chậm.",
+          "glosses": {
+            "ja": "客は 遅い Wi-Fiに 文句を 言いがち"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "料理が 遅く 冷め 客が 支配人を 呼ぶ",
+          "def": "何かに 不満で /文句/を 言う",
+          "guess": "難しければ ため息を ついて"
+        }
+      }
     },
     {
       "id": "explain",
@@ -227,9 +337,19 @@
       "usage": [
         {
           "en": "Can you _____ this rule to me?",
-          "vi": "Bạn giải thích luật này cho mình được không?"
+          "vi": "Bạn giải thích luật này cho mình được không?",
+          "glosses": {
+            "ja": "この 規則を 説明して くれる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "おばあちゃんに TikTokを 説明 孫が 半日 話す",
+          "def": "他人が はっきり わかるよう /説明/する",
+          "guess": "わかったら 言って"
+        }
+      }
     },
     {
       "id": "promise",
@@ -246,9 +366,19 @@
       "usage": [
         {
           "en": "I _____ I'll call you tonight.",
-          "vi": "Mình hứa tối nay sẽ gọi cho bạn."
+          "vi": "Mình hứa tối nay sẽ gọi cho bạn.",
+          "glosses": {
+            "ja": "今夜 電話すると 約束する"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "指切り したよ 破った 方が 負け",
+          "def": "誰かに 必ず すると /約束/する",
+          "guess": "当たれば タピオカを おごる"
+        }
+      }
     },
     {
       "id": "argue",
@@ -265,9 +395,19 @@
       "usage": [
         {
           "en": "My brothers _____ about everything.",
-          "vi": "Mấy anh em tôi cãi nhau đủ thứ chuyện."
+          "vi": "Mấy anh em tôi cãi nhau đủ thứ chuyện.",
+          "glosses": {
+            "ja": "兄弟は 何でも 口論する"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "今夜の 映画 選びで 二人が 言い争う",
+          "def": "意見が 合わず /口論/する",
+          "guess": "大声 出さず 小さく 言って"
+        }
+      }
     },
     {
       "id": "encourage",
@@ -284,9 +424,19 @@
       "usage": [
         {
           "en": "Teachers should _____ students to ask questions.",
-          "vi": "Thầy cô nên khuyến khích học sinh đặt câu hỏi."
+          "vi": "Thầy cô nên khuyến khích học sinh đặt câu hỏi.",
+          "glosses": {
+            "ja": "先生は 生徒に 質問する よう 励ます べき"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "試験の 前 母が 肩を 叩き できるよと",
+          "def": "誰かを /励まし/て 自信と 努力を 与える",
+          "guess": "先に 拍手を 送るね"
+        }
+      }
     },
     {
       "id": "realize",
@@ -303,9 +453,19 @@
       "usage": [
         {
           "en": "I didn't _____ how late it was.",
-          "vi": "Tôi không nhận ra là đã khuya đến thế."
+          "vi": "Tôi không nhận ra là đã khuya đến thế.",
+          "glosses": {
+            "ja": "こんなに 夜更け とは 気づかなかった"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "半分 来て 気づく 左右 違う サンダル",
+          "def": "それまで 見えなかった ことに 突然 /気づく/",
+          "guess": "頭の 電球は ついた かな"
+        }
+      }
     },
     {
       "id": "decide",
@@ -322,9 +482,19 @@
       "usage": [
         {
           "en": "We need to _____ by Friday.",
-          "vi": "Chúng ta cần quyết định trước thứ Sáu."
+          "vi": "Chúng ta cần quyết định trước thứ Sáu.",
+          "glosses": {
+            "ja": "金曜 までに 決める 必要が ある"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "タピオカか コーヒーか 店の 前で 十分 悩む",
+          "def": "考えた 末に 多くの中から 一つに /決める/",
+          "guess": "注文を 決めて"
+        }
+      }
     },
     {
       "id": "forget",
@@ -341,9 +511,19 @@
       "usage": [
         {
           "en": "Don't _____ your umbrella.",
-          "vi": "Đừng quên mang ô nhé."
+          "vi": "Đừng quên mang ô nhé.",
+          "glosses": {
+            "ja": "傘を 忘れる なよ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "冷蔵庫を 開け ぼうっと 立つ 何を 取る 気だっけ",
+          "def": "/忘れて/ かつて 知って いたことを 覚えて いない",
+          "guess": "あれ 今 何して いたっけ"
+        }
+      }
     },
     {
       "id": "habit",
@@ -360,9 +540,19 @@
       "usage": [
         {
           "en": "Biting your nails is a bad _____.",
-          "vi": "Cắn móng tay là một thói quen xấu."
+          "vi": "Cắn móng tay là một thói quen xấu.",
+          "glosses": {
+            "ja": "爪を 噛むのは 悪い 習慣だ"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "目が 覚めた 瞬間 手が 携帯を 探す",
+          "def": "/習慣/で 考えずに 規則正しく やること",
+          "guess": "毎日 そうだよ"
+        }
+      }
     },
     {
       "id": "neighbor",
@@ -379,9 +569,19 @@
       "usage": [
         {
           "en": "My _____ often waters my plants when I travel.",
-          "vi": "Bác hàng xóm hay tưới cây giúp khi tôi đi xa."
+          "vi": "Bác hàng xóm hay tưới cây giúp khi tôi đi xa.",
+          "glosses": {
+            "ja": "隣の おばさんが 旅行中 水やりを して くれる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "隣の 家が 酸っぱい スープを 煮て 香りが こちらまで",
+          "def": "壁一枚 隔てた そばに 住む /隣人/",
+          "guess": "遠くの 親戚より"
+        }
+      }
     },
     {
       "id": "rush",
@@ -398,9 +598,19 @@
       "usage": [
         {
           "en": "There's no need to _____, we have time.",
-          "vi": "Không cần vội đâu, mình còn thời gian."
+          "vi": "Không cần vội đâu, mình còn thời gian.",
+          "glosses": {
+            "ja": "急ぐ 必要は ない 時間は ある"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "授業まで 五分 走り ながら ボタンを 留める",
+          "def": "時間が なくて とても /急いで/ やる",
+          "guess": "ゆっくりで 間に合うよ"
+        }
+      }
     },
     {
       "id": "afford",
@@ -417,9 +627,19 @@
       "usage": [
         {
           "en": "I can't _____ a new laptop right now.",
-          "vi": "Giờ tôi chưa đủ tiền mua laptop mới."
+          "vi": "Giờ tôi chưa đủ tiền mua laptop mới.",
+          "glosses": {
+            "ja": "今は 新しい パソコンが 買えない"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "靴を 眺め 値段を 見て そっと 置く",
+          "def": "何かを 買える だけの /お金/が ある",
+          "guess": "予想は 無料 お金は いらない"
+        }
+      }
     },
     {
       "id": "borrow",
@@ -436,9 +656,19 @@
       "usage": [
         {
           "en": "Can I _____ your charger?",
-          "vi": "Mình mượn cục sạc của bạn được không?"
+          "vi": "Mình mượn cục sạc của bạn được không?",
+          "glosses": {
+            "ja": "充電器を 借りても いい"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "ペンを 貸して すぐ 返すから",
+          "def": "他人の ものを 一時 使って あとで /返す/",
+          "guess": "行った ものは 戻る"
+        }
+      }
     },
     {
       "id": "budget",
@@ -455,9 +685,19 @@
       "usage": [
         {
           "en": "We're planning a trip on a tight _____.",
-          "vi": "Chúng tôi lên kế hoạch đi chơi với ngân sách eo hẹp."
+          "vi": "Chúng tôi lên kế hoạch đi chơi với ngân sách eo hẹp.",
+          "glosses": {
+            "ja": "私たちは 厳しい 予算で 旅行を 計画して いる"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "月初に 分ける 家賃 食費 貯金",
+          "def": "ある ことに 使う /予定/の お金",
+          "guess": "文字を 上手に 使って"
+        }
+      }
     },
     {
       "id": "salary",
@@ -474,9 +714,19 @@
       "usage": [
         {
           "en": "She asked for a higher _____.",
-          "vi": "Cô ấy đề nghị được tăng lương."
+          "vi": "Cô ấy đề nghị được tăng lương.",
+          "glosses": {
+            "ja": "彼女は 昇給を 求めた"
+          }
         }
-      ]
+      ],
+      "localized": {
+        "ja": {
+          "lead": "五日に 携帯が チャリン 部屋中が 沸く",
+          "def": "毎月 決まって もらう /給料/",
+          "guess": "月末は いつも 待ち遠しい"
+        }
+      }
     }
   ]
 }
