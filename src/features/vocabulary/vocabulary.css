@@ -3615,16 +3615,16 @@
 /* The word count stands alone as one big tabular number with a small unit —
    the band chip moved up beside the level name, so nothing crowds this line. */
 .vocab-onboard-count {
-  font-size: 24px;
-  font-weight: 800;
-  line-height: 1.15;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
   color: var(--shell-text-soft);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   transition: font-size var(--dur-quick) var(--ease-out);
 }
 .vocab-onboard-rung[data-on] .vocab-onboard-count {
-  font-size: 28px;
+  font-size: 17px;
 }
 .vocab-onboard-count small {
   font-size: 11px;
@@ -3637,10 +3637,10 @@
    the count steps down a notch and the prose keeps a readable size instead of
    following the smaller scale other locales use. */
 .vocab-onboard-rung:lang(ja) .vocab-onboard-count {
-  font-size: 21px;
+  font-size: 13px;
 }
 .vocab-onboard-rung[data-on]:lang(ja) .vocab-onboard-count {
-  font-size: 24px;
+  font-size: 14px;
 }
 .vocab-onboard-rung:lang(ja) .vocab-onboard-count small {
   font-size: 10px;
@@ -3879,10 +3879,10 @@
     font-size: 15px;
   }
   .vocab-onboard-count {
-    font-size: 18px;
+    font-size: 13px;
   }
   .vocab-onboard-rung[data-on] .vocab-onboard-count {
-    font-size: 20px;
+    font-size: 14px;
   }
   .vocab-onboard-count small {
     font-size: 10px;
@@ -3997,10 +3997,10 @@
     font-size: 13px;
   }
   .vocab-onboard[data-landscape] .vocab-onboard-count {
-    font-size: 13px;
+    font-size: 11px;
   }
   .vocab-onboard[data-landscape] .vocab-onboard-rung[data-on] .vocab-onboard-count {
-    font-size: 15px;
+    font-size: 12px;
   }
   .vocab-onboard[data-landscape] .vocab-onboard-count small {
     font-size: 9px;
