@@ -7,9 +7,12 @@
  * leading edge, so it travels the exact same distance the edge sweeps in — the handle
  * and the drawer move together, one-for-one with the finger, never separating. A pull
  * that never commits slides the panel (and its tab) back out.
- * The dock carries `data-no-gesture` so a pull never also drags the card underneath;
- * the stream's own flick only reacts to decisively VERTICAL swipes, so a leftward pull
- * leaves it alone too.
+ * Closing mirrors opening: once the panel is in, a left-to-right drag anywhere on it
+ * (except a saved row, which keeps its own un-save swipe) pushes it back off the right
+ * edge, tracking the finger and either committing past the same threshold or springing
+ * back open. The dock carries `data-no-gesture` so a pull never also drags the card
+ * underneath; the stream's own flick only reacts to decisively VERTICAL swipes, so a
+ * leftward pull leaves it alone too.
  *
  * The panel covers ~85% of the width, leaving a strip of scrim on the far edge: a tap
  * there closes the drawer, and the exposed edge keeps a browser back-swipe from
@@ -74,6 +77,13 @@ export function SavedDrawer({ open, onOpenChange }: SavedDrawerProps): React.Rea
   const [pull, setPull] = useState(0);
   const detach = useRef<(() => void) | null>(null);
   const handle = useRef<HTMLButtonElement>(null);
+  // Mirror of the dismiss drag: `closePull` is 0..1 how far the open panel has been pushed
+  // back toward the right edge, with `closePullRef` kept in step for the pointerup handler
+  // (which would otherwise read the value captured when it was created). `closeDetach` tears
+  // down the window listeners the same way the open gesture's `detach` does.
+  const closePullRef = useRef(0);
+  const [closePull, setClosePull] = useState(0);
+  const closeDetach = useRef<(() => void) | null>(null);
   // A released-but-uncommitted pull must animate the drawer back out, so it stays
   // mounted for the exit duration even though `open` never flipped true.
   const [retracting, setRetracting] = useState(false);
@@ -88,10 +98,21 @@ export function SavedDrawer({ open, onOpenChange }: SavedDrawerProps): React.Rea
   useEffect(
     () => () => {
       detach.current?.();
+      closeDetach.current?.();
       window.clearTimeout(retractTimer.current);
     },
     [],
   );
+
+  // A new open must start from the fully-in position: if a previous dismiss drag was cut
+  // short (unmounted mid-drag, or reopened before its listener cleanup ran), a leftover
+  // closePull would offset the panel the moment it appears.
+  useEffect(() => {
+    if (open) {
+      closePullRef.current = 0;
+      setClosePull(0);
+    }
+  }, [open]);
 
   // Track the drawer width across resizes/orientation so the handle stays welded to the
   // panel's leading edge on every viewport.
@@ -185,6 +206,68 @@ export function SavedDrawer({ open, onOpenChange }: SavedDrawerProps): React.Rea
     window.addEventListener("pointercancel", onUp);
   };
 
+  // Dismiss gesture: a left-to-right drag on the open panel pushes it back off the right
+  // edge, the mirror of the pull that opened it. It rides the same window-listener model as
+  // the open gesture (no setPointerCapture, so the panel's `data-dragging` pointer-events:none
+  // cannot retarget the follow-up events) and the same travel (the panel's own width) and
+  // commit threshold, so opening and closing feel like one continuous control.
+  const onClosePointerDown = (event: ReactPointerEvent<HTMLElement>) => {
+    if (!open) return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    // A saved row owns its horizontal swipe (un-save); starting on one must not close the
+    // drawer, so the panel gesture yields whenever the drag origin is inside a row.
+    if ((event.target as HTMLElement).closest(".vocab-saved-item")) return;
+    closeDetach.current?.();
+    const from = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    const pullDistance = Math.max(1, panelWidth);
+    let moving = false;
+
+    const applyClose = (next: number) => {
+      closePullRef.current = next;
+      setClosePull(next);
+    };
+
+    const onMove = (moveEvent: PointerEvent) => {
+      if (moveEvent.pointerId !== from.id) return;
+      const dx = moveEvent.clientX - from.x;
+      const dy = moveEvent.clientY - from.y;
+      if (!moving) {
+        if (Math.abs(dx) < DRAG_SLOP) return;
+        // A mostly-vertical drag is the list scrolling, not the drawer leaving.
+        if (Math.abs(dx) <= Math.abs(dy)) {
+          cleanup();
+          return;
+        }
+        moving = true;
+      }
+      // Rightward (increasing x) pushes the panel out its own right edge.
+      applyClose(Math.max(0, Math.min(1, dx / pullDistance)));
+    };
+
+    const onUp = (upEvent: PointerEvent) => {
+      if (upEvent.pointerId !== from.id) return;
+      const committed = moving && closePullRef.current >= PULL_COMMIT;
+      // Reset first so the panel's own exit/spring-back animation runs from wherever the
+      // finger left it: `open` staying true returns it to 0% (spring back), `open` going
+      // false sends it to 100% (the normal exit), in both cases over the eased transition.
+      applyClose(0);
+      cleanup();
+      if (committed) onOpenChange(false);
+    };
+
+    const cleanup = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      closeDetach.current = null;
+    };
+
+    closeDetach.current = cleanup;
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+  };
+
   const locale = useLocale();
   const label = savedCount
     ? t(locale, "drawer.viewCount", { count: savedCount })
@@ -192,10 +275,12 @@ export function SavedDrawer({ open, onOpenChange }: SavedDrawerProps): React.Rea
 
   // The handle is a tab welded to the panel's leading edge: it travels the SAME distance the
   // edge sweeps in (a fraction of the panel's width), so during a pull the two move as one.
-  const drawerProgress = open ? 1 : Math.max(0, Math.min(1, pull));
+  // Once open, a dismiss drag reads progress back down from 1 toward 0, so the panel slides
+  // out the same edge it came in, tracking the finger on the identical travel.
+  const drawerProgress = open ? 1 - closePull : Math.max(0, Math.min(1, pull));
   const drawerOffset = (1 - drawerProgress) * 100;
   const handleShift = drawerProgress * panelWidth;
-  const draggingPanel = pull > 0 && !open;
+  const draggingPanel = (pull > 0 && !open) || (closePull > 0 && open);
   const showing = presence.mounted || pull > 0 || retracting;
 
   return (
@@ -248,6 +333,7 @@ export function SavedDrawer({ open, onOpenChange }: SavedDrawerProps): React.Rea
             className="vocab-saved-panel"
             data-closing={presence.closing || undefined}
             data-dragging={draggingPanel || undefined}
+            onPointerDown={onClosePointerDown}
             initial={{ x: "100%" }}
             animate={{ x: `${drawerOffset}%` }}
             transition={
