@@ -13,16 +13,7 @@
  */
 
 import { Link } from "@tanstack/react-router";
-import {
-  ArrowLeft,
-  Bookmark,
-  ChevronDown,
-  ChevronsUpDown,
-  FoldVertical,
-  Heart,
-  Undo2,
-  X,
-} from "lucide-react";
+import { ArrowLeft, Bookmark, ChevronDown, Heart, Undo2, X } from "lucide-react";
 import {
   useEffect,
   useId,
@@ -553,15 +544,17 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
                   type="button"
                   className="vocab-saved-density"
                   aria-pressed={!compact}
-                  aria-label={compact ? "Mở rộng danh sách" : "Thu gọn danh sách"}
-                  title={compact ? "Mở rộng danh sách" : "Thu gọn danh sách"}
+                  aria-label={compact ? "Mở rộng nghĩa" : "Thu gọn danh sách"}
+                  title={compact ? "Mở rộng nghĩa" : "Thu gọn danh sách"}
                   onClick={() => setCompact((value) => !value)}
                 >
-                  {compact ? (
-                    <ChevronsUpDown size={15} aria-hidden="true" />
-                  ) : (
-                    <FoldVertical size={15} aria-hidden="true" />
-                  )}
+                  {/* Peek-a-boo reads as tappable where a chevron didn't: the meanings are
+                      tucked behind two palms (faint = there is something to uncover), and a
+                      tap parts them into a wide-eyed stare (solid = the list is open). Color
+                      emoji, never a mono glyph. */}
+                  <span className="vocab-saved-density-emoji" aria-hidden="true">
+                    {compact ? "🫣" : "😳"}
+                  </span>
                 </button>
               )}
             </div>

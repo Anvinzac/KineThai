@@ -543,9 +543,15 @@
   /* The panel's horizontal position is driven by framer-motion in SavedDrawer.tsx, so the
      same transform both tracks the finger during a pull and eases open/closed on release.
      A keyframe here would fight that live transform, so there is none. */
+  /* `pan-y` hands vertical scrolling back to the browser (the list still scrolls) while
+     claiming horizontal movement for the drawer's own left-to-right dismiss gesture. Rows
+     opt back into their horizontal un-save swipe with their own `touch-action`. */
+  touch-action: pan-y;
 }
 /* While the drawer is only a drag preview it is not yet interactive; the finger is
-   driving it through the dock's window listeners, so it must not swallow taps. */
+   driving it through the dock's window listeners, so it must not swallow taps. The same
+   marker covers the dismiss drag: once a rightward pull starts, the content stops taking
+   taps and the window listeners finish the gesture. */
 .vocab-saved-panel[data-dragging] {
   pointer-events: none;
 }
@@ -2271,6 +2277,8 @@
    The feed shell locks overflow for its snap-scroll viewport; the saved list is
    an ordinary document flow page, so it opts back into scrolling. */
 .vocab-saved-shell {
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   height: 100dvh;
   overscroll-behavior-y: contain;
@@ -2297,15 +2305,40 @@
 /* Two tabs over one list each. Each tab is named after the reaction that puts a word in
    it, so the count inside the tab is the size of that list, not of the reader's taps.
    The row IS the switcher, drawn as a real tab strip: two rounded-rectangle tabs, each
-   carrying its own outline. The open tab is marked by an accent bar ALONG ITS TOP and
-   loses its bottom edge so it fuses with the container box below — the tab and the box
-   read as one shape. The strip keeps the container's side insets so no horizontal gap
-   opens between the two surfaces. */
+   carrying its own outline, separated by a small column gap. The open tab is marked by an
+   accent bar ALONG ITS TOP and loses its bottom edge so it fuses with the container box
+   below — the tab and the box read as one shape. The strip keeps the container's side insets
+   so no horizontal gap opens between those two surfaces. (The gap between the TABS is wanted;
+   only the tiny unoutlined segment it leaves in the container's TOP edge is bridged — see
+   .vocab-saved-tabs::after.) */
 .vocab-saved-tabs {
+  /* position:relative hosts the seam connector below as a positioned pseudo. An absolutely
+     positioned ::after is out of flow, so it does NOT become a third grid item. */
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 8px;
   margin: 0 max(18px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left));
+}
+/* The container's TOP edge is drawn in three collinear parts, and if they are not exactly on
+   one row the outline reads broken. Under the OPEN tab it is deliberately absent (the tab
+   fuses into the box), under the CLOSED tab its own bottom border draws that edge, and only
+   the 8px GAP between the tabs is blank — this 1px hairline is that missing span. It is hung
+   on the STRIP's `bottom:0`, which is the exact row the tabs' bottom borders occupy. (The
+   first attempt hung it on the panelbox `top:0`, but a bottom border sits in the row ABOVE
+   its edge while the panelbox top is one row BELOW that — so that patch was visibly 1px low.)
+   Width is EXACTLY the 8px gap: centred on it, its two ends meet the facing rails edge-to-
+   edge and stop there — any wider and each tip rides 1px over the vertical border it is meant
+   to join. Same --shell-line, so the three pieces read as one continuous stroke. */
+.vocab-saved-tabs::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 8px;
+  height: 1px;
+  transform: translateX(-50%);
+  background: var(--shell-line);
 }
 .vocab-saved-tab-slot {
   position: relative;
@@ -2325,15 +2358,27 @@
     border-color var(--dur-quick) var(--ease-out),
     background var(--dur-quick) var(--ease-out);
 }
-/* The open tab fuses with the container below: accent outline, the container's own fill,
-   a square bottom edge pulled one pixel down over the box so the two interiors meet with
-   no seam line between them. */
+/* The open tab fuses with the container below, so its outline must be the SAME trace as
+   that box — one continuous path, not a step change where the tab meets the container. The
+   container is bordered with --shell-line (and the unselected slot uses the same), so the
+   open slot keeps --shell-line too. The open slot drops its bottom border and the panelbox
+   drops its top border, and both carry the identical fill meeting on the same edge, so the
+   interiors join with no line and no gap — the rails simply END at the seam. (A -1px bottom
+   margin was used to force overlap, but that dragged the tab's two vertical side borders 1px
+   past the seam onto the container's rails below, a visible tip overlap — removed.) The open
+   tab is told apart by the container's fill, the label ink and the top highlight bar
+   (::before) — the ONLY colourised part — never by a heavier outline. */
 .vocab-saved-tab-slot[data-on] {
-  border-color: var(--vocab-accent);
-  border-bottom: 0;
-  border-radius: 12px 12px 0 0;
+  border-color: var(--shell-line);
+  /* Drop the bottom EDGE by width ONLY, never with the `border-bottom: 0` shorthand: that
+     shorthand also resets the bottom border's COLOR to `currentColor`, and because the slot
+     transitions `border-color`, flipping the tab back to closed then animated its 1px bottom
+     edge from the muted label colour down to --shell-line — a brief bright segment at the
+     tab's bottom on every switch. Setting only the width keeps the bottom colour pinned to
+     --shell-line in both states, so there is nothing to animate and no flash; the width still
+     snaps, which is exactly the instant, seamless fusion we want. */
+  border-bottom-width: 0;
   background: color-mix(in srgb, var(--shell-hover) 24%, transparent);
-  margin-bottom: -1px;
 }
 /* The highlighted bar, now on TOP of the open tab (it used to underline it). On the slot,
    not the tab, so it spans the whole segment including the fused density control. */
@@ -2400,50 +2445,81 @@
   font-variant-numeric: tabular-nums;
 }
 .vocab-saved-tab[data-on] .vocab-saved-tab-count {
-  background: color-mix(in srgb, var(--vocab-accent) 28%, transparent);
+  /* Neutral, like the unselected tab's count — the selected tab is carried by the top bar,
+     the stronger outline and the label colour, not by a second patch of accent. */
+  background: var(--shell-hover);
   color: var(--vocab-ink);
 }
-/* Density rides ON the open tab as the segment's tail: an icon cell divided from the tab
-   by a hairline, stretching the tab's full height so it shares the rounded outline. The
-   slot clips it to that outline. */
+/* Density is its OWN little button at the tab's tail — a rounded-rect outline so the emoji
+   plainly reads as tappable. No separator hairline any more: the outline is what divides it
+   from the label now. */
 .vocab-saved-density {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: stretch;
-  margin-left: 0;
-  min-height: 0;
-  padding: 0 12px;
-  border: 0;
-  border-left: 1px solid color-mix(in srgb, var(--vocab-accent) 28%, transparent);
-  border-radius: 0;
+  align-self: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 26px;
+  margin: 0 9px;
+  padding: 0;
+  border: 1px solid var(--shell-line-strong);
+  border-radius: 9px;
   background: transparent;
   color: var(--shell-text-soft);
   transition:
-    color var(--dur-quick) var(--ease-out),
-    background var(--dur-quick) var(--ease-out);
+    background var(--dur-quick) var(--ease-out),
+    border-color var(--dur-quick) var(--ease-out);
 }
 .vocab-saved-density:hover {
-  color: var(--vocab-ink);
-  background: color-mix(in srgb, var(--vocab-accent) 12%, transparent);
+  background: color-mix(in srgb, var(--shell-hover) 70%, transparent);
 }
 .vocab-saved-density:active {
-  background: color-mix(in srgb, var(--vocab-accent) 20%, transparent);
+  background: color-mix(in srgb, var(--shell-hover) 100%, transparent);
 }
-/* Pressed = the list is open; the icon already flips, so the fill only has to confirm it. */
+/* The peek-a-boo face is a colour emoji, so it is not tinted by `color`; the hidden state is
+   the faint palms inside the outlined button. The explicit emoji stacks keep it from falling
+   back to a mono glyph. */
+.vocab-saved-density-emoji {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.5;
+  transition: opacity var(--dur-quick) var(--ease-out);
+}
+.vocab-saved-density:hover .vocab-saved-density-emoji {
+  opacity: 0.75;
+}
+/* Highlighted (list open / meanings revealed): the button becomes a SOLID accent chip — the
+   outline drops out, the fill alone carries it — and the face comes to full opacity. */
 .vocab-saved-density[aria-pressed="true"] {
-  color: var(--vocab-ink);
-  background: color-mix(in srgb, var(--vocab-accent) 14%, transparent);
+  border-color: transparent;
+  background: var(--vocab-accent);
+}
+.vocab-saved-density[aria-pressed="true"]:hover {
+  background: color-mix(in srgb, var(--vocab-accent) 88%, #ffffff);
+}
+.vocab-saved-density[aria-pressed="true"] .vocab-saved-density-emoji {
+  opacity: 1;
 }
 .vocab-saved-density:focus-visible {
   outline: 2px solid var(--chrome-accent, #a78bfa);
-  outline-offset: -2px;
+  outline-offset: 2px;
 }
 /* The container a tab opens: welded under the strip (same side insets, no top border of
    its own, squared top corners) so strip and box read as one tabbed surface. The bottom
    margin keeps the fixed undo bar off the last row. */
 .vocab-saved-panelbox {
-  margin: 0 max(18px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 96px)
+  /* The visible container of the open tab. It rides the drawer's leftover height so a
+     short list still fills the sidebar instead of snapping to a tight box around its few
+     rows (the height jump between tabs was the eyesore). flex-grow fills the spare room;
+     flex-shrink:0 keeps it at content height for long lists, which then scroll the shell. */
+  flex: 1 0 auto;
+  /* Fill the drawer to (almost) the bottom: the old 96px bottom margin reserved room for
+     the fixed undo pill even when no undo was showing, which left a dead band under the box.
+     The container now reaches the safe area; the pill's clearance lives in the list padding
+     instead (.vocab-saved-body padding-bottom), so a transient undo never covers the last row. */
+  margin: 0 max(18px, env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 12px)
     max(18px, env(safe-area-inset-left));
   border: 1px solid var(--shell-line);
   border-top: 0;
@@ -2452,7 +2528,9 @@
   overflow: hidden;
 }
 .vocab-saved-body {
-  padding: 6px 16px 20px;
+  /* Bottom padding holds the last row clear of the fixed undo pill (which floats over the
+     now-full-height box), replacing the clearance the box's bottom margin used to reserve. */
+  padding: 6px 16px 72px;
 }
 /* One line of gesture teaching, because a swipe has no visible handle to discover. */
 .vocab-saved-hint {
@@ -2756,10 +2834,10 @@
   font-weight: 800;
 }
 .vocab-saved-empty {
-  /* Header and tabs sit above this, so the centre has to subtract them or the call to
-     action falls below the fold on short viewports. The grouping switch is hidden while
-     the list is empty, so it is not part of the subtraction. */
-  height: calc(100dvh - 175px);
+  /* The panel box already grows to fill the drawer, so the empty scene fills that box and
+     centres within it rather than guessing at a viewport-relative height. min-height (not
+     height) so a taller scene on a short screen still expands the box and scrolls. */
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2801,7 +2879,9 @@
      centre line. The bubbles are placed from it, so their tails stay on the icons when a
      shorter tier shrinks the keys (they were 3px off there while this was a literal 29px). */
   --vault-key-x: 29px;
-  --vault-tip: 116px;
+  /* Bookmark bubble sits BELOW its key, tail pointing UP. Pull it 7px down (106→113) so the tip
+     clears the button with breathing space instead of touching it (pointer length unchanged). */
+  --vault-tip: 113px;
   --vault-chip: 164px;
   --vault-jar-h: 56px;
   /* The bowl's width and the opening's height, shared by the mouth, the near rim and the
@@ -3169,17 +3249,18 @@
    midpoint. */
 .vocab-vault-tip[data-tip="heart"] {
   --tip-accent: var(--vault-heart);
-  top: 6px;
+  /* Bubble above its key, tail pointing DOWN. Lift it 6px (13→7) so the tip no longer touches
+     the button — a small breathing gap (pointer length unchanged). */
+  top: 7px;
   left: calc(50% - var(--vault-key-x));
   transform: translateX(-66.6%);
 }
 .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
   left: 66.6%;
   right: auto;
-  /* Long enough to span the head band and land on the key's top edge (≈17px down from the
-     bubble), keeping a 3px overlap into the body so the join stays seamless. */
-  bottom: -18px;
-  height: 21px;
+  /* ~25% shorter again: reaches 10px toward the key (was 13) with the same 3px body overlap. */
+  bottom: -10px;
+  height: 13px;
   transform: translateX(-50%);
   clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
@@ -3194,10 +3275,10 @@
   transform: translateX(-33.3%);
 }
 .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
-  /* Mirrors the heart's reach: spans the gap up to the key's bottom edge (≈20px above the
-     bubble) with the same 3px overlap into the body. */
-  top: -21px;
-  height: 24px;
+  /* Mirrors the heart's second cut: same 3px body overlap, ~25% shorter again — reaches ~11px up
+     toward the key (was 15); the bubble moved up with it so the tip still lands on the icon. */
+  top: -11px;
+  height: 14px;
   left: 33.3%;
   right: auto;
   transform: translateX(-50%);
@@ -3337,7 +3418,7 @@
   .vocab-vault {
     --vault-head: 46px;
     --vault-key-x: 26px;
-    --vault-tip: 98px;
+    --vault-tip: 96px;
     --vault-chip: 140px;
     --vault-jar-h: 48px;
     --vault-jar-w: 92px;
@@ -3359,16 +3440,19 @@
     padding: 7px 12px;
     font-size: 12.7px;
   }
-  /* Restate each tail's reach for this tier's shorter bubble + smaller key, so the point
-     still lands on the key instead of overshooting into it (the base reach is tuned to the
-     taller default tier). */
+  /* Restate each tail's reach for this tier's shorter bubble + smaller key, then pull both
+     bubbles back a few px so the tips leave a small breathing gap at the buttons (the heart
+     bubble's top is inherited, so it is restated explicitly here). */
+  .vocab-vault-tip[data-tip="heart"] {
+    top: 7px;
+  }
   .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
-    bottom: -10px;
-    height: 13px;
+    bottom: -5px;
+    height: 8px;
   }
   .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
-    top: -18px;
-    height: 21px;
+    top: -10px;
+    height: 13px;
   }
 }
 /* ── Landscape phone: the keys and their two bubbles ─────────────────────────
@@ -3385,7 +3469,7 @@
   .vocab-vault {
     --vault-head: 40px;
     /* head + the 34px key + room for the lower bubble's tail. */
-    --vault-tip: 88px;
+    --vault-tip: 87px;
     height: 118px;
     padding-top: var(--vault-head);
     /* The column is shorter than its contents on the smallest phones; the scene must not
@@ -3402,14 +3486,18 @@
     padding: 6px 11px;
     font-size: 12.5px;
   }
-  /* Tightest tier: the shortest bubble-to-key span, so the tails reach the least. */
+  /* Tightest tier: the shortest bubble-to-key span, so the tails reach the least. Both bubbles
+     are then pulled back a little so the tips leave a small breathing gap at the buttons. */
+  .vocab-vault-tip[data-tip="heart"] {
+    top: 7px;
+  }
   .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
-    bottom: -6px;
-    height: 9px;
+    bottom: -3px;
+    height: 6px;
   }
   .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
-    top: -14px;
-    height: 17px;
+    top: -8px;
+    height: 11px;
   }
   /* No chip to catch, so the keys stop miming a press and just sit there. */
   .vocab-vault-key[data-active],
