@@ -3461,6 +3461,9 @@
   text-align: right;
 }
 .vocab-onboard-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 15px;
   font-weight: 700;
   white-space: nowrap;
@@ -3472,15 +3475,40 @@
   color: var(--rung-own);
   font-size: 18px;
 }
-.vocab-onboard-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+/* The word count stands alone as one big tabular number with a small unit —
+   the band chip moved up beside the level name, so nothing crowds this line. */
+.vocab-onboard-count {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--shell-text-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: font-size var(--dur-quick) var(--ease-out);
+}
+.vocab-onboard-rung[data-on] .vocab-onboard-count {
+  font-size: 28px;
+}
+.vocab-onboard-count small {
   font-size: 11px;
   font-weight: 600;
   color: var(--shell-text-mute);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  margin-inline-start: 5px;
+  letter-spacing: 0.04em;
+}
+/* Japanese runs wider per glyph at the same size, so it gets its own scale:
+   the count steps down a notch and the prose keeps a readable size instead of
+   following the smaller scale other locales use. */
+.vocab-onboard-rung:lang(ja) .vocab-onboard-count {
+  font-size: 21px;
+}
+.vocab-onboard-rung[data-on]:lang(ja) .vocab-onboard-count {
+  font-size: 24px;
+}
+.vocab-onboard-rung:lang(ja) .vocab-onboard-count small {
+  font-size: 10px;
+  margin-inline-start: 3px;
+  letter-spacing: 0;
 }
 .vocab-onboard-band {
   padding: 1px 6px;
@@ -3529,9 +3557,13 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
-  font-size: 11.5px;
+  font-size: 10.5px;
   line-height: 1.35;
   color: var(--shell-text-mute);
+}
+/* Japanese keeps a touch more size here for legibility (see the count scale above). */
+.vocab-onboard-rung:lang(ja) .vocab-onboard-sample > span:not(.vocab-onboard-curiosity) {
+  font-size: 11px;
 }
 .vocab-onboard-rung[data-on] .vocab-onboard-sample > span:not(.vocab-onboard-curiosity) {
   -webkit-line-clamp: 2;
@@ -3542,7 +3574,7 @@
    Active rung: slides up with a spring overshoot while the colour shifts to the rung hue. */
 .vocab-onboard-curiosity {
   display: block;
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-style: italic;
   letter-spacing: 0.01em;
   line-height: 1.45;
@@ -3558,6 +3590,9 @@
     opacity 0.13s ease-out,
     transform 0.17s ease-out,
     color 0.18s ease-out;
+}
+.vocab-onboard-rung:lang(ja) .vocab-onboard-curiosity {
+  font-size: 11px;
 }
 .vocab-onboard-rung[data-on] .vocab-onboard-curiosity {
   opacity: 1;
@@ -3682,8 +3717,9 @@
   .vocab-onboard-curiosity {
     font-size: 10px;
   }
-  /* Two lines (name, then band and count) have to fit a ~34px row on the smallest phones,
-     so both tighten and lose their breathing room rather than spilling into the next rung. */
+  /* Two lines (name + chip, then the big count) have to fit a ~34px row on the
+     smallest phones, so both tighten and lose their breathing room rather than
+     spilling into the next rung. */
   .vocab-onboard-name {
     gap: 1px;
   }
@@ -3694,9 +3730,14 @@
   .vocab-onboard-rung[data-on] .vocab-onboard-label {
     font-size: 15px;
   }
-  .vocab-onboard-meta {
+  .vocab-onboard-count {
+    font-size: 18px;
+  }
+  .vocab-onboard-rung[data-on] .vocab-onboard-count {
+    font-size: 20px;
+  }
+  .vocab-onboard-count small {
     font-size: 10px;
-    line-height: 1.2;
   }
   .vocab-onboard-band {
     padding: 0 5px;
@@ -3799,12 +3840,21 @@
     font-size: 11px;
     white-space: normal;
     text-align: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 2px;
     line-height: 1.2;
   }
   .vocab-onboard[data-landscape] .vocab-onboard-rung[data-on] .vocab-onboard-label {
     font-size: 13px;
   }
-  .vocab-onboard[data-landscape] .vocab-onboard-meta {
+  .vocab-onboard[data-landscape] .vocab-onboard-count {
+    font-size: 13px;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-rung[data-on] .vocab-onboard-count {
+    font-size: 15px;
+  }
+  .vocab-onboard[data-landscape] .vocab-onboard-count small {
     font-size: 9px;
   }
   .vocab-onboard[data-landscape] .vocab-onboard-band {

@@ -230,7 +230,7 @@ export function DifficultyOnboarding({
         type="button"
         className="vocab-icon-button vocab-onboard-ambient"
         onClick={ambient.toggle}
-        aria-label={ambient.enabled ? "Tắt nhạc nền" : "Bật nhạc nền"}
+        aria-label={ambient.enabled ? t(ui, "player.mute") : t(ui, "player.unmute")}
         aria-pressed={ambient.enabled}
         data-active={ambient.enabled || undefined}
       >
@@ -243,6 +243,7 @@ export function DifficultyOnboarding({
             <li
               key={rung.track.id}
               className="vocab-onboard-rung"
+              lang={ui}
               data-on={at === index && ready ? "" : undefined}
               data-passed={at < index && ready ? "" : undefined}
               aria-disabled={!availability[at] || undefined}
@@ -252,12 +253,17 @@ export function DifficultyOnboarding({
               <span className="vocab-onboard-name">
                 <span className="vocab-onboard-label">
                   <span aria-hidden="true">{rung.track.emoji}</span> {rung.label}
-                </span>
-                <span className="vocab-onboard-meta">
                   <span className="vocab-onboard-band">{rung.band}</span>
-                  {rung.count === null
-                    ? "–"
-                    : t(ui, "onboard.words", { count: rung.count.toLocaleString(countTag(ui)) })}
+                </span>
+                <span className="vocab-onboard-count">
+                  {rung.count === null ? (
+                    "–"
+                  ) : (
+                    <>
+                      {rung.count.toLocaleString(countTag(ui))}
+                      <small>{t(ui, "onboard.wordsUnit")}</small>
+                    </>
+                  )}
                 </span>
               </span>
               <span className="vocab-onboard-tick" aria-hidden="true" />
