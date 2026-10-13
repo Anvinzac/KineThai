@@ -10,6 +10,8 @@
  * Depends on: none
  */
 import type { ReactElement } from "react";
+import { t } from "@/features/vocabulary/lib/ui-copy";
+import { useLocale } from "@/features/vocabulary/lib/useLocale";
 
 interface OrientationGateProps {
   /** When true, the overlay is shown; when false it renders nothing. */
@@ -18,13 +20,15 @@ interface OrientationGateProps {
 
 /** Full-screen "please rotate to portrait" prompt. @returns The overlay, or null. */
 export function OrientationGate({ show }: OrientationGateProps): ReactElement | null {
+  // Gate chrome follows the UI locale like the rest of the feed.
+  const ui = useLocale();
   if (!show) return null;
   return (
     <div
       className="fixed inset-0 z-[10000] flex flex-col items-center justify-center gap-5 bg-[#0a0014] px-10 text-center text-white"
       role="alertdialog"
       aria-modal="true"
-      aria-label="Mình xoay điện thoại lại giúp nha"
+      aria-label={t(ui, "orientation.aria")}
     >
       <svg
         className="h-16 w-16 animate-pulse text-white/80"
@@ -43,8 +47,8 @@ export function OrientationGate({ show }: OrientationGateProps): ReactElement | 
         <path d="M3 3.5V7h3.5" />
       </svg>
       <div className="flex flex-col gap-1.5">
-        <p className="text-lg font-semibold tracking-tight">Hông được bạn ơi</p>
-        <p className="text-sm text-white/60">Màn ngang bị hẹp, không đảm bảo trải nghiệm được í</p>
+        <p className="text-lg font-semibold tracking-tight">{t(ui, "orientation.title")}</p>
+        <p className="text-sm text-white/60">{t(ui, "orientation.body")}</p>
       </div>
     </div>
   );

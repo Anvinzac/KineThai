@@ -19,6 +19,8 @@ import { LayoutGrid, Settings, Store, X } from "lucide-react";
 import { ECOSYSTEM_STORE_AVAILABLE } from "@/lib/feature-flags";
 import { usePresence } from "@/hooks/use-presence";
 import { ECOSYSTEM_APPS, type EcosystemApp } from "../data/apps";
+import { t } from "@/features/vocabulary/lib/ui-copy";
+import { useLocale } from "@/features/vocabulary/lib/useLocale";
 import "../ecosystem.css";
 
 /** Matches the exit keyframes in ecosystem.css. */
@@ -127,6 +129,8 @@ export function EcosystemMenu({
   onOpenSettings,
 }: EcosystemMenuProps): React.ReactElement {
   const presence = usePresence(open, ECOSYSTEM_EXIT_MS);
+  // Fan chrome follows the UI locale; sibling-app catalog data stays as authored.
+  const ui = useLocale();
   const anchor = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const firstItem = useRef<HTMLLIElement>(null);
@@ -193,7 +197,7 @@ export function EcosystemMenu({
         className="vocab-icon-button eco-trigger"
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label={open ? "Đóng danh sách app" : "Mở app khác trong hệ sinh thái Chay Lá"}
+        aria-label={open ? t(ui, "eco.close") : t(ui, "eco.open")}
         data-active={open || undefined}
         onClick={() => onOpenChange(!open)}
       >
@@ -221,10 +225,10 @@ export function EcosystemMenu({
           >
             {/* Kept clear of the top-right corner, which the notch eats into. */}
             <div className="eco-panel-head">
-              <p className="eco-panel-title">Hệ sinh thái Chay Lá</p>
-              <p className="eco-panel-sub">Chạm để mở app khác</p>
+              <p className="eco-panel-title">{t(ui, "eco.title")}</p>
+              <p className="eco-panel-sub">{t(ui, "eco.sub")}</p>
             </div>
-            <ul className="eco-panel-grid" role="menu" aria-label="Hệ sinh thái Chay Lá">
+            <ul className="eco-panel-grid" role="menu" aria-label={t(ui, "eco.title")}>
               {ECOSYSTEM_APPS.map((app, index) => (
                 <AppTile
                   key={app.id}
@@ -248,22 +252,22 @@ export function EcosystemMenu({
                     className="eco-tile eco-tile-util"
                     to="/store"
                     role="menuitem"
-                    title="Ảnh chụp màn hình và mô tả từng app"
-                    aria-label="Cửa hàng — ảnh chụp màn hình và mô tả từng app"
+                    title={t(ui, "eco.storeTitle")}
+                    aria-label={t(ui, "eco.storeAria")}
                     onClick={close}
                   >
                     <span className="eco-tile-glyph" aria-hidden="true">
                       <Store size={19} />
                     </span>
-                    <span className="eco-tile-name">Cửa hàng</span>
+                    <span className="eco-tile-name">{t(ui, "eco.storeName")}</span>
                   </Link>
                 ) : (
                   <button
                     type="button"
                     className="eco-tile eco-tile-util"
                     role="menuitem"
-                    title="Tùy chọn luồng từ vựng"
-                    aria-label="Cài đặt — tùy chọn luồng từ vựng"
+                    title={t(ui, "eco.settingsTitle")}
+                    aria-label={t(ui, "eco.settingsAria")}
                     onClick={() => {
                       close();
                       onOpenSettings();
@@ -272,7 +276,7 @@ export function EcosystemMenu({
                     <span className="eco-tile-glyph" aria-hidden="true">
                       <Settings size={19} />
                     </span>
-                    <span className="eco-tile-name">Cài đặt</span>
+                    <span className="eco-tile-name">{t(ui, "eco.settingsName")}</span>
                   </button>
                 )}
               </li>

@@ -29,7 +29,24 @@ import {
   tracksFor,
 } from "../lib/difficulty";
 import type { TargetLocale } from "../lib/target-language";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
+import type { Locale } from "../lib/locale";
 import type { FeedPage } from "../types";
+
+/** BCP-47 tag for digit grouping in the active UI locale. */
+function countTag(locale: Locale): string | undefined {
+  switch (locale) {
+    case "vi":
+      return "vi-VN";
+    case "th":
+      return "th-TH";
+    case "ja":
+      return "ja-JP";
+    default:
+      return undefined;
+  }
+}
 
 /**
  * One colour per rung, easiest to hardest: cool mint through lime and amber to red, then
@@ -83,6 +100,8 @@ export function DifficultyOnboarding({
   locale: TargetLocale;
   onPick: (difficulty: string) => void;
 }) {
+  // Picker chrome follows the UI locale; tracks and sample words follow the deck.
+  const ui = useLocale();
   // Several tracks top out at the same level; each takes the NEXT sample of that level so
   // no two rungs are illustrated by the same word.
   const taken = new Map<string, number>();
@@ -192,9 +211,9 @@ export function DifficultyOnboarding({
       }
     >
       <header className="vocab-onboard-head">
-        <p className="vocab-eyebrow">Bắt đầu từ đâu?</p>
-        <h1 id="vocab-onboard-title">Chọn trình độ của bạn</h1>
-        <p>Kéo nút trượt để xem mỗi mức trông thế nào. Đổi lại lúc nào cũng được.</p>
+        <p className="vocab-eyebrow">{t(ui, "onboard.eyebrow")}</p>
+        <h1 id="vocab-onboard-title">{t(ui, "onboard.title")}</h1>
+        <p>{t(ui, "onboard.hint")}</p>
       </header>
 
       <div className="vocab-onboard-gauge">
@@ -215,7 +234,9 @@ export function DifficultyOnboarding({
                 </span>
                 <span className="vocab-onboard-meta">
                   <span className="vocab-onboard-band">{rung.band}</span>
-                  {rung.count === null ? "–" : `${rung.count.toLocaleString("vi-VN")} từ`}
+                  {rung.count === null
+                    ? "–"
+                    : t(ui, "onboard.words", { count: rung.count.toLocaleString(countTag(ui)) })}
                 </span>
               </span>
               <span className="vocab-onboard-tick" aria-hidden="true" />
@@ -225,12 +246,12 @@ export function DifficultyOnboarding({
                     <strong lang={locale === "zh" ? "zh-Hans" : locale}>{rung.sample.word}</strong>
                     {/* Fixed curiosity prompt: slides in with a spring when this rung
                         becomes active, fades out when the knob moves away. */}
-                    <span className="vocab-onboard-curiosity">
-                      Thấy hơi lạ, bắt đầu từ đây nhé?
-                    </span>
+                    <span className="vocab-onboard-curiosity">{t(ui, "onboard.curiosity")}</span>
                   </>
                 ) : (
-                  <span className="vocab-onboard-soon">{metadata ? "Sắp có" : ""}</span>
+                  <span className="vocab-onboard-soon">
+                    {metadata ? t(ui, "onboard.soon") : ""}
+                  </span>
                 )}
               </span>
             </li>
@@ -243,7 +264,7 @@ export function DifficultyOnboarding({
           role="slider"
           tabIndex={0}
           aria-orientation={landscape ? "horizontal" : "vertical"}
-          aria-label="Trình độ"
+          aria-label={t(ui, "onboard.levelAria")}
           aria-valuemin={1}
           aria-valuemax={rungs.length}
           aria-valuenow={index + 1}
@@ -266,10 +287,12 @@ export function DifficultyOnboarding({
           disabled={!ready}
           onClick={() => onPick(current.track.id)}
         >
-          {ready ? `Bắt đầu với “${current.track.label}”` : "Đang tải…"}
+          {ready
+            ? t(ui, "onboard.start", { label: current.track.label })
+            : t(ui, "onboard.loading")}
         </button>
         <button type="button" className="vocab-onboard-all" onClick={() => onPick(DIFFICULTY_ALL)}>
-          Học mọi trình độ
+          {t(ui, "onboard.allLevels")}
         </button>
       </footer>
     </section>

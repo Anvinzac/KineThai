@@ -18,6 +18,8 @@ import {
   getSpellingFitFontSize,
   type SpellingVariant,
 } from "../lib/spelling";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
 
 /** Per-variant letter motion. Scatter needs the index for its radial offset. */
 function variantMotion(
@@ -98,6 +100,7 @@ export function SpellingAnimation({
   variant: SpellingVariant;
   reducedMotion: boolean;
 }) {
+  const ui = useLocale();
   const hostRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLDivElement>(null);
   const [fontSize, setFontSize] = useState(SPELLING_NOMINAL_FONT_SIZE);
@@ -150,7 +153,7 @@ export function SpellingAnimation({
 
   return (
     <div className="vocab-spelling" ref={hostRef} aria-hidden="true">
-      <p className="vocab-spelling-label">Đánh vần lại lần nữa</p>
+      <p className="vocab-spelling-label">{t(ui, "spelling.label")}</p>
       <p className="sr-only" lang="en">
         {word}
       </p>

@@ -14,9 +14,13 @@ import type React from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { ECOSYSTEM_APPS, type EcosystemApp } from "../data/apps";
+import { t } from "@/features/vocabulary/lib/ui-copy";
+import { useLocale } from "@/features/vocabulary/lib/useLocale";
 import "../store.css";
 
 function AppSection({ app }: { app: EcosystemApp }): React.ReactElement {
+  // Section chrome follows the UI locale; the mock app catalog stays as authored.
+  const ui = useLocale();
   const accent = { "--eco-from": app.accent[0], "--eco-to": app.accent[1] } as React.CSSProperties;
   return (
     <section className="store-app" style={accent} aria-labelledby={`store-${app.id}`}>
@@ -36,13 +40,13 @@ function AppSection({ app }: { app: EcosystemApp }): React.ReactElement {
             href={app.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Mở ${app.name}`}
+            aria-label={t(ui, "store.openAria", { name: app.name })}
           >
-            Mở
+            {t(ui, "store.open")}
             <ExternalLink size={13} aria-hidden="true" />
           </a>
         ) : (
-          <span className="store-app-soon">Sắp có</span>
+          <span className="store-app-soon">{t(ui, "store.soon")}</span>
         )}
       </header>
 
@@ -50,7 +54,7 @@ function AppSection({ app }: { app: EcosystemApp }): React.ReactElement {
 
       {/* Horizontal strip, the way a store shows captures: it scrolls rather
           than shrinking three frames down to thumbnails on a phone. */}
-      <ul className="store-shots" aria-label={`Ảnh màn hình ${app.name}`}>
+      <ul className="store-shots" aria-label={t(ui, "store.shotsAria", { name: app.name })}>
         {app.shots.map((caption) => (
           <li className="store-shot" key={caption}>
             <div className="store-shot-frame" aria-hidden="true">
@@ -69,15 +73,16 @@ function AppSection({ app }: { app: EcosystemApp }): React.ReactElement {
  * @returns The store page.
  */
 export function StorePage(): React.ReactElement {
+  const ui = useLocale();
   return (
     <main className="vocabulary-shell store-shell">
       <header className="store-head">
-        <Link className="vocab-icon-button" to="/feed" aria-label="Về luồng từ vựng">
+        <Link className="vocab-icon-button" to="/feed" aria-label={t(ui, "store.back")}>
           <ArrowLeft size={19} />
         </Link>
         <div>
-          <h1 className="store-title">Cửa hàng Chay Lá</h1>
-          <p className="store-subtitle">Mọi app trong nhà Chay Lá, kèm ảnh màn hình và mô tả.</p>
+          <h1 className="store-title">{t(ui, "store.title")}</h1>
+          <p className="store-subtitle">{t(ui, "store.subtitle")}</p>
         </div>
       </header>
 
@@ -87,9 +92,7 @@ export function StorePage(): React.ReactElement {
         ))}
       </div>
 
-      <p className="store-foot">
-        Bạn đang ở anh.chayLá — app từ vựng của nhà Chay Lá, nên nó không có trong danh sách.
-      </p>
+      <p className="store-foot">{t(ui, "store.note")}</p>
     </main>
   );
 }

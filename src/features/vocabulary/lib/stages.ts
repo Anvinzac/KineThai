@@ -4,7 +4,7 @@ import { answerPattern, type NarrativeStyle, type VocabularyWord } from "./schem
 import { isHanAnswer } from "./hanzi";
 import { paginateText } from "@/features/post-player";
 import { resolveClue } from "./clues";
-import { leadLabel, lettersSentence, stageLabel } from "./i18n";
+import { hanLettersSentence, leadLabel, lettersSentence, stageLabel } from "./i18n";
 import { BASE_LOCALE, DEFAULT_LOCALE, type Locale } from "./locale";
 
 /**
@@ -114,9 +114,7 @@ export function buildStages(
     stages.push({
       id: "letters",
       label: stageLabel("letters", locale),
-      text: pinyinInitial
-        ? `Gồm ${hanCount} chữ Hán, pinyin bắt đầu bằng ${pinyinInitial}`
-        : `Gồm ${hanCount} chữ Hán`,
+      text: hanLettersSentence(hanCount, pinyinInitial, locale),
       lang: clueLang,
       secondaryEmphasis: pinyinInitial
         ? { phrase: pinyinInitial, variant: INITIAL_EMPHASIS_VARIANT }

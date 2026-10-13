@@ -7,6 +7,7 @@ import { EASE, SPRING } from "@/lib/motion";
 import type { VocabularyWord } from "../lib/schema";
 import type { LearningStage } from "../lib/stages";
 import { resolveClue } from "../lib/clues";
+import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
 import { VOCAB_LINE_SPACING_SCALE } from "../lib/presets";
 import { FilledUsage, MarkedText } from "./MarkedText";
@@ -228,7 +229,7 @@ export function VocabularyStage({
           ref={details}
           className="vocab-reveal-details"
           tabIndex={0}
-          aria-label="Nghĩa và ví dụ của từ"
+          aria-label={t(locale, "stage.details")}
           initial={reducedMotion ? false : { opacity: 0, y: 30, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={

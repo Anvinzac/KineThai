@@ -400,6 +400,10 @@ type StageLabels = {
   anticipation: string;
   letters: string;
   lettersText: string;
+  /** Han-answer variant of the letter-count sentence (no pinyin initial). */
+  lettersTextHan: string;
+  /** Han-answer variant naming the first pinyin letter. */
+  lettersTextHanPinyin: string;
   reveal: string;
   lead: Record<NarrativeStyle, string>;
 };
@@ -411,6 +415,8 @@ const STAGE_LABELS: Record<Locale, StageLabels | undefined> = {
     anticipation: "Bạn đoán gì?",
     letters: "Đếm chữ cái",
     lettersText: "Gồm {count} chữ cái, bắt đầu bằng {initial}",
+    lettersTextHan: "Gồm {count} chữ Hán",
+    lettersTextHanPinyin: "Gồm {count} chữ Hán, pinyin bắt đầu bằng {initial}",
     reveal: "Đây rồi!",
     lead: {
       detective: "Bối cảnh",
@@ -425,6 +431,8 @@ const STAGE_LABELS: Record<Locale, StageLabels | undefined> = {
     anticipation: "เดาสิ?",
     letters: "นับตัวอักษร",
     lettersText: "มี {count} ตัวอักษร ขึ้นต้นด้วย {initial}",
+    lettersTextHan: "มี {count} ตัวอักษรจีน",
+    lettersTextHanPinyin: "มี {count} ตัวอักษรจีน พินอินขึ้นต้นด้วย {initial}",
     reveal: "นี่ไง!",
     lead: {
       detective: "บริบท",
@@ -439,6 +447,8 @@ const STAGE_LABELS: Record<Locale, StageLabels | undefined> = {
     anticipation: "当ててみて！",
     letters: "文字数",
     lettersText: "{count} 文字、{initial} で始まる",
+    lettersTextHan: "{count} 文字の漢字",
+    lettersTextHanPinyin: "{count} 文字の漢字、ピンインは {initial} で始まる",
     reveal: "これだ！",
     lead: {
       detective: "状況",
@@ -473,4 +483,15 @@ export function lettersSentence(
 ): string {
   const template = STAGE_LABELS[locale]?.lettersText ?? STAGE_LABELS[BASE_LOCALE]!.lettersText;
   return template.replace("{count}", String(count)).replace("{initial}", initial);
+}
+
+/** Filled Han-character-count sentence, localized, falling back to Vietnamese. */
+export function hanLettersSentence(
+  count: number,
+  pinyinInitial: string,
+  locale: Locale = DEFAULT_LOCALE,
+): string {
+  const set = STAGE_LABELS[locale] ?? STAGE_LABELS[BASE_LOCALE]!;
+  const template = pinyinInitial ? set.lettersTextHanPinyin : set.lettersTextHan;
+  return template.replace("{count}", String(count)).replace("{initial}", pinyinInitial);
 }

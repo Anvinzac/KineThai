@@ -8,6 +8,7 @@ import { sitePageHead } from "@/features/vocabulary/lib/target-language";
 export const Route = createFileRoute("/feed/saved")({
   ssr: "data-only",
   loader: async () => ({ locale: await getSiteLocale() }),
-  head: ({ loaderData }) => sitePageHead(loaderData?.locale, "Từ vựng của bạn", "Những từ vựng bạn đã lưu và yêu thích, giữ ngay trên thiết bị này."),
+  head: ({ loaderData }) =>
+    sitePageHead(loaderData?.locale, "あなたの語彙", "保存・お気に入りの語彙をこの端末に。"),
   component: BookmarksPage,
 });

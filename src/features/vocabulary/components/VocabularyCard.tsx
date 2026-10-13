@@ -29,6 +29,9 @@ import { SPRING, getBeatSeconds } from "@/lib/motion";
 import { Bookmark, Heart, Pause, Play } from "lucide-react";
 import { buildVocabularyCanvas, choosePresentation, fitVocabularyTextSize } from "../lib/presets";
 import { buildStages } from "../lib/stages";
+import { resolveClue } from "../lib/clues";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
 import { getExportStageBox, type CardExportLayout } from "../lib/export-layout";
 import { hasReportedWord } from "../lib/reported-words";
 import { sceneSkipLimiter } from "../lib/skip-limiter";
@@ -196,7 +199,9 @@ export function VocabularyCard({
   onToggleAutoplay?: () => void;
 }) {
   const { theme, style } = choosePresentation(entry.occurrenceId, presentation, entry.position);
-  const stages = useMemo(() => buildStages(entry.word, style.id), [entry.word, style.id]);
+  // Card stages follow the active UI locale (Japanese by default); the reveal stays English.
+  const ui = useLocale();
+  const stages = useMemo(() => buildStages(entry.word, style.id, ui), [entry.word, style.id, ui]);
   const canvas = useMemo(() => buildVocabularyCanvas(theme, style), [theme, style]);
   // The spelling coda is one extra page appended after the reveal stage, so the
   // playback timer — not the animation component — decides when the card ends.
@@ -246,7 +251,9 @@ export function VocabularyCard({
       ...stages.map((stage) =>
         Math.round(
           getPageDuration(
-            [stage.text, stage.reveal ? entry.word.defVi : ""].filter(Boolean).join(" "),
+            [stage.text, stage.reveal ? resolveClue(entry.word, "def", ui) : ""]
+              .filter(Boolean)
+              .join(" "),
             style.tempo,
             style.rhythm,
           ) * paceFactor,
@@ -687,7 +694,7 @@ export function VocabularyCard({
       data-stage={isSpelling ? "spelling" : stage.id}
       inert={!active}
       aria-hidden={!active}
-      aria-label={`Thẻ từ vựng ${entry.position + 1}`}
+      aria-label={t(ui, "card.aria", { position: entry.position + 1 })}
       aria-posinset={entry.position + 1}
       aria-setsize={-1}
       onTouchStart={(e) => {
@@ -755,7 +762,7 @@ export function VocabularyCard({
                 key="resume"
                 type="button"
                 className="vocab-resume"
-                aria-label="Tiếp tục phát"
+                aria-label={t(ui, "card.resume")}
                 initial={{ opacity: 0, scale: 0.7 }}
                 animate={{ opacity: 1, scale: 1, transition: SPRING.gentle }}
                 exit={{ opacity: 0, scale: 1.25, transition: { duration: 0.2, ease: "easeIn" } }}
@@ -985,7 +992,7 @@ export function VocabularyCard({
                       className="vocab-emoji-strip-btn vocab-reaction-heart"
                       data-on={reactions.heart || undefined}
                       onClick={() => toggleReaction("heart")}
-                      aria-label={reactions.heart ? "Bỏ yêu thích cho từ này" : "Yêu thích từ này"}
+                      aria-label={reactions.heart ? t(ui, "card.unheart") : t(ui, "card.heart")}
                     >
                       <span
                         key={pops.heart}
@@ -1006,7 +1013,7 @@ export function VocabularyCard({
                       className="vocab-emoji-strip-btn vocab-reaction-bookmark"
                       data-on={reactions.bookmark || undefined}
                       onClick={() => toggleReaction("bookmark")}
-                      aria-label={reactions.bookmark ? "Bỏ lưu từ này" : "Lưu từ này"}
+                      aria-label={reactions.bookmark ? t(ui, "card.unsave") : t(ui, "card.save")}
                     >
                       <span
                         key={pops.bookmark}
@@ -1033,9 +1040,9 @@ export function VocabularyCard({
                         type="button"
                         className="vocab-reveal-button vocab-reveal-pill"
                         onClick={playback.reveal}
-                        aria-label="Lộ đáp án"
+                        aria-label={t(ui, "card.revealAria")}
                       >
-                        {revealButtonLabel || "Ê, từ này biết nè"}
+                        {revealButtonLabel || t(ui, "card.reveal")}
                       </button>
                     </motion.span>
                   )}
@@ -1045,7 +1052,7 @@ export function VocabularyCard({
                       className="vocab-reaction-button vocab-reaction-heart"
                       data-on={reactions.heart || undefined}
                       onClick={() => toggleReaction("heart")}
-                      aria-label={reactions.heart ? "Bỏ yêu thích cho từ này" : "Yêu thích từ này"}
+                      aria-label={reactions.heart ? t(ui, "card.unheart") : t(ui, "card.heart")}
                     >
                       <span
                         key={pops.heart}
@@ -1065,7 +1072,7 @@ export function VocabularyCard({
                       className="vocab-reaction-button vocab-reaction-bookmark"
                       data-on={reactions.bookmark || undefined}
                       onClick={() => toggleReaction("bookmark")}
-                      aria-label={reactions.bookmark ? "Bỏ lưu từ này" : "Lưu từ này"}
+                      aria-label={reactions.bookmark ? t(ui, "card.unsave") : t(ui, "card.save")}
                     >
                       <span
                         key={pops.bookmark}

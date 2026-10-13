@@ -17,6 +17,8 @@ import HanziWriter from "hanzi-writer";
 import type { CharacterJson, CharDataLoaderFn } from "hanzi-writer";
 import strokeData from "../data/hanzi-strokes.json";
 import { getStrokeDrawBudgetSeconds, solveStrokeTiming } from "../lib/hanzi";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
 
 /** Vendored per-character stroke outlines, keyed by the character itself. */
 const STROKES = strokeData as unknown as Record<string, CharacterJson>;
@@ -64,6 +66,7 @@ export function HanziStrokeSpelling({
   word: string;
   reducedMotion: boolean;
 }) {
+  const ui = useLocale();
   const hostRef = useRef<HTMLDivElement>(null);
   const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
   const chars = useMemo(() => Array.from(word).filter((ch) => HAN.test(ch)), [word]);
@@ -151,7 +154,7 @@ export function HanziStrokeSpelling({
 
   return (
     <div className="vocab-stroke" ref={hostRef} aria-hidden="true">
-      <p className="vocab-spelling-label">Viết lại từng nét</p>
+      <p className="vocab-spelling-label">{t(ui, "spelling.hanziLabel")}</p>
       <p className="sr-only" lang="zh">
         {word}
       </p>

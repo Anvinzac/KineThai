@@ -40,7 +40,7 @@ import {
   topicLabel,
   topicLabelVi,
 } from "../lib/i18n";
-import { SUPPORTED_LOCALES, localeLabel, type Locale } from "../lib/locale";
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, localeLabel, type Locale } from "../lib/locale";
 import { setLocale, useLocale } from "../lib/useLocale";
 import { difficultyCopy, t } from "../lib/ui-copy";
 import { siteBrand, type TargetLocale } from "../lib/target-language";
@@ -54,11 +54,7 @@ import type {
 } from "../types";
 import { usePresence } from "@/hooks/use-presence";
 
-const PACE_OPTIONS: { id: ReadingPace; label: string }[] = [
-  { id: "slow", label: "Chậm" },
-  { id: "normal", label: "Vừa" },
-  { id: "fast", label: "Nhanh" },
-];
+const PACE_OPTIONS: { id: ReadingPace }[] = [{ id: "slow" }, { id: "normal" }, { id: "fast" }];
 
 /** Matches the exit keyframes' duration (--dur-quick) in vocabulary.css. */
 const POPUP_EXIT_MS = 180;
@@ -321,7 +317,7 @@ function ThemePicker({
   }
 
   const summary = isAll
-    ? t(uiLocale ?? "vi", "theme.mix")
+    ? t(uiLocale ?? DEFAULT_LOCALE, "theme.mix")
     : pickedThemes.length === 1
       ? themeLabel(pickedThemes[0].id, pickedThemes[0].label, uiLocale)
       : `${pickedThemes.length}/${allIds.length}`;
@@ -335,7 +331,7 @@ function ThemePicker({
       }}
     >
       <span className="vocab-picker-label" id={labelId}>
-        {t(uiLocale ?? "vi", "theme.label")}
+        {t(uiLocale ?? DEFAULT_LOCALE, "theme.label")}
       </span>
       <button
         type="button"
@@ -381,7 +377,7 @@ function ThemePicker({
           })}
           {!isAll && (
             <button type="button" className="vocab-picker-reset" onClick={() => onChange("mix")}>
-              {t(uiLocale ?? "vi", "theme.reset")}
+              {t(uiLocale ?? DEFAULT_LOCALE, "theme.reset")}
             </button>
           )}
         </div>
@@ -410,14 +406,14 @@ function buildDifficultyOptions(locale: TargetLocale, uiLocale?: Locale): Diffic
   return [
     {
       id: DIFFICULTY_ALL,
-      label: t(uiLocale ?? "vi", "difficulty.all"),
-      hint: t(uiLocale ?? "vi", "difficulty.allHint"),
+      label: t(uiLocale ?? DEFAULT_LOCALE, "difficulty.all"),
+      hint: t(uiLocale ?? DEFAULT_LOCALE, "difficulty.allHint"),
       band: formatLevelBand(allLevels),
     },
     ...tracks.map((track) => ({
       id: track.id,
-      label: difficultyCopy(uiLocale ?? "vi", track.id).label || track.label,
-      hint: difficultyCopy(uiLocale ?? "vi", track.id).hint || track.hint,
+      label: difficultyCopy(uiLocale ?? DEFAULT_LOCALE, track.id).label || track.label,
+      hint: difficultyCopy(uiLocale ?? DEFAULT_LOCALE, track.id).hint || track.hint,
       band: formatLevelBand(track.levels),
     })),
   ];
@@ -443,20 +439,21 @@ function describeSelection(
   tracks: ReturnType<typeof tracksFor>,
   uiLocale?: Locale,
 ): { emoji: string; label: string; band: string } {
-  if (!ids.length) return { emoji: "🤯", label: t(uiLocale ?? "vi", "difficulty.all"), band: "" };
+  if (!ids.length)
+    return { emoji: "🤯", label: t(uiLocale ?? DEFAULT_LOCALE, "difficulty.all"), band: "" };
   const selected = tracks.filter((track) => ids.includes(track.id));
   if (selected.length === 1) {
     const track = selected[0]!;
     return {
       emoji: track.emoji,
-      label: difficultyCopy(uiLocale ?? "vi", track.id).label || track.label,
+      label: difficultyCopy(uiLocale ?? DEFAULT_LOCALE, track.id).label || track.label,
       band: formatLevelBand(track.levels),
     };
   }
   const levels = [...new Set(selected.flatMap((track) => track.levels))];
   return {
     emoji: "🧩",
-    label: t(uiLocale ?? "vi", "difficulty.mixed"),
+    label: t(uiLocale ?? DEFAULT_LOCALE, "difficulty.mixed"),
     band: formatLevelBand(levels),
   };
 }
@@ -1021,17 +1018,17 @@ export function FeedControls({
                 onPresentation({ ...presentation, advance: event.target.checked })
               }
             />{" "}
-            Tự động phát luồng
+            {t(ui, "advance.label")}
           </label>
           <p className="vocab-options-summary">
             {reducedMotion
-              ? "Bạn đang bật chế độ giảm chuyển động, nên gợi ý lật thủ công."
+              ? t(ui, "autoplay.reduced")
               : presentation.advance === false
-                ? "Mỗi từ sẽ tự phát lại từ đầu cho đến khi bạn vuốt sang từ mới."
-                : "Gợi ý và từ ngữ tự động chạy hết màn hình. Tắt đi để một từ tự phát lại."}
+                ? t(ui, "advance.replayHint")
+                : t(ui, "advance.flowHint")}
           </p>
-          <div className="vocab-pace" role="radiogroup" aria-label="Tốc độ đọc">
-            <span className="vocab-pace-label">Tốc độ</span>
+          <div className="vocab-pace" role="radiogroup" aria-label={t(ui, "pace.aria")}>
+            <span className="vocab-pace-label">{t(ui, "pace.label")}</span>
             <div className="vocab-pace-options">
               {PACE_OPTIONS.map((option) => {
                 const on = (presentation.pace ?? "fast") === option.id;
@@ -1045,7 +1042,7 @@ export function FeedControls({
                     disabled={reducedMotion}
                     onClick={() => onPresentation({ ...presentation, pace: option.id })}
                   >
-                    {option.label}
+                    {t(ui, `pace.${option.id}`)}
                   </button>
                 );
               })}
@@ -1069,28 +1066,27 @@ export function FeedControls({
                   })
                 }
               />{" "}
-              Giao diện Douyin
-              <small className="vocab-dialect-note">
-                Tắt toàn bộ giao diện mặc định, chỉ dùng bảng màu, nhịp hoạt hình và hiệu ứng nổi
-                bật kiểu Douyin.
-              </small>
+              {t(ui, "dialect.label")}
+              <small className="vocab-dialect-note">{t(ui, "dialect.note")}</small>
             </label>
           )}
-          <div className="vocab-memory" aria-label="Bộ nhớ lượt xem trên thiết bị">
-            <span className="vocab-group-label">Bộ nhớ trên thiết bị</span>
+          <div className="vocab-memory" aria-label={t(ui, "memory.aria")}>
+            <span className="vocab-group-label">{t(ui, "memory.label")}</span>
             <p className="vocab-options-summary">
-              Hôm nay đã xem {historyStats.distinctToday} từ · 3 ngày qua {historyStats.distinct3d}{" "}
-              · tuần này {historyStats.distinct7d}. Mỗi từ chỉ quay lại tối đa một lần mỗi ngày, hai
-              lần trong ba ngày và ba lần mỗi tuần. Tất cả chỉ lưu trong trình duyệt này.
+              {t(ui, "memory.stats", {
+                today: historyStats.distinctToday,
+                three: historyStats.distinct3d,
+                week: historyStats.distinct7d,
+              })}
             </p>
             <button type="button" className="vocab-memory-clear" onClick={onClearHistory}>
-              Quên lịch sử đã xem
+              {t(ui, "memory.forget")}
             </button>
           </div>
-          <nav aria-label="Điều hướng trang" className="vocab-site-links">
+          <nav aria-label={t(ui, "nav.aria")} className="vocab-site-links">
             {/* Community is not open to readers yet; only the button is hidden, the
                 /community route still resolves. Flip COMMUNITY_AVAILABLE to bring it back. */}
-            {COMMUNITY_AVAILABLE && <Link to="/community">Cộng đồng</Link>}
+            {COMMUNITY_AVAILABLE && <Link to="/community">{t(ui, "nav.community")}</Link>}
             {/* Temporarily hidden at request: "Đăng nhập" and "Về với từ vựng" leave the
                 sheet for now — uncomment (both live together) to bring them back. The
                 /auth route and the close behaviour are untouched.

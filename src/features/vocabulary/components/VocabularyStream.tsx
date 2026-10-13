@@ -5,6 +5,8 @@ import { useVocabularyWindow } from "../hooks/useVocabularyWindow";
 import { useFeedPagination } from "../hooks/useFeedPagination";
 import { canWalkFurther, getWalkedPositions } from "../lib/backfill";
 import { formatCountdown, isWordAllowed, nextAvailableAt, type ViewHistory } from "../lib/history";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
 import type { FeedPage, Presentation, VocabularyFilters } from "../types";
 import { VocabularyCard } from "./VocabularyCard";
 
@@ -57,6 +59,8 @@ export function VocabularyStream({
   onToggleAutoplay?: () => void;
 }) {
   const query = useVocabularyFeed(seed, filters);
+  // Empty states, status line and feed landmark read in the active UI locale.
+  const ui = useLocale();
   // Tick so day-window expiries re-evaluate without a reload.
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
@@ -248,7 +252,7 @@ export function VocabularyStream({
         ref={viewport}
         className="vocab-viewport"
         role="feed"
-        aria-label="Vốn từ tiếng Anh vô tận"
+        aria-label={t(ui, "stream.feedAria")}
         aria-busy={query.isFetching}
         tabIndex={0}
         onScroll={onScroll}
@@ -265,32 +269,34 @@ export function VocabularyStream({
       >
         {!visibleEntries.length && (
           <div className="vocab-empty" role="status">
-            <p className="vocab-eyebrow">Mỗi từ là một khởi đầu</p>
+            <p className="vocab-eyebrow">{t(ui, "stream.eyebrow")}</p>
             <h1>
               {initialError
-                ? "Thử lại nhé."
+                ? t(ui, "stream.empty.title")
                 : empty
-                  ? "Chưa có từ nào khớp."
+                  ? t(ui, "stream.noMatch")
                   : allBlocked
-                    ? "Bạn đã xem hết mọi từ rồi."
+                    ? t(ui, "stream.seenAll")
                     : query.isPaused
-                      ? "Đang chờ kết nối."
+                      ? t(ui, "stream.paused")
                       : query.entries.length
-                        ? "Đang tìm một từ bạn chưa xem…"
-                        : "Đang tìm từ đầu tiên của bạn…"}
+                        ? t(ui, "stream.searchingSeen")
+                        : t(ui, "stream.searchingFirst")}
             </h1>
             <p>
               {initialError
-                ? "Không tải được dòng từ. Cài đặt của bạn vẫn được giữ nguyên."
+                ? t(ui, "stream.loadError")
                 : empty
-                  ? "Hãy thử một cấp độ hoặc chủ đề khác."
+                  ? t(ui, "stream.noMatchHint")
                   : allBlocked
-                    ? `Bộ nhớ trên thiết bị giữ mỗi từ ở mức một lần mỗi ngày, hai lần trong ba ngày, ba lần mỗi tuần.${
+                    ? `${t(ui, "stream.memory")}${
                         nextUnlock
-                          ? ` Từ tiếp theo sẽ mở sau ${formatCountdown(nextUnlock, now)}.`
+                          ? t(ui, "stream.nextUnlock", {
+                              countdown: formatCountdown(nextUnlock, now, ui),
+                            })
                           : ""
                       }`
-                    : "Gợi ý tiếng Việt, từ mới tiếng Anh. Không cần đăng nhập."}
+                    : t(ui, "stream.tagline")}
             </p>
             {initialError && (
               <button
@@ -298,17 +304,17 @@ export function VocabularyStream({
                 className="vocab-light-button"
                 onClick={query.catalogChanged || exhausted ? onRestart : retry}
               >
-                {query.catalogChanged ? "Bắt đầu dòng mới" : "Thử lại"}
+                {query.catalogChanged ? t(ui, "stream.restart") : t(ui, "stream.retry")}
               </button>
             )}
             {empty && (
               <button type="button" className="vocab-light-button" onClick={onClearFilters}>
-                Xem tất cả từ
+                {t(ui, "stream.showAll")}
               </button>
             )}
             {allBlocked && (
               <button type="button" className="vocab-light-button" onClick={onClearHistory}>
-                Xóa lịch sử xem
+                {t(ui, "stream.clearHistory")}
               </button>
             )}
           </div>
@@ -357,19 +363,21 @@ export function VocabularyStream({
             <div className="vocab-stream-status" role="status">
               <span>
                 {query.catalogChanged
-                  ? "Có bộ từ mới. Khởi động lại để tải."
+                  ? t(ui, "stream.newCatalog")
                   : exhausted
-                    ? "Sẵn sàng trộn lần nữa? Bắt đầu dòng mới."
+                    ? t(ui, "stream.exhausted")
                     : query.isPaused
-                      ? "Mất mạng — các từ đã tải vẫn xem được."
-                      : "Không tải thêm từ được."}
+                      ? t(ui, "stream.offline")
+                      : t(ui, "stream.loadMoreFail")}
               </span>
               <button
                 type="button"
                 onClick={query.catalogChanged || exhausted ? onRestart : retry}
                 disabled={query.isFetching}
               >
-                {query.catalogChanged || exhausted ? "Khởi động lại" : "Thử lại"}
+                {query.catalogChanged || exhausted
+                  ? t(ui, "stream.restart")
+                  : t(ui, "stream.retry")}
               </button>
             </div>
           )}

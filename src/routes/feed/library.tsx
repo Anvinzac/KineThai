@@ -8,6 +8,11 @@ import { sitePageHead } from "@/features/vocabulary/lib/target-language";
 export const Route = createFileRoute("/feed/library")({
   ssr: "data-only",
   loader: async () => ({ locale: await getSiteLocale() }),
-  head: ({ loaderData }) => sitePageHead(loaderData?.locale, "Thư viện từ vựng", "Các bộ từ vựng theo chủ đề, nhu cầu và trình độ."),
+  head: ({ loaderData }) =>
+    sitePageHead(
+      loaderData?.locale,
+      "語彙ライブラリ",
+      "分野・目的・レベル別の専門パック。日々のランダム配信を補完します。",
+    ),
   component: VocabLibraryPage,
 });

@@ -51,7 +51,7 @@ export function siteBrand(locale: TargetLocale): { lead: string; accent: string 
 export function sitePageHead(
   locale: TargetLocale = "en",
   section = "",
-  description = "Thêm xíu năng lượng cho câu chữ nè",
+  description = "言葉にちょっとした元気を",
 ) {
   const title = section ? `${section} — ${siteTitle(locale)}` : siteTitle(locale);
   return {
