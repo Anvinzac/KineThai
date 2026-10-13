@@ -6,8 +6,16 @@ import { supabase } from "./client";
 // the browser never attaches the bearer token to serverFn RPCs.
 export const attachSupabaseAuth = createMiddleware({ type: "function" }).client(
   async ({ next }) => {
-    const { data } = await supabase.auth.getSession();
-    const token = data.session?.access_token;
+    // Anonymous-first: when Supabase is unconfigured (static hosts, prerender
+    // without env) or the session read fails, proceed without a token rather
+    // than failing the call. Authenticated routes still enforce auth server-side.
+    let token: string | undefined;
+    try {
+      const { data } = await supabase.auth.getSession();
+      token = data.session?.access_token ?? undefined;
+    } catch {
+      token = undefined;
+    }
     return next({
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
