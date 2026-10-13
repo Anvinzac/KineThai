@@ -128,6 +128,62 @@
 .vocab-player-controls {
   justify-self: center;
 }
+/* The song's name, run once on the SAME line as the difficulty sub-text. A news ticker,
+   not a marquee: the text makes a single left-crawl (iteration-count 1, held off-screen
+   after) and is masked to fade out at BOTH edges, so it announces the track and clears
+   without repeating. */
+.vocab-now-playing {
+  /* Anchored to the sub-text's row, in the space to its right. `--vocab-tagline-right`
+     is the measured right edge of the difficulty label (its trailing caret), so the
+     crawl ENDS just before it would reach that trail — plus a 14px breathing gap — and
+     `right` keeps it clear of the corner gear. Absolute so it no longer adds height to
+     the fixed toolbar; the scrim already covers this band. */
+  position: absolute;
+  top: var(--vocab-tagline-mid, 49px);
+  transform: translateY(-50%);
+  left: calc(var(--vocab-tagline-right, 140px) + 14px);
+  right: calc(var(--vocab-corner, 44px) + 12px);
+  /* Never stretch: cap at ~1.5× the transport group, so on wide screens it stays a
+     caption rather than a band, and only closes the gap to the gear on narrow ones. */
+  max-width: calc(var(--vocab-controls-w, 156px) * 1.5);
+  overflow: hidden;
+  text-align: center;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+}
+.vocab-now-playing-run {
+  display: inline-block;
+  white-space: nowrap;
+  /* Push the text fully off the right edge, then travel by its own width so it crosses and
+     exits left — one clean pass across the visible window. */
+  padding-left: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--chrome-ink);
+  opacity: 0.72;
+  will-change: transform;
+  animation: vocab-now-playing-run 9s linear 1 forwards;
+}
+@keyframes vocab-now-playing-run {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+/* Motion turned down: no crawl — the name simply sits centred and still (clipped if long). */
+@media (prefers-reduced-motion: reduce) {
+  .vocab-now-playing-run {
+    animation: none;
+    padding-left: 0;
+    transform: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}
 /* Settings gear beside the title: a bare icon — no circle, no fill, no border — so it
    reads as part of the header rather than as another rounded control. */
 .vocab-settings-button {
@@ -295,32 +351,35 @@
 .vocab-player-controls .vocab-export-open {
   margin-left: 8px;
 }
-/* The top-right corner control. Opaque, the way the bookmark and the app-panel
-   trigger before it were: it is the one control that owns that corner. */
+/* The top-right corner control (Settings gear). Frosted glass, the same treatment as
+   the resume play button that pops over the card when the stream is paused: a
+   translucent fill, backdrop blur, and a hairline inset ring over a soft drop shadow.
+   The ring is a box-shadow, never a border — a semi-transparent border paints a
+   visible dark edge across the translucent fill on light backgrounds. */
 .vocab-corner-button {
   justify-self: end;
   /* Above the sheet, so the button is not clipped by the notch cut for it. */
   position: relative;
   z-index: 2;
-  background: var(--shell-text);
-  border-color: transparent;
-  color: var(--shell-on-text);
-  backdrop-filter: none;
+  border: none;
+  background: var(--chrome-fill);
+  color: var(--chrome-ink);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--chrome-ink) 18%, transparent),
+    0 8px 24px rgb(0 0 0 / 28%);
 }
 .vocab-icon-button.vocab-corner-button:hover:not(:disabled) {
-  background: #fff;
-  color: #000;
+  background: color-mix(in srgb, var(--chrome-ink) 14%, var(--chrome-fill));
+  color: var(--chrome-ink);
 }
 .vocab-icon-button.vocab-corner-button[data-active] {
   background: var(--chrome-accent);
-  border-color: transparent;
   color: #0a0014;
-}
-/* Strip the base icon-button's circular border from the corner button — the
-   opaque fill already defines the disc, and the semi-transparent border renders
-   as a visible ring on light backgrounds. */
-.vocab-corner-button {
-  border: none;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #000 12%, transparent),
+    0 8px 24px rgb(0 0 0 / 28%);
 }
 
 /* Saved words as a handle docked to the right edge, replacing the old top-right
@@ -2237,34 +2296,54 @@
 }
 /* Two tabs over one list each. Each tab is named after the reaction that puts a word in
    it, so the count inside the tab is the size of that list, not of the reader's taps.
-   The row IS the switcher, drawn as a real tab strip: two flat segments sharing one
-   hairline, welded to the container box below (same side insets, no gap), the open
-   segment marked by an accent underline sitting ON the hairline. */
+   The row IS the switcher, drawn as a real tab strip: two rounded-rectangle tabs, each
+   carrying its own outline. The open tab is marked by an accent bar ALONG ITS TOP and
+   loses its bottom edge so it fuses with the container box below — the tab and the box
+   read as one shape. The strip keeps the container's side insets so no horizontal gap
+   opens between the two surfaces. */
 .vocab-saved-tabs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
+  gap: 0 8px;
   margin: 0 max(18px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left));
-  border-bottom: 1px solid var(--shell-line);
 }
 .vocab-saved-tab-slot {
   position: relative;
   display: flex;
   min-width: 0;
+  /* The outline lives on the slot (the whole segment: label + any fused density cell),
+     so a tab with only a couple of words still fills the strip's full height instead of
+     shrinking to hug its text. Both slots share the grid row's height. A tab is rounded on
+     its two TOP corners only (square bottom) — the unselected one keeps that same tab
+     silhouette, just unhighlighted, rather than reading as a separate big rounded rect. */
+  align-self: stretch;
+  border: 1px solid var(--shell-line);
+  border-radius: 12px 12px 0 0;
+  background: transparent;
+  overflow: hidden;
+  transition:
+    border-color var(--dur-quick) var(--ease-out),
+    background var(--dur-quick) var(--ease-out);
 }
-.vocab-saved-tab-slot + .vocab-saved-tab-slot {
-  border-left: 1px solid var(--shell-line);
+/* The open tab fuses with the container below: accent outline, the container's own fill,
+   a square bottom edge pulled one pixel down over the box so the two interiors meet with
+   no seam line between them. */
+.vocab-saved-tab-slot[data-on] {
+  border-color: var(--vocab-accent);
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  background: color-mix(in srgb, var(--shell-hover) 24%, transparent);
+  margin-bottom: -1px;
 }
-/* The open segment's underline. On the slot, not the tab, so it spans the whole segment
-   including the fused density control, and one pixel low so it covers the hairline. */
-.vocab-saved-tab-slot[data-on]::after {
+/* The highlighted bar, now on TOP of the open tab (it used to underline it). On the slot,
+   not the tab, so it spans the whole segment including the fused density control. */
+.vocab-saved-tab-slot[data-on]::before {
   content: "";
   position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: -1px;
-  height: 2px;
-  border-radius: 2px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
   background: var(--vocab-accent);
 }
 .vocab-saved-tab {
@@ -2275,7 +2354,7 @@
   gap: 7px;
   min-width: 0;
   min-height: 42px;
-  padding: 0 10px;
+  padding: 4px 10px 5px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -2304,7 +2383,10 @@
 }
 .vocab-saved-tab[data-on] {
   color: var(--vocab-ink);
-  background: color-mix(in srgb, var(--vocab-accent) 7%, transparent);
+  /* The open segment's fill now lives on the slot (shared with the container below), so
+     the button stays transparent — tinting it here would darken the label area away from
+     the fused box and break the single-shape read. */
+  background: transparent;
 }
 .vocab-saved-tab-count {
   min-width: 20px;
@@ -2321,9 +2403,9 @@
   background: color-mix(in srgb, var(--vocab-accent) 28%, transparent);
   color: var(--vocab-ink);
 }
-/* Density rides ON the open tab as the segment's tail: a flat icon cell divided from the
-   tab by a hairline, stretching the strip's full height — the strip is flat now, so the
-   control is flat with it. */
+/* Density rides ON the open tab as the segment's tail: an icon cell divided from the tab
+   by a hairline, stretching the tab's full height so it shares the rounded outline. The
+   slot clips it to that outline. */
 .vocab-saved-density {
   display: inline-flex;
   align-items: center;
@@ -2815,6 +2897,21 @@
   --chip-from: -28px;
   --chip-accent: var(--vault-heart);
 }
+/* The Chinese host prints one two-character word on each chip. The block is 34×22, so
+   the glyph stays small and dark — a bright chip with a dark word keeps the same contrast
+   relationship the bare block had against the vault. It rides the parent's drop transform,
+   so no separate animation is needed here. */
+.vocab-vault-chip-word {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #1a1330cc;
+}
 /* The vault body sits above the chip, so the chip passes BEHIND the front rim on its way
    in rather than sliding over the top of it. */
 .vocab-vault-jar {
@@ -3032,12 +3129,13 @@
 }
 /* The tail: a NARROW triangle sharing the bubble's fill, merged into the shape layer so the
    bubble and its point outline as one. Its horizontal position is set per bubble (off-centre,
-   a 1:2 split) and its direction by the per-bubble clip-path. */
+   a 1:2 split) and its direction by the per-bubble clip-path. The base is kept narrow and the
+   height generous so the point reads as ACUTE and reaches a little further toward its key. */
 .vocab-vault-tip-shape::after {
   content: "";
   position: absolute;
-  width: 10px;
-  height: 9px;
+  width: 7px;
+  height: 13px;
   background: var(--tip-fill);
 }
 /* The words. Split in the component so each can arrive on its own beat; they ride above
@@ -3078,7 +3176,10 @@
 .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
   left: 66.6%;
   right: auto;
-  bottom: -7px;
+  /* Long enough to span the head band and land on the key's top edge (≈17px down from the
+     bubble), keeping a 3px overlap into the body so the join stays seamless. */
+  bottom: -18px;
+  height: 21px;
   transform: translateX(-50%);
   clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
@@ -3093,7 +3194,10 @@
   transform: translateX(-33.3%);
 }
 .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
-  top: -7px;
+  /* Mirrors the heart's reach: spans the gap up to the key's bottom edge (≈20px above the
+     bubble) with the same 3px overlap into the body. */
+  top: -21px;
+  height: 24px;
   left: 33.3%;
   right: auto;
   transform: translateX(-50%);
@@ -3255,6 +3359,17 @@
     padding: 7px 12px;
     font-size: 12.7px;
   }
+  /* Restate each tail's reach for this tier's shorter bubble + smaller key, so the point
+     still lands on the key instead of overshooting into it (the base reach is tuned to the
+     taller default tier). */
+  .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
+    bottom: -10px;
+    height: 13px;
+  }
+  .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
+    top: -18px;
+    height: 21px;
+  }
 }
 /* ── Landscape phone: the keys and their two bubbles ─────────────────────────
    The full scene is a vertical stack ~234px tall before any text. A landscape phone
@@ -3286,6 +3401,15 @@
   .vocab-vault-tip {
     padding: 6px 11px;
     font-size: 12.5px;
+  }
+  /* Tightest tier: the shortest bubble-to-key span, so the tails reach the least. */
+  .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
+    bottom: -6px;
+    height: 9px;
+  }
+  .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
+    top: -14px;
+    height: 17px;
   }
   /* No chip to catch, so the keys stop miming a press and just sit there. */
   .vocab-vault-key[data-active],
@@ -3420,12 +3544,18 @@
 }
 .vocab-onboard-gauge {
   position: relative;
+  /* Contains the three rail-line layers (track z0, ladder z1, rail z2) as one stacking
+     context so their z-indexes order against each other, not the page. */
+  isolation: isolate;
   flex: 1;
   min-height: 0;
   width: min(560px, 100%);
   margin: 10px auto;
 }
 .vocab-onboard-ladder {
+  position: relative;
+  /* Above the track (z0) so every level's dot paints ON the gradient bar. */
+  z-index: 1;
   display: grid;
   grid-template-rows: repeat(var(--rung-count), minmax(0, 1fr));
   height: 100%;
@@ -3440,17 +3570,24 @@
   grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr);
   column-gap: 14px;
   align-items: center;
-  opacity: 0.5;
   cursor: pointer;
+}
+/* Dim only the words, never the whole row. A translucent rung faded its dot too, so the
+   gradient bar bled through and the passed/active dots read as sunk beneath the bar. The tick
+   is a full-opacity sibling, so every level sits solidly ON the bar. */
+.vocab-onboard-rung :is(.vocab-onboard-name, .vocab-onboard-sample) {
+  opacity: 0.5;
   transition: opacity var(--dur-quick) var(--ease-out);
 }
-.vocab-onboard-rung[data-on] {
+.vocab-onboard-rung[data-on] :is(.vocab-onboard-name, .vocab-onboard-sample) {
   opacity: 1;
 }
 /* Not on offer yet: listed so the ladder reads whole, plainly out of reach. */
 .vocab-onboard-rung[aria-disabled="true"] {
-  opacity: 0.26;
   cursor: default;
+}
+.vocab-onboard-rung[aria-disabled="true"] :is(.vocab-onboard-name, .vocab-onboard-sample) {
+  opacity: 0.26;
 }
 .vocab-onboard-name {
   display: flex;
@@ -3526,8 +3663,13 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--shell-line-strong);
+  /* Opaque fill (never the translucent line token) so the bar cannot show through an
+     unvisited dot; locked levels use a dimmer — but still solid — tone to stay legible. */
+  background: color-mix(in srgb, #ffffff 30%, var(--shell-bg));
   transition: background var(--dur-quick) var(--ease-out);
+}
+.vocab-onboard-rung[aria-disabled="true"] .vocab-onboard-tick {
+  background: color-mix(in srgb, #ffffff 16%, var(--shell-bg));
 }
 .vocab-onboard-rung:is([data-on], [data-passed]) .vocab-onboard-tick {
   background: var(--rung-own);
@@ -3619,6 +3761,8 @@
   touch-action: none;
   cursor: grab;
   outline: none;
+  /* Above the ladder so the knob it carries stays the topmost thing on the rail line. */
+  z-index: 2;
 }
 .vocab-onboard-rail:active {
   cursor: grabbing;
@@ -3627,6 +3771,10 @@
    the ::after shade covers everything BELOW the knob, so what shows is the climb so far. */
 .vocab-onboard-track {
   position: absolute;
+  /* The bar is a gauge-level layer BEHIND the ladder (z 0 < ladder z 1), so each level's
+     dot sits ON it instead of under it. It used to be a child of the rail, whose transform
+     locked it into a stacking context that always painted over the ladder. */
+  z-index: 0;
   left: 50%;
   top: calc(50% / var(--rung-count));
   bottom: calc(50% / var(--rung-count));

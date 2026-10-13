@@ -238,6 +238,10 @@ export function DifficultyOnboarding({
       </button>
 
       <div className="vocab-onboard-gauge">
+        {/* The gradient bar lives on its OWN layer, behind the ladder, so each level's dot
+            can sit ON the bar (the rail's transform would otherwise trap the bar in a
+            stacking context above every dot). The rail keeps only the draggable knob. */}
+        <span className="vocab-onboard-track" aria-hidden="true" />
         <ol className="vocab-onboard-ladder" ref={ladder}>
           {rungs.map((rung, at) => (
             <li
@@ -302,7 +306,6 @@ export function DifficultyOnboarding({
           onPointerCancel={onPointerEnd}
           onKeyDown={onKeyDown}
         >
-          <span className="vocab-onboard-track" aria-hidden="true" />
           <span className="vocab-onboard-knob" aria-hidden="true" />
         </div>
       </div>

@@ -448,19 +448,24 @@
 }
 
 /* ── outline: a hollow word that fills with ink ───────────────────────────────────
-   The stroke is drawn with -webkit-text-stroke, the fill is the clipped background.
+   The stroke is drawn with -webkit-text-stroke and painted BEHIND the fill
+   (`paint-order: stroke fill`), so each glyph is one unified contour. The fill is the
+   text colour itself, driven through -webkit-text-fill-color: at rest it is solid ink,
+   and the one-shot draw fades it in from transparent (hollow) to solid (filled).
+
+   This replaces an earlier technique that layered a `-webkit-background-clip: text`
+   fill under the stroke. Blink composites a text-clipped background and a centred
+   text-stroke as two separate paint layers, so the fill/clip boundary and the stroke
+   outline split every character into overlapping seam/segment artifacts instead of one
+   clean shape. Keeping the fill as the text colour removes the second layer entirely.
+
    -webkit-text-fill-color:transparent wins over an inherited inline `color`, so the
    renderer's colour still drives currentColor for the stroke without painting solid
    glyphs. AT REST the fill is complete: the draw is a one-shot, so a card paused by
    prefers-reduced-motion shows solid ink, never a permanent outline. ───────────── */
 .kinetic-emph-outline {
   -webkit-text-stroke: 0.035em currentColor;
-  -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
+  paint-order: stroke fill;
   padding: 0.02em 0.04em;
 }
 .kinetic-emph-outline.is-animated {
@@ -469,10 +474,10 @@
 }
 @keyframes kinetic-emphasis-outline-fill {
   from {
-    background-size: 0% 100%;
+    -webkit-text-fill-color: transparent;
   }
   to {
-    background-size: 100% 100%;
+    -webkit-text-fill-color: currentColor;
   }
 }
 

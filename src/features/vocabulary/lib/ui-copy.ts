@@ -57,6 +57,7 @@ const VI = {
   "player.mute": "Tắt nhạc nền",
   "player.unmute": "Bật nhạc nền",
   "player.shuffle": "Xáo trộn từ và bắt đầu luồng mới",
+  "player.nextTrack": "Đổi bài hát nền",
   "player.export": "Xuất từ này thành video (quản trị)",
   // ── Difficulty summary rows ──
   "difficulty.label": "Độ khó",
@@ -274,6 +275,7 @@ const TH: Partial<Record<CopyKey, string>> = {
   "player.mute": "ปิดเสียงเพลงพื้นหลัง",
   "player.unmute": "เปิดเสียงเพลงพื้นหลัง",
   "player.shuffle": "สุ่มคำและเริ่มสตรีมใหม่",
+  "player.nextTrack": "เปลี่ยนเพลงพื้นหลัง",
   "player.export": "ส่งออกคำนี้เป็นวิดีโอ (แอดมิน)",
   "difficulty.label": "ระดับความยาก",
   "difficulty.done": "เสร็จ",
@@ -479,6 +481,7 @@ const JA: Partial<Record<CopyKey, string>> = {
   "player.mute": "BGMをミュート",
   "player.unmute": "BGMを再生",
   "player.shuffle": "単語をシャッフルして新しいストリームを開始",
+  "player.nextTrack": "BGMを変える",
   "player.export": "この単語を動画として書き出す（管理者）",
   "difficulty.label": "難易度",
   "difficulty.done": "完了",

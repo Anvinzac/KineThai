@@ -26,6 +26,7 @@ import {
 import {
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -35,6 +36,7 @@ import {
 import { useSavedWords } from "../hooks/useSavedWords";
 import { resolveClue } from "../lib/clues";
 import { posLabel, topicLabel } from "../lib/i18n";
+import { resolveTarget } from "../lib/target-language";
 import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
 import type { Locale } from "../lib/locale";
@@ -47,6 +49,16 @@ import "../vocabulary.css";
 type TabKind = "bookmark" | "heart";
 
 const TABS: { kind: TabKind }[] = [{ kind: "bookmark" }, { kind: "heart" }];
+
+/**
+ * The word carried by each chip in the empty vault, on the Chinese host only.
+ * Keep them to two characters: the chip is a 34×22 block, and a longer word
+ * shrinks the glyph past the point where it reads as a word at all.
+ */
+const CHIP_WORDS: Record<TabKind, string> = {
+  bookmark: "收藏",
+  heart: "喜爱",
+};
 
 /**
  * A tooltip bubble in the empty vault. The sentence is split per WORD so each one can be
@@ -425,6 +437,12 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
     at?: number;
   } | null>(null);
   const groupId = useId();
+  // The visited address decides the deck: only the Chinese host labels the vault's
+  // falling chips with a Han word; every other host keeps them bare blocks.
+  const isZhHost = useMemo(
+    () => typeof window !== "undefined" && resolveTarget(window.location.host) === "zh",
+    [],
+  );
 
   const counts: Record<TabKind, number> = { bookmark: saved.length, heart: favorites.length };
 
@@ -595,9 +613,22 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
                       opening and is masked by the bowl's near (lower) rim, not the top arc. */}
                   <span className="vocab-vault-lid" />
                   {/* Two blocks drop into the jar — one per reaction — so the scene teaches both
-                      gestures at once instead of one per tab. The heart's is pink. */}
-                  <span className="vocab-vault-chip" data-chip="bookmark" />
-                  <span className="vocab-vault-chip" data-chip="heart" />
+                      gestures at once instead of one per tab. The heart's is pink. On the Chinese
+                      host each block carries a two-character word of its reaction's own theme. */}
+                  <span className="vocab-vault-chip" data-chip="bookmark">
+                    {isZhHost && (
+                      <span className="vocab-vault-chip-word" lang="zh-Hans">
+                        {CHIP_WORDS.bookmark}
+                      </span>
+                    )}
+                  </span>
+                  <span className="vocab-vault-chip" data-chip="heart">
+                    {isZhHost && (
+                      <span className="vocab-vault-chip-word" lang="zh-Hans">
+                        {CHIP_WORDS.heart}
+                      </span>
+                    )}
+                  </span>
                   <div className="vocab-vault-jar">
                     {/* The bowl's front wall is its own layer so it can be masked: its top edge has
                         to BE the opening's lower arc, and a mask on the jar itself would also eat
