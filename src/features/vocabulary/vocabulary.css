@@ -3571,6 +3571,14 @@
   column-gap: 14px;
   align-items: center;
   cursor: pointer;
+  /* Breathing room between rows, kept INSIDE each track (not grid row-gap) so
+     the knob math — row centres at (i + 0.5) / n — stays exact. */
+  padding-block: 6px;
+}
+/* TEMPORARY: word counts hidden until the listing copy is final. Revert by
+   deleting this rule (markup, keys and translations stay wired underneath). */
+.vocab-onboard-count {
+  display: none;
 }
 /* Dim only the words, never the whole row. A translucent rung faded its dot too, so the
    gradient bar bled through and the passed/active dots read as sunk beneath the bar. The tick
@@ -3868,6 +3876,9 @@
   /* Two lines (name + chip, then the big count) have to fit a ~34px row on the
      smallest phones, so both tighten and lose their breathing room rather than
      spilling into the next rung. */
+  .vocab-onboard-rung {
+    padding-block: 3px;
+  }
   .vocab-onboard-name {
     gap: 1px;
   }
@@ -3960,6 +3971,7 @@
     position: relative;
     height: 100%;
     column-gap: 0;
+    padding-block: 2px;
   }
   /* Tick: centred on the rail line. */
   .vocab-onboard[data-landscape] .vocab-onboard-tick {
