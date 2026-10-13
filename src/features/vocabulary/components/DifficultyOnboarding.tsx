@@ -29,7 +29,7 @@ import {
   tracksFor,
 } from "../lib/difficulty";
 import type { TargetLocale } from "../lib/target-language";
-import { t } from "../lib/ui-copy";
+import { difficultyCopy, t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
 import type { Locale } from "../lib/locale";
 import type { FeedPage } from "../types";
@@ -113,8 +113,12 @@ export function DifficultyOnboarding({
     const pool = (available && metadata?.levelSamples[ceiling]) || [];
     const turn = taken.get(ceiling) ?? 0;
     if (pool.length) taken.set(ceiling, turn + 1);
+    // Level names follow the UI locale (Japanese by default); ids still key
+    // counts, samples and picks, so only the display string is overlaid.
+    const copy = difficultyCopy(ui, track.id);
     return {
       track,
+      label: copy.label || track.label,
       color: RUNG_COLORS[index % RUNG_COLORS.length]!,
       band: formatLevelBand(track.levels),
       available,
@@ -230,7 +234,7 @@ export function DifficultyOnboarding({
             >
               <span className="vocab-onboard-name">
                 <span className="vocab-onboard-label">
-                  <span aria-hidden="true">{rung.track.emoji}</span> {rung.track.label}
+                  <span aria-hidden="true">{rung.track.emoji}</span> {rung.label}
                 </span>
                 <span className="vocab-onboard-meta">
                   <span className="vocab-onboard-band">{rung.band}</span>
@@ -268,7 +272,7 @@ export function DifficultyOnboarding({
           aria-valuemin={1}
           aria-valuemax={rungs.length}
           aria-valuenow={index + 1}
-          aria-valuetext={`${current.track.label}, ${current.band}`}
+          aria-valuetext={`${current.label}, ${current.band}`}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerEnd}
@@ -287,9 +291,7 @@ export function DifficultyOnboarding({
           disabled={!ready}
           onClick={() => onPick(current.track.id)}
         >
-          {ready
-            ? t(ui, "onboard.start", { label: current.track.label })
-            : t(ui, "onboard.loading")}
+          {ready ? t(ui, "onboard.start", { label: current.label }) : t(ui, "onboard.loading")}
         </button>
         <button type="button" className="vocab-onboard-all" onClick={() => onPick(DIFFICULTY_ALL)}>
           {t(ui, "onboard.allLevels")}
