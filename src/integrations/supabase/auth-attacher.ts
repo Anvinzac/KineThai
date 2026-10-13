@@ -6,9 +6,13 @@ import { supabase } from "./client";
 // the browser never attaches the bearer token to serverFn RPCs.
 export const attachSupabaseAuth = createMiddleware({ type: "function" }).client(
   async ({ next }) => {
-    // Anonymous-first: when Supabase is unconfigured (static hosts, prerender
-    // without env) or the session read fails, proceed without a token rather
-    // than failing the call. Authenticated routes still enforce auth server-side.
+    // Anonymous-first: without auth configured (static hosts, env-less builds)
+    // skip the session read entirely so an unconfigured client is never even
+    // constructed — no throw, no console noise. A failing read still falls back
+    // to anonymous. Authenticated routes enforce auth server-side regardless.
+    if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) {
+      return next({ headers: {} });
+    }
     let token: string | undefined;
     try {
       const { data } = await supabase.auth.getSession();
