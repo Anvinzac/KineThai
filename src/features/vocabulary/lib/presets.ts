@@ -18,6 +18,7 @@ import {
   getWords,
   isLikelyChineseText,
   isLikelyVietnameseText,
+  type EmphasisVariant,
 } from "@/features/kinetic-text";
 import { getTextSafeInsets } from "@/features/post-player/lib/playback-timing";
 import type { NarrativeStyle } from "./schema";
@@ -334,6 +335,15 @@ export type StylePreset = {
   id: NarrativeStyle;
   label: string;
   caption: string;
+  /**
+   * The highlight effects this reveal may draw from. A style used to own only
+   * choreography, and the emphasis effect came from one global pool hashed over every
+   * surface — so the highlight was a property of the WORD, and no two styles could look
+   * different however their motion differed. Authoring a short pool per style makes the
+   * effect a property of the STYLE: `Minimal` drawing no mover at all is the test of it.
+   * Absent means the unfiltered global pool, which is what every other surface uses.
+   */
+  emphasis?: readonly EmphasisVariant[];
 } & Pick<CanvasSpec, "entrance" | "loop" | "tempo" | "rhythm">;
 export const STYLES: StylePreset[] = [
   {
@@ -344,6 +354,8 @@ export const STYLES: StylePreset[] = [
     loop: "float",
     tempo: "steady",
     rhythm: "stagger",
+    // A gliding shine and a beat-brighten: clues, so it should draw the eye along, not shake.
+    emphasis: ["sweep", "flash", "underline", "color"],
   },
   {
     id: "speed",
@@ -353,6 +365,8 @@ export const STYLES: StylePreset[] = [
     loop: "pulse",
     tempo: "snappy",
     rhythm: "burst",
+    // Hard movers only — this style's whole identity is that it arrives fast.
+    emphasis: ["fringe", "pulse", "jiggle", "color"],
   },
   {
     id: "confession",
@@ -362,6 +376,8 @@ export const STYLES: StylePreset[] = [
     loop: "float",
     tempo: "steady",
     rhythm: "smooth",
+    // Soft and luminous: the hollow word that fills is this style's signature.
+    emphasis: ["outline", "glow", "halo", "underline"],
   },
   {
     id: "minimal",
@@ -371,6 +387,8 @@ export const STYLES: StylePreset[] = [
     loop: "float",
     tempo: "steady",
     rhythm: "smooth",
+    // Nothing moves. If this row animates, the authored pool is not being honoured.
+    emphasis: ["color", "underline"],
   },
 ];
 
@@ -391,6 +409,8 @@ export const DOUYIN_STYLES: StylePreset[] = [
     loop: "none",
     tempo: "steady",
     rhythm: "smooth",
+    // The hollow word fills as the blur lifts: one slow reveal, no jitter.
+    emphasis: ["outline", "halo", "underline"],
   },
   {
     id: "speed",
@@ -400,6 +420,8 @@ export const DOUYIN_STYLES: StylePreset[] = [
     loop: "shake",
     tempo: "snappy",
     rhythm: "burst",
+    // 卡点: the tear and the shake are the cut.
+    emphasis: ["fringe", "pulse", "jiggle"],
   },
   {
     id: "confession",
@@ -409,6 +431,7 @@ export const DOUYIN_STYLES: StylePreset[] = [
     loop: "float",
     tempo: "slow",
     rhythm: "poetic",
+    emphasis: ["glow", "halo", "sweep"],
   },
   {
     id: "minimal",
@@ -418,6 +441,8 @@ export const DOUYIN_STYLES: StylePreset[] = [
     loop: "none",
     tempo: "steady",
     rhythm: "stagger",
+    // The one slot allowed a box: 国潮 reads as a seal, and a lone word can spare the room.
+    emphasis: ["color", "underline", "frame"],
   },
 ];
 

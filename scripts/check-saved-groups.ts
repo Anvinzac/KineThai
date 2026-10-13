@@ -14,10 +14,10 @@
  */
 import {
   FOLDER_CAP,
-  UNDATED_LABEL,
   dayLabel,
   groupSavedWords,
 } from "../src/features/vocabulary/lib/saved-groups.ts";
+import { t } from "../src/features/vocabulary/lib/ui-copy.ts";
 import type { SavedWord } from "../src/features/vocabulary/lib/saved-words.ts";
 import type { VocabularyWord } from "../src/features/vocabulary/lib/schema.ts";
 
@@ -51,7 +51,7 @@ function sameDay(count: number, dayOffset = 0): SavedWord[] {
 }
 
 const foldersOf = (words: SavedWord[], now?: number) =>
-  groupSavedWords(words, "day", now).flatMap((group) => group.folders);
+  groupSavedWords(words, "day", "vi", now).flatMap((group) => group.folders);
 
 // ── 1. the folder ceiling ─────────────────────────────────────────────────────
 check(`the cap is 15 words per folder`, FOLDER_CAP === 15);
@@ -86,9 +86,9 @@ check("a single folder carries no extra heading", fifteen.length === 1 && fiftee
 
 // ── 3. day labels ─────────────────────────────────────────────────────────────
 const now = noon(2026, 9, 6);
-check("today reads Hôm nay", dayLabel(now, now) === "Hôm nay");
-check("yesterday reads Hôm qua", dayLabel(now - DAY_MS, now) === "Hôm qua");
-check("two days back reads Hôm kia", dayLabel(now - 2 * DAY_MS, now) === "Hôm kia");
+check("today reads Hôm nay", dayLabel(now, now, "vi") === "Hôm nay");
+check("yesterday reads Hôm qua", dayLabel(now - DAY_MS, now, "vi") === "Hôm qua");
+check("two days back reads Hôm kia", dayLabel(now - 2 * DAY_MS, now, "vi") === "Hôm kia");
 check(
   "three days back loses the word and gains a date",
   dayLabel(now - 3 * DAY_MS, now) === "3/10",
@@ -100,7 +100,7 @@ check(
 );
 check(
   "a stamp taken after the reference moment still reads Hôm nay",
-  dayLabel(now + 3_600_000, now) === "Hôm nay",
+  dayLabel(now + 3_600_000, now, "vi") === "Hôm nay",
 );
 
 // ── 4. order and completeness ─────────────────────────────────────────────────
@@ -111,13 +111,13 @@ const mixed = [
   entry("undated-a", undefined),
   entry("undated-b", undefined),
 ];
-const dayGroups = groupSavedWords(mixed, "day", now);
+const dayGroups = groupSavedWords(mixed, "day", "vi", now);
 check(
   "day groups run newest first",
   dayGroups.map((group) => group.label).join(" → ") ===
     "Hôm nay → Hôm qua → Hôm kia → Chưa xác định",
 );
-check("the undated bucket is always last", dayGroups.at(-1)?.label === UNDATED_LABEL);
+check("the undated bucket is always last", dayGroups.at(-1)?.label === t("vi", "saved.undated"));
 check(
   "every word appears in exactly one group",
   dayGroups.reduce((sum, group) => sum + group.count, 0) === mixed.length &&

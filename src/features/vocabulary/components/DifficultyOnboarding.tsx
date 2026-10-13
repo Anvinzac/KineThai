@@ -20,6 +20,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 import {
   DIFFICULTY_ALL,
   countTrackWords,
@@ -28,6 +29,7 @@ import {
   trackCeiling,
   tracksFor,
 } from "../lib/difficulty";
+import { useAmbientSound } from "../hooks/useAmbientSound";
 import type { TargetLocale } from "../lib/target-language";
 import { difficultyCopy, t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
@@ -136,6 +138,10 @@ export function DifficultyOnboarding({
   const index = resolved < 0 ? 0 : resolved;
   const current = rungs[index]!;
   const ladder = useRef<HTMLOListElement>(null);
+  // The toolbar that carries the music toggle only exists once a difficulty is picked,
+  // so the ladder docks its own: same persisted preference and the same per-host pool
+  // scope, so the Chinese host plays the traditional pool even before the first word.
+  const ambient = useAmbientSound(locale === "zh" ? "zh" : "default");
 
   // Landscape detection: drives both pointer-axis mapping in JS and a data-landscape
   // attribute that CSS uses to switch the gauge to a horizontal layout with alternating
@@ -219,6 +225,17 @@ export function DifficultyOnboarding({
         <h1 id="vocab-onboard-title">{t(ui, "onboard.title")}</h1>
         <p>{t(ui, "onboard.hint")}</p>
       </header>
+
+      <button
+        type="button"
+        className="vocab-icon-button vocab-onboard-ambient"
+        onClick={ambient.toggle}
+        aria-label={ambient.enabled ? "Tắt nhạc nền" : "Bật nhạc nền"}
+        aria-pressed={ambient.enabled}
+        data-active={ambient.enabled || undefined}
+      >
+        {ambient.enabled ? <Volume2 size={19} fill="currentColor" /> : <VolumeX size={19} />}
+      </button>
 
       <div className="vocab-onboard-gauge">
         <ol className="vocab-onboard-ladder" ref={ladder}>

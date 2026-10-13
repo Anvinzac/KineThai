@@ -67,6 +67,17 @@ const HanziStrokeSpelling = lazy(() =>
 
 /** Matches the report panel's exit keyframes (--dur-quick) in vocabulary.css. */
 const REPORT_EXIT_MS = 180;
+/** Resume button exit: grows away while its tint and blur drain to nothing. */
+const RESUME_EXIT = {
+  scale: 1.25,
+  backgroundColor: "rgba(0, 0, 0, 0)",
+  backdropFilter: "blur(0px) saturate(100%)",
+  transition: { duration: 0.2, ease: "easeIn" },
+} as const;
+const RESUME_ICON_EXIT = {
+  opacity: 0,
+  transition: { duration: 0.16, ease: "easeIn" },
+} as const;
 /** Clue-page duration multipliers; "fast" is the stream's native timing. */
 const PACE_FACTOR: Record<ReadingPace, number> = { slow: 1.75, normal: 1.35, fast: 1 };
 
@@ -244,7 +255,7 @@ export function VocabularyCard({
   }, []);
   // Pace stretches the clue pages twice over, in step: how long each page stays up, and
   // how slowly its words are read out onto it. The spelling coda keeps its own timing.
-  const paceFactor = exportLayout ? 1 : PACE_FACTOR[presentation.pace ?? "fast"];
+  const paceFactor = exportLayout ? 1 : PACE_FACTOR[presentation.pace ?? "normal"];
   /** One duration per page: every clue stage plus the trailing spelling coda. */
   const pageDurations = useMemo(
     () => [
@@ -412,6 +423,12 @@ export function VocabularyCard({
   // Keyed to `started`, not `active`: a pause must not switch the backdrop back to its
   // static form and then restart the drift from its first frame when playback resumes.
   const sweep = !!sliding && !reducedMotion && started;
+  // Once a card has drifted it never goes back to its untouched form while it is mounted:
+  // leaving the word only FREEZES the drift where it is. Dropping it instead put the
+  // backdrop back at its starting offset while the card was still sliding off screen —
+  // the colours of the word being left jumped in the middle of the swipe.
+  const [drifted, setDrifted] = useState(sweep);
+  if (sweep && !drifted) setDrifted(true);
   const cluePages = stages.filter((item) => !item.reveal).map((item) => item.text);
   // In an export the text lives in the frame's clear zone, so that zone — not the
   // whole card — is the width and height everything is fitted to.
@@ -513,13 +530,25 @@ export function VocabularyCard({
       const ay = Math.abs(dy);
       // Forward skips share one limiter; once it trips, the gesture is swallowed silently.
       const canSkip = () => sceneSkipLimiter.tryConsume();
+      // Rewinding or skipping is a request to watch, so it ends a pause: the page must
+      // never move on while the resting play button still says the stream is stopped.
+      const resume = () => {
+        if (!presentation.autoplay && !reducedMotion) onToggleAutoplay?.();
+      };
       // Horizontal swipe
       if ((ax > 44 || ay > 44) && ax > ay) {
         if (dx < -44) {
           if (isSpelling) {
-            if (canSkip()) advanceWithExit();
-          } else if (!stage.reveal && canSkip()) playback.next();
+            if (canSkip()) {
+              resume();
+              advanceWithExit();
+            }
+          } else if (!stage.reveal && canSkip()) {
+            resume();
+            playback.next();
+          }
         } else if (dx > 44) {
+          resume();
           playback.previous();
         }
         return;
@@ -530,7 +559,10 @@ export function VocabularyCard({
       if (dt < 600 && ax < 16 && ay < 16) {
         // During the spelling coda a tap means "I have it" — skip to the next word.
         if (isSpelling) {
-          if (canSkip()) advanceWithExit();
+          if (canSkip()) {
+            resume();
+            advanceWithExit();
+          }
           return;
         }
         const rect = cardRef.current?.getBoundingClientRect();
@@ -542,9 +574,11 @@ export function VocabularyCard({
         let zone: "left" | "right";
         if (relX < leftZone) {
           zone = "left";
+          resume();
           playback.previous();
         } else if (relX > rightZone) {
           zone = "right";
+          resume();
           playback.next();
         } else {
           // The center answers with the pause pop and the resting play button, not a wash.
@@ -558,7 +592,16 @@ export function VocabularyCard({
         tapZoneTimer.current = window.setTimeout(() => setTapZone(null), 350);
       }
     },
-    [playback, isSpelling, advanceWithExit, releaseDrag, onToggleAutoplay, presentation.autoplay],
+    [
+      playback,
+      isSpelling,
+      advanceWithExit,
+      releaseDrag,
+      onToggleAutoplay,
+      presentation.autoplay,
+      reducedMotion,
+      stage.reveal,
+    ],
   );
 
   void matching;
@@ -724,7 +767,14 @@ export function VocabularyCard({
         {/* The backdrop, not the text, carries the idle motion: a slow sideways
             drift of the gradient itself. It only moves colors that are already in
             the palette, so the audited contrast floors hold wherever it drifts. */}
-        <div className="vocab-backdrop-drift" data-drift={sweep || undefined}>
+        <div
+          className="vocab-backdrop-drift"
+          // `data-strip` sizes the wrapper for the sliding strip and is set on EVERY card
+          // that has one, playing or not, so a neighbour scrolling into view already shows
+          // exactly the colours it will show as the word on screen.
+          data-strip={sliding ? "" : undefined}
+          data-drift={sweep ? "on" : drifted ? "held" : undefined}
+        >
           <PostCanvasBackdrop
             postId={entry.occurrenceId}
             backgroundShiftPage={reducedMotion ? 0 : playback.page}
@@ -732,7 +782,7 @@ export function VocabularyCard({
             patternTheme={patternTheme}
             slidingCanvasBackground={sliding}
             staticCanvasBackground={theme.paint}
-            hasTransitionBackground={sweep}
+            hasTransitionBackground={sweep || drifted}
           />
         </div>
       </div>
@@ -741,21 +791,22 @@ export function VocabularyCard({
       )}
       {!exportLayout && (
         <>
-          <AnimatePresence>
-            {pausePop > 0 && !presentation.autoplay && (
-              <motion.div
-                key={`pop-${pausePop}`}
-                className="vocab-pause-pop"
-                aria-hidden="true"
-                initial={{ opacity: 0, scale: 0.6 }}
-                animate={{ opacity: [0, 1, 0], scale: [0.6, 1.08, 1.32] }}
-                transition={{ duration: 0.52, times: [0, 0.3, 1], ease: "easeOut" }}
-                onAnimationComplete={() => setPausePop(0)}
-              >
-                <Pause size={30} fill="currentColor" strokeWidth={0} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Neither control ever animates its own opacity: an element below full opacity
+              cannot sample what lies behind it, so its backdrop blur paints as a hard
+              unblurred square until the fade ends. They fade by growing the tint and the
+              blur radius from zero instead, with only the icon's opacity moving. */}
+          {pausePop > 0 && !presentation.autoplay && !reducedMotion && (
+            <div
+              key={`pop-${pausePop}`}
+              className="vocab-pause-pop"
+              aria-hidden="true"
+              onAnimationEnd={(event) => {
+                if (event.target === event.currentTarget) setPausePop(0);
+              }}
+            >
+              <Pause size={30} fill="currentColor" strokeWidth={0} />
+            </div>
+          )}
           <AnimatePresence>
             {current && !presentation.autoplay && !reducedMotion && pausePop === 0 && (
               <motion.button
@@ -765,11 +816,13 @@ export function VocabularyCard({
                 aria-label={t(ui, "card.resume")}
                 initial={{ opacity: 0, scale: 0.7 }}
                 animate={{ opacity: 1, scale: 1, transition: SPRING.gentle }}
-                exit={{ opacity: 0, scale: 1.25, transition: { duration: 0.2, ease: "easeIn" } }}
+                exit={RESUME_EXIT}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => onToggleAutoplay?.()}
               >
-                <Play size={30} fill="currentColor" strokeWidth={0} />
+                <motion.span exit={RESUME_ICON_EXIT}>
+                  <Play size={30} fill="currentColor" strokeWidth={0} />
+                </motion.span>
               </motion.button>
             )}
           </AnimatePresence>
@@ -802,6 +855,9 @@ export function VocabularyCard({
           direction={nav.direction}
           dragX={dragX}
           allowFrameEmphasis={!landscape}
+          // The highlight comes from the reveal style's own short pool, so the effect is a
+          // property of the style and not of whichever word happened to land there.
+          emphasisPool={style.emphasis}
           revealY={wideCard ? WIDE_REVEAL_Y : PORTRAIT_REVEAL_Y}
           timeScale={paceFactor}
         />

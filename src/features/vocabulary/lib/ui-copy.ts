@@ -92,6 +92,8 @@ const VI = {
   "saved.tapForMeaning": "Chạm một từ để xem nghĩa. ",
   "saved.hint": "Vuốt ngang hoặc nhấn giữ một từ để {action}.",
   "saved.undo": "Hoàn tác",
+  "saved.row.confirm": "{action} “{word}”?",
+  "saved.confirm.keep": "Giữ lại",
   "saved.group.day": "Theo ngày",
   "saved.group.level": "Theo cấp độ",
   "saved.day.today": "Hôm nay",
@@ -135,6 +137,10 @@ const VI = {
   "stream.exhausted": "Sẵn sàng trộn lần nữa? Bắt đầu dòng mới.",
   "stream.offline": "Mất mạng — các từ đã tải vẫn xem được.",
   "stream.loadMoreFail": "Không tải thêm từ được.",
+  "stream.feedEnd.eyebrow": "Hết dòng từ",
+  "stream.feedEnd.title": "Bạn đã xem hết mọi từ rồi.",
+  "stream.feedEnd.body":
+    "Bộ nhớ trên thiết bị giữ mỗi từ ở mức một lần mỗi ngày, hai lần trong ba ngày, ba lần mỗi tuần. Xóa lịch sử xem để mọi từ quay lại ngay.",
   // ── Card ──
   "card.reveal": "Ê, từ này biết nè",
   "card.aria": "Thẻ từ vựng {position}",
@@ -301,6 +307,8 @@ const TH: Partial<Record<CopyKey, string>> = {
   "saved.tapForMeaning": "แตะคำหนึ่งเพื่อดูความหมาย ",
   "saved.hint": "ปัดหรือกดค้างที่คำหนึ่งเพื่อ {action}",
   "saved.undo": "เลิกทำ",
+  "saved.row.confirm": "{action} “{word}” หรือไม่?",
+  "saved.confirm.keep": "เก็บไว้",
   "saved.group.day": "ตามวัน",
   "saved.group.level": "ตามระดับ",
   "saved.day.today": "วันนี้",
@@ -341,6 +349,10 @@ const TH: Partial<Record<CopyKey, string>> = {
   "stream.exhausted": "พร้อมสับใหม่อีกครั้ง? เริ่มสตรีมใหม่",
   "stream.offline": "เน็ตหลุด — คำที่โหลดแล้วยังดูได้",
   "stream.loadMoreFail": "โหลดคำเพิ่มไม่ได้",
+  "stream.feedEnd.eyebrow": "หมดคลังคำแล้ว",
+  "stream.feedEnd.title": "คุณดูคำทั้งหมดครบแล้ว",
+  "stream.feedEnd.body":
+    "หน่วยความจำบนอุปกรณ์เก็บแต่ละไว้อยู่ระดับหนึ่งวันละครั้ง สองครั้งในสามวัน สามครั้งต่อสัปดาห์ ล้างประวัติการดูเพื่อให้ทุกคำกลับมาทันที",
   // ── Card ──
   "card.reveal": "เฮ้ รู้จักคำนี้!",
   "card.aria": "การ์ดคำที่ {position}",
@@ -500,6 +512,8 @@ const JA: Partial<Record<CopyKey, string>> = {
   "saved.tapForMeaning": "単語をタップで意味を表示。",
   "saved.hint": "単語をスワイプまたは長押しで{action}。",
   "saved.undo": "元に戻す",
+  "saved.row.confirm": "「{word}」を{action}しますか？",
+  "saved.confirm.keep": "残す",
   "saved.group.day": "日付順",
   "saved.group.level": "レベル順",
   "saved.day.today": "今日",
@@ -539,6 +553,10 @@ const JA: Partial<Record<CopyKey, string>> = {
   "stream.exhausted": "もう一度シャッフルする？新しい流れを開始。",
   "stream.offline": "オフライン — 読み込み済みの単語は見られます。",
   "stream.loadMoreFail": "単語を追加読み込みできません。",
+  "stream.feedEnd.eyebrow": "フィードの終わり",
+  "stream.feedEnd.title": "すべての単語を見終えました。",
+  "stream.feedEnd.body":
+    "端末のメモリは各単語を1日1回・3日で2回・週3回のペースで保持します。閲覧履歴を消去すると、すべての単語がすぐに戻ります。",
   // ── Card ──
   "card.reveal": "ねえ、この単語知ってる",
   "card.aria": "単語カード {position}",

@@ -16,12 +16,21 @@ export const EMPHASIS_VARIANTS = [
   "pulse",
   "halo",
   "frame",
+  "outline",
+  "fringe",
+  "flash",
 ] as const;
 
 // glow and halo are luminous auras — they only read well on bright colors. On a
 // dim/dark emphasis color they turn into an ugly muddy blob, so those colors get
 // the non-luminous set only. sweep is a recolor + gliding shine, so it reads on
 // any color.
+//
+// outline, fringe and flash are NOT auras and belong in this set: outline is a stroke
+// plus a text-clipped fill (nothing blurred behind the word), fringe is a drop-shadow
+// offset that decays to zero, flash is a brightness swell capped at 1.55. Leaving them
+// out would let the dim-palette filter erase a style's own signature effect — the
+// authored `outline` on the storytelling reveal — and quietly fall back to something else.
 export const NON_LUMINOUS_EMPHASIS_VARIANTS = [
   "color",
   "sweep",
@@ -29,6 +38,9 @@ export const NON_LUMINOUS_EMPHASIS_VARIANTS = [
   "jiggle",
   "pulse",
   "frame",
+  "outline",
+  "fringe",
+  "flash",
 ] as const;
 
 export type EmphasisVariant = (typeof EMPHASIS_VARIANTS)[number];
@@ -39,6 +51,8 @@ export type EmphasisVariant = (typeof EMPHASIS_VARIANTS)[number];
  * @param emphasisSeed - emphasisSeed argument
  * @param anchorIndex - anchorIndex argument
  * @param allowLuminous - allowLuminous argument
+ * @param pool - the effects a surface has authored for this slot; the luminous gate
+ *   FILTERS it rather than overriding it, so a dim palette can never be handed an aura
  * @returns One of EMPHASIS_VARIANTS (or the non-luminous subset)
  */
 export function getEmphasisVariant(
@@ -46,11 +60,15 @@ export function getEmphasisVariant(
   emphasisSeed: string,
   anchorIndex: number,
   allowLuminous: boolean,
+  pool?: readonly EmphasisVariant[],
 ): EmphasisVariant {
-  const pool: readonly EmphasisVariant[] = allowLuminous
-    ? EMPHASIS_VARIANTS
-    : NON_LUMINOUS_EMPHASIS_VARIANTS;
-  return pool[getStableNumber(`${text}|${emphasisSeed}|${anchorIndex}`) % pool.length];
+  const nonLuminous: readonly EmphasisVariant[] = NON_LUMINOUS_EMPHASIS_VARIANTS;
+  const requested: readonly EmphasisVariant[] =
+    pool && pool.length > 0 ? pool : allowLuminous ? EMPHASIS_VARIANTS : nonLuminous;
+  const allowed = allowLuminous ? requested : requested.filter((v) => nonLuminous.includes(v));
+  // A pool authored entirely out of auras still has to draw something on a dim color.
+  const final = allowed.length > 0 ? allowed : nonLuminous;
+  return final[getStableNumber(`${text}|${emphasisSeed}|${anchorIndex}`) % final.length];
 }
 
 /**
@@ -80,6 +98,7 @@ export function isDimEmphasisColor(color: string): boolean {
  * @param words - page tokens
  * @param indexes - token indexes of the run, in order
  * @param emphasisColor - the page's emphasis colour, which gates luminous effects
+ * @param pool - the effects authored for this slot, if the surface has authored any
  * @returns The variant every syllable of the run is drawn with
  * @pure true
  */
@@ -88,6 +107,7 @@ export function getRunEmphasisStyle(
   words: readonly string[],
   indexes: readonly number[],
   emphasisColor: string,
+  pool?: readonly EmphasisVariant[],
 ): EmphasisVariant {
   const syllables = indexes.map((index) => words[index] ?? "");
   const variant = getEmphasisVariant(
@@ -95,8 +115,12 @@ export function getRunEmphasisStyle(
     syllables.join(" "),
     indexes[0] ?? 0,
     !isDimEmphasisColor(emphasisColor),
+    pool,
   );
   // A grouped run shows the box-drawing `frame` as a continuous underline, never a box.
+  // `outline` stays per-syllable for the same reason `frame` and `color` do: each syllable
+  // is its own set of glyphs to stroke and fill, and one stroke across a spaced pair would
+  // draw a hollow shape around the gap.
   return variant === "frame" ? "underline" : variant;
 }
 
@@ -121,6 +145,11 @@ export function getEmphasisTextShadow(variant: EmphasisVariant | null): string {
   if (variant === "frame") {
     return "0 2px 16px rgba(0,0,0,0.5)";
   }
+  // A hollow word carrying a glow reads as a lit box, not as ink: the stroke is the whole
+  // effect, so this variant deliberately keeps only the flat separation shadow.
+  if (variant === "outline") {
+    return "0 4px 40px rgba(0,0,0,0.45)";
+  }
   return "0 0 22px rgba(255,255,255,0.35), 0 5px 36px rgba(0,0,0,0.55)";
 }
 
@@ -139,6 +168,17 @@ export function getEmphasisInnerAnimation(variant: EmphasisVariant | null): stri
   }
   if (variant === "glow") {
     return "kinetic-emphasis-glow calc(var(--kinetic-beat, 0.8s) * 2) ease-in-out infinite";
+  }
+  // A one-shot tear that settles: it must not loop, or a clue sentence judders forever.
+  if (variant === "fringe") {
+    return "kinetic-emphasis-fringe calc(var(--kinetic-beat, 0.4s) * 1.5) ease-out 1";
+  }
+  // FLOORED on purpose. Everything else here scales with the beat, and a snappy card's
+  // beat is 0.36s — a full brightness swell twice would land near 0.7s, i.e. ~1.4 Hz per
+  // cycle but with the peak held for a third of it. `max(0.5s, …)` keeps the swell inside
+  // the WCAG 3 Hz threshold on every tempo instead of letting the fastest one define it.
+  if (variant === "flash") {
+    return "kinetic-emphasis-flash max(0.5s, calc(var(--kinetic-beat, 0.675s) * 2)) ease-in-out infinite";
   }
   return undefined;
 }

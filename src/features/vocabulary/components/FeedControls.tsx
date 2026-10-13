@@ -754,7 +754,9 @@ export function FeedControls({
   const panelId = useId();
   const toggleButton = useRef<HTMLButtonElement>(null);
   const toolbar = useRef<HTMLElement>(null);
-  const ambient = useAmbientSound();
+  // The Chinese host plays the traditional-instrument pool only; every other host
+  // keeps the administered/default pool and can never reach the Chinese tracks.
+  const ambient = useAmbientSound(locale === "zh" ? "zh" : "default");
   const close = () => {
     onOpen(false);
     toggleButton.current?.focus();
@@ -1031,7 +1033,7 @@ export function FeedControls({
             <span className="vocab-pace-label">{t(ui, "pace.label")}</span>
             <div className="vocab-pace-options">
               {PACE_OPTIONS.map((option) => {
-                const on = (presentation.pace ?? "fast") === option.id;
+                const on = (presentation.pace ?? "normal") === option.id;
                 return (
                   <button
                     key={option.id}

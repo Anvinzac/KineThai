@@ -7,6 +7,12 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# IDE-generated knowledge/wiki caches
+.qoder/
+# Debug/probe screenshot artifacts at repo root
+/probe-*.png
+/rt-*.png
+
 node_modules
 dist
 dist-ssr

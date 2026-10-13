@@ -13,6 +13,7 @@ import {
   getPhotoBackdropTextShadow,
   resolveTextColorOnPhotoBackdrop,
   type CanvasSpec,
+  type Entrance,
 } from "@/features/canvas";
 import {
   getDataEmphasisWordSpans,
@@ -53,6 +54,12 @@ export type WordSequenceTextProps = {
   background?: string | null;
   photoBackdrop?: boolean;
   entranceSeed?: string;
+  /**
+   * Authored word entrance. Given, it replaces the personality auto-picked from
+   * `entranceSeed`; omitted — every community post — the pick stays seed-driven, so
+   * `spec.entrance` alone never changes how a post's words arrive.
+   */
+  entrance?: Entrance;
   fitAsUnit?: boolean;
   /**
    * Multiplier on the line-to-line advance. 1 keeps the renderer's own compact
@@ -79,6 +86,12 @@ export type WordSequenceTextProps = {
    */
   allowFrameEmphasis?: boolean;
   /**
+   * The highlight effects the emphasised words may draw from. A reveal style authors a short
+   * pool so the effect reads as a property of the style; absent, the global pool applies and
+   * every other surface looks exactly as it did.
+   */
+  emphasisPool?: readonly EmphasisVariant[];
+  /**
    * Multiplier on how fast the words are read out — every word's start delay and its
    * entrance length, springs included. 1 keeps the tempo's own pace; the vocabulary
    * card raises it for a reader who picked a slower reading speed.
@@ -103,11 +116,13 @@ export function WordSequenceText({
   background,
   photoBackdrop = false,
   entranceSeed,
+  entrance,
   fitAsUnit = false,
   lineSpacingScale = 1,
   dataEmphasis,
   secondaryEmphasis,
   allowFrameEmphasis = true,
+  emphasisPool,
   timeScale = 1,
 }: WordSequenceTextProps): ReactElement {
   // A Han page tokenizes per character before anything else: a whole Chinese sample
@@ -169,7 +184,7 @@ export function WordSequenceText({
         : { lines: [], suggestedFitScale: 1 },
     [isPackedLines, isHan, words, canvasWidth, spec.size, visualScaleGuard, phraseKeys],
   );
-  const entranceStyle = getEntranceStyle(entranceSeed ?? spec.text, spec.rhythm);
+  const entranceStyle = getEntranceStyle(entranceSeed ?? spec.text, spec.rhythm, entrance);
   const layoutMode = getKineticTextLayoutMode(spec.text, isPackedLines, words.length, emphasized);
   const leftAnchoredText = layoutMode !== "center";
   const spotlightEmphasis = layoutMode === "left-spotlight";
@@ -274,6 +289,7 @@ export function WordSequenceText({
           secondaryEmphasized={secondaryEmphasized}
           secondaryVariant={secondaryVariant}
           allowFrame={allowFrameEmphasis}
+          pool={emphasisPool}
           spotlightEmphasis={spotlightEmphasis}
           spec={spec}
           staticRender={staticRender}

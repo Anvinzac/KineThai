@@ -8,7 +8,7 @@
 import type { ReactElement } from "react";
 import { motion } from "framer-motion";
 import type { CSSProperties, ReactNode } from "react";
-import type { CanvasSpec } from "@/features/canvas";
+import { getCanvasEmphasisWordColor, type CanvasSpec } from "@/features/canvas";
 import {
   getAuraColor,
   getEmphasisInnerAnimation,
@@ -42,6 +42,8 @@ export type WordSequenceLinesProps = {
   secondaryVariant?: EmphasisVariant;
   /** False where the box-drawing frame is not allowed (forwarded from WordSequenceText). */
   allowFrame?: boolean;
+  /** The effects this slot may draw from, forwarded from WordSequenceText. */
+  pool?: readonly EmphasisVariant[];
   spotlightEmphasis: boolean;
   spec: CanvasSpec;
   staticRender: boolean;
@@ -108,6 +110,7 @@ export function WordSequenceLines({
   secondaryEmphasized,
   secondaryVariant,
   allowFrame = true,
+  pool,
   spotlightEmphasis,
   spec,
   staticRender,
@@ -150,6 +153,7 @@ export function WordSequenceLines({
       entranceStyle={entranceStyle}
       skipFrame={skipFrame}
       allowFrame={allowFrame}
+      pool={pool}
       runEffect={runEffect}
       sharedVariant={sharedVariant}
       timeScale={timeScale}
@@ -191,6 +195,7 @@ export function WordSequenceLines({
         secondaryVariant,
         emphasisColor,
         allowFrame,
+        pool,
       },
     );
     // Every syllable of the run is dressed in the one effect the run settled on; only a
@@ -225,10 +230,20 @@ export function WordSequenceLines({
           <span
             data-kinetic-run={lift}
             className={`kinetic-emphasis-mark kinetic-emphasis-run${
-              lift === "halo" ? " kinetic-emph-halo" : lift === "sweep" ? " kinetic-emph-sweep" : ""
+              lift === "halo"
+                ? " kinetic-emph-halo"
+                : lift === "sweep"
+                  ? " kinetic-emph-sweep"
+                  : lift === "underline"
+                    ? " kinetic-emph-underline"
+                    : ""
             }${staticRender ? "" : " is-animated"}`}
             style={
               {
+                // The bar paints in currentColor, which must be the syllables' emphasis color.
+                ...(lift === "underline"
+                  ? { color: getCanvasEmphasisWordColor(lift, textColor, emphasisColor) }
+                  : {}),
                 "--kinetic-emphasis-delay": `${effectDelay.delay + effectDelay.duration + 0.18}s`,
                 ...(lift === "halo" || lift === "glow"
                   ? { "--kinetic-aura-color": getAuraColor(textColor) }

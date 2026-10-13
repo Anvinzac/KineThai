@@ -24,7 +24,6 @@ import {
   X,
 } from "lucide-react";
 import {
-  Fragment,
   useEffect,
   useId,
   useRef,
@@ -34,8 +33,8 @@ import {
   type PointerEvent,
 } from "react";
 import { useSavedWords } from "../hooks/useSavedWords";
-import { posLabel, topicLabel } from "../lib/i18n";
 import { resolveClue } from "../lib/clues";
+import { posLabel, topicLabel } from "../lib/i18n";
 import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
 import type { Locale } from "../lib/locale";
@@ -47,7 +46,7 @@ import "../vocabulary.css";
 /** Which reaction defines the list on screen. */
 type TabKind = "bookmark" | "heart";
 
-const TABS: TabKind[] = ["bookmark", "heart"];
+const TABS: { kind: TabKind }[] = [{ kind: "bookmark" }, { kind: "heart" }];
 
 /**
  * A tooltip bubble in the empty vault. The sentence is split per WORD so each one can be
@@ -59,7 +58,7 @@ const TABS: TabKind[] = ["bookmark", "heart"];
  * SINGLE silhouette with no seam where they meet. Putting the text in the same layer would
  * have the filter trace every glyph too.
  * @param kind - Which key this bubble points at
- * @param active - Whether that key's tab is the one on screen
+ * @param ui - Active locale for the tooltip's chatty line
  */
 function VaultTip({ kind, ui }: { kind: TabKind; ui: Locale }): React.ReactElement {
   return (
@@ -82,12 +81,16 @@ function VaultTip({ kind, ui }: { kind: TabKind; ui: Locale }): React.ReactEleme
 
 /** How far a row has to travel sideways before it counts as a swipe. */
 const SWIPE_PX = 56;
-/** How long a held touch counts as a long-press before it removes the row. */
+/** How long a held touch counts as a long-press before it offers to remove the row. */
 const LONG_PRESS_MS = 500;
 /** How long the undo offer stays up after a removal. */
 const UNDO_MS = 6000;
 
-/** One kept word. Swipe it sideways, hold it, or press Delete to take it off the list. */
+/**
+ * One kept word. Swipe it sideways or press Delete to take it off the list. Holding it
+ * only offers removal: a reader pressing around to see what the row does must not lose
+ * the word, so the hold opens a confirm bar and the removal waits for its button.
+ */
 function SavedRow({
   entry,
   flag,
@@ -105,9 +108,28 @@ function SavedRow({
   const [shift, setShift] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [pressing, setPressing] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const rowRef = useRef<HTMLLIElement>(null);
+  const confirmRef = useRef<HTMLButtonElement>(null);
   const origin = useRef<{ x: number; y: number } | null>(null);
   const timer = useRef<number | null>(null);
   const settled = useRef(true);
+
+  // The offer stands until it is answered or the reader touches anything outside the row.
+  useEffect(() => {
+    if (!confirming) return;
+    confirmRef.current?.focus();
+    function onOutside(event: globalThis.PointerEvent) {
+      if (!rowRef.current?.contains(event.target as Node)) setConfirming(false);
+    }
+    document.addEventListener("pointerdown", onOutside);
+    return () => document.removeEventListener("pointerdown", onOutside);
+  }, [confirming]);
+
+  function cancelConfirm() {
+    setConfirming(false);
+    rowRef.current?.focus();
+  }
 
   function clearTimer() {
     if (timer.current !== null) {
@@ -116,13 +138,22 @@ function SavedRow({
     }
   }
 
-  function fire() {
+  function settle() {
     clearTimer();
     settled.current = true;
     origin.current = null;
     setPressing(false);
     setShift(0);
+  }
+
+  function fire() {
+    settle();
     onRemove();
+  }
+
+  function offer() {
+    settle();
+    setConfirming(true);
   }
 
   function reset() {
@@ -138,6 +169,8 @@ function SavedRow({
 
   function onPointerDown(event: PointerEvent<HTMLLIElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
+    // While the offer is up the row is still; its buttons take the taps.
+    if (confirming) return;
     settled.current = false;
     origin.current = { x: event.clientX, y: event.clientY };
     clearTimer();
@@ -147,7 +180,7 @@ function SavedRow({
     // commits.
     if (event.pointerType !== "mouse") {
       setPressing(true);
-      timer.current = window.setTimeout(fire, LONG_PRESS_MS);
+      timer.current = window.setTimeout(offer, LONG_PRESS_MS);
     }
     // Track the finger even when it slides off the row's own box. Kept last: a browser
     // that rejects the pointer id then cannot cost the rest of the gesture.
@@ -175,8 +208,8 @@ function SavedRow({
   }
 
   function onPointerUp() {
-    // A tap is what is LEFT once the two destructive gestures are ruled out: the
-    // long-press already fired (settled) or the finger travelled far enough to be
+    // A tap is what is LEFT once the other gestures are ruled out: the long-press
+    // already opened its offer (settled) or the finger travelled far enough to be
     // a swipe. Only then does it mean "show me the meaning".
     const tapped = compact && !settled.current && Math.abs(shift) <= 8;
     reset();
@@ -184,6 +217,13 @@ function SavedRow({
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLLIElement>) {
+    if (confirming) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        cancelConfirm();
+      }
+      return;
+    }
     if (event.key === "Delete" || event.key === "Backspace") {
       event.preventDefault();
       onRemove();
@@ -202,8 +242,10 @@ function SavedRow({
 
   return (
     <li
+      ref={rowRef}
       className="vocab-saved-item"
       data-pressing={pressing || undefined}
+      data-confirming={confirming || undefined}
       data-shifted={shifted || undefined}
       data-reveal={shifted ? (shift < 0 ? "right" : "left") : undefined}
       style={{ "--row-shift": `${shift}px` } as CSSProperties}
@@ -226,6 +268,28 @@ function SavedRow({
       <span className="vocab-saved-row-flag" aria-hidden="true">
         {flag}
       </span>
+      {confirming && (
+        <div
+          className="vocab-saved-confirm"
+          role="group"
+          aria-label={t(ui, "saved.row.confirm", { action: flag, word: entry.word.word })}
+        >
+          <button
+            ref={confirmRef}
+            type="button"
+            className="vocab-saved-confirm-remove"
+            onClick={() => {
+              setConfirming(false);
+              onRemove();
+            }}
+          >
+            {flag}
+          </button>
+          <button type="button" className="vocab-saved-confirm-keep" onClick={cancelConfirm}>
+            {t(ui, "saved.confirm.keep")}
+          </button>
+        </div>
+      )}
       <div className="vocab-saved-row-body">
         <div className="vocab-saved-word-row">
           <h3 className="vocab-saved-word" lang="en">
@@ -363,12 +427,6 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
   const groupId = useId();
 
   const counts: Record<TabKind, number> = { bookmark: saved.length, heart: favorites.length };
-  const rows = tab === "bookmark" ? saved : favorites;
-  // Filed by day, always. Grouping by level was a second switch for something the reader
-  // never changed, so the list keeps the one order that matches how it was collected.
-  const groups = groupSavedWords(rows, "day", ui);
-  const removeFlag = t(ui, `saved.remove.${tab}`);
-  const removeUndo = t(ui, `saved.remove.${tab}.undo`);
 
   useEffect(() => {
     if (!undo) return;
@@ -383,14 +441,14 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
     // the tablist, or the list would switch lists under the reader's finger.
     if (!(event.target as HTMLElement).closest('[role="tab"]')) return;
     event.preventDefault();
-    const at = TABS.findIndex((kind) => kind === tab);
+    const at = TABS.findIndex((item) => item.kind === tab);
     const step = event.key === "ArrowRight" ? 1 : -1;
-    setTab(TABS[(at + step + TABS.length) % TABS.length]);
+    setTab(TABS[(at + step + TABS.length) % TABS.length].kind);
   }
 
-  function handleRemove(entry: SavedWord) {
-    setUndo({ word: entry.word.word, id: entry.word.id, kind: tab, at: entry.savedAt });
-    remove(entry.word.id, tab);
+  function handleRemove(entry: SavedWord, kind: TabKind) {
+    setUndo({ word: entry.word.word, id: entry.word.id, kind, at: entry.savedAt });
+    remove(entry.word.id, kind);
   }
 
   const embedded = Boolean(onClose);
@@ -427,29 +485,35 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
         aria-label={t(ui, "saved.list.aria")}
         onKeyDown={onTabKeyDown}
       >
-        {TABS.map((kind) => {
+        {TABS.map((item) => {
           // The density control belongs to the list that is open, so it rides on the active
           // tab itself rather than standing in a switch row of its own. It is withheld until
           // there is something to expand.
-          const fused = tab === kind && rows.length > 0;
+          const fused = tab === item.kind && counts[item.kind] > 0;
           const expandLabel = compact ? t(ui, "saved.expand") : t(ui, "saved.collapse");
           return (
-            <Fragment key={kind}>
+            // One slot per half of the strip. The slot, not the tab, carries the active
+            // underline, so the indicator spans the whole segment — fused control included.
+            <div
+              className="vocab-saved-tab-slot"
+              role="presentation"
+              key={item.kind}
+              data-on={tab === item.kind || undefined}
+            >
               <button
                 type="button"
                 role="tab"
-                id={`${groupId}-tab-${kind}`}
-                aria-selected={tab === kind}
-                aria-controls={`${groupId}-panel`}
-                tabIndex={tab === kind ? 0 : -1}
+                id={`${groupId}-tab-${item.kind}`}
+                aria-selected={tab === item.kind}
+                aria-controls={`${groupId}-panel-${item.kind}`}
+                tabIndex={tab === item.kind ? 0 : -1}
                 className="vocab-saved-tab"
-                data-on={tab === kind || undefined}
-                data-fused={fused || undefined}
-                onClick={() => setTab(kind)}
+                data-on={tab === item.kind || undefined}
+                onClick={() => setTab(item.kind)}
               >
-                {kind === "bookmark" ? <Bookmark size={15} /> : <Heart size={15} />}
-                {t(ui, `saved.tab.${kind}`)}
-                <span className="vocab-saved-tab-count">{counts[kind]}</span>
+                {item.kind === "bookmark" ? <Bookmark size={15} /> : <Heart size={15} />}
+                <span className="vocab-saved-tab-label">{t(ui, `saved.tab.${item.kind}`)}</span>
+                <span className="vocab-saved-tab-count">{counts[item.kind]}</span>
               </button>
               {fused && (
                 <button
@@ -467,94 +531,105 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
                   )}
                 </button>
               )}
-            </Fragment>
+            </div>
           );
         })}
       </div>
 
-      {rows.length ? (
-        <div
-          id={`${groupId}-panel`}
-          role="tabpanel"
-          aria-labelledby={`${groupId}-tab-${tab}`}
-          className="vocab-saved-body"
-        >
-          <p className="vocab-saved-hint">
-            {compact ? t(ui, "saved.tapForMeaning") : ""}
-            {t(ui, "saved.hint", { action: removeFlag.toLowerCase() })}
-          </p>
-          <SavedFolders
-            groups={groups}
-            flag={removeFlag}
-            compact={compact}
-            onRemove={handleRemove}
-            ui={ui}
-          />
-        </div>
-      ) : (
-        <div
-          className="vocab-saved-empty"
-          role="tabpanel"
-          id={`${groupId}-panel`}
-          aria-labelledby={`${groupId}-tab-${tab}`}
-        >
-          {/* The empty list is the one screen that has to TEACH the gesture, so instead of a
-              lone grey glyph it shows the vault doing its job: the two buttons the reader
-              will actually tap, a word-chip dropping from the one this tab belongs to, and
-              the jar catching it. Entirely decorative — the heading and body below say the
-              same thing in words, so a screen reader loses nothing by skipping it. */}
-          <div className="vocab-vault" data-kind={tab} aria-hidden="true">
-            {/* One tooltip per key. Each is centred on its own key — the bookmark held above,
-                the heart directly underneath — so each tail points straight at its icon's
-                midpoint and the pair reads symmetrically about the centre line. */}
-            <VaultTip kind="heart" ui={ui} />
-            <VaultTip kind="bookmark" ui={ui} />
-            {/* Heart first, then bookmark — the same order the two buttons sit in under every
-                word in the feed, so the row learned here matches the row they will tap. */}
-            <div className="vocab-vault-keys">
-              <span className="vocab-vault-key" data-key="heart" data-active>
-                <Heart size={17} strokeWidth={2.2} />
-              </span>
-              <span className="vocab-vault-key" data-key="bookmark" data-active>
-                <Bookmark size={17} strokeWidth={2.2} />
-              </span>
-            </div>
-            {/* The mouth, BEHIND the chips, so a block stays bright while it sinks into the
-                opening and is masked by the bowl's near (lower) rim, not the top arc. */}
-            <span className="vocab-vault-lid" />
-            {/* Two blocks drop into the jar — one per reaction — so the scene teaches both
-                gestures at once instead of one per tab. The heart's is pink. */}
-            <span className="vocab-vault-chip" data-chip="bookmark" />
-            <span className="vocab-vault-chip" data-chip="heart" />
-            <div className="vocab-vault-jar">
-              {/* The bowl's front wall is its own layer so it can be masked: its top edge has
-                  to BE the opening's lower arc, and a mask on the jar itself would also eat
-                  the sparks and the halo that sit outside the bowl. */}
-              <span className="vocab-vault-body" />
-              <span className="vocab-vault-shine" />
-              <span className="vocab-vault-spark" data-s="1" />
-              <span className="vocab-vault-spark" data-s="2" />
-              <span className="vocab-vault-spark" data-s="3" />
-            </div>
+      {TABS.map((item) => {
+        // Filed by day, always. Grouping by level was a second switch for something the
+        // reader never changed, so the list keeps the one order that matches how it was
+        // collected. Each tab owns its container: list and empty scene alike live inside
+        // the panel that tab controls, so switching tabs swaps containers, not contents.
+        const kindRows = item.kind === "bookmark" ? saved : favorites;
+        const kindGroups = groupSavedWords(kindRows, "day", ui);
+        return (
+          <div
+            key={item.kind}
+            id={`${groupId}-panel-${item.kind}`}
+            role="tabpanel"
+            aria-labelledby={`${groupId}-tab-${item.kind}`}
+            className="vocab-saved-panelbox"
+            hidden={tab !== item.kind || undefined}
+          >
+            {kindRows.length ? (
+              <div className="vocab-saved-body">
+                <p className="vocab-saved-hint">
+                  {compact ? t(ui, "saved.tapForMeaning") : ""}
+                  {t(ui, "saved.hint", {
+                    action: t(ui, `saved.remove.${item.kind}`).toLowerCase(),
+                  })}
+                </p>
+                <SavedFolders
+                  groups={kindGroups}
+                  flag={t(ui, `saved.remove.${item.kind}`)}
+                  compact={compact}
+                  onRemove={(entry) => handleRemove(entry, item.kind)}
+                  ui={ui}
+                />
+              </div>
+            ) : (
+              <div className="vocab-saved-empty">
+                {/* The empty list is the one screen that has to TEACH the gesture, so instead of a
+                    lone grey glyph it shows the vault doing its job: the two buttons the reader
+                    will actually tap, a word-chip dropping from the one this tab belongs to, and
+                    the jar catching it. Entirely decorative — the heading and body below say the
+                    same thing in words, so a screen reader loses nothing by skipping it. */}
+                <div className="vocab-vault" aria-hidden="true">
+                  {/* One tooltip per key. Each is centred on its own key — the bookmark held above,
+                      the heart directly underneath — so each tail points straight at its icon's
+                      midpoint and the pair reads symmetrically about the centre line. */}
+                  <VaultTip kind="heart" ui={ui} />
+                  <VaultTip kind="bookmark" ui={ui} />
+                  {/* Heart first, then bookmark — the same order the two buttons sit in under every
+                      word in the feed, so the row learned here matches the row they will tap. */}
+                  <div className="vocab-vault-keys">
+                    <span className="vocab-vault-key" data-key="heart" data-active>
+                      <Heart size={17} strokeWidth={2.2} />
+                    </span>
+                    <span className="vocab-vault-key" data-key="bookmark" data-active>
+                      <Bookmark size={17} strokeWidth={2.2} />
+                    </span>
+                  </div>
+                  {/* The mouth, BEHIND the chips, so a block stays bright while it sinks into the
+                      opening and is masked by the bowl's near (lower) rim, not the top arc. */}
+                  <span className="vocab-vault-lid" />
+                  {/* Two blocks drop into the jar — one per reaction — so the scene teaches both
+                      gestures at once instead of one per tab. The heart's is pink. */}
+                  <span className="vocab-vault-chip" data-chip="bookmark" />
+                  <span className="vocab-vault-chip" data-chip="heart" />
+                  <div className="vocab-vault-jar">
+                    {/* The bowl's front wall is its own layer so it can be masked: its top edge has
+                        to BE the opening's lower arc, and a mask on the jar itself would also eat
+                        the sparks and the halo that sit outside the bowl. */}
+                    <span className="vocab-vault-body" />
+                    <span className="vocab-vault-shine" />
+                    <span className="vocab-vault-spark" data-s="1" />
+                    <span className="vocab-vault-spark" data-s="2" />
+                    <span className="vocab-vault-spark" data-s="3" />
+                  </div>
+                </div>
+                <h2>{t(ui, `saved.empty.${item.kind}.title`)}</h2>
+                {/* Two lengths, one shown at a time: a landscape phone drops the bowl and
+                    most of the scene, so the instruction has to carry itself in one line. */}
+                <p className="vocab-saved-empty-long">{t(ui, `saved.empty.${item.kind}.body`)}</p>
+                <p className="vocab-saved-empty-short">{t(ui, `saved.empty.${item.kind}.short`)}</p>
+                {/* In the drawer the feed is already behind the panel, so the way
+                    back is to close it — a link to /feed would be a dead button. */}
+                {onClose ? (
+                  <button type="button" className="vocab-light-button" onClick={onClose}>
+                    {t(ui, "saved.back")}
+                  </button>
+                ) : (
+                  <Link className="vocab-light-button" to="/feed">
+                    {t(ui, "saved.back")}
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
-          <h2>{t(ui, `saved.empty.${tab}.title`)}</h2>
-          {/* Two lengths, one shown at a time: a landscape phone drops the bowl and
-              most of the scene, so the instruction has to carry itself in one line. */}
-          <p className="vocab-saved-empty-long">{t(ui, `saved.empty.${tab}.body`)}</p>
-          <p className="vocab-saved-empty-short">{t(ui, `saved.empty.${tab}.short`)}</p>
-          {/* In the drawer the feed is already behind the panel, so the way
-              back is to close it — a link to /feed would be a dead button. */}
-          {onClose ? (
-            <button type="button" className="vocab-light-button" onClick={onClose}>
-              {t(ui, "saved.back")}
-            </button>
-          ) : (
-            <Link className="vocab-light-button" to="/feed">
-              {t(ui, "saved.back")}
-            </Link>
-          )}
-        </div>
-      )}
+        );
+      })}
 
       {undo && (
         <div className="vocab-saved-undo" role="status">

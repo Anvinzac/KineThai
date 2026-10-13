@@ -328,16 +328,18 @@ function renderRun(text: string, emphasisSize: number) {
   );
 }
 
-let joinedBars = 0;
+let underlinedRuns = 0;
 let splitBars = 0;
 for (const compound of COMPOUNDS) {
-  for (const bar of renderRun(compound, 2).match(/kinetic-emph-underline(?: is-joined)?/g) ?? []) {
-    if (bar.includes("is-joined")) joinedBars += 1;
-    else splitBars += 1;
-  }
+  const markup = renderRun(compound, 2);
+  const bars = (markup.match(/kinetic-emph-underline/g) ?? []).length;
+  if (!bars) continue;
+  underlinedRuns += 1;
+  const runBar = /kinetic-emphasis-run kinetic-emph-underline/.test(markup);
+  if (bars !== 1 || !runBar) splitBars += 1;
 }
-assert(joinedBars > 0, `the seeded pick exercised the underline on syllable runs (${joinedBars})`);
-assert(splitBars === 0, "no underline bar inside a shared run is left broken at the gap");
+assert(underlinedRuns > 0, `the seeded pick exercised the underline on syllable runs (${underlinedRuns})`);
+assert(splitBars === 0, "a shared run draws one underline across the run, never one per syllable");
 
 // A lone syllable has nothing to join, so it must keep its own flush bar rather
 // than bleeding 0.14em past both ends.
