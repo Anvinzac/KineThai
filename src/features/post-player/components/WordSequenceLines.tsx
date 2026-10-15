@@ -6,7 +6,6 @@
  */
 
 import type { ReactElement } from "react";
-import { motion } from "framer-motion";
 import type { CSSProperties, ReactNode } from "react";
 import { getCanvasEmphasisWordColor, type CanvasSpec } from "@/features/canvas";
 import {
@@ -20,6 +19,7 @@ import type { ResolvedEntranceStyle } from "../lib/entrances";
 import { getEntranceTransition } from "../lib/entrances";
 import { getWordDelay, tempoConfig } from "../lib/playback-timing";
 import { WordSequenceWord } from "./WordSequenceWord";
+import { PausableRunFrame } from "./PausableRunFrame";
 
 type VietnameseLines = ReturnType<typeof getVietnameseLayoutMetrics>["lines"];
 
@@ -209,11 +209,10 @@ export function WordSequenceLines({
     const effectDelay = frameEntrance(last.index);
     const runAnimation = lift && !staticRender ? getEmphasisInnerAnimation(lift) : undefined;
     return (
-      <motion.span
+      <PausableRunFrame
         key={key}
         className="inline-flex relative"
-        initial={staticRender ? false : { opacity: 0, filter: "blur(6px)" }}
-        animate={{ opacity: 1, filter: "blur(0px)" }}
+        staticRender={staticRender}
         transition={getEntranceTransition(entranceStyle, frameDelay, frameDuration, timeScale)}
         style={{
           display: "inline-flex",
@@ -259,7 +258,7 @@ export function WordSequenceLines({
         ) : (
           children
         )}
-      </motion.span>
+      </PausableRunFrame>
     );
   };
 
