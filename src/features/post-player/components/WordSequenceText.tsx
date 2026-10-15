@@ -236,76 +236,77 @@ export function WordSequenceText({
 
   return (
     <EntranceClockContext.Provider value={entranceClock}>
-    <div
-      ref={wrapperRef}
-      aria-hidden={measure || undefined}
-      className="pointer-events-none absolute select-none"
-      style={{
-        left: `${spec.x}%`,
-        top: `${safeCenterY}%`,
-        transform: "translate(-50%, -50%)",
-        width: textSafeMaxWidth,
-        maxWidth: textSafeMaxWidth,
-        visibility: measure ? "hidden" : undefined,
-      }}
-    >
-      <motion.div
-        ref={textRef}
-        key={`${playKey}-${staticRender ? "revealed" : "animated"}`}
-        className={
-          isPackedLines
-            ? "flex flex-col items-stretch"
-            : leftAnchoredText
-              ? "flex flex-wrap items-baseline justify-start"
-              : "flex flex-wrap items-center justify-center"
-        }
-        initial={staticRender ? false : "hidden"}
-        animate="show"
+      <div
+        ref={wrapperRef}
+        aria-hidden={measure || undefined}
+        className="pointer-events-none absolute select-none"
         style={{
-          width: "100%",
-          // A solo page is one unbreakable span, so it cannot wrap anyway; naming the
-          // intent keeps the single-line answer from depending on that accident.
-          flexWrap: isSolo ? "nowrap" : undefined,
-          columnGap: isPackedLines ? undefined : "0.34em",
-          rowGap: isPackedLines ? undefined : `${0.08 * lineSpacingScale}em`,
-          fontFamily: spec.font,
-          fontSize,
-          color: textColor,
-          fontWeight: spec.weight,
-          letterSpacing: `${spec.letterSpacing}em`,
-          lineHeight: (isPackedLines ? 1.04 : 0.9) * lineSpacingScale,
-          textAlign: leftAnchoredText ? "left" : "center",
-          textShadow: photoTextShadow ?? "0 4px 40px rgba(0,0,0,0.45)",
-          transform: `rotate(${spec.rotation}deg)`,
-          animation: loopAnimation
-            ? `${loopAnimation} ${paused ? "paused" : "running"}`
-            : undefined,
+          left: `${spec.x}%`,
+          top: `${safeCenterY}%`,
+          transform: "translate(-50%, -50%)",
+          width: textSafeMaxWidth,
+          maxWidth: textSafeMaxWidth,
+          visibility: measure ? "hidden" : undefined,
         }}
       >
-        <WordSequenceLines
-          isVietnamese={isPackedLines}
-          lineSpacingScale={lineSpacingScale}
-          vietnameseLines={packedLayout.lines}
-          words={words}
-          emphasized={emphasized}
-          phraseKeys={phraseKeys}
-          secondaryEmphasized={secondaryEmphasized}
-          secondaryVariant={secondaryVariant}
-          allowFrame={allowFrameEmphasis}
-          pool={emphasisPool}
-          spotlightEmphasis={spotlightEmphasis}
-          spec={spec}
-          staticRender={staticRender}
-          paused={paused}
-          isSolo={isSolo}
-          soloInlineScale={soloInlineScale}
-          leftAnchoredText={leftAnchoredText}
-          textColor={textColor}
-          emphasisColor={emphasisColor}
-          entranceStyle={entranceStyle}
-          timeScale={timeScale}
-        />
-      </motion.div>
-    </div>
+        <motion.div
+          ref={textRef}
+          key={`${playKey}-${staticRender ? "revealed" : "animated"}`}
+          className={
+            isPackedLines
+              ? "flex flex-col items-stretch"
+              : leftAnchoredText
+                ? "flex flex-wrap items-baseline justify-start"
+                : "flex flex-wrap items-center justify-center"
+          }
+          initial={staticRender ? false : "hidden"}
+          animate="show"
+          style={{
+            width: "100%",
+            // A solo page is one unbreakable span, so it cannot wrap anyway; naming the
+            // intent keeps the single-line answer from depending on that accident.
+            flexWrap: isSolo ? "nowrap" : undefined,
+            columnGap: isPackedLines ? undefined : "0.34em",
+            rowGap: isPackedLines ? undefined : `${0.08 * lineSpacingScale}em`,
+            fontFamily: spec.font,
+            fontSize,
+            color: textColor,
+            fontWeight: spec.weight,
+            letterSpacing: `${spec.letterSpacing}em`,
+            lineHeight: (isPackedLines ? 1.04 : 0.9) * lineSpacingScale,
+            textAlign: leftAnchoredText ? "left" : "center",
+            textShadow: photoTextShadow ?? "0 4px 40px rgba(0,0,0,0.45)",
+            transform: `rotate(${spec.rotation}deg)`,
+            animation: loopAnimation
+              ? `${loopAnimation} ${paused ? "paused" : "running"}`
+              : undefined,
+          }}
+        >
+          <WordSequenceLines
+            isVietnamese={isPackedLines}
+            lineSpacingScale={lineSpacingScale}
+            vietnameseLines={packedLayout.lines}
+            words={words}
+            emphasized={emphasized}
+            phraseKeys={phraseKeys}
+            secondaryEmphasized={secondaryEmphasized}
+            secondaryVariant={secondaryVariant}
+            allowFrame={allowFrameEmphasis}
+            pool={emphasisPool}
+            spotlightEmphasis={spotlightEmphasis}
+            spec={spec}
+            staticRender={staticRender}
+            paused={paused}
+            isSolo={isSolo}
+            soloInlineScale={soloInlineScale}
+            leftAnchoredText={leftAnchoredText}
+            textColor={textColor}
+            emphasisColor={emphasisColor}
+            entranceStyle={entranceStyle}
+            timeScale={timeScale}
+          />
+        </motion.div>
+      </div>
+    </EntranceClockContext.Provider>
   );
 }
