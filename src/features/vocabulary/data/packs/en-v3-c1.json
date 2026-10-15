@@ -1,0 +1,66 @@
+{
+  "revision": "ba80921d8160540b70d76797",
+  "name": "WordCrawler en-v3-c1 deck",
+  "count": 2,
+  "topics": [
+    "character",
+    "emotion"
+  ],
+  "levels": [
+    "C1"
+  ],
+  "words": [
+    {
+      "id": "humble",
+      "word": "humble",
+      "defVi": "Không khoe_khoang, dù giỏi | vẫn thấy mình còn thiếu_sót.",
+      "leadVi": "Đạt giải nhất, cô vẫn cúi đầu | cảm_ơn thầy.",
+      "anticipateVi": "Giỏi mà chẳng khoe!",
+      "emphasis": [
+        "khoe khoang",
+        "cúi đầu"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈhʌm.bəl/",
+      "topic": "character",
+      "topics": [
+        "character"
+      ],
+      "level": "C1",
+      "usage": [
+        {
+          "en": "Despite his fame, he remained _____ and kind.",
+          "vi": "Dù nổi_tiếng, anh ấy vẫn khiêm_tốn và tử_tế."
+        }
+      ],
+      "chars": 6,
+      "initial": "H"
+    },
+    {
+      "id": "frustrated",
+      "word": "frustrated",
+      "defVi": "Thấy bực_bội | vì cố mãi mà mọi việc chẳng thành.",
+      "leadVi": "Lắp tủ cả buổi chiều, ốc_vít vẫn thừa ba con.",
+      "anticipateVi": "Muốn ném hết đi rồi!",
+      "emphasis": [
+        "bực bội",
+        "ốc vít"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈfrʌs.treɪ.t̬ɪd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "C1",
+      "usage": [
+        {
+          "en": "She felt _____ because nobody listened to her ideas.",
+          "vi": "Cô ấy thấy bực_bội | vì chẳng ai nghe ý_tưởng của=mình."
+        }
+      ],
+      "chars": 10,
+      "initial": "F"
+    }
+  ]
+}

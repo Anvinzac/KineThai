@@ -1,0 +1,467 @@
+{
+  "revision": "c5bc27e872a282c124e685ad",
+  "name": "WordCrawler en-v3-b1 deck",
+  "count": 17,
+  "topics": [
+    "attention",
+    "character",
+    "communication",
+    "daily",
+    "emotion",
+    "health",
+    "money",
+    "thinking"
+  ],
+  "levels": [
+    "B1"
+  ],
+  "words": [
+    {
+      "id": "generous",
+      "word": "generous",
+      "defVi": "Sẵn_lòng chia_sẻ tiền_bạc, thời_gian hay công_sức.",
+      "leadVi": "Lương vừa về, anh liền quyên_góp | xây cầu cho làng.",
+      "anticipateVi": "Rộng tay cỡ nào đây?",
+      "emphasis": [
+        "chia sẻ",
+        "quyên góp"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈdʒen.ər.əs/",
+      "topic": "character",
+      "topics": [
+        "character",
+        "money"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "It was very _____ of you to pay for dinner.",
+          "vi": "Bạn thật hào_phóng | khi trả=tiền bữa tối."
+        }
+      ],
+      "chars": 8,
+      "initial": "G"
+    },
+    {
+      "id": "grateful",
+      "word": "grateful",
+      "defVi": "Thấy biết_ơn | vì điều tốt người khác dành cho mình.",
+      "leadVi": "Nhận hoa từ học_trò cũ, thầy rưng_rưng nước_mắt.",
+      "anticipateVi": "Cảm_ơn bao_nhiêu cho đủ?",
+      "emphasis": [
+        "biết ơn",
+        "rưng rưng"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈɡreɪt.fəl/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "I'm really _____ for all your help.",
+          "vi": "Tôi thật_sự biết_ơn | mọi sự giúp_đỡ của=bạn."
+        }
+      ],
+      "chars": 8,
+      "initial": "G"
+    },
+    {
+      "id": "embarrassed",
+      "word": "embarrassed",
+      "defVi": "Ngượng_ngùng, xấu_hổ | vì lỡ làm điều khó_coi.",
+      "leadVi": "Đi giữa sân_trường thì tuột dép, cả lớp cười ồ.",
+      "anticipateVi": "Đỏ_bừng cả hai má!",
+      "emphasis": [
+        "xấu hổ",
+        "tuột dép"
+      ],
+      "pos": "adj",
+      "ipa": "/ɪmˈber.əst/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "I was so _____ when I forgot her name.",
+          "vi": "Tôi xấu_hổ quá | khi quên mất tên cô=ấy."
+        }
+      ],
+      "chars": 11,
+      "initial": "E"
+    },
+    {
+      "id": "apologize",
+      "word": "apologize",
+      "defVi": "Nói lời xin_lỗi | khi mình đã=làm điều sai_trái.",
+      "leadVi": "Lỡ va vào cụ già, cậu vội cúi đầu rối_rít.",
+      "anticipateVi": "Lỗi tại mình hết á!",
+      "emphasis": [
+        "xin lỗi",
+        "rối rít"
+      ],
+      "pos": "verb",
+      "ipa": "/əˈpɑː.lə.dʒaɪz/",
+      "topic": "communication",
+      "topics": [
+        "communication"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "You should _____ to your sister for shouting at her.",
+          "vi": "Con nên xin_lỗi chị | vì đã=quát chị."
+        }
+      ],
+      "chars": 9,
+      "initial": "A"
+    },
+    {
+      "id": "ignore",
+      "word": "ignore",
+      "defVi": "Cố_tình làm_lơ, không quan_tâm hay đáp lại ai.",
+      "leadVi": "Nhắn mười tin, người kia xem rồi | mà chẳng trả_lời.",
+      "anticipateVi": "Coi như không thấy nha!",
+      "emphasis": [
+        "làm lơ",
+        "trả lời"
+      ],
+      "pos": "verb",
+      "ipa": "/ɪɡˈnɔːr/",
+      "topic": "attention",
+      "topics": [
+        "attention",
+        "communication"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "He tried to _____ the noise and keep working.",
+          "vi": "Anh ấy cố mặc_kệ tiếng ồn | để tiếp_tục làm việc."
+        }
+      ],
+      "chars": 6,
+      "initial": "I"
+    },
+    {
+      "id": "doubt",
+      "word": "doubt",
+      "defVi": "Thấy nghi_ngờ, chưa thật tin | điều đó là sự_thật.",
+      "leadVi": "Quảng_cáo hứa khỏi mọi bệnh, ông chỉ nhíu mày.",
+      "anticipateVi": "Hừm… nghe sao_sao á!",
+      "emphasis": [
+        "nghi ngờ",
+        "nhíu mày"
+      ],
+      "pos": "verb",
+      "ipa": "/daʊt/",
+      "topic": "thinking",
+      "topics": [
+        "thinking"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "I _____ he will come on time.",
+          "vi": "Tôi không chắc | anh ấy sẽ=đến đúng giờ."
+        }
+      ],
+      "chars": 5,
+      "initial": "D"
+    },
+    {
+      "id": "chore",
+      "word": "chore",
+      "defVi": "Việc lặt_vặt trong nhà | như rửa=bát hay quét=nhà.",
+      "leadVi": "Cuối tuần chưa kịp nghỉ, đống quần_áo đã=chờ sẵn.",
+      "anticipateVi": "Chổi đâu, giẻ đâu?",
+      "emphasis": [
+        "lặt vặt",
+        "quần áo"
+      ],
+      "pos": "noun",
+      "ipa": "/tʃɔːr/",
+      "topic": "daily",
+      "topics": [
+        "daily"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "Washing the dishes is my least favourite _____.",
+          "vi": "Rửa=bát là việc nhà | tôi ghét nhất."
+        }
+      ],
+      "chars": 5,
+      "initial": "C"
+    },
+    {
+      "id": "jealous",
+      "word": "jealous",
+      "defVi": "Thấy ghen_tị, khó_chịu | khi người khác hơn=mình.",
+      "leadVi": "Bạn_thân khoe điện_thoại mới, lòng bỗng thấy hơi chua.",
+      "anticipateVi": "Có ai đang nóng mắt không?",
+      "emphasis": [
+        "ghen tị",
+        "hơi chua"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈdʒel.əs/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "She felt _____ of her sister's success.",
+          "vi": "Cô=ấy ghen_tị | với thành_công của=chị_gái."
+        }
+      ],
+      "chars": 7,
+      "initial": "J"
+    },
+    {
+      "id": "lonely",
+      "word": "lonely",
+      "defVi": "Buồn và cô_đơn | vì không có ai bên_cạnh.",
+      "leadVi": "Tết ở lại thành_phố, cả dãy=trọ vắng_tanh.",
+      "anticipateVi": "Có mình ở đây rồi mà!",
+      "emphasis": [
+        "cô đơn",
+        "vắng tanh"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈloʊn.li/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "He felt _____ after moving to a new city.",
+          "vi": "Anh=ấy thấy cô_đơn | sau=khi chuyển đến thành_phố mới."
+        }
+      ],
+      "chars": 6,
+      "initial": "L"
+    },
+    {
+      "id": "proud",
+      "word": "proud",
+      "defVi": "Thấy tự_hào | vì mình hay người_thân làm nên chuyện.",
+      "leadVi": "Con nhận giấy_khen, bố_mẹ rạng_rỡ khoe khắp xóm.",
+      "anticipateVi": "Ưỡn ngực lên nào!",
+      "emphasis": [
+        "tự hào",
+        "rạng rỡ"
+      ],
+      "pos": "adj",
+      "ipa": "/praʊd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "We are so _____ of you.",
+          "vi": "Bố_mẹ rất=tự_hào | về con."
+        }
+      ],
+      "chars": 5,
+      "initial": "P"
+    },
+    {
+      "id": "confused",
+      "word": "confused",
+      "defVi": "Thấy bối_rối | vì không=hiểu chuyện gì đang=xảy_ra.",
+      "leadVi": "Thầy giảng xong bài, cả lớp nhìn nhau ngơ_ngác.",
+      "anticipateVi": "Ủa, rồi sao nữa?",
+      "emphasis": [
+        "bối rối",
+        "ngơ ngác"
+      ],
+      "pos": "adj",
+      "ipa": "/kənˈfjuːzd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "thinking"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "I'm _____ about what to do next.",
+          "vi": "Tôi đang=rối, không=biết nên làm gì tiếp_theo."
+        }
+      ],
+      "chars": 8,
+      "initial": "C"
+    },
+    {
+      "id": "exhausted",
+      "word": "exhausted",
+      "defVi": "Mệt đến kiệt_sức, chẳng còn muốn làm gì nữa.",
+      "leadVi": "Thức trắng ba đêm, vừa chạm=gối là ngủ say.",
+      "anticipateVi": "Ráng thêm chút, sắp xong rồi!",
+      "emphasis": [
+        "kiệt sức",
+        "ngủ say"
+      ],
+      "pos": "adj",
+      "ipa": "/ɪɡˈzɑː.stɪd/",
+      "topic": "health",
+      "topics": [
+        "health",
+        "emotion"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "After the long hike, we were completely _____.",
+          "vi": "Sau chuyến=leo_núi dài, chúng_tôi hoàn_toàn kiệt_sức."
+        }
+      ],
+      "chars": 9,
+      "initial": "E"
+    },
+    {
+      "id": "honest",
+      "word": "honest",
+      "defVi": "Sống thật_thà, không=nói_dối hay gian_lận với ai.",
+      "leadVi": "Nhặt=được ví đầy tiền, liền đem trả lại người mất.",
+      "anticipateVi": "Nói thật đi, bạn biết rồi!",
+      "emphasis": [
+        "thật thà",
+        "trả lại"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈɑː.nɪst/",
+      "topic": "character",
+      "topics": [
+        "character"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "To be _____, I didn't like the movie.",
+          "vi": "Nói thật, tôi không=thích bộ=phim đó."
+        }
+      ],
+      "chars": 6,
+      "initial": "H"
+    },
+    {
+      "id": "brave",
+      "word": "brave",
+      "defVi": "Có lòng dũng_cảm, dám làm điều khó dù đang=sợ.",
+      "leadVi": "Run cầm_cập, nhưng vẫn bước lên sân_khấu hát.",
+      "anticipateVi": "Gan lì thì đoán đi!",
+      "emphasis": [
+        "dũng cảm",
+        "bước lên"
+      ],
+      "pos": "adj",
+      "ipa": "/breɪv/",
+      "topic": "character",
+      "topics": [
+        "character"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "It was _____ of her to speak up.",
+          "vi": "Cô=ấy thật can_đảm | khi dám lên_tiếng."
+        }
+      ],
+      "chars": 5,
+      "initial": "B"
+    },
+    {
+      "id": "selfish",
+      "word": "selfish",
+      "defVi": "Chỉ biết nghĩ cho=mình, mặc_kệ người khác ra sao.",
+      "leadVi": "Đặt đồ_ăn chung, giành ngay miếng ngon nhất cho=mình.",
+      "anticipateVi": "Đáp án này không chia đâu!",
+      "emphasis": [
+        "mặc kệ",
+        "giành ngay"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈsel.fɪʃ/",
+      "topic": "character",
+      "topics": [
+        "character"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "It's _____ to keep all the snacks for yourself.",
+          "vi": "Giữ hết đồ ăn_vặt cho riêng mình | là ích_kỷ."
+        }
+      ],
+      "chars": 7,
+      "initial": "S"
+    },
+    {
+      "id": "encourage",
+      "word": "encourage",
+      "defVi": "Nói lời động_viên | để ai thêm tự_tin, cố_gắng.",
+      "leadVi": "Trước giờ thi, mẹ vỗ vai: \"Con làm=được mà.\"",
+      "anticipateVi": "Vỗ tay cho bạn trước nè!",
+      "emphasis": [
+        "động viên",
+        "vỗ vai"
+      ],
+      "pos": "verb",
+      "ipa": "/ɪnˈkɝː.ɪdʒ/",
+      "topic": "communication",
+      "topics": [
+        "communication",
+        "emotion"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "Teachers should _____ students to ask questions.",
+          "vi": "Thầy_cô nên khuyến_khích | học_sinh đặt câu_hỏi."
+        }
+      ],
+      "chars": 9,
+      "initial": "E"
+    },
+    {
+      "id": "afford",
+      "word": "afford",
+      "defVi": "Có đủ tiền | để mua hay chi_trả cho thứ gì.",
+      "leadVi": "Ngắm đôi=giày mãi, liếc thấy giá, lặng_lẽ đặt xuống.",
+      "anticipateVi": "Đoán miễn phí, khỏi trả tiền!",
+      "emphasis": [
+        "đủ tiền",
+        "lặng lẽ"
+      ],
+      "pos": "verb",
+      "ipa": "/əˈfɔːrd/",
+      "topic": "money",
+      "topics": [
+        "money"
+      ],
+      "level": "B1",
+      "usage": [
+        {
+          "en": "I can't _____ a new laptop right now.",
+          "vi": "Giờ tôi chưa đủ tiền | mua máy_tính xách_tay mới."
+        }
+      ],
+      "chars": 6,
+      "initial": "A"
+    }
+  ]
+}

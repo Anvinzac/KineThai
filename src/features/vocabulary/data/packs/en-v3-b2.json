@@ -1,0 +1,332 @@
+{
+  "revision": "0c629306a66bef0a0e23b1b2",
+  "name": "WordCrawler en-v3-b2 deck",
+  "count": 11,
+  "topics": [
+    "character",
+    "communication",
+    "daily",
+    "emotion",
+    "money",
+    "technology",
+    "thinking",
+    "time",
+    "travel",
+    "work"
+  ],
+  "levels": [
+    "B2"
+  ],
+  "words": [
+    {
+      "id": "curious",
+      "word": "curious",
+      "defVi": "Luôn muốn tìm_hiểu | những điều mình chưa=từng biết.",
+      "leadVi": "Thấy cái gì lạ | cũng hỏi tại_sao, mở ra xem.",
+      "anticipateVi": "Sao lại thế nhỉ?",
+      "emphasis": [
+        "tìm hiểu",
+        "tại sao"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈkjʊr.i.əs/",
+      "topic": "character",
+      "topics": [
+        "character",
+        "thinking"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "Kids are naturally _____ about the world around them.",
+          "vi": "Trẻ_con vốn tò_mò | về thế_giới xung_quanh."
+        }
+      ],
+      "chars": 7,
+      "initial": "C"
+    },
+    {
+      "id": "patient",
+      "word": "patient",
+      "defVi": "Bình_tĩnh chờ_đợi, không=vội_vàng hay cáu_gắt.",
+      "leadVi": "Con hỏi lần thứ mười, mẹ vẫn nhẹ_nhàng trả_lời.",
+      "anticipateVi": "Chậm mà chắc nhé!",
+      "emphasis": [
+        "chờ đợi",
+        "nhẹ nhàng"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈpeɪ.ʃənt/",
+      "topic": "character",
+      "topics": [
+        "character"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "Please be _____; the doctor will see you soon.",
+          "vi": "Xin hãy kiên_nhẫn, bác_sĩ sẽ=khám | cho bạn ngay."
+        }
+      ],
+      "chars": 7,
+      "initial": "P"
+    },
+    {
+      "id": "stubborn",
+      "word": "stubborn",
+      "defVi": "Cứ nhất_quyết giữ ý mình, ai khuyên cũng mặc.",
+      "leadVi": "Đã bảo đường kia ngập, ông vẫn khăng_khăng đi thẳng.",
+      "anticipateVi": "Cứng như đá luôn á!",
+      "emphasis": [
+        "nhất quyết",
+        "khăng khăng"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈstʌb.ɚn/",
+      "topic": "character",
+      "topics": [
+        "character"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "He's too _____ to admit he was wrong.",
+          "vi": "Anh ta quá bướng_bỉnh | nên không=chịu nhận sai."
+        }
+      ],
+      "chars": 8,
+      "initial": "S"
+    },
+    {
+      "id": "relieved",
+      "word": "relieved",
+      "defVi": "Thấy nhẹ_nhõm | khi điều lo_lắng cuối_cùng đã qua.",
+      "leadVi": "Tưởng mất hộ_chiếu, hóa_ra nó nằm trong túi áo.",
+      "anticipateVi": "Phù… thở ra được rồi!",
+      "emphasis": [
+        "nhẹ nhõm",
+        "hóa ra"
+      ],
+      "pos": "adj",
+      "ipa": "/rɪˈliːvd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "We were _____ to hear that everyone was safe.",
+          "vi": "Chúng_tôi nhẹ_nhõm | khi nghe tin mọi người đều an_toàn."
+        }
+      ],
+      "chars": 8,
+      "initial": "R"
+    },
+    {
+      "id": "interrupt",
+      "word": "interrupt",
+      "defVi": "Bỗng chen ngang | khi người khác đang=nói hoặc làm việc.",
+      "leadVi": "Thầy giảng chưa hết câu, cậu đã=giơ tay cắt_lời.",
+      "anticipateVi": "Xen vô làm chi?",
+      "emphasis": [
+        "chen ngang",
+        "cắt lời"
+      ],
+      "pos": "verb",
+      "ipa": "/ˌɪn.t̬əˈrʌpt/",
+      "topic": "communication",
+      "topics": [
+        "communication"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "Please don't _____ me while I'm speaking.",
+          "vi": "Làm ơn đừng ngắt_lời | khi tôi đang=nói."
+        }
+      ],
+      "chars": 9,
+      "initial": "I"
+    },
+    {
+      "id": "punctual",
+      "word": "punctual",
+      "defVi": "Luôn có_mặt đúng giờ, chẳng bao_giờ để ai chờ.",
+      "leadVi": "Hẹn tám giờ, kim đồng_hồ điểm là anh gõ cửa.",
+      "anticipateVi": "Tích_tắc, tới liền!",
+      "emphasis": [
+        "đúng giờ",
+        "gõ cửa"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈpʌŋk.tʃu.əl/",
+      "topic": "time",
+      "topics": [
+        "time",
+        "character"
+      ],
+      "exams": [
+        "toeic"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "She is always _____ for meetings.",
+          "vi": "Cô ấy luôn đến họp | đúng giờ."
+        }
+      ],
+      "chars": 8,
+      "initial": "P"
+    },
+    {
+      "id": "delay",
+      "word": "delay",
+      "defVi": "Khiến việc gì chậm lại, trễ hơn | so_với dự_kiến.",
+      "leadVi": "Bão lớn, chuyến bay tạm hoãn | sang tận chiều tối.",
+      "anticipateVi": "Chờ dài cổ luôn!",
+      "emphasis": [
+        "chậm lại",
+        "tạm hoãn"
+      ],
+      "pos": "verb",
+      "ipa": "/dɪˈleɪ/",
+      "topic": "time",
+      "topics": [
+        "time",
+        "travel"
+      ],
+      "exams": [
+        "toeic"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "Heavy traffic may _____ our arrival.",
+          "vi": "Kẹt xe có_thể khiến chúng_tôi | đến trễ."
+        }
+      ],
+      "chars": 5,
+      "initial": "D"
+    },
+    {
+      "id": "efficient",
+      "word": "efficient",
+      "defVi": "Làm nhanh_gọn, ít tốn công_sức | mà vẫn hiệu_quả.",
+      "leadVi": "Chị gom việc lại, một chuyến=xe giải_quyết cả ba.",
+      "anticipateVi": "Gọn lẹ như chớp!",
+      "emphasis": [
+        "nhanh gọn",
+        "giải quyết"
+      ],
+      "pos": "adj",
+      "ipa": "/ɪˈfɪʃ.ənt/",
+      "topic": "work",
+      "topics": [
+        "work",
+        "technology"
+      ],
+      "exams": [
+        "toeic",
+        "ielts"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "This new heater is more _____ and uses less energy.",
+          "vi": "Chiếc máy sưởi mới này | hoạt_động hiệu_quả hơn, tốn ít điện hơn."
+        }
+      ],
+      "chars": 9,
+      "initial": "E"
+    },
+    {
+      "id": "commute",
+      "word": "commute",
+      "defVi": "Quãng đường đi làm | rồi trở về nhà mỗi ngày.",
+      "leadVi": "Sáng nào cũng chen_chúc | trên xe_buýt cả tiếng.",
+      "anticipateVi": "Kẹt xe nữa rồi trời!",
+      "emphasis": [
+        "đi làm",
+        "chen chúc"
+      ],
+      "pos": "noun",
+      "ipa": "/kəˈmjuːt/",
+      "topic": "daily",
+      "topics": [
+        "daily",
+        "travel",
+        "work"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "My daily _____ takes about forty minutes.",
+          "vi": "Quãng đường đi làm mỗi ngày của=tôi | mất khoảng bốn mươi phút."
+        }
+      ],
+      "chars": 7,
+      "initial": "C"
+    },
+    {
+      "id": "rush",
+      "word": "rush",
+      "defVi": "Đi hay làm vội_vàng | vì sắp hết thời_gian.",
+      "leadVi": "Sắp vào lớp, cuống_cuồng vừa chạy vừa cài áo.",
+      "anticipateVi": "Từ từ thôi, kịp mà!",
+      "emphasis": [
+        "vội vàng",
+        "cuống cuồng"
+      ],
+      "pos": "verb",
+      "ipa": "/rʌʃ/",
+      "topic": "time",
+      "topics": [
+        "time",
+        "daily"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "There's no need to _____, we have time.",
+          "vi": "Không=cần vội đâu, mình còn thời_gian."
+        }
+      ],
+      "chars": 4,
+      "initial": "R"
+    },
+    {
+      "id": "budget",
+      "word": "budget",
+      "defVi": "Khoản tiền dự_tính | dành để chi cho một việc.",
+      "leadVi": "Đầu tháng chia ngay: tiền nhà, tiền ăn, tiền tiết_kiệm.",
+      "anticipateVi": "Tiêu chữ cái cho khéo nhé!",
+      "emphasis": [
+        "dự tính",
+        "chia ngay"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈbʌdʒ.ɪt/",
+      "topic": "money",
+      "topics": [
+        "money",
+        "work"
+      ],
+      "exams": [
+        "toeic"
+      ],
+      "level": "B2",
+      "usage": [
+        {
+          "en": "We're planning a trip on a tight _____.",
+          "vi": "Chúng_tôi lên kế_hoạch đi chơi | với ngân_sách eo_hẹp."
+        }
+      ],
+      "chars": 6,
+      "initial": "B"
+    }
+  ]
+}
