@@ -3822,28 +3822,8 @@
 }
 /* Runs from the first rung's centre to the last one's. The whole scale is painted on it;
    the ::after shade covers everything BELOW the knob, so what shows is the climb so far. */
-.vocab-onboard-track {
-  position: absolute;
-  /* The bar is a gauge-level layer BEHIND the ladder (z 0 < ladder z 1), so each level's
-     dot sits ON it instead of under it. It used to be a child of the rail, whose transform
-     locked it into a stacking context that always painted over the ladder. */
-  z-index: 0;
-  left: 50%;
-  top: calc(50% / var(--rung-count));
-  bottom: calc(50% / var(--rung-count));
-  width: 4px;
-  border-radius: 4px;
-  background: var(--rung-scale);
-  transform: translateX(-50%);
-  overflow: hidden;
-}
-.vocab-onboard-track::after {
-  content: "";
-  position: absolute;
-  inset: calc(var(--rung-index) / (var(--rung-count) - 1) * 100%) 0 0;
-  background: color-mix(in srgb, var(--shell-bg) 82%, #ffffff);
-  transition: inset var(--dur-move) var(--ease-spring);
-}
+/* The gradient bar was removed: the ladder reads cleaner as dots alone, and the bar's
+   cyan-to-red scale read as a stray coloured line next to the slider. */
 .vocab-onboard-knob {
   position: absolute;
   left: 50%;
