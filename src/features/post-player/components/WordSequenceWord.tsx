@@ -24,6 +24,7 @@ import {
   type ResolvedEntranceStyle,
 } from "../lib/entrances";
 import { EMPHASIS_FONT_SCALE, getWordDelay, tempoConfig } from "../lib/playback-timing";
+import { usePausableEntrance } from "../hooks/usePausableEntrance";
 
 export type WordSequenceWordProps = {
   word: string;
@@ -174,6 +175,13 @@ export function WordSequenceWord({
   const safeHidden = isSolo
     ? { ...hidden, x: 0, rotate: 0, scale: Math.min(Number(hidden.scale ?? 1), 1) }
     : hidden;
+  const entranceTransition = isSolo
+    ? { delay: entranceDelay, duration: entranceDuration, ease: [0.22, 1, 0.36, 1] as const }
+    : getEntranceTransition(entranceStyle, entranceDelay, entranceDuration, timeScale);
+  // The entrance pauses with the page (an overlay covering the feed) instead of playing
+  // on unseen underneath it. Static renders and run syllables keep inheriting the parent.
+  const ownsEntrance = !staticRender && !skipFrame;
+  const entranceControls = usePausableEntrance("show", entranceTransition, ownsEntrance);
   return (
     <motion.span
       key={`${word}-${index}`}
@@ -186,7 +194,8 @@ export function WordSequenceWord({
       // staticRender flip) keeps restarting its delayed entrance — leaving the frame/
       // halo effect on the wrapper visible while the glyph itself is invisible. Skip
       // the per-syllable opacity entrance and let the wrapper's group fade carry it.
-      initial={skipFrame ? false : undefined}
+      initial={skipFrame ? false : ownsEntrance ? "hidden" : undefined}
+      animate={ownsEntrance ? entranceControls : undefined}
       variants={{
         // The starting pose comes from the post's auto-picked entrance style;
         // every style settles to the shared neutral rest below. Emphasis size
@@ -195,11 +204,7 @@ export function WordSequenceWord({
         hidden: safeHidden,
         show: ENTRANCE_REST,
       }}
-      transition={
-        isSolo
-          ? { delay: entranceDelay, duration: entranceDuration, ease: [0.22, 1, 0.36, 1] }
-          : getEntranceTransition(entranceStyle, entranceDelay, entranceDuration, timeScale)
-      }
+      transition={entranceTransition}
       className={important ? "relative inline-flex" : "inline-flex"}
       style={{
         color: wordColor,
