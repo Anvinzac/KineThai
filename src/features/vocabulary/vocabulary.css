@@ -3214,7 +3214,9 @@
 .vocab-vault-tip-shape::after {
   content: "";
   position: absolute;
-  width: 8px;
+  /* Width is tuned per tier so the two diagonals meet at a sturdy ~50° point — any sharper
+     and the antialiased fill fades at the tip, fraying the outline into two strokes. */
+  width: 12px;
   height: 13px;
   background: var(--tip-fill);
 }
@@ -3262,10 +3264,9 @@
   bottom: -10px;
   height: 13px;
   transform: translateX(-50%);
-  /* ~1px flat at the point: an acute single-pixel tip antialiases to near-transparent, which
-     frays the outline into two strokes meeting at a gap. The tiny flat keeps the fill solid
-     so the outline wraps the point as ONE joint. */
-  clip-path: polygon(0 0, 100% 0, 56% 100%, 44% 100%);
+  /* A true single point: the 12px base over the 13px height meets the diagonals at ~50°,
+     wide enough that the fill stays solid all the way into the joint — no blunt cut needed. */
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
 /* Bookmark bubble: directly under the RIGHT (bookmark) key, its tail near the LEFT end (short 1
    side on the left, 2 on the right) — the mirror of the heart's. translateX(-33.3%) brings that
@@ -3285,8 +3286,10 @@
   left: 33.3%;
   right: auto;
   transform: translateX(-50%);
-  /* Same 1px-flat tip as the heart's tail (mirrored upward). */
-  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+  /* A 1px wider base than the heart's, keeping the same ~50° joint over its extra height. */
+  width: 13px;
+  /* Same true point, mirrored upward. */
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 @keyframes vocab-vault-bob {
   0%,
@@ -3453,6 +3456,8 @@
   .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
     bottom: -5px;
     height: 8px;
+    /* Shorter tail, so narrow the base back to keep the same sturdy point angle (~53°). */
+    width: 8px;
   }
   .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
     top: -10px;
@@ -3498,6 +3503,8 @@
   .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
     bottom: -3px;
     height: 6px;
+    /* Shortest tier: narrow the base to match, keeping a solid single-point joint (~34°). */
+    width: 8px;
   }
   .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
     top: -8px;
