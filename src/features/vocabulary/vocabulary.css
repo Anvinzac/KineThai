@@ -3723,13 +3723,14 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  /* Opaque fill (never the translucent line token) so the bar cannot show through an
-     unvisited dot; locked levels use a dimmer — but still solid — tone to stay legible. */
-  background: color-mix(in srgb, #ffffff 30%, var(--shell-bg));
+  /* Solid, fully opaque fill: mixed against the opaque shell so no alpha is ever
+     involved and nothing can show through. Locked levels are a dimmer — still solid —
+     tone, never a translucent one. */
+  background: color-mix(in srgb, #ffffff 46%, var(--shell-bg));
   transition: background var(--dur-quick) var(--ease-out);
 }
 .vocab-onboard-rung[aria-disabled="true"] .vocab-onboard-tick {
-  background: color-mix(in srgb, #ffffff 16%, var(--shell-bg));
+  background: color-mix(in srgb, #ffffff 28%, var(--shell-bg));
 }
 .vocab-onboard-rung:is([data-on], [data-passed]) .vocab-onboard-tick {
   background: var(--rung-own);
@@ -3824,7 +3825,11 @@
    the ::after shade covers everything BELOW the knob, so what shows is the climb so far. */
 /* A thin neutral spine links the level dots — no cyan-to-red gradient, just a quiet
    guide so the ladder reads as one slider instead of floating dots. */
-.vocab-onboard-rail::before {
+/* A thin neutral spine links the level dots — no cyan-to-red gradient, just a quiet
+   guide so the ladder reads as one slider instead of floating dots. It hangs off the
+   gauge (z-index auto) so it paints UNDER the dots (ladder z1) and the knob (rail z2):
+   a spine drawn over a dot is what made the unselected ones look see-through. */
+.vocab-onboard-gauge::before {
   content: "";
   position: absolute;
   top: calc(100% / var(--rung-count) / 2);
@@ -3834,6 +3839,7 @@
   transform: translateX(-50%);
   border-radius: 999px;
   background: color-mix(in srgb, #ffffff 18%, transparent);
+  pointer-events: none;
 }
 .vocab-onboard-knob {
   position: absolute;
@@ -4083,6 +4089,16 @@
     height: 56px;
     transform: translateY(-50%);
     cursor: ew-resize;
+  }
+  /* Spine: follows the rail onto the horizontal axis, still under the dots. */
+  .vocab-onboard[data-landscape] .vocab-onboard-gauge::before {
+    top: 50%;
+    bottom: auto;
+    left: calc(100% / var(--rung-count) / 2);
+    right: calc(100% / var(--rung-count) / 2);
+    width: auto;
+    height: 3px;
+    transform: translateY(-50%);
   }
   /* Knob: moves left by --rung-index. */
   .vocab-onboard[data-landscape] .vocab-onboard-knob {
