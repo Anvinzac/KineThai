@@ -32,6 +32,7 @@ import {
 } from "@/features/kinetic-text";
 import { getEmphasizedWordIndexes } from "../lib/feed-emphasis";
 import { getEntranceStyle } from "../lib/entrances";
+import { EntranceClockContext, useEntranceClock } from "../hooks/usePausableEntrance";
 import {
   EMPHASIS_FONT_SCALE,
   EMPHASIS_SCALE_FIT_GUARD,
@@ -231,8 +232,10 @@ export function WordSequenceText({
     ? "min(90%, calc(100% - 2.5rem))"
     : TEXT_SAFE_MAX_WIDTH;
   const loopAnimation = getLoopAnimation(spec.loop, spec.tempo);
+  const entranceClock = useEntranceClock(paused, `${playKey}-${staticRender}`);
 
   return (
+    <EntranceClockContext.Provider value={entranceClock}>
     <div
       ref={wrapperRef}
       aria-hidden={measure || undefined}

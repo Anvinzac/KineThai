@@ -6,7 +6,6 @@
  */
 
 import type { ReactElement } from "react";
-import { motion } from "framer-motion";
 import type { CSSProperties, ReactNode } from "react";
 import { getCanvasEmphasisWordColor, type CanvasSpec } from "@/features/canvas";
 import {
