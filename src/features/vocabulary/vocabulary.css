@@ -3456,6 +3456,8 @@
   .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
     bottom: -5px;
     height: 8px;
+    /* Shorter tail, so narrow the base back to keep the same sturdy point angle (~53°). */
+    width: 8px;
   }
   .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
     top: -10px;
@@ -3501,6 +3503,8 @@
   .vocab-vault-tip[data-tip="heart"] .vocab-vault-tip-shape::after {
     bottom: -3px;
     height: 6px;
+    /* Shortest tier: narrow the base to match, keeping a solid single-point joint (~34°). */
+    width: 8px;
   }
   .vocab-vault-tip[data-tip="bookmark"] .vocab-vault-tip-shape::after {
     top: -8px;
