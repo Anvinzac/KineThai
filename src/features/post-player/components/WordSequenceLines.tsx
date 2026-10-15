@@ -325,6 +325,9 @@ export function WordSequenceLines({
             return (
               <span
                 key={segment.key}
+                // Hook for the measured layout: a segment never breaks, so its drawn
+                // width is the unit that has to be proven to fit before it is placed.
+                data-kinetic-segment={segment.key}
                 className="inline-flex flex-nowrap items-baseline whitespace-nowrap"
                 style={{
                   columnGap: "0.24em",

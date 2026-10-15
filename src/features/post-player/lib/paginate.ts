@@ -1,13 +1,29 @@
 /**
  * Pure helpers for sentence-safe text pagination.
  *
- * Exports: paginateText
+ * Exports: paginateText, PaginateOptions
  * Depends on: @/features/kinetic-text
  */
 
-import { getTextPageWordLimit, getWords, isLikelyVietnameseText } from "@/features/kinetic-text";
+import {
+  getPunctuationPhraseEdges,
+  getTextPageWordLimit,
+  getWords,
+  isBreakOneWordFromEdge,
+  isLikelyVietnameseText,
+} from "@/features/kinetic-text";
 
 type RawTextPage = { text: string; mergeable: boolean };
+
+/** How a caller wants its text paged. */
+export type PaginateOptions = {
+  /**
+   * Treat a word ending in a comma, full stop or semicolon as a phrase edge, and never
+   * open a page one word away from one — not on the word that carries the mark, nor one
+   * word after it. Off by default, so community posts page exactly as before.
+   */
+  keepPhraseEdges?: boolean;
+};
 
 /** Word-index span `[start, end)` of one compound `word - word` phrase. */
 type CompoundPhraseSpan = { start: number; end: number };
@@ -62,9 +78,10 @@ const VIETNAMESE_CLAUSE_CONJUNCTION_KEYS = VIETNAMESE_CLAUSE_CONJUNCTIONS.map((p
  * Sentences always stay whole; only very long sentences may open a new page
  * (see splitSentenceIntoPages for the exact rules).
  * @param text - text argument
+ * @param options - how the caller wants its text paged
  * @returns Ordered page strings; empty input → `[""]`
  */
-export function paginateText(text: string): string[] {
+export function paginateText(text: string, options: PaginateOptions = {}): string[] {
   const blocks = text
     .replace(/\r\n?/g, "\n")
     .split("\n")
@@ -72,7 +89,7 @@ export function paginateText(text: string): string[] {
     .filter(Boolean);
   if (blocks.length === 0) return [""];
 
-  return mergeShortTextPages(blocks.flatMap((block) => paginateTextBlock(block)));
+  return mergeShortTextPages(blocks.flatMap((block) => paginateTextBlock(block, options)));
 }
 
 /**
@@ -80,14 +97,17 @@ export function paginateText(text: string): string[] {
  * Language is detected once per block, then every sentence is split
  * independently so a page break can never cut across sentences.
  * @param text - trimmed block text
+ * @param options - how the caller wants its text paged
  * @returns Raw pages for the block, before anti-orphan merging
  */
-function paginateTextBlock(text: string): RawTextPage[] {
+function paginateTextBlock(text: string, options: PaginateOptions): RawTextPage[] {
   const wordLimit = getTextPageWordLimit(text);
   const isVietnamese = isLikelyVietnameseText(text);
   const sentences = text.match(/[^.!?]+[.!?]+["')\]]*|[^.!?]+$/g) ?? [text];
   return sentences
-    .flatMap((sentence) => splitSentenceIntoPages(sentence.trim(), wordLimit, isVietnamese))
+    .flatMap((sentence) =>
+      splitSentenceIntoPages(sentence.trim(), wordLimit, isVietnamese, options),
+    )
     .filter((page) => page.text);
 }
 
@@ -100,19 +120,25 @@ function paginateTextBlock(text: string): RawTextPage[] {
  * @param sentence - trimmed sentence text
  * @param wordLimit - soft page word budget for the detected language
  * @param isVietnamese - true when the surrounding block is Vietnamese
+ * @param options - how the caller wants its text paged
  * @returns Pages; `mergeable` marks overflow continuations for the anti-orphan merge
  */
 function splitSentenceIntoPages(
   sentence: string,
   wordLimit: number,
   isVietnamese: boolean,
+  options: PaginateOptions,
 ): RawTextPage[] {
   const wholeSentencePage = [{ text: sentence, mergeable: false }];
 
   const words = getWords(sentence);
   if (words.length < wordLimit * LONG_SENTENCE_WORD_MULTIPLIER) return wholeSentencePage;
 
-  const breakIndexes = getClauseBreakIndexes(words, isVietnamese);
+  const edges = options.keepPhraseEdges ? getPunctuationPhraseEdges(words) : [];
+  // A page may not open one word away from a phrase edge, any more than a line may.
+  const breakIndexes = getClauseBreakIndexes(words, isVietnamese).filter(
+    (breakIndex) => !isBreakOneWordFromEdge(words, edges, breakIndex),
+  );
   if (breakIndexes.length === 0) return wholeSentencePage;
 
   const chunks: string[] = [];

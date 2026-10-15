@@ -98,13 +98,23 @@ function keepFirstRuns(indexes: Iterable<number>, maxRuns: number): Set<number> 
  * single highlighted word (limitShortSentenceEmphasis), whichever path chose it.
  * @param words - words argument
  * @param dataEmphasis - optional upstream annotation phrases; exact matches win over scoring
+ * @param boundPhrases - optional phrases the source text marked as ONE word. They pick
+ *   nothing by themselves; a highlight that lands on one syllable of such a word grows to
+ *   cover all of it, exactly as it does for the curated compounds.
  * @returns Computed value
  */
-export function getEmphasizedWordIndexes(words: string[], dataEmphasis?: string[]): Set<number> {
+export function getEmphasizedWordIndexes(
+  words: string[],
+  dataEmphasis?: string[],
+  boundPhrases?: string[],
+): Set<number> {
+  const boundKeys = getEmphasisPhraseKeysForLayout(boundPhrases);
+  const selected = selectEmphasizedWordIndexes(words, dataEmphasis);
+  const phraseKeys = [...getEmphasisPhraseKeysForLayout(dataEmphasis), ...boundKeys];
   return limitShortSentenceEmphasis(
     words,
-    selectEmphasizedWordIndexes(words, dataEmphasis),
-    getEmphasisPhraseKeysForLayout(dataEmphasis),
+    boundKeys.length ? expandEmphasisToBoundPhrases(words, selected, phraseKeys) : selected,
+    phraseKeys,
   );
 }
 

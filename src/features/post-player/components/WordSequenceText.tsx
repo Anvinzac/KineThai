@@ -16,6 +16,7 @@ import {
   type Entrance,
 } from "@/features/canvas";
 import {
+  getPunctuationPhraseEdges,
   getDataEmphasisWordSpans,
   getEmphasisPhraseKeysForLayout,
   getEmphasizedRunPhraseKeys,
@@ -40,6 +41,7 @@ import {
   VIETNAMESE_SCALE_FIT_GUARD,
 } from "../lib/playback-timing";
 import { estimateSoloRevealFit } from "../lib/solo-text-fit";
+import { useMeasuredLines, type MeasuredLayoutBudget } from "../hooks/useMeasuredLines";
 import { useWordSequenceFit } from "../hooks/useWordSequenceFit";
 import { WordSequenceLines } from "./WordSequenceLines";
 
@@ -73,6 +75,12 @@ export type WordSequenceTextProps = {
   /** Optional upstream emphasis annotations; only phrases occurring in this page's text match. */
   dataEmphasis?: string[];
   /**
+   * Phrases the source text marked as ONE word ("ba lô"). On a packed page each is an
+   * unbreakable segment — it moves to the next line whole rather than leaving a syllable
+   * behind — and a highlight never covers only part of one.
+   */
+  boundPhrases?: string[];
+  /**
    * Optional second highlight drawn with its own effect. It bypasses both the
    * annotation budget and the per-language one-word cap, so a page can carry two
    * marks that read differently — the vocabulary letter-count clue boxes its
@@ -98,6 +106,14 @@ export type WordSequenceTextProps = {
    * card raises it for a reader who picked a slower reading speed.
    */
   timeScale?: number;
+  /**
+   * Lay a Vietnamese page out from measured widths instead of the character-count
+   * estimate: every unbreakable segment is measured as drawn, and the line breaks and
+   * the font size are solved together inside these limits (see useMeasuredLines).
+   * Omitted — every community post — the estimate-packed lines and the fit solver stand
+   * exactly as before. Han pages keep their own packing either way.
+   */
+  measuredLayout?: MeasuredLayoutBudget;
 };
 
 /**
@@ -121,10 +137,12 @@ export function WordSequenceText({
   fitAsUnit = false,
   lineSpacingScale = 1,
   dataEmphasis,
+  boundPhrases,
   secondaryEmphasis,
   allowFrameEmphasis = true,
   emphasisPool,
   timeScale = 1,
+  measuredLayout,
 }: WordSequenceTextProps): ReactElement {
   // A Han page tokenizes per character before anything else: a whole Chinese sample
   // sentence is one whitespace token, and as one token it rendered as a single
@@ -141,8 +159,8 @@ export function WordSequenceText({
   // packed-page fit floor. `fitAsUnit` pages (solo reveals) always stay one line.
   const isPackedLines = isVietnamese || isHan;
   const emphasized = useMemo(
-    () => getEmphasizedWordIndexes(words, dataEmphasis),
-    [words, dataEmphasis],
+    () => getEmphasizedWordIndexes(words, dataEmphasis, boundPhrases),
+    [words, dataEmphasis, boundPhrases],
   );
   // Read the primitives, not the object, so a caller re-creating the literal each
   // render cannot churn the memo and rebuild the index set every frame.
@@ -167,9 +185,10 @@ export function WordSequenceText({
   const phraseKeys = useMemo(
     () => [
       ...getEmphasisPhraseKeysForLayout(dataEmphasis),
+      ...getEmphasisPhraseKeysForLayout(boundPhrases),
       ...getEmphasizedRunPhraseKeys(words, emphasized),
     ],
-    [dataEmphasis, words, emphasized],
+    [dataEmphasis, boundPhrases, words, emphasized],
   );
   const isSolo = words.length <= 1;
   const visualScaleGuard = Math.max(
@@ -208,13 +227,67 @@ export function WordSequenceText({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const staticRender = revealed || measure;
+  // Everything that can change how wide a segment is drawn. The measured layout keeps
+  // its measurements for as long as this stands.
+  const measuredSignature = useMemo(
+    () =>
+      [
+        spec.text,
+        spec.font,
+        spec.weight,
+        spec.letterSpacing,
+        lineSpacingScale,
+        allowFrameEmphasis,
+        [...emphasized].join(","),
+        secondaryEmphasized ? [...secondaryEmphasized].join(",") : "",
+        secondaryVariant ?? "",
+        emphasisPool?.join(",") ?? "",
+        phraseKeys.map((key) => key.join(" ")).join("|"),
+      ].join("\u0001"),
+    [
+      spec.text,
+      spec.font,
+      spec.weight,
+      spec.letterSpacing,
+      lineSpacingScale,
+      allowFrameEmphasis,
+      emphasized,
+      secondaryEmphasized,
+      secondaryVariant,
+      emphasisPool,
+      phraseKeys,
+    ],
+  );
+  // Where the page's own phrases meet: a comma, full stop or semicolon closes the phrase it
+  // ends. A break is welcome right after one, never one word away from it.
+  const phraseEdges = useMemo(
+    () => (isVietnamese ? getPunctuationPhraseEdges(words) : undefined),
+    [isVietnamese, words],
+  );
+  const measuredLines = useMeasuredLines({
+    budget: measuredLayout,
+    enabled: isVietnamese && !measure,
+    lines: packedLayout.lines,
+    signature: measuredSignature,
+    phraseEdges,
+    lineSpacingScale,
+    wrapperRef,
+    textRef,
+  });
+  // The words are mounted afresh whenever the breaks change. Moving a word to another
+  // line remounts it on its own otherwise, part-way through an entrance its neighbours
+  // are already running; starting the block again keeps every word on one clock.
+  const layoutKey = measuredLines
+    ? measuredLines.lines.map((line) => line.segments.length).join(".")
+    : "estimate";
   const { fontSize, soloInlineScale, safeCenterY } = useWordSequenceFit({
-    initialFit,
-    measurementKey: `${playKey}-${staticRender}`,
+    // A measured page arrives at its size already; the solver only places it.
+    initialFit: measuredLines ? 1 : initialFit,
+    measurementKey: `${playKey}-${staticRender}-${layoutKey}`,
     canvasWidth,
     background,
-    spec,
-    disableFit: disableFit && !isSolo,
+    spec: measuredLines ? { ...spec, size: measuredLines.fontSize } : spec,
+    disableFit: (disableFit || !!measuredLines) && !isSolo,
     onFitScale,
     isSolo,
     isPackedLines,
@@ -251,7 +324,7 @@ export function WordSequenceText({
       >
         <motion.div
           ref={textRef}
-          key={`${playKey}-${staticRender ? "revealed" : "animated"}`}
+          key={`${playKey}-${staticRender ? "revealed" : "animated"}-${layoutKey}`}
           className={
             isPackedLines
               ? "flex flex-col items-stretch"
@@ -285,7 +358,7 @@ export function WordSequenceText({
           <WordSequenceLines
             isVietnamese={isPackedLines}
             lineSpacingScale={lineSpacingScale}
-            vietnameseLines={packedLayout.lines}
+            vietnameseLines={measuredLines?.lines ?? packedLayout.lines}
             words={words}
             emphasized={emphasized}
             phraseKeys={phraseKeys}

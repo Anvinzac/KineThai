@@ -89,10 +89,12 @@ function StageText({
   | "entrance"
   | "fitAsUnit"
   | "dataEmphasis"
+  | "boundPhrases"
   | "secondaryEmphasis"
   | "allowFrameEmphasis"
   | "emphasisPool"
   | "timeScale"
+  | "measuredLayout"
 >) {
   const [still] = useState(reducedMotion || !playing);
   return (
@@ -123,6 +125,7 @@ export function VocabularyStage({
   emphasisPool,
   revealY,
   timeScale = 1,
+  textBudget,
 }: {
   stage: LearningStage;
   word: VocabularyWord;
@@ -154,6 +157,11 @@ export function VocabularyStage({
   revealY: number;
   /** Reading-pace stretch on the words' read-out; matches the page-duration stretch. */
   timeScale?: number;
+  /**
+   * Limits for a clue page's measured layout: its largest font and its vertical budget.
+   * With them, a Vietnamese clue is broken into lines from the real width of its words.
+   */
+  textBudget?: React.ComponentProps<typeof WordSequenceText>["measuredLayout"];
 }) {
   const details = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -226,10 +234,14 @@ export function VocabularyStage({
                 entrance={spec.entrance}
                 fitAsUnit={!!stage.reveal}
                 dataEmphasis={stage.dataEmphasis}
+                boundPhrases={stage.boundPhrases}
                 secondaryEmphasis={stage.secondaryEmphasis}
                 allowFrameEmphasis={allowFrameEmphasis}
                 emphasisPool={emphasisPool}
                 timeScale={timeScale}
+                // The answer is one word fitted as a unit; only clue pages are broken
+                // into lines.
+                measuredLayout={stage.reveal ? undefined : textBudget}
               />
             </motion.div>
           </motion.div>
