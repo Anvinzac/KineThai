@@ -1,13 +1,12 @@
 {
-  "revision": "0c629306a66bef0a0e23b1b2",
+  "revision": "904acb0a7ec8b1c99cb03f94",
   "name": "WordCrawler en-v3-b2 deck",
-  "count": 11,
+  "count": 10,
   "topics": [
     "character",
     "communication",
     "daily",
     "emotion",
-    "money",
     "technology",
     "thinking",
     "time",
@@ -36,14 +35,14 @@
         "thinking"
       ],
       "level": "B2",
+      "chars": 7,
+      "initial": "C",
       "usage": [
         {
           "en": "Kids are naturally _____ about the world around them.",
           "vi": "Trẻ_con vốn tò_mò | về thế_giới xung_quanh."
         }
-      ],
-      "chars": 7,
-      "initial": "C"
+      ]
     },
     {
       "id": "patient",
@@ -62,14 +61,14 @@
         "character"
       ],
       "level": "B2",
+      "chars": 7,
+      "initial": "P",
       "usage": [
         {
           "en": "Please be _____; the doctor will see you soon.",
           "vi": "Xin hãy kiên_nhẫn, bác_sĩ sẽ=khám | cho bạn ngay."
         }
-      ],
-      "chars": 7,
-      "initial": "P"
+      ]
     },
     {
       "id": "stubborn",
@@ -88,14 +87,14 @@
         "character"
       ],
       "level": "B2",
+      "chars": 8,
+      "initial": "S",
       "usage": [
         {
           "en": "He's too _____ to admit he was wrong.",
           "vi": "Anh ta quá bướng_bỉnh | nên không=chịu nhận sai."
         }
-      ],
-      "chars": 8,
-      "initial": "S"
+      ]
     },
     {
       "id": "relieved",
@@ -114,14 +113,14 @@
         "emotion"
       ],
       "level": "B2",
+      "chars": 8,
+      "initial": "R",
       "usage": [
         {
           "en": "We were _____ to hear that everyone was safe.",
           "vi": "Chúng_tôi nhẹ_nhõm | khi nghe tin mọi người đều an_toàn."
         }
-      ],
-      "chars": 8,
-      "initial": "R"
+      ]
     },
     {
       "id": "interrupt",
@@ -140,14 +139,14 @@
         "communication"
       ],
       "level": "B2",
+      "chars": 9,
+      "initial": "I",
       "usage": [
         {
           "en": "Please don't _____ me while I'm speaking.",
           "vi": "Làm ơn đừng ngắt_lời | khi tôi đang=nói."
         }
-      ],
-      "chars": 9,
-      "initial": "I"
+      ]
     },
     {
       "id": "punctual",
@@ -170,14 +169,14 @@
         "toeic"
       ],
       "level": "B2",
+      "chars": 8,
+      "initial": "P",
       "usage": [
         {
           "en": "She is always _____ for meetings.",
           "vi": "Cô ấy luôn đến họp | đúng giờ."
         }
-      ],
-      "chars": 8,
-      "initial": "P"
+      ]
     },
     {
       "id": "delay",
@@ -200,14 +199,14 @@
         "toeic"
       ],
       "level": "B2",
+      "chars": 5,
+      "initial": "D",
       "usage": [
         {
           "en": "Heavy traffic may _____ our arrival.",
           "vi": "Kẹt xe có_thể khiến chúng_tôi | đến trễ."
         }
-      ],
-      "chars": 5,
-      "initial": "D"
+      ]
     },
     {
       "id": "efficient",
@@ -231,14 +230,14 @@
         "ielts"
       ],
       "level": "B2",
+      "chars": 9,
+      "initial": "E",
       "usage": [
         {
           "en": "This new heater is more _____ and uses less energy.",
           "vi": "Chiếc máy sưởi mới này | hoạt_động hiệu_quả hơn, tốn ít điện hơn."
         }
-      ],
-      "chars": 9,
-      "initial": "E"
+      ]
     },
     {
       "id": "commute",
@@ -262,14 +261,14 @@
         "ielts"
       ],
       "level": "B2",
+      "chars": 7,
+      "initial": "C",
       "usage": [
         {
           "en": "My daily _____ takes about forty minutes.",
           "vi": "Quãng đường đi làm mỗi ngày của=tôi | mất khoảng bốn mươi phút."
         }
-      ],
-      "chars": 7,
-      "initial": "C"
+      ]
     },
     {
       "id": "rush",
@@ -289,44 +288,14 @@
         "daily"
       ],
       "level": "B2",
+      "chars": 4,
+      "initial": "R",
       "usage": [
         {
           "en": "There's no need to _____, we have time.",
           "vi": "Không=cần vội đâu, mình còn thời_gian."
         }
-      ],
-      "chars": 4,
-      "initial": "R"
-    },
-    {
-      "id": "budget",
-      "word": "budget",
-      "defVi": "Khoản tiền dự_tính | dành để chi cho một việc.",
-      "leadVi": "Đầu tháng chia ngay: tiền nhà, tiền ăn, tiền tiết_kiệm.",
-      "anticipateVi": "Tiêu chữ cái cho khéo nhé!",
-      "emphasis": [
-        "dự tính",
-        "chia ngay"
-      ],
-      "pos": "noun",
-      "ipa": "/ˈbʌdʒ.ɪt/",
-      "topic": "money",
-      "topics": [
-        "money",
-        "work"
-      ],
-      "exams": [
-        "toeic"
-      ],
-      "level": "B2",
-      "usage": [
-        {
-          "en": "We're planning a trip on a tight _____.",
-          "vi": "Chúng_tôi lên kế_hoạch đi chơi | với ngân_sách eo_hẹp."
-        }
-      ],
-      "chars": 6,
-      "initial": "B"
+      ]
     }
   ]
 }

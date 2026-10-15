@@ -1,7 +1,7 @@
 {
-  "revision": "7a3f8a12f3a6183f153d27f3",
+  "revision": "82c139e668272b5f5b18bfef",
   "name": "WordCrawler en-v3-a1 deck",
-  "count": 55,
+  "count": 52,
   "topics": [
     "character",
     "communication",
@@ -40,41 +40,14 @@
         "thinking"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "I",
       "usage": [
         {
           "en": "Can you _____ life without the internet?",
           "vi": "Bạn có tưởng_tượng nổi | cuộc_sống không có mạng không?"
         }
-      ],
-      "chars": 7,
-      "initial": "I"
-    },
-    {
-      "id": "explain",
-      "word": "explain",
-      "defVi": "Trình_bày, giải_thích | để người khác hiểu rõ điều gì.",
-      "leadVi": "Bà hỏi cách chuyển_khoản, cháu kiên_nhẫn chỉ từng bước.",
-      "anticipateVi": "Hiểu rồi thì nói luôn!",
-      "emphasis": [
-        "giải thích",
-        "từng bước"
-      ],
-      "pos": "verb",
-      "ipa": "/ɪkˈspleɪn/",
-      "topic": "communication",
-      "topics": [
-        "communication",
-        "study"
-      ],
-      "level": "A1",
-      "usage": [
-        {
-          "en": "Can you _____ this rule to me?",
-          "vi": "Bạn giải_thích luật này | cho mình được không?"
-        }
-      ],
-      "chars": 7,
-      "initial": "E"
+      ]
     },
     {
       "id": "decide",
@@ -93,14 +66,14 @@
         "thinking"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "D",
       "usage": [
         {
           "en": "We need to _____ by Friday.",
           "vi": "Chúng_ta cần quyết_định | trước thứ_Sáu."
         }
-      ],
-      "chars": 6,
-      "initial": "D"
+      ]
     },
     {
       "id": "forget",
@@ -119,14 +92,14 @@
         "thinking"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "F",
       "usage": [
         {
           "en": "Don't _____ your umbrella.",
           "vi": "Đừng=quên mang ô nhé."
         }
-      ],
-      "chars": 6,
-      "initial": "F"
+      ]
     },
     {
       "id": "neighbor",
@@ -146,14 +119,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 8,
+      "initial": "N",
       "usage": [
         {
           "en": "My _____ often waters my plants when I travel.",
           "vi": "Bác hàng_xóm hay tưới cây giúp tôi | mỗi khi tôi đi xa."
         }
-      ],
-      "chars": 8,
-      "initial": "N"
+      ]
     },
     {
       "id": "hungry",
@@ -173,14 +146,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "H",
       "usage": [
         {
           "en": "I'm so _____, let's get some pho.",
           "vi": "Mình đói quá, đi ăn=phở đi."
         }
-      ],
-      "chars": 6,
-      "initial": "H"
+      ]
     },
     {
       "id": "thirsty",
@@ -200,14 +173,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "T",
       "usage": [
         {
           "en": "Can I have some water? I'm really _____.",
           "vi": "Cho mình xin ít nước, mình khát quá."
         }
-      ],
-      "chars": 7,
-      "initial": "T"
+      ]
     },
     {
       "id": "tired",
@@ -227,14 +200,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "T",
       "usage": [
         {
           "en": "I'm too _____ to cook tonight.",
           "vi": "Tối nay mình mệt quá, chẳng muốn nấu_nướng."
         }
-      ],
-      "chars": 5,
-      "initial": "T"
+      ]
     },
     {
       "id": "angry",
@@ -253,14 +226,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "A",
       "usage": [
         {
           "en": "Mom gets _____ when I come home late.",
           "vi": "Mẹ nổi_giận | mỗi khi tôi về=nhà muộn."
         }
-      ],
-      "chars": 5,
-      "initial": "A"
+      ]
     },
     {
       "id": "afraid",
@@ -279,14 +252,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "A",
       "usage": [
         {
           "en": "My little brother is _____ of the dark.",
           "vi": "Em_trai tôi | sợ bóng_tối."
         }
-      ],
-      "chars": 6,
-      "initial": "A"
+      ]
     },
     {
       "id": "bored",
@@ -305,14 +278,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "B",
       "usage": [
         {
           "en": "The kids got _____ during the long drive.",
           "vi": "Bọn=trẻ thấy chán | trong chuyến xe dài."
         }
-      ],
-      "chars": 5,
-      "initial": "B"
+      ]
     },
     {
       "id": "busy",
@@ -332,14 +305,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "B",
       "usage": [
         {
           "en": "Sorry, I'm _____ right now. Can I call you back?",
           "vi": "Xin_lỗi, giờ mình đang=bận. | Lát mình gọi lại nhé?"
         }
-      ],
-      "chars": 4,
-      "initial": "B"
+      ]
     },
     {
       "id": "cheap",
@@ -359,14 +332,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "C",
       "usage": [
         {
           "en": "This street food is tasty and _____.",
           "vi": "Món=ăn đường_phố này | ngon mà rẻ."
         }
-      ],
-      "chars": 5,
-      "initial": "C"
+      ]
     },
     {
       "id": "expensive",
@@ -385,14 +358,14 @@
         "money"
       ],
       "level": "A1",
+      "chars": 9,
+      "initial": "E",
       "usage": [
         {
           "en": "Rent in the city center is very _____.",
           "vi": "Tiền thuê nhà | ở trung_tâm rất=đắt."
         }
-      ],
-      "chars": 9,
-      "initial": "E"
+      ]
     },
     {
       "id": "delicious",
@@ -411,14 +384,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 9,
+      "initial": "D",
       "usage": [
         {
           "en": "Grandma's spring rolls are _____.",
           "vi": "Chả_giò bà làm | ngon tuyệt."
         }
-      ],
-      "chars": 9,
-      "initial": "D"
+      ]
     },
     {
       "id": "dangerous",
@@ -438,14 +411,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 9,
+      "initial": "D",
       "usage": [
         {
           "en": "It's _____ to swim here at night.",
           "vi": "Bơi ở đây vào ban_đêm | rất=nguy_hiểm."
         }
-      ],
-      "chars": 9,
-      "initial": "D"
+      ]
     },
     {
       "id": "famous",
@@ -464,14 +437,14 @@
         "society"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "F",
       "usage": [
         {
           "en": "Hoi An is _____ for its lanterns.",
           "vi": "Hội_An nổi_tiếng | với những chiếc=đèn_lồng."
         }
-      ],
-      "chars": 6,
-      "initial": "F"
+      ]
     },
     {
       "id": "quiet",
@@ -490,14 +463,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "Q",
       "usage": [
         {
           "en": "Please be _____, the baby is sleeping.",
           "vi": "Làm_ơn giữ yên_lặng, em_bé đang=ngủ."
         }
-      ],
-      "chars": 5,
-      "initial": "Q"
+      ]
     },
     {
       "id": "dirty",
@@ -516,14 +489,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "D",
       "usage": [
         {
           "en": "Take off your _____ shoes before coming in.",
           "vi": "Cởi đôi=giày dơ ra | trước khi vào=nhà nhé."
         }
-      ],
-      "chars": 5,
-      "initial": "D"
+      ]
     },
     {
       "id": "funny",
@@ -543,14 +516,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "F",
       "usage": [
         {
           "en": "My uncle tells really _____ stories.",
           "vi": "Chú tôi | kể chuyện rất=buồn_cười."
         }
-      ],
-      "chars": 5,
-      "initial": "F"
+      ]
     },
     {
       "id": "excited",
@@ -569,14 +542,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "E",
       "usage": [
         {
           "en": "The children are _____ about the trip.",
           "vi": "Bọn=trẻ đang=háo_hức | về chuyến đi."
         }
-      ],
-      "chars": 7,
-      "initial": "E"
+      ]
     },
     {
       "id": "friendly",
@@ -596,41 +569,14 @@
         "society"
       ],
       "level": "A1",
+      "chars": 8,
+      "initial": "F",
       "usage": [
         {
           "en": "The staff at this hotel are very _____.",
           "vi": "Nhân_viên khách_sạn này | rất=thân_thiện."
         }
-      ],
-      "chars": 8,
-      "initial": "F"
-    },
-    {
-      "id": "healthy",
-      "word": "healthy",
-      "defVi": "Cơ_thể khỏe_mạnh | và ít khi ốm_đau.",
-      "leadVi": "Ông bảy mươi tuổi, sáng nào cũng chạy_bộ quanh hồ.",
-      "anticipateVi": "Rau xanh hay trà_sữa?",
-      "emphasis": [
-        "khỏe mạnh",
-        "chạy bộ"
-      ],
-      "pos": "adj",
-      "ipa": "/ˈhel.θi/",
-      "topic": "health",
-      "topics": [
-        "health",
-        "food"
-      ],
-      "level": "A1",
-      "usage": [
-        {
-          "en": "Eating vegetables keeps you _____.",
-          "vi": "Ăn rau | giúp bạn khỏe_mạnh."
-        }
-      ],
-      "chars": 7,
-      "initial": "H"
+      ]
     },
     {
       "id": "umbrella",
@@ -649,14 +595,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 8,
+      "initial": "U",
       "usage": [
         {
           "en": "Take an _____, it might rain.",
           "vi": "Mang theo cây=dù nhé, trời có_thể mưa."
         }
-      ],
-      "chars": 8,
-      "initial": "U"
+      ]
     },
     {
       "id": "passport",
@@ -675,14 +621,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 8,
+      "initial": "P",
       "usage": [
         {
           "en": "You need a _____ to travel abroad.",
           "vi": "Bạn cần hộ_chiếu | để ra nước_ngoài."
         }
-      ],
-      "chars": 8,
-      "initial": "P"
+      ]
     },
     {
       "id": "breakfast",
@@ -702,14 +648,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 9,
+      "initial": "B",
       "usage": [
         {
           "en": "I usually have pho for _____.",
           "vi": "Bữa_sáng tôi hay ăn=phở."
         }
-      ],
-      "chars": 9,
-      "initial": "B"
+      ]
     },
     {
       "id": "birthday",
@@ -729,14 +675,14 @@
         "society"
       ],
       "level": "A1",
+      "chars": 8,
+      "initial": "B",
       "usage": [
         {
           "en": "Happy _____! How old are you now?",
           "vi": "Chúc_mừng sinh_nhật! | Giờ bạn bao_nhiêu tuổi rồi?"
         }
-      ],
-      "chars": 8,
-      "initial": "B"
+      ]
     },
     {
       "id": "kitchen",
@@ -756,14 +702,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "K",
       "usage": [
         {
           "en": "Mom is cooking dinner in the _____.",
           "vi": "Mẹ đang=nấu bữa=tối | trong bếp."
         }
-      ],
-      "chars": 7,
-      "initial": "K"
+      ]
     },
     {
       "id": "holiday",
@@ -783,14 +729,14 @@
         "time"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "H",
       "usage": [
         {
           "en": "We spent our summer _____ in Nha Trang.",
           "vi": "Chúng_tôi nghỉ hè | ở Nha_Trang."
         }
-      ],
-      "chars": 7,
-      "initial": "H"
+      ]
     },
     {
       "id": "homework",
@@ -809,14 +755,14 @@
         "study"
       ],
       "level": "A1",
+      "chars": 8,
+      "initial": "H",
       "usage": [
         {
           "en": "Have you finished your _____ yet?",
           "vi": "Con làm xong bài_tập chưa?"
         }
-      ],
-      "chars": 8,
-      "initial": "H"
+      ]
     },
     {
       "id": "weekend",
@@ -836,14 +782,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "W",
       "usage": [
         {
           "en": "What are you doing this _____?",
           "vi": "Cuối_tuần này | bạn làm gì?"
         }
-      ],
-      "chars": 7,
-      "initial": "W"
+      ]
     },
     {
       "id": "island",
@@ -863,14 +809,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "I",
       "usage": [
         {
           "en": "We took a boat to a small _____.",
           "vi": "Chúng_tôi đi thuyền | ra một hòn=đảo nhỏ."
         }
-      ],
-      "chars": 6,
-      "initial": "I"
+      ]
     },
     {
       "id": "library",
@@ -889,14 +835,14 @@
         "study"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "L",
       "usage": [
         {
           "en": "I borrowed this book from the _____.",
           "vi": "Tôi mượn cuốn=sách này | ở thư_viện."
         }
-      ],
-      "chars": 7,
-      "initial": "L"
+      ]
     },
     {
       "id": "ticket",
@@ -916,14 +862,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "T",
       "usage": [
         {
           "en": "I bought a _____ for the 8 p.m. show.",
           "vi": "Tôi đã=mua vé | suất chiếu 8 giờ tối."
         }
-      ],
-      "chars": 6,
-      "initial": "T"
+      ]
     },
     {
       "id": "traffic",
@@ -943,14 +889,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "T",
       "usage": [
         {
           "en": "The _____ is terrible this morning.",
           "vi": "Sáng nay | đường kẹt kinh_khủng."
         }
-      ],
-      "chars": 7,
-      "initial": "T"
+      ]
     },
     {
       "id": "hobby",
@@ -969,14 +915,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "H",
       "usage": [
         {
           "en": "My _____ is playing the guitar.",
           "vi": "Sở_thích của=tôi | là chơi đàn ghi-ta."
         }
-      ],
-      "chars": 5,
-      "initial": "H"
+      ]
     },
     {
       "id": "menu",
@@ -995,14 +941,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "M",
       "usage": [
         {
           "en": "Could we see the _____, please?",
           "vi": "Cho chúng_tôi xem thực_đơn | được không?"
         }
-      ],
-      "chars": 4,
-      "initial": "M"
+      ]
     },
     {
       "id": "market",
@@ -1022,14 +968,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "M",
       "usage": [
         {
           "en": "Mom goes to the _____ every morning.",
           "vi": "Sáng nào mẹ cũng | đi chợ."
         }
-      ],
-      "chars": 6,
-      "initial": "M"
+      ]
     },
     {
       "id": "festival",
@@ -1049,14 +995,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 8,
+      "initial": "F",
       "usage": [
         {
           "en": "The flower _____ in Da Lat is beautiful.",
           "vi": "Lễ_hội hoa ở Đà_Lạt | rất=đẹp."
         }
-      ],
-      "chars": 8,
-      "initial": "F"
+      ]
     },
     {
       "id": "airport",
@@ -1075,14 +1021,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "A",
       "usage": [
         {
           "en": "We need to be at the _____ by 6 a.m.",
           "vi": "Chúng_ta phải có_mặt ở sân_bay | trước 6 giờ sáng."
         }
-      ],
-      "chars": 7,
-      "initial": "A"
+      ]
     },
     {
       "id": "mistake",
@@ -1102,14 +1048,14 @@
         "work"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "M",
       "usage": [
         {
           "en": "I made a big _____ in my report.",
           "vi": "Tôi mắc một=lỗi to | trong bản báo_cáo."
         }
-      ],
-      "chars": 7,
-      "initial": "M"
+      ]
     },
     {
       "id": "advice",
@@ -1128,14 +1074,14 @@
         "communication"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "A",
       "usage": [
         {
           "en": "Can you give me some _____?",
           "vi": "Bạn cho mình | vài lời_khuyên được không?"
         }
-      ],
-      "chars": 6,
-      "initial": "A"
+      ]
     },
     {
       "id": "dictionary",
@@ -1154,14 +1100,14 @@
         "study"
       ],
       "level": "A1",
+      "chars": 10,
+      "initial": "D",
       "usage": [
         {
           "en": "Look up the word in a _____.",
           "vi": "Hãy=tra từ đó | trong từ_điển."
         }
-      ],
-      "chars": 10,
-      "initial": "D"
+      ]
     },
     {
       "id": "arrive",
@@ -1180,14 +1126,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "A",
       "usage": [
         {
           "en": "What time does the train _____?",
           "vi": "Mấy giờ | tàu tới nơi?"
         }
-      ],
-      "chars": 6,
-      "initial": "A"
+      ]
     },
     {
       "id": "laugh",
@@ -1206,14 +1152,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "L",
       "usage": [
         {
           "en": "Her jokes always make me _____.",
           "vi": "Mấy câu đùa của=cô=ấy | lúc nào cũng làm tôi cười."
         }
-      ],
-      "chars": 5,
-      "initial": "L"
+      ]
     },
     {
       "id": "climb",
@@ -1233,14 +1179,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "C",
       "usage": [
         {
           "en": "Let's _____ to the top of the hill.",
           "vi": "Mình leo lên | đỉnh đồi nhé."
         }
-      ],
-      "chars": 5,
-      "initial": "C"
+      ]
     },
     {
       "id": "share",
@@ -1260,14 +1206,14 @@
         "communication"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "S",
       "usage": [
         {
           "en": "Can I _____ your table?",
           "vi": "Mình ngồi chung bàn với bạn | được không?"
         }
-      ],
-      "chars": 5,
-      "initial": "S"
+      ]
     },
     {
       "id": "wait",
@@ -1287,14 +1233,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "W",
       "usage": [
         {
           "en": "Please _____ here for a moment.",
           "vi": "Vui_lòng đợi ở đây | một lát."
         }
-      ],
-      "chars": 4,
-      "initial": "W"
+      ]
     },
     {
       "id": "choose",
@@ -1314,14 +1260,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "C",
       "usage": [
         {
           "en": "You can _____ any color you like.",
           "vi": "Bạn có_thể chọn | bất_kỳ màu nào bạn thích."
         }
-      ],
-      "chars": 6,
-      "initial": "C"
+      ]
     },
     {
       "id": "believe",
@@ -1340,14 +1286,14 @@
         "thinking"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "B",
       "usage": [
         {
           "en": "I can't _____ it's already October!",
           "vi": "Không=thể tin | là đã=tháng Mười rồi!"
         }
-      ],
-      "chars": 7,
-      "initial": "B"
+      ]
     },
     {
       "id": "enjoy",
@@ -1367,14 +1313,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "E",
       "usage": [
         {
           "en": "Did you _____ the party?",
           "vi": "Bạn có=vui ở bữa_tiệc không?"
         }
-      ],
-      "chars": 5,
-      "initial": "E"
+      ]
     },
     {
       "id": "relax",
@@ -1394,14 +1340,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "R",
       "usage": [
         {
           "en": "Sit down and _____ for a bit.",
           "vi": "Ngồi xuống | nghỉ_ngơi chút đi."
         }
-      ],
-      "chars": 5,
-      "initial": "R"
+      ]
     },
     {
       "id": "spend",
@@ -1421,41 +1367,14 @@
         "time"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "S",
       "usage": [
         {
           "en": "How much did you _____ on that phone?",
           "vi": "Bạn đã=tốn bao_nhiêu tiền | cho cái=điện_thoại đó?"
         }
-      ],
-      "chars": 5,
-      "initial": "S"
-    },
-    {
-      "id": "wake",
-      "word": "wake",
-      "defVi": "Thôi ngủ và tỉnh_giấc, mở mắt ra | đón ngày mới.",
-      "leadVi": "Tiếng gà gáy ngoài sân, mắt nhắm mắt mở bò dậy.",
-      "anticipateVi": "Reng reng reng!",
-      "emphasis": [
-        "tỉnh giấc",
-        "bò dậy"
-      ],
-      "pos": "verb",
-      "ipa": "/weɪk/",
-      "topic": "daily",
-      "topics": [
-        "daily",
-        "time"
-      ],
-      "level": "A1",
-      "usage": [
-        {
-          "en": "I usually _____ up at six.",
-          "vi": "Tôi thường dậy | lúc sáu giờ."
-        }
-      ],
-      "chars": 4,
-      "initial": "W"
+      ]
     },
     {
       "id": "travel",
@@ -1474,14 +1393,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "T",
       "usage": [
         {
           "en": "I want to _____ around Vietnam by motorbike.",
           "vi": "Tôi muốn đi du_lịch | vòng quanh Việt_Nam bằng xe_máy."
         }
-      ],
-      "chars": 6,
-      "initial": "T"
+      ]
     }
   ]
 }

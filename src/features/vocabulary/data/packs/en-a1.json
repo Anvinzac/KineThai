@@ -1,7 +1,7 @@
 {
-  "revision": "56a3fe5624d8053dfd87cff8",
+  "revision": "c8d44b4100fb01b79f2d39fe",
   "name": "WordCrawler en-a1 deck",
-  "count": 100,
+  "count": 98,
   "topics": [
     "communication",
     "daily",
@@ -40,14 +40,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "A",
       "usage": [
         {
           "en": "I eat an _____ every morning.",
           "vi": "Sáng nào tôi cũng=ăn một=quả táo."
         }
-      ],
-      "chars": 5,
-      "initial": "A"
+      ]
     },
     {
       "id": "bag",
@@ -66,14 +66,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "B",
       "usage": [
         {
           "en": "She put her phone in her _____.",
           "vi": "Cô ấy cất điện_thoại | vào=túi_xách."
         }
-      ],
-      "chars": 3,
-      "initial": "B"
+      ]
     },
     {
       "id": "bed",
@@ -92,14 +92,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "B",
       "usage": [
         {
           "en": "I go to _____ at ten o'clock.",
           "vi": "Tôi đi ngủ | lúc mười giờ."
         }
-      ],
-      "chars": 3,
-      "initial": "B"
+      ]
     },
     {
       "id": "bike",
@@ -119,14 +119,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "B",
       "usage": [
         {
           "en": "I ride my _____ to school.",
           "vi": "Tôi đạp xe | đến trường."
         }
-      ],
-      "chars": 4,
-      "initial": "B"
+      ]
     },
     {
       "id": "bird",
@@ -145,14 +145,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "B",
       "usage": [
         {
           "en": "A small _____ is singing in the tree.",
           "vi": "Một con=chim nhỏ | đang hót trên cây."
         }
-      ],
-      "chars": 4,
-      "initial": "B"
+      ]
     },
     {
       "id": "book",
@@ -172,14 +172,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "B",
       "usage": [
         {
           "en": "This _____ is very interesting.",
           "vi": "Cuốn=sách này | rất=thú_vị."
         }
-      ],
-      "chars": 4,
-      "initial": "B"
+      ]
     },
     {
       "id": "bread",
@@ -198,14 +198,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "B",
       "usage": [
         {
           "en": "I have _____ and milk for breakfast.",
           "vi": "Bữa sáng tôi ăn bánh_mì | với sữa."
         }
-      ],
-      "chars": 5,
-      "initial": "B"
+      ]
     },
     {
       "id": "brother",
@@ -225,14 +225,14 @@
         "society"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "B",
       "usage": [
         {
           "en": "My _____ is two years older than me.",
           "vi": "Anh trai tôi | lớn hơn tôi hai tuổi."
         }
-      ],
-      "chars": 7,
-      "initial": "B"
+      ]
     },
     {
       "id": "bus",
@@ -251,14 +251,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "B",
       "usage": [
         {
           "en": "I take the _____ to work.",
           "vi": "Tôi đi xe_buýt | đi làm."
         }
-      ],
-      "chars": 3,
-      "initial": "B"
+      ]
     },
     {
       "id": "cake",
@@ -277,14 +277,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "C",
       "usage": [
         {
           "en": "Mom made a chocolate _____ for my birthday.",
           "vi": "Mẹ làm bánh sô_cô_la | cho=sinh_nhật tôi."
         }
-      ],
-      "chars": 4,
-      "initial": "C"
+      ]
     },
     {
       "id": "car",
@@ -303,14 +303,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "C",
       "usage": [
         {
           "en": "My father drives a red _____.",
           "vi": "Bố tôi lái một=chiếc ô_tô đỏ."
         }
-      ],
-      "chars": 3,
-      "initial": "C"
+      ]
     },
     {
       "id": "cat",
@@ -330,14 +330,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "C",
       "usage": [
         {
           "en": "Our _____ sleeps on the sofa.",
           "vi": "Con=mèo nhà tôi | ngủ trên ghế dài."
         }
-      ],
-      "chars": 3,
-      "initial": "C"
+      ]
     },
     {
       "id": "chair",
@@ -356,14 +356,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "C",
       "usage": [
         {
           "en": "Please sit on this _____.",
           "vi": "Mời bạn ngồi | lên chiếc=ghế này."
         }
-      ],
-      "chars": 5,
-      "initial": "C"
+      ]
     },
     {
       "id": "child",
@@ -383,14 +383,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "C",
       "usage": [
         {
           "en": "The _____ is playing in the garden.",
           "vi": "Đứa trẻ | đang=chơi trong vườn."
         }
-      ],
-      "chars": 5,
-      "initial": "C"
+      ]
     },
     {
       "id": "city",
@@ -410,14 +410,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "C",
       "usage": [
         {
           "en": "Hanoi is a big _____.",
           "vi": "Hà_Nội | là một=thành_phố lớn."
         }
-      ],
-      "chars": 4,
-      "initial": "C"
+      ]
     },
     {
       "id": "clock",
@@ -437,14 +437,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "C",
       "usage": [
         {
           "en": "The _____ on the wall is slow.",
           "vi": "Cái=đồng_hồ trên tường | chạy chậm."
         }
-      ],
-      "chars": 5,
-      "initial": "C"
+      ]
     },
     {
       "id": "coat",
@@ -463,14 +463,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "C",
       "usage": [
         {
           "en": "Put on your _____, it's cold outside.",
           "vi": "Mặc áo khoác vào, | ngoài trời lạnh đấy."
         }
-      ],
-      "chars": 4,
-      "initial": "C"
+      ]
     },
     {
       "id": "cold",
@@ -490,14 +490,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "C",
       "usage": [
         {
           "en": "It is very _____ today.",
           "vi": "Hôm nay | trời rất=lạnh."
         }
-      ],
-      "chars": 4,
-      "initial": "C"
+      ]
     },
     {
       "id": "cook",
@@ -517,14 +517,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "C",
       "usage": [
         {
           "en": "My mother _____ dinner every evening.",
           "vi": "Mẹ tôi | nấu bữa tối hằng ngày."
         }
-      ],
-      "chars": 4,
-      "initial": "C"
+      ]
     },
     {
       "id": "cup",
@@ -544,14 +544,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "C",
       "usage": [
         {
           "en": "Would you like a _____ of tea?",
           "vi": "Bạn uống một=tách trà nhé?"
         }
-      ],
-      "chars": 3,
-      "initial": "C"
+      ]
     },
     {
       "id": "dance",
@@ -571,14 +571,14 @@
         "society"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "D",
       "usage": [
         {
           "en": "They love to _____ at parties.",
           "vi": "Họ thích nhảy múa | trong các=bữa tiệc."
         }
-      ],
-      "chars": 5,
-      "initial": "D"
+      ]
     },
     {
       "id": "day",
@@ -597,14 +597,14 @@
         "time"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "D",
       "usage": [
         {
           "en": "There are seven _____s in a week.",
           "vi": "Một tuần | có bảy ngày."
         }
-      ],
-      "chars": 3,
-      "initial": "D"
+      ]
     },
     {
       "id": "desk",
@@ -624,14 +624,14 @@
         "work"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "D",
       "usage": [
         {
           "en": "My books are on my _____.",
           "vi": "Sách của=tôi | nằm trên bàn học."
         }
-      ],
-      "chars": 4,
-      "initial": "D"
+      ]
     },
     {
       "id": "dog",
@@ -651,14 +651,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "D",
       "usage": [
         {
           "en": "The _____ is barking at the gate.",
           "vi": "Con=chó | đang=sủa ở cổng."
         }
-      ],
-      "chars": 3,
-      "initial": "D"
+      ]
     },
     {
       "id": "door",
@@ -677,14 +677,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "D",
       "usage": [
         {
           "en": "Please close the _____.",
           "vi": "Làm ơn | đóng cửa lại."
         }
-      ],
-      "chars": 4,
-      "initial": "D"
+      ]
     },
     {
       "id": "drink",
@@ -704,14 +704,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "D",
       "usage": [
         {
           "en": "You should _____ more water.",
           "vi": "Bạn nên uống | nhiều nước hơn."
         }
-      ],
-      "chars": 5,
-      "initial": "D"
+      ]
     },
     {
       "id": "egg",
@@ -730,14 +730,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "E",
       "usage": [
         {
           "en": "I want a fried _____ for breakfast.",
           "vi": "Tôi muốn ăn trứng ốp | cho=bữa sáng."
         }
-      ],
-      "chars": 3,
-      "initial": "E"
+      ]
     },
     {
       "id": "eye",
@@ -757,14 +757,14 @@
         "perception"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "E",
       "usage": [
         {
           "en": "She has big brown _____s.",
           "vi": "Cô ấy | có đôi mắt nâu to."
         }
-      ],
-      "chars": 3,
-      "initial": "E"
+      ]
     },
     {
       "id": "family",
@@ -784,14 +784,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "F",
       "usage": [
         {
           "en": "I live with my _____.",
           "vi": "Tôi sống | cùng gia_đình."
         }
-      ],
-      "chars": 6,
-      "initial": "F"
+      ]
     },
     {
       "id": "farm",
@@ -811,14 +811,14 @@
         "work"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "F",
       "usage": [
         {
           "en": "My uncle has a big _____.",
           "vi": "Chú tôi | có một=trang_trại lớn."
         }
-      ],
-      "chars": 4,
-      "initial": "F"
+      ]
     },
     {
       "id": "father",
@@ -838,14 +838,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "F",
       "usage": [
         {
           "en": "My _____ is a doctor.",
           "vi": "Bố tôi | là bác_sĩ."
         }
-      ],
-      "chars": 6,
-      "initial": "F"
+      ]
     },
     {
       "id": "fish",
@@ -865,14 +865,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "F",
       "usage": [
         {
           "en": "We had _____ for dinner.",
           "vi": "Bữa tối | chúng_tôi ăn cá."
         }
-      ],
-      "chars": 4,
-      "initial": "F"
+      ]
     },
     {
       "id": "flower",
@@ -891,14 +891,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "F",
       "usage": [
         {
           "en": "She gave me a red _____.",
           "vi": "Cô ấy tặng tôi | một=bông hoa đỏ."
         }
-      ],
-      "chars": 6,
-      "initial": "F"
+      ]
     },
     {
       "id": "friend",
@@ -918,14 +918,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "F",
       "usage": [
         {
           "en": "Tom is my best _____.",
           "vi": "Tom là bạn thân nhất | của=tôi."
         }
-      ],
-      "chars": 6,
-      "initial": "F"
+      ]
     },
     {
       "id": "fruit",
@@ -945,14 +945,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "F",
       "usage": [
         {
           "en": "Eat more fresh _____.",
           "vi": "Hãy ăn | nhiều trái_cây tươi."
         }
-      ],
-      "chars": 5,
-      "initial": "F"
+      ]
     },
     {
       "id": "game",
@@ -971,14 +971,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "G",
       "usage": [
         {
           "en": "Let's play a _____ after dinner.",
           "vi": "Ăn tối xong | mình chơi trò_chơi nhé."
         }
-      ],
-      "chars": 4,
-      "initial": "G"
+      ]
     },
     {
       "id": "garden",
@@ -998,14 +998,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "G",
       "usage": [
         {
           "en": "We grow vegetables in our _____.",
           "vi": "Chúng_tôi trồng rau | trong vườn."
         }
-      ],
-      "chars": 6,
-      "initial": "G"
+      ]
     },
     {
       "id": "glass",
@@ -1025,14 +1025,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "G",
       "usage": [
         {
           "en": "Can I have a _____ of water?",
           "vi": "Cho tôi | một=ly nước nhé?"
         }
-      ],
-      "chars": 5,
-      "initial": "G"
+      ]
     },
     {
       "id": "happy",
@@ -1051,14 +1051,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "H",
       "usage": [
         {
           "en": "I am very _____ to see you.",
           "vi": "Tôi rất=vui | được gặp bạn."
         }
-      ],
-      "chars": 5,
-      "initial": "H"
+      ]
     },
     {
       "id": "hat",
@@ -1077,14 +1077,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "H",
       "usage": [
         {
           "en": "Wear a _____, it's sunny.",
           "vi": "Đội mũ vào, | trời nắng đấy."
         }
-      ],
-      "chars": 3,
-      "initial": "H"
+      ]
     },
     {
       "id": "help",
@@ -1104,14 +1104,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "H",
       "usage": [
         {
           "en": "Can you _____ me carry this box?",
           "vi": "Bạn giúp tôi | bê thùng này nhé?"
         }
-      ],
-      "chars": 4,
-      "initial": "H"
+      ]
     },
     {
       "id": "home",
@@ -1130,14 +1130,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "H",
       "usage": [
         {
           "en": "I am going _____ now.",
           "vi": "Bây_giờ | tôi về nhà."
         }
-      ],
-      "chars": 4,
-      "initial": "H"
+      ]
     },
     {
       "id": "horse",
@@ -1157,14 +1157,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "H",
       "usage": [
         {
           "en": "He rides a white _____.",
           "vi": "Anh ấy cưỡi | một=con ngựa trắng."
         }
-      ],
-      "chars": 5,
-      "initial": "H"
+      ]
     },
     {
       "id": "hot",
@@ -1184,14 +1184,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "H",
       "usage": [
         {
           "en": "Be careful, the soup is _____.",
           "vi": "Cẩn_thận, | canh nóng đấy."
         }
-      ],
-      "chars": 3,
-      "initial": "H"
+      ]
     },
     {
       "id": "house",
@@ -1210,14 +1210,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "H",
       "usage": [
         {
           "en": "They live in a big _____.",
           "vi": "Họ sống | trong một=ngôi nhà lớn."
         }
-      ],
-      "chars": 5,
-      "initial": "H"
+      ]
     },
     {
       "id": "ice",
@@ -1237,14 +1237,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "I",
       "usage": [
         {
           "en": "Put some _____ in my drink, please.",
           "vi": "Cho thêm | ít đá vào ly tôi nhé."
         }
-      ],
-      "chars": 3,
-      "initial": "I"
+      ]
     },
     {
       "id": "juice",
@@ -1263,14 +1263,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "J",
       "usage": [
         {
           "en": "I drink orange _____ every day.",
           "vi": "Ngày nào tôi cũng=uống | nước cam."
         }
-      ],
-      "chars": 5,
-      "initial": "J"
+      ]
     },
     {
       "id": "key",
@@ -1289,67 +1289,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "K",
       "usage": [
         {
           "en": "I can't find my _____.",
           "vi": "Tôi không=tìm thấy | chìa_khóa."
         }
-      ],
-      "chars": 3,
-      "initial": "K"
-    },
-    {
-      "id": "kitchen",
-      "word": "kitchen",
-      "defVi": "Phòng trong nhà | dành cho việc nấu_nướng.",
-      "leadVi": "Nồi_niêu, xoong_chảo | treo ngay_ngắn trên tường.",
-      "anticipateVi": "Mùi thơm từ phòng nào?",
-      "emphasis": [
-        "nấu nướng",
-        "Nồi niêu"
-      ],
-      "pos": "noun",
-      "ipa": "/ˈkɪtʃ.ən/",
-      "topic": "food",
-      "topics": [
-        "food",
-        "daily"
-      ],
-      "level": "A1",
-      "usage": [
-        {
-          "en": "Mom is in the _____.",
-          "vi": "Mẹ đang=ở | trong bếp."
-        }
-      ],
-      "chars": 7,
-      "initial": "K"
-    },
-    {
-      "id": "laugh",
-      "word": "laugh",
-      "defVi": "Phát ra tiếng | khi thấy vui hoặc buồn_cười.",
-      "leadVi": "Nghe chuyện hài, | cả lớp ôm bụng nghiêng_ngả.",
-      "anticipateVi": "Ha ha vì chuyện gì?",
-      "emphasis": [
-        "buồn cười",
-        "ôm bụng"
-      ],
-      "pos": "verb",
-      "ipa": "/lɑːf/",
-      "topic": "emotion",
-      "topics": [
-        "emotion"
-      ],
-      "level": "A1",
-      "usage": [
-        {
-          "en": "The children _____ at the funny clown.",
-          "vi": "Bọn trẻ cười | chú hề vui_nhộn."
-        }
-      ],
-      "chars": 5,
-      "initial": "L"
+      ]
     },
     {
       "id": "leg",
@@ -1368,14 +1315,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "L",
       "usage": [
         {
           "en": "I hurt my _____ playing football.",
           "vi": "Tôi bị đau chân | khi đá bóng."
         }
-      ],
-      "chars": 3,
-      "initial": "L"
+      ]
     },
     {
       "id": "letter",
@@ -1394,14 +1341,14 @@
         "communication"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "L",
       "usage": [
         {
           "en": "I wrote a _____ to my grandma.",
           "vi": "Tôi viết thư | cho=bà."
         }
-      ],
-      "chars": 6,
-      "initial": "L"
+      ]
     },
     {
       "id": "milk",
@@ -1421,14 +1368,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "M",
       "usage": [
         {
           "en": "Babies drink a lot of _____.",
           "vi": "Em bé | uống rất=nhiều sữa."
         }
-      ],
-      "chars": 4,
-      "initial": "M"
+      ]
     },
     {
       "id": "money",
@@ -1447,14 +1394,14 @@
         "money"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "M",
       "usage": [
         {
           "en": "I don't have much _____.",
           "vi": "Tôi không=có | nhiều tiền."
         }
-      ],
-      "chars": 5,
-      "initial": "M"
+      ]
     },
     {
       "id": "moon",
@@ -1473,14 +1420,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "M",
       "usage": [
         {
           "en": "The _____ is full tonight.",
           "vi": "Đêm nay | trăng tròn."
         }
-      ],
-      "chars": 4,
-      "initial": "M"
+      ]
     },
     {
       "id": "morning",
@@ -1499,14 +1446,14 @@
         "time"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "M",
       "usage": [
         {
           "en": "I run every _____.",
           "vi": "Tôi chạy bộ | mỗi buổi sáng."
         }
-      ],
-      "chars": 7,
-      "initial": "M"
+      ]
     },
     {
       "id": "mother",
@@ -1526,14 +1473,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "M",
       "usage": [
         {
           "en": "My _____ cooks very well.",
           "vi": "Mẹ tôi | nấu ăn rất=ngon."
         }
-      ],
-      "chars": 6,
-      "initial": "M"
+      ]
     },
     {
       "id": "mouth",
@@ -1552,14 +1499,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "M",
       "usage": [
         {
           "en": "Open your _____, please.",
           "vi": "Há miệng ra nào."
         }
-      ],
-      "chars": 5,
-      "initial": "M"
+      ]
     },
     {
       "id": "music",
@@ -1579,14 +1526,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "M",
       "usage": [
         {
           "en": "I listen to _____ every night.",
           "vi": "Tối nào tôi cũng=nghe nhạc."
         }
-      ],
-      "chars": 5,
-      "initial": "M"
+      ]
     },
     {
       "id": "name",
@@ -1605,14 +1552,14 @@
         "communication"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "N",
       "usage": [
         {
           "en": "What is your _____?",
           "vi": "Bạn tên là gì?"
         }
-      ],
-      "chars": 4,
-      "initial": "N"
+      ]
     },
     {
       "id": "night",
@@ -1631,14 +1578,14 @@
         "time"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "N",
       "usage": [
         {
           "en": "I can't sleep at _____.",
           "vi": "Ban_đêm | tôi không=ngủ được."
         }
-      ],
-      "chars": 5,
-      "initial": "N"
+      ]
     },
     {
       "id": "nose",
@@ -1658,14 +1605,14 @@
         "perception"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "N",
       "usage": [
         {
           "en": "He has a cold and a red _____.",
           "vi": "Anh ấy bị cảm, | mũi đỏ ửng."
         }
-      ],
-      "chars": 4,
-      "initial": "N"
+      ]
     },
     {
       "id": "open",
@@ -1684,14 +1631,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "O",
       "usage": [
         {
           "en": "Please _____ the window.",
           "vi": "Làm ơn | mở cửa_sổ ra."
         }
-      ],
-      "chars": 4,
-      "initial": "O"
+      ]
     },
     {
       "id": "park",
@@ -1711,14 +1658,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "P",
       "usage": [
         {
           "en": "We walk in the _____ on Sundays.",
           "vi": "Chủ_nhật | chúng_tôi đi dạo công_viên."
         }
-      ],
-      "chars": 4,
-      "initial": "P"
+      ]
     },
     {
       "id": "pen",
@@ -1737,14 +1684,14 @@
         "study"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "P",
       "usage": [
         {
           "en": "Can I use your _____?",
           "vi": "Tôi dùng bút | của=bạn được không?"
         }
-      ],
-      "chars": 3,
-      "initial": "P"
+      ]
     },
     {
       "id": "phone",
@@ -1764,14 +1711,14 @@
         "communication"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "P",
       "usage": [
         {
           "en": "My _____ is ringing.",
           "vi": "Điện_thoại của=tôi | đang=reo."
         }
-      ],
-      "chars": 5,
-      "initial": "P"
+      ]
     },
     {
       "id": "picture",
@@ -1790,14 +1737,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "P",
       "usage": [
         {
           "en": "She drew a _____ of her cat.",
           "vi": "Cô bé vẽ | một=bức tranh về con=mèo."
         }
-      ],
-      "chars": 7,
-      "initial": "P"
+      ]
     },
     {
       "id": "rain",
@@ -1816,14 +1763,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "R",
       "usage": [
         {
           "en": "We stayed home because of the _____.",
           "vi": "Chúng_tôi ở nhà | vì trời mưa."
         }
-      ],
-      "chars": 4,
-      "initial": "R"
+      ]
     },
     {
       "id": "read",
@@ -1842,14 +1789,14 @@
         "study"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "R",
       "usage": [
         {
           "en": "I like to _____ before bed.",
           "vi": "Tôi thích đọc | trước khi ngủ."
         }
-      ],
-      "chars": 4,
-      "initial": "R"
+      ]
     },
     {
       "id": "rice",
@@ -1868,14 +1815,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "R",
       "usage": [
         {
           "en": "We eat _____ every day.",
           "vi": "Ngày nào chúng_tôi cũng=ăn cơm."
         }
-      ],
-      "chars": 4,
-      "initial": "R"
+      ]
     },
     {
       "id": "river",
@@ -1894,14 +1841,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "R",
       "usage": [
         {
           "en": "The _____ is very wide here.",
           "vi": "Ở đây | con=sông rất=rộng."
         }
-      ],
-      "chars": 5,
-      "initial": "R"
+      ]
     },
     {
       "id": "room",
@@ -1920,14 +1867,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "R",
       "usage": [
         {
           "en": "My _____ is small but tidy.",
           "vi": "Phòng tôi | nhỏ nhưng gọn_gàng."
         }
-      ],
-      "chars": 4,
-      "initial": "R"
+      ]
     },
     {
       "id": "run",
@@ -1946,14 +1893,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "R",
       "usage": [
         {
           "en": "I _____ in the park every morning.",
           "vi": "Sáng nào tôi cũng=chạy | trong công_viên."
         }
-      ],
-      "chars": 3,
-      "initial": "R"
+      ]
     },
     {
       "id": "sad",
@@ -1972,14 +1919,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "S",
       "usage": [
         {
           "en": "She felt _____ when her friend left.",
           "vi": "Cô ấy buồn | khi bạn rời đi."
         }
-      ],
-      "chars": 3,
-      "initial": "S"
+      ]
     },
     {
       "id": "school",
@@ -1998,14 +1945,14 @@
         "study"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "S",
       "usage": [
         {
           "en": "I walk to _____ every day.",
           "vi": "Ngày nào tôi cũng=đi bộ | đến trường."
         }
-      ],
-      "chars": 6,
-      "initial": "S"
+      ]
     },
     {
       "id": "sea",
@@ -2025,14 +1972,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "S",
       "usage": [
         {
           "en": "We swam in the _____ last summer.",
           "vi": "Hè năm ngoái | chúng_tôi bơi ở biển."
         }
-      ],
-      "chars": 3,
-      "initial": "S"
+      ]
     },
     {
       "id": "shoe",
@@ -2051,14 +1998,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "S",
       "usage": [
         {
           "en": "These _____s are too small for me.",
           "vi": "Đôi giày này | chật với tôi."
         }
-      ],
-      "chars": 4,
-      "initial": "S"
+      ]
     },
     {
       "id": "shop",
@@ -2078,14 +2025,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "S",
       "usage": [
         {
           "en": "The _____ opens at eight.",
           "vi": "Cửa_hàng | mở cửa lúc tám giờ."
         }
-      ],
-      "chars": 4,
-      "initial": "S"
+      ]
     },
     {
       "id": "sing",
@@ -2105,14 +2052,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "S",
       "usage": [
         {
           "en": "She likes to _____ in the shower.",
           "vi": "Cô ấy thích hát | khi tắm."
         }
-      ],
-      "chars": 4,
-      "initial": "S"
+      ]
     },
     {
       "id": "sister",
@@ -2132,14 +2079,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "S",
       "usage": [
         {
           "en": "My _____ is a nurse.",
           "vi": "Chị gái tôi | là y_tá."
         }
-      ],
-      "chars": 6,
-      "initial": "S"
+      ]
     },
     {
       "id": "sleep",
@@ -2159,14 +2106,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "S",
       "usage": [
         {
           "en": "Babies _____ a lot.",
           "vi": "Em bé | ngủ rất=nhiều."
         }
-      ],
-      "chars": 5,
-      "initial": "S"
+      ]
     },
     {
       "id": "small",
@@ -2185,14 +2132,14 @@
         "general"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "S",
       "usage": [
         {
           "en": "This shirt is too _____ for me.",
           "vi": "Cái=áo này | quá chật với tôi."
         }
-      ],
-      "chars": 5,
-      "initial": "S"
+      ]
     },
     {
       "id": "snow",
@@ -2211,14 +2158,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "S",
       "usage": [
         {
           "en": "Children play in the _____ in winter.",
           "vi": "Mùa đông | trẻ_em chơi đùa trong tuyết."
         }
-      ],
-      "chars": 4,
-      "initial": "S"
+      ]
     },
     {
       "id": "song",
@@ -2238,14 +2185,14 @@
         "emotion"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "S",
       "usage": [
         {
           "en": "This is my favourite _____.",
           "vi": "Đây là | bài hát tôi thích nhất."
         }
-      ],
-      "chars": 4,
-      "initial": "S"
+      ]
     },
     {
       "id": "star",
@@ -2264,14 +2211,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "S",
       "usage": [
         {
           "en": "I can see many _____s tonight.",
           "vi": "Đêm nay | tôi thấy nhiều ngôi sao."
         }
-      ],
-      "chars": 4,
-      "initial": "S"
+      ]
     },
     {
       "id": "sun",
@@ -2290,14 +2237,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "S",
       "usage": [
         {
           "en": "The _____ is very bright today.",
           "vi": "Hôm nay | mặt_trời rất=chói."
         }
-      ],
-      "chars": 3,
-      "initial": "S"
+      ]
     },
     {
       "id": "swim",
@@ -2317,14 +2264,14 @@
         "travel"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "S",
       "usage": [
         {
           "en": "Can you _____?",
           "vi": "Bạn biết bơi không?"
         }
-      ],
-      "chars": 4,
-      "initial": "S"
+      ]
     },
     {
       "id": "table",
@@ -2343,14 +2290,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "T",
       "usage": [
         {
           "en": "Put the plates on the _____.",
           "vi": "Đặt đĩa | lên bàn đi."
         }
-      ],
-      "chars": 5,
-      "initial": "T"
+      ]
     },
     {
       "id": "teacher",
@@ -2370,14 +2317,14 @@
         "work"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "T",
       "usage": [
         {
           "en": "Our _____ is very kind.",
           "vi": "Cô giáo của=chúng_tôi | rất=hiền."
         }
-      ],
-      "chars": 7,
-      "initial": "T"
+      ]
     },
     {
       "id": "tea",
@@ -2396,14 +2343,14 @@
         "food"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "T",
       "usage": [
         {
           "en": "Would you like some green _____?",
           "vi": "Bạn uống | chút trà xanh nhé?"
         }
-      ],
-      "chars": 3,
-      "initial": "T"
+      ]
     },
     {
       "id": "tree",
@@ -2422,14 +2369,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "T",
       "usage": [
         {
           "en": "There is a big _____ in front of my house.",
           "vi": "Trước nhà tôi | có một=cái cây to."
         }
-      ],
-      "chars": 4,
-      "initial": "T"
+      ]
     },
     {
       "id": "walk",
@@ -2449,14 +2396,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "W",
       "usage": [
         {
           "en": "I _____ to work every day.",
           "vi": "Ngày nào tôi cũng=đi bộ | đi làm."
         }
-      ],
-      "chars": 4,
-      "initial": "W"
+      ]
     },
     {
       "id": "wash",
@@ -2476,14 +2423,14 @@
         "health"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "W",
       "usage": [
         {
           "en": "_____ your hands before eating.",
           "vi": "Rửa tay | trước khi ăn nhé."
         }
-      ],
-      "chars": 4,
-      "initial": "W"
+      ]
     },
     {
       "id": "window",
@@ -2502,14 +2449,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 6,
+      "initial": "W",
       "usage": [
         {
           "en": "Can you open the _____?",
           "vi": "Bạn mở cửa_sổ | được không?"
         }
-      ],
-      "chars": 6,
-      "initial": "W"
+      ]
     },
     {
       "id": "write",
@@ -2529,14 +2476,14 @@
         "communication"
       ],
       "level": "A1",
+      "chars": 5,
+      "initial": "W",
       "usage": [
         {
           "en": "Please _____ your name here.",
           "vi": "Hãy viết tên bạn | vào đây."
         }
-      ],
-      "chars": 5,
-      "initial": "W"
+      ]
     },
     {
       "id": "big",
@@ -2555,14 +2502,14 @@
         "general"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "B",
       "usage": [
         {
           "en": "They live in a _____ house.",
           "vi": "Họ sống | trong một=ngôi nhà to."
         }
-      ],
-      "chars": 3,
-      "initial": "B"
+      ]
     },
     {
       "id": "red",
@@ -2581,14 +2528,14 @@
         "general"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "R",
       "usage": [
         {
           "en": "She is wearing a _____ dress.",
           "vi": "Cô ấy mặc | một=chiếc váy đỏ."
         }
-      ],
-      "chars": 3,
-      "initial": "R"
+      ]
     },
     {
       "id": "eat",
@@ -2608,14 +2555,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 3,
+      "initial": "E",
       "usage": [
         {
           "en": "We _____ lunch at noon.",
           "vi": "Chúng_tôi ăn trưa | lúc mười hai giờ."
         }
-      ],
-      "chars": 3,
-      "initial": "E"
+      ]
     },
     {
       "id": "baby",
@@ -2635,14 +2582,14 @@
         "daily"
       ],
       "level": "A1",
+      "chars": 4,
+      "initial": "B",
       "usage": [
         {
           "en": "The _____ is sleeping now.",
           "vi": "Em bé | đang=ngủ."
         }
-      ],
-      "chars": 4,
-      "initial": "B"
+      ]
     },
     {
       "id": "chicken",
@@ -2662,14 +2609,14 @@
         "nature"
       ],
       "level": "A1",
+      "chars": 7,
+      "initial": "C",
       "usage": [
         {
           "en": "We had roast _____ for dinner.",
           "vi": "Bữa tối | chúng_tôi ăn gà quay."
         }
-      ],
-      "chars": 7,
-      "initial": "C"
+      ]
     }
   ]
 }
