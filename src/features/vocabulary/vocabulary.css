@@ -4090,6 +4090,16 @@
     transform: translateY(-50%);
     cursor: ew-resize;
   }
+  /* Spine: follows the rail onto the horizontal axis, still under the dots. */
+  .vocab-onboard[data-landscape] .vocab-onboard-gauge::before {
+    top: 50%;
+    bottom: auto;
+    left: calc(100% / var(--rung-count) / 2);
+    right: calc(100% / var(--rung-count) / 2);
+    width: auto;
+    height: 3px;
+    transform: translateY(-50%);
+  }
   /* Knob: moves left by --rung-index. */
   .vocab-onboard[data-landscape] .vocab-onboard-knob {
     left: calc((var(--rung-index) + 0.5) * 100% / var(--rung-count));
