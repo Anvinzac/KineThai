@@ -3214,7 +3214,7 @@
 .vocab-vault-tip-shape::after {
   content: "";
   position: absolute;
-  width: 7px;
+  width: 8px;
   height: 13px;
   background: var(--tip-fill);
 }
@@ -3262,7 +3262,10 @@
   bottom: -10px;
   height: 13px;
   transform: translateX(-50%);
-  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  /* ~1px flat at the point: an acute single-pixel tip antialiases to near-transparent, which
+     frays the outline into two strokes meeting at a gap. The tiny flat keeps the fill solid
+     so the outline wraps the point as ONE joint. */
+  clip-path: polygon(0 0, 100% 0, 56% 100%, 44% 100%);
 }
 /* Bookmark bubble: directly under the RIGHT (bookmark) key, its tail near the LEFT end (short 1
    side on the left, 2 on the right) — the mirror of the heart's. translateX(-33.3%) brings that
@@ -3282,7 +3285,8 @@
   left: 33.3%;
   right: auto;
   transform: translateX(-50%);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  /* Same 1px-flat tip as the heart's tail (mirrored upward). */
+  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
 }
 @keyframes vocab-vault-bob {
   0%,
