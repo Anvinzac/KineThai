@@ -3848,24 +3848,20 @@
   position: absolute;
   left: 50%;
   top: calc((var(--rung-index) + 0.5) * 100% / var(--rung-count));
-  width: 30px;
-  height: 30px;
-  margin: -15px 0 0 -15px;
-  border: 3px solid #ffffff;
+  width: 45px;
+  height: 45px;
+  margin: -22.5px 0 0 -22.5px;
+  border: 4px solid #ffffff;
   border-radius: 50%;
   background: var(--rung);
   box-shadow:
-    0 0 0 6px color-mix(in srgb, var(--rung) 28%, transparent),
-    0 0 26px color-mix(in srgb, var(--rung) 70%, transparent),
-    0 4px 12px #00000080;
+    0 0 0 9px color-mix(in srgb, var(--rung) 28%, transparent),
+    0 0 34px color-mix(in srgb, var(--rung) 70%, transparent),
+    0 6px 16px #00000080;
   transition:
     top var(--dur-move) var(--ease-spring),
     background var(--dur-move) var(--ease-out),
     box-shadow var(--dur-move) var(--ease-out);
-}
-.vocab-onboard-rail:focus-visible .vocab-onboard-knob {
-  outline: 2px solid #ffffff;
-  outline-offset: 5px;
 }
 .vocab-onboard-foot {
   display: flex;
@@ -4118,7 +4114,7 @@
   .vocab-onboard[data-landscape] .vocab-onboard-knob {
     left: calc((var(--rung-index) + 0.5) * 100% / var(--rung-count));
     top: 50%;
-    margin: -15px 0 0 -15px;
+    margin: -22.5px 0 0 -22.5px;
     transition:
       left var(--dur-move) var(--ease-spring),
       background var(--dur-move) var(--ease-out),
