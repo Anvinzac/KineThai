@@ -3822,8 +3822,19 @@
 }
 /* Runs from the first rung's centre to the last one's. The whole scale is painted on it;
    the ::after shade covers everything BELOW the knob, so what shows is the climb so far. */
-/* The gradient bar was removed: the ladder reads cleaner as dots alone, and the bar's
-   cyan-to-red scale read as a stray coloured line next to the slider. */
+/* A thin neutral spine links the level dots — no cyan-to-red gradient, just a quiet
+   guide so the ladder reads as one slider instead of floating dots. */
+.vocab-onboard-rail::before {
+  content: "";
+  position: absolute;
+  top: calc(100% / var(--rung-count) / 2);
+  bottom: calc(100% / var(--rung-count) / 2);
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: color-mix(in srgb, #ffffff 18%, transparent);
+}
 .vocab-onboard-knob {
   position: absolute;
   left: 50%;
