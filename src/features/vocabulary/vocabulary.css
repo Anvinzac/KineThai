@@ -3283,11 +3283,10 @@
      toward the key (was 15); the bubble moved up with it so the tip still lands on the icon. */
   top: -11px;
   height: 14px;
-  left: 33.3%;
-  right: auto;
-  transform: translateX(-50%);
-  /* Same 1px-flat tip as the heart's tail (mirrored upward). */
-  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+  /* A 1px wider base than the heart's, keeping the same ~50° joint over its extra height. */
+  width: 13px;
+  /* Same true point, mirrored upward. */
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 @keyframes vocab-vault-bob {
   0%,
