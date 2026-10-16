@@ -40,7 +40,8 @@ export function parseCustomPack(text: string, source: string): CustomPack {
   } catch {
     throw new Error("Tệp không phải JSON hợp lệ.");
   }
-  const deck = normalizeDeck(json);
+  // Accept a bare array of words as shorthand for { words: [...] }.
+  const deck = normalizeDeck(Array.isArray(json) ? { words: json } : json);
   if (!deck.count) throw new Error("Gói không có từ nào.");
   return {
     catalog: { revision: hash(JSON.stringify(deck)), ...deck },
