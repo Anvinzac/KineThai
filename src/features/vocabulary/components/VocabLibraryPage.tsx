@@ -12,6 +12,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Library as LibraryIcon, Sparkles } from "lucide-react";
 import { LIBRARY_GROUPS } from "../lib/library";
 import { formatLevelBand } from "../lib/difficulty";
+import { ImportPackPanel } from "./ImportPackPanel";
 import "../vocabulary.css";
 
 /** Show the curated pack shelves. @returns Public library page. */
@@ -35,6 +36,7 @@ export function VocabLibraryPage() {
       </header>
 
       <div className="vocab-library-body">
+        <ImportPackPanel />
         {LIBRARY_GROUPS.map((group) => (
           <section
             className="vocab-library-group"

@@ -5607,3 +5607,97 @@
     opacity: 0;
   }
 }
+/* ── Import your own pack (library) + active-pack chip (feed) ── */
+.vocab-import {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--shell-line);
+  border-radius: 16px;
+}
+.vocab-import-row {
+  display: flex;
+  gap: 8px;
+}
+.vocab-import-url {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--shell-line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--shell-text);
+  font-size: 14px;
+}
+.vocab-import-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border: 1px solid var(--shell-line);
+  border-radius: 12px;
+  background: var(--shell-text);
+  color: var(--shell-bg);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.vocab-import-btn.ghost {
+  background: transparent;
+  color: var(--shell-text);
+}
+.vocab-import-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.vocab-import-active {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--shell-text);
+  font-size: 13px;
+}
+.vocab-import-active > span {
+  flex: 1 1 100%;
+}
+.vocab-import-error {
+  margin: 0;
+  color: var(--destructive, #f87171);
+  font-size: 12px;
+  white-space: pre-line;
+}
+.vocab-custom-pack-chip {
+  position: fixed;
+  top: max(58px, calc(env(safe-area-inset-top) + 50px));
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 80vw;
+  padding: 4px 6px 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--shell-bg) 70%, transparent);
+  backdrop-filter: blur(8px);
+  color: var(--shell-text);
+  font-size: 12px;
+  font-weight: 700;
+  transform: translateX(-50%);
+}
+.vocab-custom-pack-name {
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vocab-custom-pack-chip button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
