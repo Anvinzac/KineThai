@@ -1,5 +1,6 @@
 /** Anonymous browser fetch adapter. Exports: fetchVocabularyPage, VocabularyRequestError. Depends on: transport types, backfill bounds. */
 import { VOCAB_PAGE_LIMIT } from "../lib/backfill";
+import { readCustomPage } from "../lib/custom-pack";
 import type { FeedCursor, FeedPage, VocabularyFilters } from "../types";
 
 export class VocabularyRequestError extends Error {
@@ -18,6 +19,14 @@ export async function fetchVocabularyPage(input: {
   cursor: FeedCursor;
   signal: AbortSignal;
 }): Promise<FeedPage> {
+  // An imported pack plays entirely in the browser: no request, only its own words.
+  const local = readCustomPage({
+    seed: input.seed,
+    ...input.filters,
+    position: input.cursor.position,
+    limit: VOCAB_PAGE_LIMIT,
+  });
+  if (local) return local;
   const query = new URLSearchParams({
     seed: input.seed,
     topic: input.filters.topic,

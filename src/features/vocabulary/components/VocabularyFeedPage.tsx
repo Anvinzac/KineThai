@@ -20,6 +20,8 @@ import { fetchVocabularyPage } from "../api/feed";
 import { readDifficultyChoice, writeDifficultyChoice } from "../lib/difficulty-choice";
 import { readDialectChoice, writeDialectChoice } from "../lib/dialect-choice";
 import type { TargetLocale } from "../lib/target-language";
+import { CUSTOM_PACK_EVENT, clearCustomPack, readCustomPack } from "../lib/custom-pack";
+import { Link } from "@tanstack/react-router";
 import "../vocabulary.css";
 
 function newSeed(): string {
@@ -64,7 +66,30 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   // stream is not mounted before that, so it never starts on "every level" only to be
   // thrown away a moment later for the level the reader actually keeps.
   const [stage, setStage] = useState<"pending" | "onboarding" | "feed">("pending");
+  // Imported pack (browser-only). Its own levels may not match a stored track, so it
+  // skips onboarding, plays every word, and keeps theme/style on random mix.
+  const [packName, setPackName] = useState<string | null>(null);
   useEffect(() => {
+    const sync = () => {
+      const pack = readCustomPack();
+      setPackName(pack?.catalog.name ?? null);
+      if (pack) {
+        setFilters(ALL_FILTERS);
+        setPresentation((p) => ({ ...p, theme: "mix", style: "mix" }));
+        setStage("feed");
+      }
+      setSeed(newSeed());
+    };
+    window.addEventListener(CUSTOM_PACK_EVENT, sync);
+    return () => window.removeEventListener(CUSTOM_PACK_EVENT, sync);
+  }, []);
+  useEffect(() => {
+    const pack = readCustomPack();
+    if (pack) {
+      setPackName(pack.catalog.name);
+      setStage("feed");
+      return;
+    }
     const stored = readDifficultyChoice();
     if (stored === null) {
       setStage("onboarding");
@@ -178,9 +203,19 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
         onClearHistory={viewHistory.clear}
         onExport={isAdmin ? openExport : undefined}
       />
+      {packName && (
+        <div className="vocab-custom-pack-chip" role="status">
+          <Link to="/feed/library" className="vocab-custom-pack-name">
+            Gói của bạn: {packName}
+          </Link>
+          <button type="button" onClick={clearCustomPack} aria-label="Thoát gói của bạn">
+            ×
+          </button>
+        </div>
+      )}
       <SavedDrawer open={savedOpen} onOpenChange={setSavedOpen} />
       <VocabularyStream
-        key={`${seed}:${filters.topic}:${filters.level}:${filters.difficulty}`}
+        key={`${packName ?? ""}:${seed}:${filters.topic}:${filters.level}:${filters.difficulty}`}
         seed={seed}
         filters={filters}
         presentation={presentation}
