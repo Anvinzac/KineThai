@@ -21,6 +21,7 @@ import {
   type EmphasisVariant,
 } from "@/features/kinetic-text";
 import { getTextSafeInsets } from "@/features/post-player/lib/playback-timing";
+import { getClueBandStretch } from "./landscape-geometry";
 import type { NarrativeStyle } from "./schema";
 import { hash } from "./random";
 import { pickHandwritingFont } from "./handwriting";
@@ -505,13 +506,14 @@ export function getVocabularyTextHeightBudget(
   // its floor — the layout that looks broken the moment the reader rotates. The clue's final
   // size is then pinned by the fit solver's legibility floor (it will not shrink text already
   // under MIN_FONT_SIZE), so the size chosen here has to fit the band the solver will actually
-  // hand the text. On a wide card, reserve exactly the solver's own safe insets instead of the
-  // portrait pixel count — never more than the caller asked, so portrait and export (which
-  // passes 0) are byte-for-byte unchanged.
-  const chrome =
-    width > height
-      ? Math.min(reservedHeight, getTextSafeInsets(height).top + getTextSafeInsets(height).bottom)
-      : reservedHeight;
+  // hand the text. On a wide card the stylesheet stretches the clue band so the solver's
+  // bottom margin ends on the real chrome (getClueBandStretch), so what is reserved is the
+  // solver's own safe insets of THAT band, less the stretch — never more than the caller
+  // asked, so portrait and export (which passes 0) are byte-for-byte unchanged.
+  if (width <= height) return Math.max(100, height - reservedHeight);
+  const stretch = getClueBandStretch(height);
+  const insets = getTextSafeInsets(height + stretch);
+  const chrome = Math.min(reservedHeight, insets.top + insets.bottom - stretch);
   return Math.max(100, height - chrome);
 }
 

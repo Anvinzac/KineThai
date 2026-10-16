@@ -1665,10 +1665,8 @@
    and that slice reads as one scene. The per-page shift is defined as one segment, so
    page turns still change the colour completely; and the overhang (60% a side) still
    dwarfs the drift's travel (7% of the wrapper), so no edge is ever exposed. */
-@media (orientation: landscape) and (max-height: 560px) {
-  .vocab-backdrop-drift[data-strip] {
-    inset: 0 -60%;
-  }
+.vocabulary-shell[data-short-viewport="landscape"] .vocab-backdrop-drift[data-strip] {
+  inset: 0 -60%;
 }
 /* The kinetic text casts a wide soft black shadow, which lifts light type off a deep
    card. Under dark ink on a pale card it is just a dirty halo, so it is dropped. */
@@ -5322,38 +5320,77 @@
    its 44px tap height for exactly as long as the band can afford it and only then compacts,
    and the gap absorbs whatever is left over — so the chrome's top edge lands on the band and
    is never allowed past it. Portrait is untouched: the tier opens below the shortest
-   portrait phone measured here (360×640). */
-@media (max-height: 560px) {
-  .vocabulary-shell {
-    /* The bottom chrome gets 15% of the screen height, but NOT less than 72px. A pure
-       ratio collapsed on a landscape phone: at 390px tall, 15dvh is 58px, which the
-       44px button row and the 3px progress row all but fill, leaving the gap on its
-       floor and the progress bar sitting on top of the buttons. The floor costs a
-       little height on the shortest screens and buys a gap you can see. At the tier's
-       own ceiling (560px) 15dvh is 84px, so the ratio still governs the taller end and
-       the two meet continuously at the boundary. */
-    --vocab-chrome-band: max(15dvh, 72px);
-    --vocab-chrome-inset: max(6px, calc(env(safe-area-inset-bottom) + 4px));
-    --vocab-chrome-progress: 3px;
-    /* The separation the progress row needs to read as its own row rather than as part
-       of the button row below it. The button row compacts before this is given up. */
-    --vocab-chrome-gap-min: 14px;
-    --vocab-chrome-bar: min(
-      44px,
-      calc(
-        var(--vocab-chrome-band) - var(--vocab-chrome-inset) - var(--vocab-chrome-progress) -
-          var(--vocab-chrome-gap-min)
-      )
-    );
-    --vocab-chrome-gap: max(
-      var(--vocab-chrome-gap-min),
-      calc(
-        var(--vocab-chrome-band) - var(--vocab-chrome-inset) - var(--vocab-chrome-bar) -
-          var(--vocab-chrome-progress)
-      )
-    );
+   portrait phone measured here (360×640).
+
+   The tier is keyed on the shell's MEASURED height (data-short-viewport, published by
+   useShellHeightVar against SHORT_VIEWPORT_MAX_H in lib/landscape-geometry.ts), not on a
+   max-height media query: the query reads the viewport, which disagrees with the box for
+   a frame or more during a rotation, and it restated a breakpoint the card applies in JS. */
+.vocabulary-shell[data-short-viewport] {
+  /* The bottom chrome gets 15% of the screen height, but NOT less than 72px. A pure
+     ratio collapsed on a landscape phone: at 390px tall, 15dvh is 58px, which the
+     44px button row and the 3px progress row all but fill, leaving the gap on its
+     floor and the progress bar sitting on top of the buttons. The floor costs a
+     little height on the shortest screens and buys a gap you can see. At the tier's
+     own ceiling (560px) 15dvh is 84px, so the ratio still governs the taller end and
+     the two meet continuously at the boundary. */
+  /* --vocab-vh is the shell's MEASURED height, published by useShellHeightVar.
+     dvh is the wrong input here: it is re-resolved when the browser's own chrome
+     moves and can report the previous orientation for a frame or more after a
+     rotation, which laid the whole stack out against a height the card did not
+     have. The dvh fallback only covers a frame where the property is missing. */
+  --vocab-chrome-band: max(calc(var(--vocab-vh, 100dvh) * 0.15), 72px);
+  --vocab-chrome-inset: max(6px, calc(env(safe-area-inset-bottom) + 4px));
+  --vocab-chrome-progress: 3px;
+  /* The separation the progress row needs to read as its own row rather than as part
+     of the button row below it. The button row compacts before this is given up. */
+  --vocab-chrome-gap-min: 14px;
+  --vocab-chrome-bar: min(
+    44px,
+    calc(
+      var(--vocab-chrome-band) - var(--vocab-chrome-inset) - var(--vocab-chrome-progress) -
+        var(--vocab-chrome-gap-min)
+    )
+  );
+  --vocab-chrome-gap: max(
+    var(--vocab-chrome-gap-min),
+    calc(
+      var(--vocab-chrome-band) - var(--vocab-chrome-inset) - var(--vocab-chrome-bar) -
+        var(--vocab-chrome-progress)
+    )
+  );
+}
+/* The reaction counts hang 17px BELOW their button (3px offset + a 14px line). Portrait
+   leaves a 44px inset under the button row, so they sit comfortably inside it; the short
+   landscape tier cuts that inset to 6px and the labels were clipped 11px past the card's
+   bottom edge.
+
+   Rather than buy the height back — which would come straight out of the answer page,
+   where the meaning panel is already down to two lines — the count moves to the side of
+   its glyph. Landscape is the one orientation with width to spare. The row still centres
+   on one line because the box stays exactly the button's height either way. */
+.vocabulary-shell[data-short-viewport="landscape"] .vocab-reaction {
+  flex-direction: row;
+  gap: 6px;
+}
+.vocabulary-shell[data-short-viewport="landscape"] .vocab-reaction-count {
+  position: static;
+  transform: none;
+  top: auto;
+  left: auto;
+  /* The roll-in keyframe carries a centring translate for the stacked layout; inline it
+     would shunt the label sideways. */
+  animation-name: vocab-reaction-count-fade;
+}
+@keyframes vocab-reaction-count-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
+
 /* Wide cards: the answer page splits its height by PROPORTION instead of at fixed marks.
 
    The portrait coordinates (word at 34%, meaning panel from 50%) assume a tall card. The
@@ -5379,7 +5416,7 @@
 
    Export frames keep the portrait geometry, hence the [data-export] exclusion. The card
    applies the same wider-than-tall test when it centres the word in the band
-   (WIDE_REVEAL_Y) and when it withholds the boxed highlight. */
+   (getWideRevealY in lib/landscape-geometry.ts) and when it withholds the boxed highlight. */
 @media (orientation: landscape) {
   .vocab-card:not([data-export]) {
     --vocab-reveal-head: 72px;
@@ -5406,7 +5443,60 @@
   .vocab-card:not([data-export]) .vocab-reveal-burst {
     top: calc(var(--vocab-reveal-head) + var(--vocab-reveal-word) / 2);
   }
+  /* A clue page's band is stretched the same way: the fit solver keeps its text 132px
+     clear of the band's foot, which is portrait furniture. On a 390px-tall card the real
+     chrome plus its clearance is only 84px, so the unstretched band threw away ~48px of a
+     very short screen and the clue was set ~20% smaller than it needed to be. Moving the
+     band's foot lands the solver's margin on the chrome's clearance instead (on a tall
+     landscape window, where the chrome is taller than 132px, it pulls the foot UP, so a
+     long clue can no longer run into the button row). getClueBandStretch in
+     lib/landscape-geometry.ts mirrors this for the size budget. */
+  .vocab-card:not([data-export]) .vocab-stage-band:not([data-reveal]) {
+    bottom: calc(var(--vocab-chrome-top) + var(--vocab-reveal-foot) - 132px);
+  }
 }
+/* ── Two-column answer page (landscape phone) ────────────────────────────────
+   Stacked, the word and its meaning divide ~200px of free height between them and
+   the panel ends up with about two lines. Side by side each gets the FULL height:
+   the word owns a column on the left, the meaning panel the rest.
+
+   The card decides when this applies and publishes both the flag and the column
+   width (see SHORT_VIEWPORT_MAX_H in lib/landscape-geometry.ts, WIDE_WORD_COLUMN in
+   VocabularyCard). Nothing here restates the breakpoint, and the word is fitted to the
+   same column width the band is cut to, so the two cannot drift apart.
+
+   The word's share of the HEIGHT becomes all of it, which keeps the band formula
+   below unchanged — it already reads --vocab-reveal-word as "the word's share". */
+.vocab-card[data-reveal-split="two-column"] {
+  --vocab-reveal-word: var(--vocab-reveal-free);
+  /* Breathing room between the two columns, and the panel's own right margin. */
+  --vocab-col-gap: 18px;
+  --vocab-col-edge: 16px;
+}
+/* The band is cut to the left column. The -72/-132 offsets are the fit pipeline's own
+   reserved margins, exactly as in the stacked rule above. */
+.vocab-card[data-reveal-split="two-column"] .vocab-stage-band[data-reveal] {
+  left: 0;
+  right: calc(100% - var(--vocab-word-col));
+}
+/* The panel takes the right column and runs the full height, so a long definition has
+   somewhere to go instead of scrolling inside two lines. */
+.vocab-card[data-reveal-split="two-column"] .vocab-reveal-details {
+  --vocab-reveal-top: var(--vocab-reveal-head);
+  left: calc(var(--vocab-word-col) + var(--vocab-col-gap));
+  right: var(--vocab-col-edge);
+  width: auto;
+  margin-inline: 0;
+  max-height: calc(
+    100% - var(--vocab-reveal-head) - var(--vocab-chrome-top) - var(--vocab-reveal-gap)
+  );
+}
+/* The celebration belongs to the word, so it bursts from the middle of ITS column. */
+.vocab-card[data-reveal-split="two-column"] .vocab-reveal-burst {
+  top: calc(var(--vocab-reveal-head) + var(--vocab-reveal-free) / 2);
+  left: calc(var(--vocab-word-col) / 2);
+}
+
 /* The page label is hidden on short screens (see the max-height: 620px rule above), so
    the panel can run down to just above the progress row. */
 @media (orientation: landscape) and (max-height: 620px) {

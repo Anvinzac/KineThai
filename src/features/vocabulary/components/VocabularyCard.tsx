@@ -34,6 +34,7 @@ import {
   fitVocabularyTextSize,
   getVocabularyTextHeightBudget,
 } from "../lib/presets";
+import { getWideRevealY, isShortViewport } from "../lib/landscape-geometry";
 import { buildStages } from "../lib/stages";
 import { getExportStageBox, type CardExportLayout } from "../lib/export-layout";
 import { hasReportedWord } from "../lib/reported-words";
@@ -157,8 +158,19 @@ const rowItemVariants: Variants = {
 };
 /** Where the answer word sits in its band, as a percentage of the band's height. */
 const PORTRAIT_REVEAL_Y = 34;
-/** On a wide card the band is cut to the word's share of the height; this is its middle. */
-const WIDE_REVEAL_Y = 43;
+/**
+ * Two-column answer page: on a landscape phone the word and its meaning sit SIDE BY
+ * SIDE rather than stacked. Stacking them splits ~200px of free height two ways and
+ * left the meaning panel with about two lines; side by side each gets the full height
+ * and the panel gets the room it needs.
+ *
+ * The card decides when it applies (a wide card no taller than SHORT_VIEWPORT_MAX_H)
+ * and publishes both the flag (`data-reveal-split`) and the column width
+ * (`--vocab-word-col`) to CSS, so the stylesheet never restates the breakpoint and the
+ * two can never disagree about when or how wide.
+ */
+/** The answer word's share of the width; the meaning panel takes the rest. */
+const WIDE_WORD_COLUMN = 0.46;
 
 /** Horizontal travel before a drag starts moving the page, in px. */
 const DRAG_SLOP_PX = 10;
@@ -440,7 +452,19 @@ export function VocabularyCard({
   // its meaning by proportion (the landscape tier in vocabulary.css); the word is then
   // centred in its own band rather than pinned at the portrait 34%.
   const wideCard = !exportLayout && landscape;
+  // Only a SHORT landscape card goes two-column: a landscape desktop window is tall
+  // enough that the stacked proportional split still reads well, and splitting it
+  // would leave both columns half empty.
+  const twoColumn = wideCard && isShortViewport(height);
+  // A wide card's answer band is stretched by the fit solver's uneven margins (72px
+  // above, 132px below), so the middle of the room the word is given is NOT the middle
+  // of the band; it is derived from the same geometry the stylesheet lays out, which is
+  // also where the celebration burst is aimed.
+  const revealY = wideCard ? getWideRevealY(height, twoColumn) : PORTRAIT_REVEAL_Y;
   const textWidth = exportBox?.textWidth ?? width;
+  // The answer shares the card with its meaning panel now, so it is fitted to its own
+  // column instead of the whole width — otherwise it is sized for space it does not have.
+  const revealCanvasWidth = twoColumn ? Math.round(textWidth * WIDE_WORD_COLUMN) : textWidth;
   const textHeight = exportBox?.textHeight ?? height;
   const textReserve = exportBox ? 0 : undefined;
   const uniformTextSize = getUniformPageTextSize(
@@ -743,7 +767,15 @@ export function VocabularyCard({
     <article
       ref={cardRef}
       className="vocab-card"
-      style={colors}
+      style={
+        twoColumn
+          ? ({
+              ...colors,
+              "--vocab-word-col": `${(WIDE_WORD_COLUMN * 100).toFixed(2)}%`,
+            } as CSSProperties)
+          : colors
+      }
+      data-reveal-split={twoColumn ? "two-column" : undefined}
       data-theme={theme.id}
       data-tone={theme.tone}
       data-dialect={presentation.dialect === "douyin" ? "douyin" : undefined}
@@ -859,7 +891,7 @@ export function VocabularyCard({
           word={entry.word}
           spec={{ ...canvas, text: stage.text, size: stage.reveal ? 128 : textSize }}
           background={theme.background}
-          canvasWidth={textWidth}
+          canvasWidth={stage.reveal ? revealCanvasWidth : textWidth}
           active={active}
           staged={started}
           playing={playback.playing}
@@ -872,7 +904,7 @@ export function VocabularyCard({
           // property of the style and not of whichever word happened to land there.
           emphasisPool={style.emphasis}
           textBudget={textBudget}
-          revealY={wideCard ? WIDE_REVEAL_Y : PORTRAIT_REVEAL_Y}
+          revealY={revealY}
           timeScale={paceFactor}
         />
       )}

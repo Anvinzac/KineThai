@@ -1,12 +1,12 @@
 /** Public vocabulary page orchestration. Exports: VocabularyFeedPage. Depends on: controls, stream, reduced-motion preference, font readiness, track rotation. */
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useScreenWakeLock } from "@/hooks/use-screen-wake-lock";
-import { useOrientationGate } from "@/hooks/use-orientation-gate";
-import { OrientationGate } from "@/components/OrientationGate";
+import { useShellHeightVar } from "@/hooks/use-shell-height-var";
 import type { FeedPage, Presentation, VocabularyFilters } from "../types";
 import { DIFFICULTY_ALL } from "../lib/difficulty";
+import { SHORT_VIEWPORT_MAX_H } from "../lib/landscape-geometry";
 import { useIsAdmin } from "@/features/admin/hooks/useIsAdmin";
 import { useFontsReady } from "../hooks/useFontsReady";
 import { useTrackRotation } from "../hooks/useTrackRotation";
@@ -120,6 +120,10 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   }, []);
   // The saved drawer suspends the feed behind it rather than navigating away.
   const [savedOpen, setSavedOpen] = useState(false);
+  // The landscape chrome measures itself against this, not against dvh, and the
+  // short-viewport tier is keyed on the same measurement (data-short-viewport).
+  const shell = useRef<HTMLElement>(null);
+  useShellHeightVar(shell, { shortMaxHeight: SHORT_VIEWPORT_MAX_H });
   const [optionsOpen, setOptionsOpen] = useState(false);
   // Video export is an admin tool; for everyone else the control is never rendered
   // and the studio's code is never downloaded.
@@ -132,12 +136,10 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   const closeExport = useCallback(() => setExportOpen(false), []);
   const viewHistory = useViewHistory();
   const reducedMotion = !!useReducedMotion();
-  // Rotate-to-portrait gate: the feed's whole typography stack is authored for one aspect
-  // ratio, and the wide-card landscape layout is still too buggy to ship, so a phone held
-  // in landscape gets the opaque cover instead — folded into `suspended` below to actually
-  // stop playback behind it. Keep the screen lit only while a scene is active and ungated.
-  const orientationGated = useOrientationGate();
-  useScreenWakeLock(!orientationGated);
+  // No rotate-to-portrait gate here: the feed has its own landscape layout (two-column
+  // answer page, compact chrome, measured shell height). The post-player surfaces, which
+  // only letterbox, keep theirs. Keep the screen lit while the feed is open.
+  useScreenWakeLock(true);
   // The stream still mounts and fetches while fonts load; only the text is held.
   const fontsReady = useFontsReady();
   // Each word that comes on screen is logged to the viewing history and counted
@@ -163,8 +165,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   };
   if (stage !== "feed") {
     return (
-      <main className="vocabulary-shell">
-        <OrientationGate show={orientationGated} />
+      <main className="vocabulary-shell" ref={shell}>
         {stage === "onboarding" && (
           <DifficultyOnboarding metadata={ladder} locale={locale ?? "en"} onPick={pickDifficulty} />
         )}
@@ -172,8 +173,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     );
   }
   return (
-    <main className="vocabulary-shell">
-      <OrientationGate show={orientationGated} />
+    <main className="vocabulary-shell" ref={shell}>
       <FeedControls
         metadata={metadata}
         filters={filters}
@@ -220,7 +220,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
         filters={filters}
         presentation={presentation}
         reducedMotion={reducedMotion}
-        suspended={orientationGated || optionsOpen || savedOpen || !fontsReady || exportOpen}
+        suspended={optionsOpen || savedOpen || !fontsReady || exportOpen}
         exportOpen={isAdmin && exportOpen}
         onCloseExport={closeExport}
         history={viewHistory.history}
