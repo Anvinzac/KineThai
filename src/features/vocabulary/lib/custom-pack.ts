@@ -31,7 +31,66 @@ function hash(text: string): string {
   return out;
 }
 
-/** Validate raw JSON text against the default deck format. Throws a readable message on failure. */
+type RawWord = Record<string, unknown>;
+
+/** Level named in a file name or URL (deck-v3-A1.json, hsk2.json), if any. */
+function levelFromSource(source: string): string | undefined {
+  const m = source.match(/(?:^|[^a-z0-9])(a1|a2|b1|b2|c1|c2|hsk[1-9])(?=[^a-z0-9]|$)/i);
+  return m?.[1]?.toUpperCase();
+}
+
+/**
+ * Accept the word packs this app already uses: the WordCrawler batch decks
+ * (docs/Batches/*.json — a bare array with usageEn/usageVi/emphasisVi, no ids) and the
+ * compiled packs (data/packs/*.json — { revision, words: [...] }). Both become the
+ * schema's word shape before validation.
+ */
+function toDeck(json: unknown, source: string): { meta?: { name: string }; words: RawWord[] } {
+  const list = (Array.isArray(json) ? json : (json as { words?: unknown })?.words) as unknown;
+  if (!Array.isArray(list)) throw new Error("Không tìm thấy danh sách từ trong gói.");
+  const name =
+    (!Array.isArray(json) && typeof (json as { name?: unknown }).name === "string"
+      ? (json as { name: string }).name
+      : "") || source.split(/[/\\]/).pop()?.replace(/\.json$/i, "") || "Gói của bạn";
+  const fallbackLevel = levelFromSource(source);
+  const seen = new Set<string>();
+  const words: RawWord[] = [];
+  for (const item of list as RawWord[]) {
+    if (!item || typeof item !== "object" || typeof item.word !== "string") continue;
+    const head = item.word.trim().toLowerCase();
+    if (!head || seen.has(head)) continue;
+    seen.add(head);
+    const {
+      usageEn,
+      usageVi,
+      emphasisVi,
+      chars: _c,
+      initial: _i,
+      ...rest
+    } = item as RawWord & { usageEn?: string; usageVi?: string; emphasisVi?: string[] };
+    const usage =
+      Array.isArray(rest.usage) && rest.usage.length
+        ? rest.usage
+        : usageEn
+          ? [{ en: usageEn, vi: usageVi ?? "" }]
+          : [];
+    const exams = Array.isArray(rest.exams) && rest.exams.length ? rest.exams : undefined;
+    words.push({
+      ...rest,
+      id:
+        typeof rest.id === "string" && rest.id
+          ? rest.id
+          : head.replace(/[^a-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || `w${words.length}`,
+      usage,
+      exams,
+      emphasis: rest.emphasis ?? emphasisVi,
+      level: rest.level ?? fallbackLevel,
+    });
+  }
+  return { meta: { name }, words };
+}
+
+/** Validate raw JSON text against the app's pack formats. Throws a readable message on failure. */
 export function parseCustomPack(text: string, source: string): CustomPack {
   if (text.length > MAX_BYTES) throw new Error("Gói quá lớn (tối đa 4 MB).");
   let json: unknown;
@@ -40,8 +99,7 @@ export function parseCustomPack(text: string, source: string): CustomPack {
   } catch {
     throw new Error("Tệp không phải JSON hợp lệ.");
   }
-  // Accept a bare array of words as shorthand for { words: [...] }.
-  const deck = normalizeDeck(Array.isArray(json) ? { words: json } : json);
+  const deck = normalizeDeck(toDeck(json, source));
   if (!deck.count) throw new Error("Gói không có từ nào.");
   return {
     catalog: { revision: hash(JSON.stringify(deck)), ...deck },
