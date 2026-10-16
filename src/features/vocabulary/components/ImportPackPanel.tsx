@@ -26,7 +26,6 @@ export function ImportPackPanel() {
   const [tab, setTab] = useState<"import" | "generate">("import");
   const [url, setUrl] = useState("");
   const [busy, setBusy] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [active, setActive] = useState<CustomPack | null>(null);
 
@@ -50,16 +49,6 @@ export function ImportPackPanel() {
       setError(e instanceof Error ? e.message.split("\n").slice(0, 4).join("\n") : "Không nhập được gói.");
     } finally {
       setBusy(false);
-    }
-  };
-
-  const copyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(PACK_GENERATOR_PROMPT);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setError("Trình duyệt chặn sao chép — hãy bôi đen và copy thủ công.");
     }
   };
 
@@ -152,29 +141,15 @@ export function ImportPackPanel() {
       ) : (
         <div className="vocab-import-generate">
           <p className="vocab-library-group-note">
-            Tải tệp mẫu để xem định dạng, hoặc sao chép prompt dưới đây, dán danh sách từ của bạn
-            vào chỗ đánh dấu (cách nhau bởi dấu phẩy, xuống dòng hay bất kỳ ký tự nào), rồi gửi cho
-            AI. Lưu kết quả thành tệp .json và nhập ở thẻ bên cạnh.
+            Tải một tệp duy nhất gồm sẵn prompt và JSON mẫu. Dán danh sách từ của bạn vào chỗ
+            đánh dấu (cách nhau bởi dấu phẩy, xuống dòng hay bất kỳ ký tự nào), gửi cả tệp cho AI,
+            rồi lưu kết quả thành .json và nhập ở thẻ bên cạnh.
           </p>
           <div className="vocab-import-row">
-            <button type="button" className="vocab-import-btn" onClick={downloadSamplePack}>
-              <Download size={15} aria-hidden="true" /> Tải JSON mẫu
-            </button>
-            <button type="button" className="vocab-import-btn" onClick={() => void copyPrompt()}>
-              {copied ? (
-                <>
-                  <Check size={15} aria-hidden="true" /> Đã sao chép
-                </>
-              ) : (
-                <>
-                  <Copy size={15} aria-hidden="true" /> Sao chép prompt
-                </>
-              )}
+            <button type="button" className="vocab-import-btn" onClick={downloadPackKit}>
+              <Download size={15} aria-hidden="true" /> Tải tệp prompt (.md)
             </button>
           </div>
-          <pre className="vocab-import-prompt" tabIndex={0} aria-label="Prompt tạo gói từ vựng">
-            {PACK_GENERATOR_PROMPT}
-          </pre>
         </div>
       )}
       {error && (
