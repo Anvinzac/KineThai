@@ -5611,10 +5611,11 @@
 .vocab-import {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  border: 1px solid var(--shell-line);
-  border-radius: 16px;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid color-mix(in oklab, var(--shell-text) 10%, transparent);
+  border-radius: 20px;
+  background: color-mix(in oklab, var(--shell-text) 3%, transparent);
 }
 .vocab-import-row {
   display: flex;
@@ -5623,39 +5624,69 @@
 .vocab-import-url {
   flex: 1;
   min-width: 0;
-  padding: 10px 12px;
-  border: 1px solid var(--shell-line);
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in oklab, var(--shell-text) 14%, transparent);
   border-radius: 12px;
-  background: transparent;
+  background: color-mix(in oklab, var(--shell-bg) 60%, transparent);
   color: var(--shell-text);
   font-size: 14px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.vocab-import-url::placeholder {
+  color: color-mix(in oklab, var(--shell-text) 38%, transparent);
+}
+.vocab-import-url:focus-visible {
+  border-color: color-mix(in oklab, var(--shell-text) 45%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--shell-text) 10%, transparent);
 }
 .vocab-import-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 14px;
-  border: 1px solid var(--shell-line);
+  justify-content: center;
+  gap: 7px;
+  height: 42px;
+  padding: 0 16px;
+  border: 1px solid transparent;
   border-radius: 12px;
   background: var(--shell-text);
   color: var(--shell-bg);
   font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0.01em;
   cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+}
+.vocab-import-btn:hover {
+  opacity: 0.88;
+}
+.vocab-import-btn:active {
+  transform: scale(0.97);
 }
 .vocab-import-btn.ghost {
   background: transparent;
+  border-color: color-mix(in oklab, var(--shell-text) 16%, transparent);
   color: var(--shell-text);
 }
+.vocab-import-btn.ghost:hover {
+  background: color-mix(in oklab, var(--shell-text) 7%, transparent);
+  opacity: 1;
+}
 .vocab-import-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: default;
+  transform: none;
 }
 .vocab-import-active {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in oklab, var(--shell-text) 12%, transparent);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--shell-text) 5%, transparent);
   color: var(--shell-text);
   font-size: 13px;
 }
@@ -5670,43 +5701,55 @@
 }
 .vocab-import-tabs {
   display: flex;
-  gap: 6px;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid color-mix(in oklab, var(--shell-text) 10%, transparent);
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--shell-text) 5%, transparent);
 }
 .vocab-import-tab {
   flex: 1;
-  padding: 9px 10px;
-  border: 1px solid var(--shell-line);
-  border-radius: 12px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
   background: transparent;
-  color: var(--shell-text);
+  color: color-mix(in oklab, var(--shell-text) 55%, transparent);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  opacity: 0.6;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.vocab-import-tab:hover {
+  color: var(--shell-text);
 }
 .vocab-import-tab.on {
   background: var(--shell-text);
   color: var(--shell-bg);
-  opacity: 1;
+  box-shadow: 0 2px 8px color-mix(in oklab, var(--shell-text) 22%, transparent);
 }
 .vocab-import-generate {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 .vocab-import-prompt {
   margin: 0;
-  max-height: 260px;
+  max-height: 280px;
   overflow: auto;
-  padding: 12px;
-  border: 1px solid var(--shell-line);
-  border-radius: 12px;
-  color: var(--shell-text);
+  padding: 14px 16px;
+  border: 1px solid color-mix(in oklab, var(--shell-text) 10%, transparent);
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--shell-bg) 65%, transparent);
+  color: color-mix(in oklab, var(--shell-text) 78%, transparent);
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
   font-size: 11.5px;
-  line-height: 1.5;
+  line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
   user-select: text;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--shell-text) 25%, transparent) transparent;
 }
 .vocab-custom-pack-chip {
   position: fixed;
