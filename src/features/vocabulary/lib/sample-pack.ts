@@ -26,18 +26,19 @@ export const SAMPLE_PACK_JSON = `{
       "emphasis": ["đi dạo quanh"]
     },
     {
-      "id": "golden-hour",
-      "word": "golden hour",
+      "id": "twilight",
+      "word": "twilight",
       "level": "B1",
       "pos": "noun",
-      "defVi": "khoảng thời gian ánh sáng vàng đẹp nhất trước hoàng hôn",
+      "ipa": "/ˈtwaɪlaɪt/",
+      "defVi": "ánh hoàng hôn, lúc chạng vạng",
       "leadVi": "Nhiếp ảnh gia nào cũng chờ khoảnh khắc này…",
-      "anticipateVi": "Mặt trời sắp lặn, cả bầu trời như được mạ vàng.",
-      "topic": "photography",
+      "anticipateVi": "Mặt trời vừa lặn, bầu trời còn lại một vệt sáng dịu.",
+      "topic": "nature",
       "usage": [
-        { "en": "The city looks magical during the golden hour.", "vi": "Thành phố trông kỳ diệu trong giờ vàng." }
+        { "en": "The city looks magical in the twilight.", "vi": "Thành phố trông kỳ diệu trong ánh hoàng hôn." }
       ],
-      "emphasis": ["giờ vàng"]
+      "emphasis": ["ánh hoàng hôn"]
     }
   ]
 }
