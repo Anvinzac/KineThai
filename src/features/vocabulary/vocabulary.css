@@ -5668,6 +5668,46 @@
   font-size: 12px;
   white-space: pre-line;
 }
+.vocab-import-tabs {
+  display: flex;
+  gap: 6px;
+}
+.vocab-import-tab {
+  flex: 1;
+  padding: 9px 10px;
+  border: 1px solid var(--shell-line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--shell-text);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.vocab-import-tab.on {
+  background: var(--shell-text);
+  color: var(--shell-bg);
+  opacity: 1;
+}
+.vocab-import-generate {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vocab-import-prompt {
+  margin: 0;
+  max-height: 260px;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--shell-line);
+  border-radius: 12px;
+  color: var(--shell-text);
+  font-size: 11.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+}
 .vocab-custom-pack-chip {
   position: fixed;
   top: max(58px, calc(env(safe-area-inset-top) + 50px));
