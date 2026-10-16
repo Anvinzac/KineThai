@@ -1,13 +1,12 @@
 /**
- * Sample pack and the LLM prompt used to generate one. Both mirror the deck format the
- * importer accepts (lib/custom-pack.ts → lib/schema.ts), so a pack produced from this
- * prompt imports without edits.
+ * The pack-generation kit: one Markdown file combining the full LLM prompt and a sample
+ * pack in the default deck format (lib/custom-pack.ts → lib/schema.ts). Users paste their
+ * word list into the marked section, hand the whole file to an AI, and import the result.
  *
- * Exports: SAMPLE_PACK_JSON, PACK_GENERATOR_PROMPT, downloadSamplePack
+ * Exports: PACK_KIT_MD, downloadPackKit
  */
 
-/** A minimal valid pack in the default format — two words, every common field shown. */
-export const SAMPLE_PACK_JSON = `{
+const SAMPLE_PACK_JSON = `{
   "meta": { "name": "Gói mẫu của tôi" },
   "words": [
     {
@@ -41,24 +40,29 @@ export const SAMPLE_PACK_JSON = `{
       "emphasis": ["ánh hoàng hôn"]
     }
   ]
-}
-`;
+}`;
 
 /**
- * Full prompt to paste into an LLM. The word list goes between the markers at the end;
- * commas, newlines, semicolons or any other separators are all fine.
+ * One self-contained Markdown file: the prompt first, then a sample output for reference.
+ * The word list goes between the markers at the end; commas, newlines, semicolons or any
+ * other separators are all fine.
  */
-export const PACK_GENERATOR_PROMPT = `You are generating a vocabulary pack for a kinetic-typography word-learning app. Output ONE valid JSON file and nothing else — no markdown fences, no commentary.
+export const PACK_KIT_MD = `# Vocabulary Pack Generator
+
+You are generating a vocabulary pack for a kinetic-typography word-learning app. Output ONE valid JSON file and nothing else — no markdown fences, no commentary.
 
 ## Required format
 
+\`\`\`json
 {
   "meta": { "name": "<short pack name>" },
   "words": [ <one object per word, see below> ]
 }
+\`\`\`
 
 ## Each word object
 
+\`\`\`json
 {
   "id": "unique-lowercase-slug",        // letters, digits, - and _ only; unique across the pack
   "word": "the headword",               // English letters (may contain ' or -), or Chinese characters
@@ -74,6 +78,7 @@ export const PACK_GENERATOR_PROMPT = `You are generating a vocabulary pack for a
   ],
   "emphasis": ["a short Vietnamese phrase (max 6 words) from the usage translation to highlight"]
 }
+\`\`\`
 
 ## Rules
 
@@ -83,18 +88,24 @@ export const PACK_GENERATOR_PROMPT = `You are generating a vocabulary pack for a
 - Keep emphasis phrases short and meaningful — they are highlighted on screen.
 - Output must parse with JSON.parse: double quotes, no trailing commas, no comments.
 
+## Sample output (for reference — a valid two-word pack)
+
+\`\`\`json
+${SAMPLE_PACK_JSON}
+\`\`\`
+
 ## My word list (separated by commas, newlines, or any characters — treat every token as one word):
 
 <PASTE YOUR WORD LIST HERE>
 `;
 
-/** Download the sample pack as a JSON file (same-origin blob, works everywhere). */
-export function downloadSamplePack() {
-  const blob = new Blob([SAMPLE_PACK_JSON], { type: "application/json;charset=utf-8" });
+/** Download the kit as a single Markdown file (same-origin blob, works everywhere). */
+export function downloadPackKit() {
+  const blob = new Blob([PACK_KIT_MD], { type: "text/markdown;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "goi-tu-vung-mau.json";
+  a.download = "tao-goi-tu-vung.md";
   document.body.appendChild(a);
   a.click();
   a.remove();
