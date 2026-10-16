@@ -48,10 +48,17 @@ function levelFromSource(source: string): string | undefined {
 function toDeck(json: unknown, source: string): { meta?: { name: string }; words: RawWord[] } {
   const list = (Array.isArray(json) ? json : (json as { words?: unknown })?.words) as unknown;
   if (!Array.isArray(list)) throw new Error("Không tìm thấy danh sách từ trong gói.");
+  const root = Array.isArray(json) ? {} : (json as { name?: unknown; meta?: { name?: unknown } });
+  const named = [root.meta?.name, root.name].find(
+    (n): n is string => typeof n === "string" && n.trim() !== "",
+  );
   const name =
-    (!Array.isArray(json) && typeof (json as { name?: unknown }).name === "string"
-      ? (json as { name: string }).name
-      : "") || source.split(/[/\\]/).pop()?.replace(/\.json$/i, "") || "Gói của bạn";
+    named?.trim() ||
+    source
+      .split(/[/\\]/)
+      .pop()
+      ?.replace(/\.json$/i, "") ||
+    "Gói của bạn";
   const fallbackLevel = levelFromSource(source);
   const seen = new Set<string>();
   const words: RawWord[] = [];

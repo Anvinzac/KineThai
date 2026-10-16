@@ -5621,6 +5621,11 @@
   display: flex;
   gap: 8px;
 }
+.vocab-import-actions > .vocab-import-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+}
 .vocab-import-url {
   flex: 1;
   min-width: 0;
@@ -5632,7 +5637,9 @@
   color: var(--shell-text);
   font-size: 13px;
   outline: none;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 .vocab-import-url::placeholder {
   color: color-mix(in oklab, var(--shell-text) 32%, transparent);
@@ -5640,6 +5647,62 @@
 .vocab-import-url:focus-visible {
   border-color: color-mix(in oklab, var(--shell-text) 38%, transparent);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--shell-text) 8%, transparent);
+}
+.vocab-import-file {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px 0 6px;
+  background: color-mix(in oklab, var(--shell-text) 4%, transparent);
+}
+.vocab-import-file-name {
+  display: inline-flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--shell-text);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.vocab-import-file-name > span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vocab-import-file-name > svg:last-child {
+  color: color-mix(in oklab, var(--shell-text) 45%, transparent);
+}
+.vocab-import-file-name:hover {
+  background: color-mix(in oklab, var(--shell-text) 8%, transparent);
+}
+.vocab-import-file-clear {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in oklab, var(--shell-text) 60%, transparent);
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+.vocab-import-file-clear:hover {
+  background: color-mix(in oklab, var(--shell-text) 10%, transparent);
+  color: var(--shell-text);
 }
 .vocab-import-btn {
   display: inline-flex;
@@ -5656,7 +5719,10 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 .vocab-import-btn:hover {
   background: color-mix(in oklab, var(--shell-text) 13%, transparent);
@@ -5716,7 +5782,9 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 .vocab-import-tab:hover {
   color: color-mix(in oklab, var(--shell-text) 80%, transparent);
@@ -5729,6 +5797,912 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+/* Pack preview: a portal outside .vocabulary-shell, so it restates the shell tokens it uses. */
+.vocab-preview {
+  --shell-bg: var(--card);
+  --shell-text: var(--foreground);
+  --preview-line: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --preview-mute: color-mix(in oklab, var(--foreground) 52%, transparent);
+  --preview-cols: 52px minmax(150px, 1.1fr) 84px minmax(200px, 2fr) minmax(120px, 1fr)
+    minmax(220px, 2.2fr);
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: max(18px, env(safe-area-inset-top)) clamp(14px, 3vw, 36px)
+    max(16px, env(safe-area-inset-bottom));
+  background: var(--background);
+  color: var(--foreground);
+  outline: none;
+  animation: vocab-preview-in 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.vocab-preview[data-state="closed"] {
+  animation: vocab-preview-out 0.16s ease-in forwards;
+}
+@keyframes vocab-preview-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+}
+@keyframes vocab-preview-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+}
+.vocab-preview-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.vocab-preview-top > svg {
+  flex: none;
+  color: var(--mint);
+}
+.vocab-preview-heading {
+  flex: 1;
+  min-width: 0;
+}
+.vocab-preview-heading h2 {
+  margin: 0;
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vocab-preview-heading p {
+  margin: 2px 0 0;
+  overflow: hidden;
+  color: var(--preview-mute);
+  font-size: 12.5px;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+.vocab-preview-close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--preview-line);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.vocab-preview-close:hover {
+  background: color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+.vocab-preview-tabs {
+  align-self: flex-start;
+  min-width: 240px;
+}
+.vocab-preview-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid color-mix(in oklab, var(--foreground) 12%, transparent);
+  border-radius: 10px;
+  color: var(--preview-mute);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.vocab-preview-search:focus-within {
+  border-color: color-mix(in oklab, var(--foreground) 34%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--foreground) 7%, transparent);
+}
+.vocab-preview-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 13.5px;
+  outline: none;
+}
+.vocab-preview-hits {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.vocab-preview-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--preview-line);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--foreground) 2%, transparent);
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--foreground) 25%, transparent) transparent;
+}
+.vocab-preview-head,
+.vocab-preview-row {
+  display: grid;
+  grid-template-columns: var(--preview-cols);
+  column-gap: 18px;
+  padding: 0 18px;
+}
+.vocab-preview-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid var(--preview-line);
+  background: color-mix(in oklab, var(--background) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+.vocab-preview-head > * {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--preview-mute);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.vocab-preview-head > button {
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+.vocab-preview-head > button:hover,
+.vocab-preview-head > button[aria-sort="ascending"],
+.vocab-preview-head > button[aria-sort="descending"] {
+  color: var(--foreground);
+}
+.vocab-preview-head > button svg {
+  opacity: 0.7;
+}
+.vocab-preview-body {
+  position: relative;
+}
+.vocab-preview-row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-block: 14px;
+  border-bottom: 1px solid var(--preview-line);
+  font-size: 13.5px;
+  line-height: 1.5;
+  transition: background 0.15s ease;
+}
+.vocab-preview-row:hover {
+  background: color-mix(in oklab, var(--foreground) 3.5%, transparent);
+}
+.vocab-preview-row > * {
+  min-width: 0;
+}
+.vocab-preview-row p {
+  margin: 0;
+}
+.vocab-preview-n {
+  color: color-mix(in oklab, var(--foreground) 32%, transparent);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.vocab-preview-word {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.vocab-preview-word strong {
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  overflow-wrap: anywhere;
+}
+.vocab-preview-word span {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  color: var(--preview-mute);
+  font-size: 12px;
+}
+.vocab-preview-word code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+.vocab-preview-word em {
+  font-style: italic;
+}
+.vocab-preview-level {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--mint) 16%, transparent);
+  color: var(--mint);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.vocab-preview-def {
+  color: color-mix(in oklab, var(--foreground) 90%, transparent);
+}
+.vocab-preview-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vocab-preview-tags li {
+  padding: 1px 7px;
+  border: 1px solid var(--preview-line);
+  border-radius: 6px;
+  color: var(--preview-mute);
+  font-size: 11.5px;
+}
+.vocab-preview-usage {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vocab-preview-usage p:first-child {
+  font-style: italic;
+}
+.vocab-preview-usage p + p,
+.vocab-preview-usage span {
+  color: var(--preview-mute);
+  font-size: 12.5px;
+}
+.vocab-preview-empty {
+  margin: 0;
+  padding: 40px 18px;
+  color: var(--preview-mute);
+  font-size: 13px;
+  text-align: center;
+}
+.vocab-preview-raw {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: clamp(14px, 2.4vw, 26px);
+  border: 1px solid var(--preview-line);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--foreground) 2%, transparent);
+  overscroll-behavior: contain;
+  user-select: text;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--foreground) 25%, transparent) transparent;
+}
+
+/* Reader JSON (JsonView): one colour per kind of value, so fields read apart at a glance. */
+.vocab-preview,
+.vocab-json {
+  --json-key: oklch(0.8 0.09 292);
+  --json-str: color-mix(in oklab, var(--foreground) 90%, transparent);
+  --json-num: var(--citrus);
+  --json-bool: var(--mint);
+  --json-slug: oklch(0.8 0.1 232);
+  --json-ipa: oklch(0.82 0.08 40);
+  --json-slot: var(--citrus);
+}
+.vocab-json {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.vocab-json-fields {
+  display: grid;
+  grid-template-columns: minmax(110px, max-content) minmax(0, 1fr);
+  margin: 0;
+  border: 1px solid var(--preview-line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.vocab-json-fields > dt,
+.vocab-json-fields > dd {
+  margin: 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--preview-line);
+}
+.vocab-json-fields > dt:first-of-type,
+.vocab-json-fields > dt:first-of-type + dd {
+  border-top: none;
+}
+.vocab-json-fields > dt {
+  background: color-mix(in oklab, var(--json-key) 6%, transparent);
+}
+.vocab-json-fields > dd {
+  min-width: 0;
+}
+@media (max-width: 640px) {
+  .vocab-json-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .vocab-json-fields > dt {
+    padding-bottom: 6px;
+  }
+  .vocab-json-fields > dt + dd {
+    padding-top: 10px;
+    border-top: none;
+  }
+  .vocab-json-fields > dt:first-of-type + dd {
+    padding-top: 10px;
+  }
+  .vocab-json-key {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+}
+.vocab-json-fields[data-depth]:not([data-depth="0"]) {
+  border-radius: 10px;
+  font-size: 13.5px;
+}
+.vocab-json-fields[data-depth]:not([data-depth="0"]) > dt,
+.vocab-json-fields[data-depth]:not([data-depth="0"]) > dd {
+  padding: 8px 12px;
+}
+.vocab-json-key {
+  display: flex;
+  flex-direction: column;
+  color: var(--json-key);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+.vocab-json-key code {
+  color: color-mix(in oklab, var(--json-key) 55%, transparent);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+}
+.vocab-json-str {
+  color: var(--json-str);
+  overflow-wrap: anywhere;
+}
+.vocab-json-word {
+  color: var(--foreground);
+  font-size: 15.5px;
+  font-weight: 750;
+  letter-spacing: -0.005em;
+}
+.vocab-json-num {
+  color: var(--json-num);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.vocab-json-bool,
+.vocab-json-level {
+  display: inline-block;
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--json-bool) 15%, transparent);
+  color: var(--json-bool);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.vocab-json-slug {
+  color: var(--json-slug);
+  font-size: 13px;
+}
+.vocab-json-ipa {
+  color: var(--json-ipa);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12.5px;
+}
+.vocab-json-null {
+  color: color-mix(in oklab, var(--foreground) 35%, transparent);
+  font-style: italic;
+}
+.vocab-json-slot {
+  display: inline-block;
+  padding: 1px 9px;
+  border: 1px dashed color-mix(in oklab, var(--json-slot) 60%, transparent);
+  border-radius: 7px;
+  background: color-mix(in oklab, var(--json-slot) 9%, transparent);
+  color: var(--json-slot);
+  font-size: 13px;
+  font-style: italic;
+}
+.vocab-json-note {
+  margin: 6px 0 0;
+  padding-left: 10px;
+  border-left: 2px solid color-mix(in oklab, var(--json-key) 40%, transparent);
+  color: color-mix(in oklab, var(--foreground) 58%, transparent);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.vocab-json-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vocab-json-chips > li {
+  padding: 2px 10px;
+  border: 1px solid var(--preview-line);
+  border-radius: 8px;
+  background: color-mix(in oklab, var(--foreground) 3%, transparent);
+  line-height: 1.6;
+}
+.vocab-json-chips button {
+  border: none;
+  background: none;
+  color: var(--json-key);
+  font-weight: 700;
+  cursor: pointer;
+}
+.vocab-json-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vocab-json-grid-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--preview-line);
+  border-radius: 12px;
+  scrollbar-width: thin;
+}
+.vocab-json-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.vocab-json-grid th {
+  position: sticky;
+  top: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--preview-line);
+  background: color-mix(in oklab, var(--json-key) 7%, var(--background));
+  text-align: left;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+.vocab-json-grid td {
+  min-width: 220px;
+  max-width: 380px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--preview-line);
+  vertical-align: top;
+}
+.vocab-json-grid td[data-field="word"],
+.vocab-json-grid td[data-field="id"],
+.vocab-json-grid td[data-field="level"],
+.vocab-json-grid td[data-field="pos"],
+.vocab-json-grid td[data-field="ipa"],
+.vocab-json-grid td[data-field="topic"],
+.vocab-json-grid td[data-field="topics"],
+.vocab-json-grid td[data-field="exams"] {
+  min-width: 0;
+  white-space: nowrap;
+}
+.vocab-json-grid td[data-field="usage"] {
+  min-width: 300px;
+}
+.vocab-json-grid tbody tr:nth-child(even) {
+  background: color-mix(in oklab, var(--foreground) 2.5%, transparent);
+}
+.vocab-json-grid tbody tr:hover {
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
+}
+.vocab-json-grid tbody tr:last-child td {
+  border-bottom: none;
+}
+.vocab-json-grid td.vocab-json-index {
+  width: 1%;
+  min-width: 0;
+  padding-right: 4px;
+  color: color-mix(in oklab, var(--foreground) 45%, transparent);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.vocab-json-more {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-top: 1px solid var(--preview-line);
+  background: color-mix(in oklab, var(--foreground) 3%, transparent);
+  color: var(--json-key);
+  font-size: 12.5px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* Text that does not parse (CodeView): numbered, highlighted, generous leading. */
+.vocab-code {
+  margin: 0;
+  padding: 0;
+  counter-reset: line;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.9;
+  list-style: none;
+  color: color-mix(in oklab, var(--foreground) 82%, transparent);
+}
+.vocab-code > li {
+  display: grid;
+  grid-template-columns: 3.2em 1fr;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.vocab-code > li::before {
+  counter-increment: line;
+  content: counter(line);
+  padding-right: 1em;
+  color: color-mix(in oklab, var(--foreground) 25%, transparent);
+  text-align: right;
+  user-select: none;
+}
+.vocab-code-key {
+  color: var(--json-key);
+}
+.vocab-code-str {
+  color: var(--json-slug);
+}
+.vocab-code-num {
+  color: var(--json-num);
+}
+.vocab-code-bool {
+  color: var(--json-bool);
+}
+.vocab-code-slot {
+  color: var(--json-slot);
+  font-style: italic;
+}
+.vocab-code-comment {
+  color: color-mix(in oklab, var(--foreground) 42%, transparent);
+  font-style: italic;
+}
+.vocab-code-punct {
+  color: color-mix(in oklab, var(--foreground) 40%, transparent);
+}
+
+/* The AI prompt kit as a document (PackKitDoc). */
+.vocab-doc {
+  max-width: 860px;
+  margin: 0 auto;
+  color: color-mix(in oklab, var(--foreground) 86%, transparent);
+  font-size: 15px;
+  line-height: 1.8;
+}
+.vocab-doc h3 {
+  margin: 0 0 14px;
+  color: var(--foreground);
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+.vocab-doc h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 34px 0 12px;
+  color: var(--mint);
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.vocab-doc h4::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: color-mix(in oklab, var(--mint) 25%, transparent);
+}
+.vocab-doc > p,
+.vocab-doc-fold-body > p {
+  margin: 0 0 12px;
+}
+.vocab-doc > ul,
+.vocab-doc-fold-body > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+.vocab-doc > ul > li,
+.vocab-doc-fold-body > ul > li {
+  position: relative;
+  padding-left: 22px;
+}
+.vocab-doc > ul > li::before,
+.vocab-doc-fold-body > ul > li::before {
+  content: "";
+  position: absolute;
+  top: 0.72em;
+  left: 4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--mint);
+  transform: rotate(45deg);
+}
+.vocab-doc > p code,
+.vocab-doc > ul code,
+.vocab-doc-fold-body > p code,
+.vocab-doc-fold-body > ul code,
+.vocab-doc-fold summary code {
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: color-mix(in oklab, var(--json-key) 14%, transparent);
+  color: var(--json-key);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.88em;
+}
+/* Detailed rules: three nested levels of native <details>. Level 1 is a card for the whole
+   rule set, level 2 a bordered row per topic, level 3 a quieter row per sub-topic. */
+.vocab-doc-fold {
+  margin: 0 0 10px;
+  border: 1px solid var(--preview-line);
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--foreground) 2.5%, transparent);
+}
+.vocab-doc-fold[data-depth="1"] {
+  margin-top: 30px;
+  border-color: color-mix(in oklab, var(--mint) 28%, transparent);
+  background: color-mix(in oklab, var(--mint) 4%, transparent);
+}
+.vocab-doc-fold[data-depth="3"] {
+  border-radius: 11px;
+  background: transparent;
+}
+.vocab-doc-fold > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 12px 16px;
+  color: var(--foreground);
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.vocab-doc-fold > summary::-webkit-details-marker {
+  display: none;
+}
+.vocab-doc-fold[data-depth="1"] > summary {
+  min-height: 58px;
+  color: var(--mint);
+  font-size: 13.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.vocab-doc-fold[data-depth="3"] > summary {
+  min-height: 46px;
+  padding: 10px 14px;
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+  font-size: 14.5px;
+  font-weight: 650;
+}
+.vocab-doc-fold > summary > span {
+  flex: 1;
+  min-width: 0;
+}
+.vocab-doc-fold > summary > svg {
+  flex: none;
+  color: color-mix(in oklab, var(--foreground) 50%, transparent);
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.vocab-doc-fold[data-depth="1"] > summary > svg {
+  color: var(--mint);
+}
+.vocab-doc-fold[open] > summary > svg {
+  transform: rotate(90deg);
+}
+.vocab-doc-fold > summary > em {
+  flex: none;
+  min-width: 24px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+  color: color-mix(in oklab, var(--foreground) 60%, transparent);
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+}
+.vocab-doc-fold-all {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin: -6px -6px -6px 0;
+  border: 1px solid color-mix(in oklab, var(--mint) 30%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--mint) 8%, transparent);
+  color: var(--mint);
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    transform 0.15s ease;
+}
+.vocab-doc-fold-all:hover {
+  background: color-mix(in oklab, var(--mint) 16%, transparent);
+}
+.vocab-doc-fold-all:active {
+  transform: scale(0.92);
+}
+.vocab-doc-fold-all[aria-pressed="true"] {
+  background: var(--mint);
+  color: var(--background);
+}
+.vocab-doc-fold > summary:hover {
+  background: color-mix(in oklab, var(--foreground) 3%, transparent);
+  border-radius: inherit;
+}
+.vocab-doc-fold > summary:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--mint) 60%, transparent);
+  outline-offset: -2px;
+  border-radius: inherit;
+}
+.vocab-doc-fold-body {
+  padding: 2px 16px 14px;
+  animation: vocab-doc-fold-in 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.vocab-doc-fold[data-depth="1"] > .vocab-doc-fold-body {
+  padding: 2px 12px 12px;
+}
+@keyframes vocab-doc-fold-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@media (max-width: 640px) {
+  .vocab-doc-fold-body {
+    padding: 2px 12px 12px;
+  }
+  .vocab-doc-fold[data-depth="1"] > .vocab-doc-fold-body {
+    padding: 2px 8px 8px;
+  }
+}
+.vocab-doc-block {
+  margin: 4px 0 16px;
+}
+.vocab-doc-block > .vocab-code {
+  padding: 14px 16px;
+  border: 1px solid var(--preview-line);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--background) 60%, transparent);
+}
+.vocab-doc-slot {
+  padding: 18px 20px;
+  border: 1.5px dashed color-mix(in oklab, var(--json-slot) 55%, transparent);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--json-slot) 8%, transparent);
+  color: var(--json-slot);
+  font-weight: 650;
+  text-align: center;
+}
+.vocab-preview-error {
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in oklab, var(--destructive, #f87171) 35%, transparent);
+  border-radius: 10px;
+  background: color-mix(in oklab, var(--destructive, #f87171) 10%, transparent);
+  color: var(--destructive, #f87171);
+  font-size: 12.5px;
+  white-space: pre-line;
+}
+.vocab-preview-foot {
+  display: flex;
+  justify-content: flex-end;
+}
+/* Phones are the main audience: thumb-sized targets, 16px fields (iOS zooms into anything
+   smaller on focus), and actions that span the width instead of hugging one edge. */
+@media (max-width: 640px), (pointer: coarse) {
+  .vocab-import {
+    gap: 12px;
+    padding: 16px 14px;
+  }
+  .vocab-import-btn {
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 11px;
+    font-size: 14px;
+  }
+  .vocab-import-url {
+    height: 44px;
+    border-radius: 11px;
+    font-size: 16px;
+  }
+  .vocab-import-file-name {
+    height: 36px;
+    font-size: 14px;
+  }
+  .vocab-import-file-clear {
+    width: 36px;
+    height: 36px;
+  }
+  .vocab-import-tab {
+    height: 38px;
+    font-size: 13.5px;
+  }
+  .vocab-import-active > .vocab-import-btn {
+    flex: 1 1 0;
+  }
+  .vocab-preview-tabs {
+    align-self: stretch;
+  }
+  .vocab-preview-search {
+    height: 44px;
+  }
+  .vocab-preview-search input {
+    font-size: 16px;
+  }
+  .vocab-preview-close {
+    width: 44px;
+    height: 44px;
+  }
+  .vocab-preview-foot > .vocab-import-btn {
+    flex: 1;
+    height: 48px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 359px) {
+  .vocab-import-actions {
+    flex-direction: column;
+  }
+}
+/* Narrow screens: each word becomes a card — headword and level on top, then meaning,
+   example and tags, with the index tucked in the corner. */
+@media (max-width: 820px) {
+  .vocab-preview-head {
+    display: none;
+  }
+  .vocab-preview-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "word level"
+      "def def"
+      "usage usage"
+      "topics n";
+    row-gap: 8px;
+    padding: 14px 16px;
+  }
+  .vocab-preview-row > [data-col="n"] {
+    grid-area: n;
+    align-self: end;
+  }
+  .vocab-preview-row > [data-col="word"] {
+    grid-area: word;
+  }
+  .vocab-preview-row > [data-col="level"] {
+    grid-area: level;
+  }
+  .vocab-preview-row > [data-col="def"] {
+    grid-area: def;
+  }
+  .vocab-preview-row > [data-col="topics"] {
+    grid-area: topics;
+  }
+  .vocab-preview-row > [data-col="usage"] {
+    grid-area: usage;
+  }
+  .vocab-preview-row > :empty {
+    display: none;
+  }
 }
 .vocab-import-prompt {
   margin: 0;
