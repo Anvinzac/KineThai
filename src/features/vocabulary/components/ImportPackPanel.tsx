@@ -8,7 +8,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { Check, Copy, Download, FileUp, Link2, Play, X } from "lucide-react";
+import { Download, FileUp, Link2, Play, X } from "lucide-react";
 import {
   CUSTOM_PACK_EVENT,
   clearCustomPack,
@@ -18,7 +18,7 @@ import {
   writeCustomPack,
   type CustomPack,
 } from "../lib/custom-pack";
-import { PACK_GENERATOR_PROMPT, downloadSamplePack } from "../lib/sample-pack";
+import { downloadPackKit } from "../lib/sample-pack";
 
 export function ImportPackPanel() {
   const navigate = useNavigate();
