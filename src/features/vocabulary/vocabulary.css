@@ -3870,16 +3870,21 @@
     background var(--dur-move) var(--ease-out),
     box-shadow var(--dur-move) var(--ease-out);
 }
+/* One row: a quiet "Tất cả" (every level) beside the start button, together no wider
+   than the start button used to be alone. */
 .vocab-onboard-foot {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  width: min(420px, 100%);
+  margin: 0 auto;
   padding: 4px 8px 0;
 }
 /* The start button wears the chosen level's colour, so the commitment matches the knob. */
 .vocab-onboard-go {
-  width: min(360px, 100%);
+  flex: 1;
+  min-width: 0;
   min-height: 50px;
   padding: 12px 24px;
   border-radius: 40px;
@@ -3899,14 +3904,27 @@
   color: var(--shell-text-mute);
 }
 .vocab-onboard-all {
-  min-height: 40px;
-  padding: 6px 14px;
-  background: transparent;
-  color: var(--shell-text-mute);
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  flex: none;
+  min-height: 50px;
+  padding: 12px 20px;
+  border: 1px solid var(--shell-line-strong);
+  border-radius: 40px;
+  background: color-mix(in oklab, var(--shell-text) 6%, transparent);
+  color: var(--shell-text-soft);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform var(--dur-move) var(--ease-spring);
+}
+.vocab-onboard-all:hover {
+  border-color: color-mix(in oklab, var(--shell-text) 34%, transparent);
+  background: color-mix(in oklab, var(--shell-text) 11%, transparent);
+}
+.vocab-onboard-all:active {
+  transform: scale(0.97);
 }
 /* Short screens: ten rows have to share less height, so the secondary line of each gives. */
 @media (max-height: 640px) {
@@ -4137,8 +4155,9 @@
     padding: 8px 14px;
   }
   .vocab-onboard[data-landscape] .vocab-onboard-all {
-    min-height: 34px;
-    font-size: 11px;
+    min-height: 38px;
+    padding: 8px 14px;
+    font-size: 13px;
   }
 }
 /* Landscape reduced-motion: remove left transition on knob. */

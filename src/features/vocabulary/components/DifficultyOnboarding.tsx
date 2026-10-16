@@ -275,14 +275,19 @@ export function DifficultyOnboarding({
       <footer className="vocab-onboard-foot">
         <button
           type="button"
+          className="vocab-onboard-all"
+          aria-label="Tất cả, xem từ của mọi trình độ"
+          onClick={() => onPick(DIFFICULTY_ALL)}
+        >
+          Tất cả
+        </button>
+        <button
+          type="button"
           className="vocab-onboard-go"
           disabled={!ready}
           onClick={() => onPick(current.track.id)}
         >
           {ready ? `Bắt đầu với “${current.track.label}”` : "Đang tải…"}
-        </button>
-        <button type="button" className="vocab-onboard-all" onClick={() => onPick(DIFFICULTY_ALL)}>
-          Học mọi trình độ
         </button>
       </footer>
     </section>
