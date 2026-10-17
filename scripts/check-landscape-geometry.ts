@@ -68,7 +68,7 @@ console.log("OK — mirrored constants match vocabulary.css");
 // ── 2. No restated short-viewport breakpoint on card rules ─────────────────────
 // Page layouts (the saved page's empty vault) still read the viewport; card geometry
 // reads the shell's measured height.
-const PAGE_LAYOUT = /^\s*\.(vocab-vault|vocab-saved-empty)/;
+const PAGE_LAYOUT = /^\s*\.(vocab-vault|vocab-saved-empty|vocab-saved-list)/;
 const media = /@media[^{]*max-height:\s*(\d+)px[^{]*\{\s*([^{]+)\{/g;
 for (const match of css.matchAll(media)) {
   const [, px, selector] = match;

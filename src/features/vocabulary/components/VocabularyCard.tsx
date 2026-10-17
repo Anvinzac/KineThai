@@ -169,8 +169,10 @@ const PORTRAIT_REVEAL_Y = 34;
  * (`--vocab-word-col`) to CSS, so the stylesheet never restates the breakpoint and the
  * two can never disagree about when or how wide.
  */
-/** The answer word's share of the width; the meaning panel takes the rest. */
-const WIDE_WORD_COLUMN = 0.46;
+/** The answer word's share of the width. */
+const WIDE_WORD_COLUMN = 0.6;
+/** The meaning panel's share. The remainder is the gap between them and the edges. */
+const WIDE_PANEL_COLUMN = 0.35;
 
 /** Horizontal travel before a drag starts moving the page, in px. */
 const DRAG_SLOP_PX = 10;
@@ -772,6 +774,7 @@ export function VocabularyCard({
           ? ({
               ...colors,
               "--vocab-word-col": `${(WIDE_WORD_COLUMN * 100).toFixed(2)}%`,
+              "--vocab-panel-col": `${(WIDE_PANEL_COLUMN * 100).toFixed(2)}%`,
             } as CSSProperties)
           : colors
       }

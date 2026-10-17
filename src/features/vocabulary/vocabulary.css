@@ -5479,22 +5479,102 @@
   left: 0;
   right: calc(100% - var(--vocab-word-col));
 }
-/* The panel takes the right column and runs the full height, so a long definition has
-   somewhere to go instead of scrolling inside two lines. */
+/* The panel takes the right column, centred on the word's own line rather than hung
+   from the top: the two columns then read as one row. Vertical centring is done with
+   `margin-block: auto` between a set top and bottom, NOT a translate — the panel
+   springs in and the spring owns `transform`.
+
+   It is free to grow into the whole column height, which is how it pays for being
+   narrower than it was when it spanned the card. */
 .vocab-card[data-reveal-split="two-column"] .vocab-reveal-details {
   --vocab-reveal-top: var(--vocab-reveal-head);
-  left: calc(var(--vocab-word-col) + var(--vocab-col-gap));
+  top: var(--vocab-reveal-head);
+  bottom: var(--vocab-chrome-top);
+  left: auto;
   right: var(--vocab-col-edge);
-  width: auto;
+  width: var(--vocab-panel-col);
+  height: fit-content;
+  margin-block: auto;
   margin-inline: 0;
-  max-height: calc(
-    100% - var(--vocab-reveal-head) - var(--vocab-chrome-top) - var(--vocab-reveal-gap)
-  );
+  max-height: calc(100% - var(--vocab-reveal-head) - var(--vocab-chrome-top));
 }
 /* The celebration belongs to the word, so it bursts from the middle of ITS column. */
 .vocab-card[data-reveal-split="two-column"] .vocab-reveal-burst {
   top: calc(var(--vocab-reveal-head) + var(--vocab-reveal-free) / 2);
   left: calc(var(--vocab-word-col) / 2);
+}
+
+/* ── Overlays use the width on a landscape phone ─────────────────────────────
+   Both of these are portrait columns by default. On a landscape card that leaves a
+   tall narrow strip scrolling in the middle of a wide screen: the options sheet
+   measured 520px wide with 61% of its content behind a scroll, and the saved list
+   showed two 70px rows at a time across 740px of width.
+
+   The options sheet is feed chrome, so it keys on the shell's MEASURED height
+   (data-short-viewport, published by useShellHeightVar) rather than restating the
+   breakpoint in a media query. The saved page below is a page layout, which still
+   reads the viewport — see check-landscape-geometry's PAGE_LAYOUT allowlist. */
+.vocabulary-shell[data-short-viewport="landscape"] .vocab-options {
+  width: min(720px, calc(100% - 28px));
+  padding: 12px 16px 16px;
+  /* Measured viewport height, NOT 100%: the sheet is positioned inside the toolbar,
+     so a percentage here resolves against that thin bar and collapsed the panel to
+     30px. --vocab-vh is the shell's real height. */
+  max-height: calc(var(--vocab-vh, 100dvh) - 92px);
+}
+/* Three selects across instead of two: at this width they were half empty, and every
+   row saved here is a row not scrolled.
+
+   The sheet still scrolls, and that is accepted rather than fought. It carries seven
+   blocks of settings against ~266px of landscape height; two-column layouts were all
+   tried and cost more than they saved — CSS `columns` clipped the overflow sideways
+   into nothing, auto-flow grid paired the one-line summary with the three-select block
+   and made the sheet TALLER than the single column it replaced (638 vs 519), and a
+   spanning grid row inflated it further (657). Width plus a denser select row takes it
+   from 61% hidden to 49% honestly. */
+.vocabulary-shell[data-short-viewport="landscape"] .vocab-select-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+/* The saved page is a page layout, not card chrome: two words per row doubles what is
+   on screen without shrinking the rows. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .vocab-saved-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: start;
+  }
+}
+
+/* ── Report panel on a landscape phone ───────────────────────────────────────
+   The portrait panel is a 372px column. On a landscape card that is a quarter of
+   the width, so eight reason chips wrapped into FOUR rows and 39% of the panel sat
+   behind a scroll — the chips, the note and the send button all competing for
+   ~200px of height while 370px of width went unused beside them.
+
+   Here it is given the width instead: a wide, short sheet whose chips lay out in
+   two rows and whose content fits without scrolling. The toolbar clearance also
+   drops from the portrait 102px to 72px, because in this tier the toolbar ends at
+   56px rather than sitting low on a tall screen. */
+.vocab-card[data-reveal-split="two-column"] .vocab-report-panel {
+  --vocab-report-w: min(680px, calc(100% - 24px));
+  width: var(--vocab-report-w);
+  /* Centred on the card rather than pinned to the report button's end: at this width
+     there is no "end" of the row left to hug. */
+  left: calc((100% - var(--vocab-report-w)) / 2);
+  max-height: calc(100% - var(--vocab-chrome-inset) - var(--vocab-chrome-bar) - 72px);
+  padding: 12px 16px;
+  transform-origin: bottom center;
+}
+.vocab-card[data-reveal-split="two-column"] .vocab-report-reasons {
+  /* Centred so a short last row sits under the middle of the rows above it. */
+  justify-content: center;
+  margin-top: 10px;
+}
+.vocab-card[data-reveal-split="two-column"] .vocab-report-send {
+  margin-top: 12px;
+  min-height: 42px;
 }
 
 /* The page label is hidden on short screens (see the max-height: 620px rule above), so
