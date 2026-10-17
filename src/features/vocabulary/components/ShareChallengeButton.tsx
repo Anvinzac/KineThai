@@ -12,14 +12,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Share2 } from "lucide-react";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
 
 /** How long the confirmation stays up before the button returns to its idle face. */
 const CONFIRM_MS = 2200;
-
-/** What goes in the message. Deliberately free of the answer. */
-function challengeText(url: string): string {
-  return `Đoán thử từ này xem, tui cá là bạn chịu thua 😎\n${url}`;
-}
 
 /**
  * Share this word as a guessing challenge.
@@ -27,6 +24,7 @@ function challengeText(url: string): string {
  * @returns The button, or null when the word has no code yet.
  */
 export function ShareChallengeButton({ code }: { code?: string }): React.ReactElement | null {
+  const ui = useLocale();
   const [done, setDone] = useState(false);
   const timer = useRef<number | null>(null);
 
@@ -47,12 +45,13 @@ export function ShareChallengeButton({ code }: { code?: string }): React.ReactEl
 
   async function share() {
     const url = `${window.location.origin}/w/${code}`;
-    const text = challengeText(url);
+    // Deliberately free of the answer.
+    const text = t(ui, "share.message", { url });
     try {
       // The share sheet is the point on a phone; `share` resolves when the sheet
       // closes, and rejects on cancel — which is not an error worth reporting.
       if (navigator.share) {
-        await navigator.share({ title: "Đoán từ này đi!", text });
+        await navigator.share({ title: t(ui, "share.title"), text });
         return;
       }
       await navigator.clipboard.writeText(text);
@@ -70,11 +69,11 @@ export function ShareChallengeButton({ code }: { code?: string }): React.ReactEl
         className="vocab-share-button"
         data-done={done || undefined}
         onClick={share}
-        aria-label={done ? "Đã chép link thách đố" : "Chia sẻ để thách bạn bè đoán từ này"}
-        title="Thách bạn bè đoán từ này"
+        aria-label={t(ui, done ? "share.ariaDone" : "share.ariaIdle")}
+        title={t(ui, "share.buttonTitle")}
       >
         {done ? <Check size={17} /> : <Share2 size={17} />}
-        <span className="vocab-share-label">{done ? "Đã chép!" : "Chia sẻ"}</span>
+        <span className="vocab-share-label">{t(ui, done ? "share.labelDone" : "share.label")}</span>
       </button>
     </div>
   );

@@ -15,6 +15,9 @@ import { Link, useParams } from "@tanstack/react-router";
 import { useMemo, useState, type FormEvent } from "react";
 import { ArrowLeft, Send } from "lucide-react";
 import { findWordByShareCode } from "../lib/saved-words";
+import { resolveClue } from "../lib/clues";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
 import { MarkedText } from "./MarkedText";
 import "../vocabulary.css";
 
@@ -30,6 +33,7 @@ function matches(guess: string, answer: string): boolean {
  */
 export function ChallengePage(): React.ReactElement {
   const { code = "" } = useParams({ strict: false }) as { code?: string };
+  const ui = useLocale();
   const word = useMemo(() => findWordByShareCode(code), [code]);
   const [guess, setGuess] = useState("");
   const [wrong, setWrong] = useState(0);
@@ -39,13 +43,12 @@ export function ChallengePage(): React.ReactElement {
     return (
       <main className="vocabulary-shell vocab-challenge-shell">
         <div className="vocab-challenge-card">
-          <h1 className="vocab-challenge-title">Không tìm thấy từ này</h1>
+          <h1 className="vocab-challenge-title">{t(ui, "challenge.notFoundTitle")}</h1>
           <p className="vocab-challenge-body">
-            Mã <strong>{code.toUpperCase()}</strong> không còn trong kho từ. Có thể bạn chép thiếu
-            một ký tự, hoặc từ đó đã được thay.
+            {t(ui, "challenge.notFoundBody", { code: code.toUpperCase() })}
           </p>
           <Link className="vocab-light-button" to="/feed">
-            Mở luồng từ vựng
+            {t(ui, "challenge.openFeed")}
           </Link>
         </div>
       </main>
@@ -65,12 +68,16 @@ export function ChallengePage(): React.ReactElement {
   return (
     <main className="vocabulary-shell vocab-challenge-shell">
       <div className="vocab-challenge-card">
-        <p className="vocab-challenge-eyebrow">Bạn bè thách bạn đoán từ này</p>
+        <p className="vocab-challenge-eyebrow">{t(ui, "challenge.eyebrow")}</p>
 
         {/* The clue, never the answer. */}
-        {word.leadVi && <p className="vocab-challenge-clue">{word.leadVi}</p>}
+        {word.leadVi && (
+          <p className="vocab-challenge-clue" lang={ui}>
+            {resolveClue(word, "lead", ui)}
+          </p>
+        )}
         <p className="vocab-challenge-hint">
-          Gồm <strong>{letters}</strong> chữ cái, bắt đầu bằng <strong>{initial}</strong>
+          {t(ui, "challenge.hint", { count: letters, initial })}
         </p>
 
         {solved ? (
@@ -83,38 +90,40 @@ export function ChallengePage(): React.ReactElement {
                 {word.ipa}
               </p>
             )}
-            <p className="vocab-challenge-def" lang="vi">
-              <MarkedText text={word.defVi} />
+            <p className="vocab-challenge-def" lang={ui}>
+              <MarkedText text={resolveClue(word, "def", ui)} />
             </p>
-            <p className="vocab-challenge-body">
-              Đoán đúng rồi! Giờ tới lượt bạn thách người khác.
-            </p>
+            <p className="vocab-challenge-body">{t(ui, "challenge.solved")}</p>
             <Link className="vocab-light-button" to="/feed">
-              Học thêm từ mới
+              {t(ui, "challenge.learnMore")}
             </Link>
           </div>
         ) : (
           <form className="vocab-challenge-form" onSubmit={onSubmit}>
             <label className="sr-only" htmlFor="vocab-guess">
-              Từ bạn đoán
+              {t(ui, "challenge.guessLabel")}
             </label>
             <input
               id="vocab-guess"
               className="vocab-challenge-input"
               value={guess}
               onChange={(event) => setGuess(event.target.value)}
-              placeholder="Đoán thử xem…"
+              placeholder={t(ui, "challenge.guessPlaceholder")}
               autoComplete="off"
               autoCapitalize="none"
               spellCheck={false}
               lang="en"
             />
-            <button className="vocab-challenge-send" type="submit" aria-label="Gửi câu trả lời">
+            <button
+              className="vocab-challenge-send"
+              type="submit"
+              aria-label={t(ui, "challenge.send")}
+            >
               <Send size={17} />
             </button>
             {wrong > 0 && (
               <p className="vocab-challenge-wrong" role="status">
-                Chưa đúng — thử lại nha ({wrong} lần)
+                {t(ui, "challenge.wrong", { count: wrong })}
               </p>
             )}
           </form>
@@ -122,7 +131,7 @@ export function ChallengePage(): React.ReactElement {
 
         <Link className="vocab-challenge-back" to="/feed">
           <ArrowLeft size={15} aria-hidden="true" />
-          Về luồng từ vựng
+          {t(ui, "challenge.back")}
         </Link>
       </div>
     </main>
