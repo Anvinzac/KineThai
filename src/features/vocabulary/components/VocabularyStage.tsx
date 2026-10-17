@@ -250,7 +250,6 @@ export function VocabularyStage({
       </AnimatePresence>
       {stage.reveal && (
         <motion.div
-          ref={details}
           className="vocab-reveal-details"
           tabIndex={0}
           aria-label="Nghĩa và ví dụ của từ"
@@ -260,23 +259,28 @@ export function VocabularyStage({
             reducedMotion ? { duration: 0 } : { ...SPRING.gentle, delay: DETAILS_DELAY_SECONDS }
           }
         >
-          {(word.ipa || word.pos) && (
-            <p className="vocab-pronunciation" lang="en">
-              {word.ipa} {word.pos && <span>· {word.pos}</span>}
-            </p>
-          )}
-          <p lang="vi">
-            <MarkedText text={word.defVi} />
-          </p>
-          {word.usage.map((example, index) => (
-            <div className="vocab-example" key={index}>
-              <p lang="en">
-                <FilledUsage text={example.en} word={word.word} />
+          {/* The text scrolls in here, not on the panel itself, so the share badge
+              below can hang off the panel's bottom edge: a child of a scroll
+              container is clipped by it and could never straddle the border.
+              `details` follows the scroller, because its one job is resetting
+              scrollTop when the word changes. */}
+          <div className="vocab-reveal-scroll" ref={details}>
+            {(word.ipa || word.pos) && (
+              <p className="vocab-pronunciation" lang="en">
+                {word.ipa} {word.pos && <span>· {word.pos}</span>}
               </p>
-            </div>
-          ))}
-          {/* Last child and sticky, so it sits in the panel's bottom-right corner
-              and stays there while a long definition scrolls under it. */}
+            )}
+            <p lang="vi">
+              <MarkedText text={word.defVi} />
+            </p>
+            {word.usage.map((example, index) => (
+              <div className="vocab-example" key={index}>
+                <p lang="en">
+                  <FilledUsage text={example.en} word={word.word} />
+                </p>
+              </div>
+            ))}
+          </div>
           <ShareChallengeButton code={word.shareCode} />
         </motion.div>
       )}

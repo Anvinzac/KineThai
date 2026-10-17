@@ -1744,8 +1744,13 @@
   max-height: calc(
     100% - var(--vocab-reveal-top) - var(--vocab-chrome-top) - var(--vocab-reveal-gap)
   );
-  overflow-y: auto;
-  overflow-x: hidden;
+  /* A flex column whose scrolling lives on the inner .vocab-reveal-scroll, not
+     here. The share badge straddles this box's bottom edge, and a child of a
+     scroll container is clipped by it — it could never hang outside. The column
+     keeps the inner scroller bounded by this max-height. */
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
   overscroll-behavior-y: contain;
   scrollbar-width: thin;
   /* Never let text overflow horizontally, but respect Vietnamese compound words:
@@ -1760,6 +1765,11 @@
   font-size: clamp(16px, 1.9vw, 21px);
   line-height: 1.6;
   --vocab-reveal-pad-y: 14px;
+  /* The share badge's upper ~45% sits inside this box; the room for it is reserved
+     on .vocab-reveal-scroll below, NOT by this padding — two responsive tiers
+     re-declare the `padding` shorthand, so anything set here is wiped at exactly
+     the sizes where the panel hugs its content and the slack is needed most. */
+  --vocab-reveal-badge-room: 20px;
   padding: var(--vocab-reveal-pad-y) 18px;
   border-radius: 20px;
   border: 1px solid color-mix(in srgb, var(--vocab-ink) 14%, transparent);
@@ -7051,18 +7061,34 @@
   text-decoration: none;
 }
 
+/* The panel's text. `min-height: 0` is what lets a flex item actually shrink to
+   its container and scroll instead of growing the panel past its max-height. */
+.vocab-reveal-scroll {
+  min-height: 0;
+  /* Keeps the last line of the definition out from under the badge. On the
+     two-column landscape panel, which hugs its content exactly, there is no other
+     slack. */
+  margin-bottom: var(--vocab-reveal-badge-room, 20px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+}
+
 /* ── Share-a-challenge button ────────────────────────────────────────────────
    Sits in the meaning panel's bottom-right corner. Sticky rather than absolute:
    the panel scrolls when a definition is long, and an absolutely positioned
    child would scroll away with the text instead of staying in the corner. */
+/* A badge on the panel's bottom edge: mostly outside, so it reads as attached to
+   the panel rather than as another line of its content. Absolute against the
+   panel (which is itself positioned), and the panel's overflow is visible so the
+   overhanging half is not clipped. */
 .vocab-share-dock {
-  position: sticky;
+  position: absolute;
+  right: 16px;
   bottom: 0;
-  display: flex;
-  justify-content: flex-end;
-  /* Pulled into the panel's own padding so the button hugs the corner, and given
-     negative top margin so it overlaps the last line rather than adding a row. */
-  margin: -8px -4px -4px 0;
+  /* Just over half of the badge sits below the panel's edge. */
+  transform: translateY(58%);
   pointer-events: none;
 }
 .vocab-share-button {

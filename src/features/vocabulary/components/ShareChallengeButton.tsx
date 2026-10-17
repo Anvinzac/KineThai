@@ -70,11 +70,11 @@ export function ShareChallengeButton({ code }: { code?: string }): React.ReactEl
         className="vocab-share-button"
         data-done={done || undefined}
         onClick={share}
-        aria-label={done ? "Đã chép link thách đố" : "Thách bạn bè đoán từ này"}
+        aria-label={done ? "Đã chép link thách đố" : "Chia sẻ để thách bạn bè đoán từ này"}
         title="Thách bạn bè đoán từ này"
       >
         {done ? <Check size={17} /> : <Share2 size={17} />}
-        <span className="vocab-share-label">{done ? "Đã chép!" : "Thách bạn"}</span>
+        <span className="vocab-share-label">{done ? "Đã chép!" : "Chia sẻ"}</span>
       </button>
     </div>
   );
