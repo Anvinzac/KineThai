@@ -3684,7 +3684,11 @@
    is a full-opacity sibling, so every level sits solidly ON the bar. */
 .vocab-onboard-rung :is(.vocab-onboard-name, .vocab-onboard-sample) {
   opacity: 0.5;
-  transition: opacity var(--dur-quick) var(--ease-out);
+  /* transform is animated too: the sample word lifts from the dot line to the
+     name line when its rung becomes active (see .vocab-onboard-sample). */
+  transition:
+    opacity var(--dur-quick) var(--ease-out),
+    transform var(--dur-quick) var(--ease-out);
 }
 .vocab-onboard-rung[data-on] :is(.vocab-onboard-name, .vocab-onboard-sample) {
   opacity: 1;
@@ -3760,6 +3764,16 @@
   gap: 2px;
   min-width: 0;
   text-align: left;
+  /* At rest the sample word drops onto its dot's centre line (the rung's
+     vertical middle) instead of floating up level with the name. The active
+     rung lifts it back beside the name while it zooms — the [data-on] rule and
+     the strong's font-size. translateY, not margin, so the lift animates and
+     costs no layout. ~9px = measured gap between the word centre (351px) and
+     the dot centre (360px) on an inactive rung. */
+  transform: translateY(9px);
+}
+.vocab-onboard-rung[data-on] .vocab-onboard-sample {
+  transform: translateY(0);
 }
 .vocab-onboard-sample strong {
   font-size: 15px;
@@ -3979,6 +3993,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .vocab-onboard-rung .vocab-onboard-sample,
   .vocab-onboard-knob,
   .vocab-onboard-label,
   .vocab-onboard-sample strong,
@@ -4085,6 +4100,9 @@
     padding: 0 2px;
     box-sizing: border-box;
     bottom: auto;
+    /* Portrait drops the word onto the dot line; the horizontal rail places the
+       word by `bottom` instead, so the vertical nudge must not leak here. */
+    transform: none;
   }
   /* Odd rungs (1st, 3rd, 5th…): word sits closer to the rail. */
   .vocab-onboard[data-landscape] .vocab-onboard-rung:nth-child(odd) .vocab-onboard-sample {
