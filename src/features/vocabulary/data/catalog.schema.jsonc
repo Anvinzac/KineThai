@@ -40,6 +40,31 @@
  *    • `emphasis` array — LEGACY. Still schema-valid and de-duplicated by
  *      normalizeEmphasisPhrases(), but the feed renderer no longer reads it. Prefer inline.
  *
+ *  ── Word joiner  `_`  (which syllables are ONE word) ─────────────────────────────
+ *    Vietnamese is written syllable by syllable, so "ba lô" looks like two words and a
+ *    line could break in the middle of it. In every text field (defVi / leadVi /
+ *    anticipateVi / usage.vi / usage.en) join the syllables of a single word with ONE
+ *    underscore and no spaces, and keep a plain space between words:
+ *
+ *        "Sáng nào cũng đeo ba_lô ra cửa."      "Điều /quan_trọng/ nhất là sức_khỏe."
+ *
+ *    • One-syllable words are written alone. Never join two different words.
+ *    • A highlight `/…/` starts and ends on a word boundary (`/quan_trọng/`, never
+ *      `/quan/_trọng`).
+ *    • The answer blank is a RUN of underscores (`____`) and is unrelated: a join is a
+ *      single underscore with a letter on both sides.
+ *    • Length rules written in "words" count syllables; `ba_lô` is two.
+ *    • Any language works the same way; between two Han glyphs the join keeps them
+ *      together without adding a space (`诚_实`).
+ *    • Optional and backward compatible: text without joins renders as before.
+ *    The underscore never reaches a reader. lib/catalog-source.ts turns it into a
+ *    no-break space (or a word joiner between Han glyphs) as the catalog is loaded
+ *    (lib/word-joiner.ts): prose keeps the word on one line natively, and the kinetic
+ *    pages treat it as one unbreakable segment that moves to the next line whole.
+ *    Guard: npm run check:word-joiners
+ *    Rules for whoever GENERATES the text (what to join, per language, with examples):
+ *    docs/word-joiner-generation-handoff.md
+ *
  *  ── Field-origin legend used below ───────────────────────────────────────────────
  *    [AUTHOR]   you write it in the deck
  *    [DERIVED]  normalizeDeck() computes it — never author, it is overwritten

@@ -38,7 +38,8 @@
         }
       ],
       "chars": 2,
-      "initial": "嫉"
+      "initial": "嫉",
+      "shareCode": "1N4"
     },
     {
       "id": "lonely",
@@ -60,7 +61,8 @@
         }
       ],
       "chars": 2,
-      "initial": "孤"
+      "initial": "孤",
+      "shareCode": "6HH"
     },
     {
       "id": "proud",
@@ -82,7 +84,8 @@
         }
       ],
       "chars": 2,
-      "initial": "骄"
+      "initial": "骄",
+      "shareCode": "Y64"
     },
     {
       "id": "confused",
@@ -104,7 +107,8 @@
         }
       ],
       "chars": 2,
-      "initial": "困"
+      "initial": "困",
+      "shareCode": "ED9"
     },
     {
       "id": "exhausted",
@@ -126,7 +130,8 @@
         }
       ],
       "chars": 4,
-      "initial": "精"
+      "initial": "精",
+      "shareCode": "HH2"
     },
     {
       "id": "honest",
@@ -148,7 +153,8 @@
         }
       ],
       "chars": 2,
-      "initial": "老"
+      "initial": "老",
+      "shareCode": "PZT"
     },
     {
       "id": "polite",
@@ -170,7 +176,8 @@
         }
       ],
       "chars": 2,
-      "initial": "礼"
+      "initial": "礼",
+      "shareCode": "ZGT"
     },
     {
       "id": "lazy",
@@ -192,7 +199,8 @@
         }
       ],
       "chars": 1,
-      "initial": "懒"
+      "initial": "懒",
+      "shareCode": "R2Y"
     },
     {
       "id": "brave",
@@ -214,7 +222,8 @@
         }
       ],
       "chars": 2,
-      "initial": "勇"
+      "initial": "勇",
+      "shareCode": "30Q"
     },
     {
       "id": "selfish",
@@ -236,7 +245,8 @@
         }
       ],
       "chars": 2,
-      "initial": "自"
+      "initial": "自",
+      "shareCode": "FY8"
     },
     {
       "id": "complain",
@@ -258,7 +268,8 @@
         }
       ],
       "chars": 2,
-      "initial": "抱"
+      "initial": "抱",
+      "shareCode": "CXR"
     },
     {
       "id": "explain",
@@ -280,7 +291,8 @@
         }
       ],
       "chars": 2,
-      "initial": "解"
+      "initial": "解",
+      "shareCode": "T15"
     },
     {
       "id": "promise",
@@ -302,7 +314,8 @@
         }
       ],
       "chars": 2,
-      "initial": "保"
+      "initial": "保",
+      "shareCode": "J9H"
     },
     {
       "id": "argue",
@@ -324,7 +337,8 @@
         }
       ],
       "chars": 2,
-      "initial": "吵"
+      "initial": "吵",
+      "shareCode": "QBA"
     },
     {
       "id": "encourage",
@@ -346,7 +360,8 @@
         }
       ],
       "chars": 2,
-      "initial": "鼓"
+      "initial": "鼓",
+      "shareCode": "9Y9"
     },
     {
       "id": "realize",
@@ -368,7 +383,8 @@
         }
       ],
       "chars": 3,
-      "initial": "意"
+      "initial": "意",
+      "shareCode": "N67"
     },
     {
       "id": "decide",
@@ -390,7 +406,8 @@
         }
       ],
       "chars": 2,
-      "initial": "决"
+      "initial": "决",
+      "shareCode": "76V"
     },
     {
       "id": "forget",
@@ -412,7 +429,8 @@
         }
       ],
       "chars": 2,
-      "initial": "忘"
+      "initial": "忘",
+      "shareCode": "KE8"
     },
     {
       "id": "habit",
@@ -434,7 +452,8 @@
         }
       ],
       "chars": 2,
-      "initial": "习"
+      "initial": "习",
+      "shareCode": "TH9"
     },
     {
       "id": "neighbor",
@@ -456,7 +475,8 @@
         }
       ],
       "chars": 2,
-      "initial": "邻"
+      "initial": "邻",
+      "shareCode": "8N5"
     },
     {
       "id": "rush",
@@ -478,7 +498,8 @@
         }
       ],
       "chars": 2,
-      "initial": "着"
+      "initial": "着",
+      "shareCode": "HHV"
     },
     {
       "id": "afford",
@@ -500,7 +521,8 @@
         }
       ],
       "chars": 3,
-      "initial": "买"
+      "initial": "买",
+      "shareCode": "JY8"
     },
     {
       "id": "borrow",
@@ -522,7 +544,8 @@
         }
       ],
       "chars": 1,
-      "initial": "借"
+      "initial": "借",
+      "shareCode": "CFP"
     },
     {
       "id": "budget",
@@ -544,7 +567,8 @@
         }
       ],
       "chars": 2,
-      "initial": "预"
+      "initial": "预",
+      "shareCode": "31X"
     },
     {
       "id": "salary",
@@ -566,7 +590,8 @@
         }
       ],
       "chars": 2,
-      "initial": "工"
+      "initial": "工",
+      "shareCode": "5ZR"
     }
   ]
 }

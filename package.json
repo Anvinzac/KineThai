@@ -21,11 +21,17 @@
     "check:workbench": "npx tsx scripts/check-vocabulary-workbench.ts",
     "check:hanzi": "npx tsx scripts/check-hanzi-spelling.ts",
     "check:douyin": "npx tsx scripts/check-douyin-presets.ts",
+    "check:measured-lines": "npx tsx scripts/check-measured-lines.ts",
+    "check:word-joiners": "npx tsx scripts/check-word-joiners.ts",
+    "check:landscape": "npx tsx scripts/check-landscape-geometry.ts",
+    "check:orientation-gate": "npx tsx scripts/check-orientation-gate.ts",
     "build:hanzi": "npx tsx scripts/build-hanzi-strokes.ts",
     "mock:saved": "npx tsx scripts/mock-saved-words.ts",
     "build:pages": "VITE_STATIC_BUILD=1 BASE_PATH=/KineThai/ vite build",
     "build:vercel": "VITE_STATIC_BUILD=1 BASE_PATH=/ vite build",
-    "check:static-feed": "npx tsx scripts/check-static-feed.ts"
+    "check:static-feed": "npx tsx scripts/check-static-feed.ts",
+    "share:codes": "npx tsx scripts/assign-share-codes.ts",
+    "check:share-codes": "npx tsx scripts/check-share-codes.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -90,7 +96,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
-    "@lovable.dev/vite-tanstack-config": "2.25.3",
+    "@lovable.dev/vite-tanstack-config": "2.26.5",
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",

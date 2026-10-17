@@ -3,14 +3,17 @@
  *
  * A reviewer picks what is wrong from fixed complaint chips rather than typing a prompt,
  * and the result is validated against the same rules the crawler's prompt asks for
- * (length window, no English, no quotes) before it is accepted. Two attempts, then the
+ * (length window, no English, no quotes) before it is accepted. The model is asked to
+ * join the syllables of each word with an underscore (see vocabulary/lib/word-joiner), so
+ * the card can keep a word on one line. Two attempts, then the
  * reviewer is told to edit by hand — a model that keeps breaking the rules should not
  * quietly win.
  *
  * Exports: REGEN_FIELDS, RegenField, regeneratePhrase
- * Depends on: ../lib/llm.server
+ * Depends on: ../lib/llm.server, vocabulary/lib/word-joiner
  */
 
+import { countJoinedUnits } from "@/features/vocabulary/lib/word-joiner";
 import { llmChat, type LlmConfig } from "../lib/llm.server";
 
 export const REGEN_FIELDS = ["defVi", "leadVi", "anticipateVi"] as const;
@@ -45,9 +48,9 @@ const SPECS: Record<RegenField, { minW: number; maxW: number; maxCh: number; rul
   },
 };
 
-function wordCount(text: string): number {
-  return text.split(/\s+/).filter(Boolean).length;
-}
+// Length rules are written in syllables, and a word the model joined ("ba_lô") is still
+// two of them.
+const wordCount = countJoinedUnits;
 
 /**
  * Generate one replacement phrase, retrying once when the model breaks a rule.
@@ -74,14 +77,18 @@ export async function regeneratePhrase(
     `Write a replacement for the "${field}" field of a Vietnamese vocabulary card for the English word "${ctx.english}".`,
     "",
     `Field rules: ${spec.rules}`,
-    `Length: exactly ${spec.minW}–${spec.maxW} Vietnamese words (space-separated syllables), max ${spec.maxCh} characters.`,
+    `Length: exactly ${spec.minW}–${spec.maxW} Vietnamese syllables, max ${spec.maxCh} characters.`,
+    "Word boundaries: join the syllables of every multi-syllable word with an underscore and no spaces " +
+      "(ba_lô, quan_trọng, thình_thịch, học_sinh); separate words with a single space. " +
+      "A one-syllable word is written alone. Never join two different words.",
     `The learner's level is ${ctx.level ?? "B1"}, topic ${ctx.topic || "general"}.`,
     "",
     `Current version (rejected): "${ctx.current}"`,
     `Reviewer complaints: ${ctx.complaints.join("; ")}`,
     ctx.otherFields ? `Other fields on this card (do NOT copy them): ${ctx.otherFields}` : "",
     wantsEmphasis
-      ? "Mark the 1–2 short spoken phrases (2–3 syllables each) worth highlighting by wrapping them in *asterisks*."
+      ? "Mark the 1–2 short spoken phrases (2–3 syllables each) worth highlighting by wrapping them in *asterisks*; " +
+        "a highlight starts and ends on a word boundary, never inside a joined word."
       : "",
     "",
     "Fix every complaint. Reply with ONLY the new Vietnamese phrase — no quotes, no explanations.",

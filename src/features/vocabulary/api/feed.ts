@@ -1,6 +1,7 @@
 /** Anonymous browser fetch adapter. Exports: fetchVocabularyPage, VocabularyRequestError. Depends on: transport types, backfill bounds, feed-pager (static-host fallback). */
 import { VOCAB_PAGE_LIMIT } from "../lib/backfill";
 import { readVocabularyPage } from "../lib/feed-pager";
+import { readCustomPage } from "../lib/custom-pack";
 import { resolveTarget } from "../lib/target-language";
 import type { FeedCursor, FeedPage, VocabularyFilters } from "../types";
 
@@ -68,6 +69,14 @@ export async function fetchVocabularyPage(input: {
   cursor: FeedCursor;
   signal: AbortSignal;
 }): Promise<FeedPage> {
+  // An imported pack plays entirely in the browser: no request, only its own words.
+  const local = readCustomPage({
+    seed: input.seed,
+    ...input.filters,
+    position: input.cursor.position,
+    limit: VOCAB_PAGE_LIMIT,
+  });
+  if (local) return local;
   const controller = new AbortController();
   const abort = () => controller.abort();
   input.signal.addEventListener("abort", abort, { once: true });

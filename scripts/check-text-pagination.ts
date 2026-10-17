@@ -109,6 +109,31 @@ check(
   dashEnglishPages,
 );
 
+// 9. With keepPhraseEdges (the vocabulary card), a page never opens one word after a comma,
+// full stop or semicolon. Without it, pages split exactly as before.
+const strandedAfterComma =
+  "Chiều hôm qua trời mưa rất to, sấm và chớp liên hồi khiến cả xóm phải đóng cửa ngồi trong nhà suốt mấy tiếng đồng hồ.";
+const unguarded = paginateText(strandedAfterComma);
+const guarded = paginateText(strandedAfterComma, { keepPhraseEdges: true });
+check(
+  "default paging is unchanged (splits before 'và', one word after the comma)",
+  unguarded.length === 2 && (unguarded[0] ?? "").endsWith("to, sấm"),
+  unguarded,
+);
+check(
+  "keepPhraseEdges refuses the break one word after the comma",
+  guarded.length === 1 && guarded[0] === strandedAfterComma,
+  guarded,
+);
+const farFromComma =
+  "Chiều hôm qua trời mưa rất to, sấm chớp liên hồi và cả xóm phải đóng cửa ngồi trong nhà suốt mấy tiếng đồng hồ liền.";
+check(
+  "keepPhraseEdges keeps a break that is far enough from the comma",
+  JSON.stringify(paginateText(farFromComma, { keepPhraseEdges: true })) ===
+    JSON.stringify(paginateText(farFromComma)),
+  paginateText(farFromComma, { keepPhraseEdges: true }),
+);
+
 if (failures > 0) {
   console.error(`${failures} pagination check(s) failed.`);
   process.exit(1);

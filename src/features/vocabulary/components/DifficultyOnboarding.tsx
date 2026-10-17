@@ -212,9 +212,6 @@ export function DifficultyOnboarding({
       style={
         {
           "--rung": current.color,
-          // The rail is painted with the same ten colours the knob steps through.
-          // Axis flips with orientation: 180deg = top→bottom in portrait, 90deg = left→right in landscape.
-          "--rung-scale": `linear-gradient(${landscape ? "90deg" : "180deg"}, ${RUNG_COLORS.join(", ")})`,
           "--rung-index": index,
           "--rung-count": rungs.length,
         } as React.CSSProperties
@@ -238,10 +235,6 @@ export function DifficultyOnboarding({
       </button>
 
       <div className="vocab-onboard-gauge">
-        {/* The gradient bar lives on its OWN layer, behind the ladder, so each level's dot
-            can sit ON the bar (the rail's transform would otherwise trap the bar in a
-            stacking context above every dot). The rail keeps only the draggable knob. */}
-        <span className="vocab-onboard-track" aria-hidden="true" />
         <ol className="vocab-onboard-ladder" ref={ladder}>
           {rungs.map((rung, at) => (
             <li
@@ -313,14 +306,19 @@ export function DifficultyOnboarding({
       <footer className="vocab-onboard-foot">
         <button
           type="button"
+          className="vocab-onboard-all"
+          aria-label={t(ui, "onboard.allLevels")}
+          onClick={() => onPick(DIFFICULTY_ALL)}
+        >
+          {t(ui, "onboard.allLevels")}
+        </button>
+        <button
+          type="button"
           className="vocab-onboard-go"
           disabled={!ready}
           onClick={() => onPick(current.track.id)}
         >
           {ready ? t(ui, "onboard.start", { label: current.label }) : t(ui, "onboard.loading")}
-        </button>
-        <button type="button" className="vocab-onboard-all" onClick={() => onPick(DIFFICULTY_ALL)}>
-          {t(ui, "onboard.allLevels")}
         </button>
       </footer>
     </section>

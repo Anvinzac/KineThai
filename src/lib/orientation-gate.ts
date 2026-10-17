@@ -2,7 +2,7 @@
  * Rotation-gate configuration.
  *
  * The gate shows a "rotate to portrait" overlay on phones held in landscape, because
- * every kinetic scene (vocabulary feed, post player) is authored portrait-first. It is
+ * the post player's kinetic scenes are authored portrait-first. It is
  * deliberately easy to switch off:
  *   - Flip `ORIENTATION_GATE_ENABLED` to `false` to remove the gate everywhere at once.
  *   - Or, per device and without a rebuild, run in the console:
@@ -20,12 +20,12 @@
  * Master switch. Set to `false` to disable the rotation gate across the whole app.
  * This is the single line to change once the cross-browser trial is finished.
  *
- * !!! TEMPORARILY OFF FOR LANDSCAPE TESTING — RESTORE TO `true` BEFORE DEPLOYING. !!!
- * Landscape layout work is in progress (empty-vault scene, bottom chrome band), and
- * the gate hides the very screens being worked on. Flip this back before the next
- * push to the cloud.
+ * The vocabulary feed (/feed) no longer mounts the gate at all — it has its own
+ * landscape layout. What this still covers are the post-player surfaces (community
+ * feed, permalink, profile), which only letterbox a 9:16 card. `npm run
+ * check:orientation-gate` fails if this is `false` or if the mount topology drifts.
  */
-export const ORIENTATION_GATE_ENABLED = false;
+export const ORIENTATION_GATE_ENABLED = true;
 
 /** `localStorage` key for the per-device runtime override ("on" | "off"). */
 export const ORIENTATION_GATE_STORAGE_KEY = "kinetic.orientation.gate";

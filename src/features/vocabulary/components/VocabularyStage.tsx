@@ -13,6 +13,7 @@ import { useLocale } from "../lib/useLocale";
 import { VOCAB_LINE_SPACING_SCALE } from "../lib/presets";
 import { FilledUsage, MarkedText } from "./MarkedText";
 import { RevealBurst } from "./RevealBurst";
+import { ShareChallengeButton } from "./ShareChallengeButton";
 
 /** Horizontal travel of a clue page as it arrives and leaves, in px. */
 const PAGE_ENTER_OFFSET = 34;
@@ -92,10 +93,12 @@ function StageText({
   | "entrance"
   | "fitAsUnit"
   | "dataEmphasis"
+  | "boundPhrases"
   | "secondaryEmphasis"
   | "allowFrameEmphasis"
   | "emphasisPool"
   | "timeScale"
+  | "measuredLayout"
 >) {
   const [still] = useState(reducedMotion || !playing);
   return (
@@ -126,6 +129,7 @@ export function VocabularyStage({
   emphasisPool,
   revealY,
   timeScale = 1,
+  textBudget,
 }: {
   stage: LearningStage;
   word: VocabularyWord;
@@ -157,6 +161,11 @@ export function VocabularyStage({
   revealY: number;
   /** Reading-pace stretch on the words' read-out; matches the page-duration stretch. */
   timeScale?: number;
+  /**
+   * Limits for a clue page's measured layout: its largest font and its vertical budget.
+   * With them, a Vietnamese clue is broken into lines from the real width of its words.
+   */
+  textBudget?: React.ComponentProps<typeof WordSequenceText>["measuredLayout"];
 }) {
   const locale = useLocale();
   const details = useRef<HTMLDivElement>(null);
@@ -230,10 +239,14 @@ export function VocabularyStage({
                 entrance={spec.entrance}
                 fitAsUnit={!!stage.reveal}
                 dataEmphasis={stage.dataEmphasis}
+                boundPhrases={stage.boundPhrases}
                 secondaryEmphasis={stage.secondaryEmphasis}
                 allowFrameEmphasis={allowFrameEmphasis}
                 emphasisPool={emphasisPool}
                 timeScale={timeScale}
+                // The answer is one word fitted as a unit; only clue pages are broken
+                // into lines.
+                measuredLayout={stage.reveal ? undefined : textBudget}
               />
             </motion.div>
           </motion.div>
@@ -241,7 +254,6 @@ export function VocabularyStage({
       </AnimatePresence>
       {stage.reveal && (
         <motion.div
-          ref={details}
           className="vocab-reveal-details"
           tabIndex={0}
           aria-label={t(locale, "stage.details")}
@@ -251,21 +263,29 @@ export function VocabularyStage({
             reducedMotion ? { duration: 0 } : { ...SPRING.gentle, delay: DETAILS_DELAY_SECONDS }
           }
         >
-          {(word.ipa || word.pos) && (
-            <p className="vocab-pronunciation" lang="en">
-              {word.ipa} {word.pos && <span>· {word.pos}</span>}
-            </p>
-          )}
-          <p lang={locale}>
-            <MarkedText text={resolveClue(word, "def", locale)} />
-          </p>
-          {word.usage.map((example, index) => (
-            <div className="vocab-example" key={index}>
-              <p lang="en">
-                <FilledUsage text={example.en} word={word.word} />
+          {/* The text scrolls in here, not on the panel itself, so the share badge
+              below can hang off the panel's bottom edge: a child of a scroll
+              container is clipped by it and could never straddle the border.
+              `details` follows the scroller, because its one job is resetting
+              scrollTop when the word changes. */}
+          <div className="vocab-reveal-scroll" ref={details}>
+            {(word.ipa || word.pos) && (
+              <p className="vocab-pronunciation" lang="en">
+                {word.ipa} {word.pos && <span>· {word.pos}</span>}
               </p>
-            </div>
-          ))}
+            )}
+            <p lang={locale}>
+              <MarkedText text={resolveClue(word, "def", locale)} />
+            </p>
+            {word.usage.map((example, index) => (
+              <div className="vocab-example" key={index}>
+                <p lang="en">
+                  <FilledUsage text={example.en} word={word.word} />
+                </p>
+              </div>
+            ))}
+          </div>
+          <ShareChallengeButton code={word.shareCode} />
         </motion.div>
       )}
     </motion.div>

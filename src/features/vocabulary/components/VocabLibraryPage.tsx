@@ -14,6 +14,7 @@ import { libraryGroups } from "../lib/library";
 import { formatLevelBand } from "../lib/difficulty";
 import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
+import { ImportPackPanel } from "./ImportPackPanel";
 import "../vocabulary.css";
 
 /** Show the curated pack shelves. @returns Public library page. */
@@ -38,6 +39,7 @@ export function VocabLibraryPage() {
       </header>
 
       <div className="vocab-library-body">
+        <ImportPackPanel />
         {groups.map((group) => (
           <section
             className="vocab-library-group"

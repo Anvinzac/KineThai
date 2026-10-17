@@ -28,6 +28,19 @@ export {
   getVietnameseWordLines,
 } from "./page-metrics";
 
+export {
+  MAX_MEASURED_SEGMENTS,
+  getPunctuationPhraseEdges,
+  isBreakOneWordFromEdge,
+  solveMeasuredLines,
+} from "./measured-lines";
+export type {
+  MeasuredLineBounds,
+  MeasuredLineOptions,
+  MeasuredLines,
+  MeasuredSegment,
+} from "./measured-lines";
+
 export { getHanTokens, isLikelyChineseText } from "./han-lines";
 
 export {

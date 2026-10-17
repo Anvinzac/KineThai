@@ -27,7 +27,14 @@ import {
 } from "framer-motion";
 import { SPRING, getBeatSeconds } from "@/lib/motion";
 import { Bookmark, Heart, Pause, Play } from "lucide-react";
-import { buildVocabularyCanvas, choosePresentation, fitVocabularyTextSize } from "../lib/presets";
+import {
+  VOCAB_TEXT_BUDGET_LINE_EM,
+  buildVocabularyCanvas,
+  choosePresentation,
+  fitVocabularyTextSize,
+  getVocabularyTextHeightBudget,
+} from "../lib/presets";
+import { getWideRevealY, isShortViewport } from "../lib/landscape-geometry";
 import { buildStages } from "../lib/stages";
 import { resolveClue } from "../lib/clues";
 import { t } from "../lib/ui-copy";
@@ -154,8 +161,21 @@ const rowItemVariants: Variants = {
 };
 /** Where the answer word sits in its band, as a percentage of the band's height. */
 const PORTRAIT_REVEAL_Y = 34;
-/** On a wide card the band is cut to the word's share of the height; this is its middle. */
-const WIDE_REVEAL_Y = 43;
+/**
+ * Two-column answer page: on a landscape phone the word and its meaning sit SIDE BY
+ * SIDE rather than stacked. Stacking them splits ~200px of free height two ways and
+ * left the meaning panel with about two lines; side by side each gets the full height
+ * and the panel gets the room it needs.
+ *
+ * The card decides when it applies (a wide card no taller than SHORT_VIEWPORT_MAX_H)
+ * and publishes both the flag (`data-reveal-split`) and the column width
+ * (`--vocab-word-col`) to CSS, so the stylesheet never restates the breakpoint and the
+ * two can never disagree about when or how wide.
+ */
+/** The answer word's share of the width. */
+const WIDE_WORD_COLUMN = 0.6;
+/** The meaning panel's share. The remainder is the gap between them and the edges. */
+const WIDE_PANEL_COLUMN = 0.35;
 
 /** Horizontal travel before a drag starts moving the page, in px. */
 const DRAG_SLOP_PX = 10;
@@ -441,17 +461,45 @@ export function VocabularyCard({
   // its meaning by proportion (the landscape tier in vocabulary.css); the word is then
   // centred in its own band rather than pinned at the portrait 34%.
   const wideCard = !exportLayout && landscape;
+  // Only a SHORT landscape card goes two-column: a landscape desktop window is tall
+  // enough that the stacked proportional split still reads well, and splitting it
+  // would leave both columns half empty.
+  const twoColumn = wideCard && isShortViewport(height);
+  // A wide card's answer band is stretched by the fit solver's uneven margins (72px
+  // above, 132px below), so the middle of the room the word is given is NOT the middle
+  // of the band; it is derived from the same geometry the stylesheet lays out, which is
+  // also where the celebration burst is aimed.
+  const revealY = wideCard ? getWideRevealY(height, twoColumn) : PORTRAIT_REVEAL_Y;
   const textWidth = exportBox?.textWidth ?? width;
+  // The answer shares the card with its meaning panel now, so it is fitted to its own
+  // column instead of the whole width — otherwise it is sized for space it does not have.
+  const revealCanvasWidth = twoColumn ? Math.round(textWidth * WIDE_WORD_COLUMN) : textWidth;
+  const textHeight = exportBox?.textHeight ?? height;
+  const textReserve = exportBox ? 0 : undefined;
+  const uniformTextSize = getUniformPageTextSize(
+    Math.max(96, Math.min(160, textWidth * 0.13)),
+    cluePages,
+    cluePages.join(" "),
+  );
   const textSize = fitVocabularyTextSize(
     stage.text,
-    getUniformPageTextSize(
-      Math.max(96, Math.min(160, textWidth * 0.13)),
-      cluePages,
-      cluePages.join(" "),
-    ),
+    uniformTextSize,
     textWidth,
-    exportBox?.textHeight ?? height,
-    exportBox ? 0 : undefined,
+    textHeight,
+    textReserve,
+  );
+  // The size above comes from a character-count estimate and is only where a clue page
+  // STARTS. Once the page is drawn its words are measured and the breaks and the size are
+  // solved together inside these limits: never larger than the card's uniform size, never
+  // taller than the room the estimate was budgeting for.
+  const textBudgetHeight = getVocabularyTextHeightBudget(textWidth, textHeight, textReserve);
+  const textBudget = useMemo(
+    () => ({
+      maxSize: uniformTextSize,
+      budgetHeight: textBudgetHeight,
+      budgetLineEm: VOCAB_TEXT_BUDGET_LINE_EM,
+    }),
+    [uniformTextSize, textBudgetHeight],
   );
   // Every role comes from one validated palette. `--vocab-button-ink` is the
   // palette's on-accent color, which the audit already proved clears 4.5:1 against
@@ -728,7 +776,16 @@ export function VocabularyCard({
     <article
       ref={cardRef}
       className="vocab-card"
-      style={colors}
+      style={
+        twoColumn
+          ? ({
+              ...colors,
+              "--vocab-word-col": `${(WIDE_WORD_COLUMN * 100).toFixed(2)}%`,
+              "--vocab-panel-col": `${(WIDE_PANEL_COLUMN * 100).toFixed(2)}%`,
+            } as CSSProperties)
+          : colors
+      }
+      data-reveal-split={twoColumn ? "two-column" : undefined}
       data-theme={theme.id}
       data-tone={theme.tone}
       data-dialect={presentation.dialect === "douyin" ? "douyin" : undefined}
@@ -846,7 +903,7 @@ export function VocabularyCard({
           word={entry.word}
           spec={{ ...canvas, text: stage.text, size: stage.reveal ? 128 : textSize }}
           background={theme.background}
-          canvasWidth={textWidth}
+          canvasWidth={stage.reveal ? revealCanvasWidth : textWidth}
           active={active}
           staged={started}
           playing={playback.playing}
@@ -858,7 +915,8 @@ export function VocabularyCard({
           // The highlight comes from the reveal style's own short pool, so the effect is a
           // property of the style and not of whichever word happened to land there.
           emphasisPool={style.emphasis}
-          revealY={wideCard ? WIDE_REVEAL_Y : PORTRAIT_REVEAL_Y}
+          textBudget={textBudget}
+          revealY={revealY}
           timeScale={paceFactor}
         />
       )}

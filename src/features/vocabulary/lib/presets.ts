@@ -21,6 +21,7 @@ import {
   type EmphasisVariant,
 } from "@/features/kinetic-text";
 import { getTextSafeInsets } from "@/features/post-player/lib/playback-timing";
+import { getClueBandStretch } from "./landscape-geometry";
 import type { NarrativeStyle } from "./schema";
 import { hash } from "./random";
 import { pickHandwritingFont } from "./handwriting";
@@ -483,6 +484,38 @@ export const VOCAB_LINE_SPACING_SCALE = 1.2;
 
 /** Height the feed's own overlay controls take out of a card (toolbar above, actions below). */
 const FEED_CHROME_HEIGHT = 320;
+/** Em of height one line of clue text is budgeted at when a size is chosen for a page. */
+export const VOCAB_TEXT_BUDGET_LINE_EM = 1.6;
+
+/**
+ * Vertical room a card grants its clue text.
+ * @param width - card (or export text box) width
+ * @param height - card (or export text box) height
+ * @param reservedHeight - space the text may not use; see fitVocabularyTextSize
+ * @returns Height in px the text block is budgeted to stay within
+ * @pure true
+ */
+export function getVocabularyTextHeightBudget(
+  width: number,
+  height: number,
+  reservedHeight = FEED_CHROME_HEIGHT,
+): number {
+  // `FEED_CHROME_HEIGHT` is an absolute measurement taken on the tall portrait card, where
+  // 320px is only a few tenths of the height. A card wider than it is tall is barely half as
+  // tall, so that same reservation would eat most of the display and collapse the clue text to
+  // its floor — the layout that looks broken the moment the reader rotates. The clue's final
+  // size is then pinned by the fit solver's legibility floor (it will not shrink text already
+  // under MIN_FONT_SIZE), so the size chosen here has to fit the band the solver will actually
+  // hand the text. On a wide card the stylesheet stretches the clue band so the solver's
+  // bottom margin ends on the real chrome (getClueBandStretch), so what is reserved is the
+  // solver's own safe insets of THAT band, less the stretch — never more than the caller
+  // asked, so portrait and export (which passes 0) are byte-for-byte unchanged.
+  if (width <= height) return Math.max(100, height - reservedHeight);
+  const stretch = getClueBandStretch(height);
+  const insets = getTextSafeInsets(height + stretch);
+  const chrome = Math.min(reservedHeight, insets.top + insets.bottom - stretch);
+  return Math.max(100, height - chrome);
+}
 
 /**
  * Reserve the overlay controls before passing type to the original canvas fitter.
@@ -498,20 +531,7 @@ export function fitVocabularyTextSize(
   reservedHeight = FEED_CHROME_HEIGHT,
 ) {
   const words = getWords(text);
-  // `FEED_CHROME_HEIGHT` is an absolute measurement taken on the tall portrait card, where
-  // 320px is only a few tenths of the height. A card wider than it is tall is barely half as
-  // tall, so that same reservation would eat most of the display and collapse the clue text to
-  // its floor — the layout that looks broken the moment the reader rotates. The clue's final
-  // size is then pinned by the fit solver's legibility floor (it will not shrink text already
-  // under MIN_FONT_SIZE), so the size chosen here has to fit the band the solver will actually
-  // hand the text. On a wide card, reserve exactly the solver's own safe insets instead of the
-  // portrait pixel count — never more than the caller asked, so portrait and export (which
-  // passes 0) are byte-for-byte unchanged.
-  const chrome =
-    width > height
-      ? Math.min(reservedHeight, getTextSafeInsets(height).top + getTextSafeInsets(height).bottom)
-      : reservedHeight;
-  const availableHeight = Math.max(100, height - chrome);
+  const availableHeight = getVocabularyTextHeightBudget(width, height, reservedHeight);
   const availableWidth = Math.max(180, width * 0.84);
   const vietnamese = isLikelyVietnameseText(text);
   // A Han deck's usage sentence packs through the same staggered-line renderer as
@@ -535,7 +555,7 @@ export function fitVocabularyTextSize(
         used += advance;
       }
     }
-    if (lines * size * 1.6 <= availableHeight) return size;
+    if (lines * size * VOCAB_TEXT_BUDGET_LINE_EM <= availableHeight) return size;
   }
   return 28;
 }

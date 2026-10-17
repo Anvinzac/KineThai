@@ -88,6 +88,9 @@ export function useLearningPlayback(options: {
     const startedAt = performance.now();
     const timer = setTimeout(
       () => {
+        // A timer the browser held back (screen dimmed, tab frozen) must not fire a
+        // page turn nobody can see; the visibility listener re-arms it on return.
+        if (typeof document !== "undefined" && document.hidden) return;
         if (isLast && options.loop) {
           setPage(0);
           setReplay((current) => current + 1);
@@ -98,7 +101,10 @@ export function useLearningPlayback(options: {
     );
     return () => {
       clearTimeout(timer);
-      elapsed.current = Math.min(duration, elapsed.current + (performance.now() - startedAt));
+      // Bank at most the page's own length, and nothing for time spent with the page
+      // hidden — otherwise a long pause returns with the clock already spent.
+      const shown = typeof document !== "undefined" && document.hidden ? 0 : performance.now() - startedAt;
+      elapsed.current = Math.min(duration, elapsed.current + shown);
     };
   }, [
     playing,

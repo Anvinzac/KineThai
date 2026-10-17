@@ -147,9 +147,14 @@ const catalogRun = simulateForwardWalk(
   blockAll,
   400,
 );
+// One cycle plus a page of slack, never more than the buffer holds.
+const catalogBound = Math.min(
+  VOCAB_MAX_PAGES,
+  Math.ceil((catalog.words.length + VOCAB_PAGE_LIMIT) / VOCAB_PAGE_LIMIT),
+);
 assert.ok(
-  catalogRun.fetches <= 5,
-  `catalog walk issued ${catalogRun.fetches} requests, expected <= 5`,
+  catalogRun.fetches <= catalogBound,
+  `catalog walk issued ${catalogRun.fetches} requests, expected <= ${catalogBound}`,
 );
 console.log(
   `OK — real ${catalog.words.length}-word catalog settles after ${catalogRun.fetches} requests`,

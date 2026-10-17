@@ -122,10 +122,10 @@ export function VocabularyStream({
     [poolDone, visibleEntries],
   );
 
-  // Suspended means something is covering the feed, so the neighbouring words
-  // cannot be seen. Dropping overscan unmounts them and hands back their DOM and
-  // their decoded art for as long as the overlay is up.
-  const windowState = useVocabularyWindow(rows, suspended ? 0 : 2);
+  // Neighbours stay mounted (and paused) while an overlay covers the feed. Unmounting
+  // them and remounting the lot on close made every neighbour re-run its entrance and
+  // re-measure at once, which flashed through several scenes before settling.
+  const windowState = useVocabularyWindow(rows, 2);
   const feedForPaging = useMemo(
     () => ({ ...query, entries: visibleEntries }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

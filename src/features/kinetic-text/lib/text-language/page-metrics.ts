@@ -1,7 +1,7 @@
 /**
  * Vietnamese + Han kinetic line packing and page fit metrics.
  *
- * Exports: WordLine, WordSegment, getVietnameseWordLines, getVietnameseLayoutMetrics, getHanCharBudgetForLine, getHanLayoutMetrics, char budget helpers
+ * Exports: WordLine, WordSegment, getVietnameseWordLines, getVietnameseLayoutMetrics, getHanCharBudgetForLine, getHanLayoutMetrics, getVietnameseLineIndentEm, char budget helpers
  * Depends on: text-language/vietnamese-phrases getBoundPhraseLength
  */
 
@@ -329,7 +329,13 @@ function getVietnameseWordSegments(
   return segments;
 }
 
-function getVietnameseLineIndentEm(lineIndex: number) {
+/**
+ * Indent of a staggered line, in em of the page font.
+ * @param lineIndex - zero-based line
+ * @returns The step for that depth; lines past the last step share it
+ * @pure true
+ */
+export function getVietnameseLineIndentEm(lineIndex: number): number {
   return VIETNAMESE_LINE_INDENT_EM[Math.min(lineIndex, VIETNAMESE_LINE_INDENT_EM.length - 1)];
 }
 

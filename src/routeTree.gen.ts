@@ -39,6 +39,7 @@ import { Route as AdminWordingsRouteImport } from './routes/admin/wordings'
 import { Route as FeedIndexRouteImport } from './routes/feed/index'
 import { Route as FeedLibraryRouteImport } from './routes/feed/library'
 import { Route as FeedSavedRouteImport } from './routes/feed/saved'
+import { Route as WCodeRouteImport } from './routes/w.$code'
 import { Route as AuthenticatedPPostIdRouteImport } from './routes/_authenticated/p.$postId'
 import { Route as AuthenticatedUUsernameRouteImport } from './routes/_authenticated/u.$username'
 import { Route as ApiPublicEngagementRouteImport } from './routes/api/public/engagement'
@@ -198,6 +199,11 @@ const FeedSavedRoute = FeedSavedRouteImport.update({
   path: '/feed/saved',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WCodeRoute = WCodeRouteImport.update({
+  id: '/w/$code',
+  path: '/w/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedPPostIdRoute = AuthenticatedPPostIdRouteImport.update({
   id: '/p/$postId',
   path: '/p/$postId',
@@ -263,6 +269,7 @@ export interface FileRoutesByFullPath {
   '/admin/wordings': typeof AdminWordingsRoute
   '/feed/library': typeof FeedLibraryRoute
   '/feed/saved': typeof FeedSavedRoute
+  '/w/$code': typeof WCodeRoute
   '/admin/': typeof AdminIndexRoute
   '/feed/': typeof FeedIndexRoute
   '/p/$postId': typeof AuthenticatedPPostIdRoute
@@ -300,6 +307,7 @@ export interface FileRoutesByTo {
   '/admin/wordings': typeof AdminWordingsRoute
   '/feed/library': typeof FeedLibraryRoute
   '/feed/saved': typeof FeedSavedRoute
+  '/w/$code': typeof WCodeRoute
   '/admin': typeof AdminIndexRoute
   '/feed': typeof FeedIndexRoute
   '/p/$postId': typeof AuthenticatedPPostIdRoute
@@ -340,6 +348,7 @@ export interface FileRoutesById {
   '/admin/wordings': typeof AdminWordingsRoute
   '/feed/library': typeof FeedLibraryRoute
   '/feed/saved': typeof FeedSavedRoute
+  '/w/$code': typeof WCodeRoute
   '/admin/': typeof AdminIndexRoute
   '/feed/': typeof FeedIndexRoute
   '/_authenticated/p/$postId': typeof AuthenticatedPPostIdRoute
@@ -380,6 +389,7 @@ export interface FileRouteTypes {
     | '/admin/wordings'
     | '/feed/library'
     | '/feed/saved'
+    | '/w/$code'
     | '/admin/'
     | '/feed/'
     | '/p/$postId'
@@ -417,6 +427,7 @@ export interface FileRouteTypes {
     | '/admin/wordings'
     | '/feed/library'
     | '/feed/saved'
+    | '/w/$code'
     | '/admin'
     | '/feed'
     | '/p/$postId'
@@ -456,6 +467,7 @@ export interface FileRouteTypes {
     | '/admin/wordings'
     | '/feed/library'
     | '/feed/saved'
+    | '/w/$code'
     | '/admin/'
     | '/feed/'
     | '/_authenticated/p/$postId'
@@ -476,6 +488,7 @@ export interface RootRouteChildren {
   StoreRoute: typeof StoreRoute
   FeedLibraryRoute: typeof FeedLibraryRoute
   FeedSavedRoute: typeof FeedSavedRoute
+  WCodeRoute: typeof WCodeRoute
   FeedIndexRoute: typeof FeedIndexRoute
   ApiPublicEngagementRoute: typeof ApiPublicEngagementRoute
   ApiPublicTelemetryRoute: typeof ApiPublicTelemetryRoute
@@ -696,6 +709,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeedSavedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/w/$code': {
+      id: '/w/$code'
+      path: '/w/$code'
+      fullPath: '/w/$code'
+      preLoaderRoute: typeof WCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/p/$postId': {
       id: '/_authenticated/p/$postId'
       path: '/p/$postId'
@@ -822,6 +842,7 @@ const rootRouteChildren: RootRouteChildren = {
   StoreRoute: StoreRoute,
   FeedLibraryRoute: FeedLibraryRoute,
   FeedSavedRoute: FeedSavedRoute,
+  WCodeRoute: WCodeRoute,
   FeedIndexRoute: FeedIndexRoute,
   ApiPublicEngagementRoute: ApiPublicEngagementRoute,
   ApiPublicTelemetryRoute: ApiPublicTelemetryRoute,

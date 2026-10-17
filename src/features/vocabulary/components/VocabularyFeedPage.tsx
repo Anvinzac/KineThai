@@ -1,12 +1,12 @@
 /** Public vocabulary page orchestration. Exports: VocabularyFeedPage. Depends on: controls, stream, reduced-motion preference, font readiness, track rotation. */
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useScreenWakeLock } from "@/hooks/use-screen-wake-lock";
-import { useOrientationGate } from "@/hooks/use-orientation-gate";
-import { OrientationGate } from "@/components/OrientationGate";
+import { useShellHeightVar } from "@/hooks/use-shell-height-var";
 import type { FeedPage, Presentation, VocabularyFilters } from "../types";
 import { DIFFICULTY_ALL } from "../lib/difficulty";
+import { SHORT_VIEWPORT_MAX_H } from "../lib/landscape-geometry";
 import { useIsAdmin } from "@/features/admin/hooks/useIsAdmin";
 import { useFontsReady } from "../hooks/useFontsReady";
 import { useTrackRotation } from "../hooks/useTrackRotation";
@@ -20,6 +20,8 @@ import { fetchVocabularyPage } from "../api/feed";
 import { readDifficultyChoice, writeDifficultyChoice } from "../lib/difficulty-choice";
 import { readDialectChoice, writeDialectChoice } from "../lib/dialect-choice";
 import type { TargetLocale } from "../lib/target-language";
+import { CUSTOM_PACK_EVENT, clearCustomPack, readCustomPack } from "../lib/custom-pack";
+import { Link } from "@tanstack/react-router";
 import "../vocabulary.css";
 
 function newSeed(): string {
@@ -64,7 +66,30 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   // stream is not mounted before that, so it never starts on "every level" only to be
   // thrown away a moment later for the level the reader actually keeps.
   const [stage, setStage] = useState<"pending" | "onboarding" | "feed">("pending");
+  // Imported pack (browser-only). Its own levels may not match a stored track, so it
+  // skips onboarding, plays every word, and keeps theme/style on random mix.
+  const [packName, setPackName] = useState<string | null>(null);
   useEffect(() => {
+    const sync = () => {
+      const pack = readCustomPack();
+      setPackName(pack?.catalog.name ?? null);
+      if (pack) {
+        setFilters(ALL_FILTERS);
+        setPresentation((p) => ({ ...p, theme: "mix", style: "mix" }));
+        setStage("feed");
+      }
+      setSeed(newSeed());
+    };
+    window.addEventListener(CUSTOM_PACK_EVENT, sync);
+    return () => window.removeEventListener(CUSTOM_PACK_EVENT, sync);
+  }, []);
+  useEffect(() => {
+    const pack = readCustomPack();
+    if (pack) {
+      setPackName(pack.catalog.name);
+      setStage("feed");
+      return;
+    }
     const stored = readDifficultyChoice();
     if (stored === null) {
       setStage("onboarding");
@@ -95,6 +120,10 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   }, []);
   // The saved drawer suspends the feed behind it rather than navigating away.
   const [savedOpen, setSavedOpen] = useState(false);
+  // The landscape chrome measures itself against this, not against dvh, and the
+  // short-viewport tier is keyed on the same measurement (data-short-viewport).
+  const shell = useRef<HTMLElement>(null);
+  useShellHeightVar(shell, { shortMaxHeight: SHORT_VIEWPORT_MAX_H });
   const [optionsOpen, setOptionsOpen] = useState(false);
   // Video export is an admin tool; for everyone else the control is never rendered
   // and the studio's code is never downloaded.
@@ -107,12 +136,10 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   const closeExport = useCallback(() => setExportOpen(false), []);
   const viewHistory = useViewHistory();
   const reducedMotion = !!useReducedMotion();
-  // Rotate-to-portrait gate: the feed's whole typography stack is authored for one aspect
-  // ratio, and the wide-card landscape layout is still too buggy to ship, so a phone held
-  // in landscape gets the opaque cover instead — folded into `suspended` below to actually
-  // stop playback behind it. Keep the screen lit only while a scene is active and ungated.
-  const orientationGated = useOrientationGate();
-  useScreenWakeLock(!orientationGated);
+  // No rotate-to-portrait gate here: the feed has its own landscape layout (two-column
+  // answer page, compact chrome, measured shell height). The post-player surfaces, which
+  // only letterbox, keep theirs. Keep the screen lit while the feed is open.
+  useScreenWakeLock(true);
   // The stream still mounts and fetches while fonts load; only the text is held.
   const fontsReady = useFontsReady();
   // Each word that comes on screen is logged to the viewing history and counted
@@ -138,8 +165,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   };
   if (stage !== "feed") {
     return (
-      <main className="vocabulary-shell">
-        <OrientationGate show={orientationGated} />
+      <main className="vocabulary-shell" ref={shell}>
         {stage === "onboarding" && (
           <DifficultyOnboarding metadata={ladder} locale={locale ?? "en"} onPick={pickDifficulty} />
         )}
@@ -147,8 +173,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     );
   }
   return (
-    <main className="vocabulary-shell">
-      <OrientationGate show={orientationGated} />
+    <main className="vocabulary-shell" ref={shell}>
       <FeedControls
         metadata={metadata}
         filters={filters}
@@ -178,14 +203,24 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
         onClearHistory={viewHistory.clear}
         onExport={isAdmin ? openExport : undefined}
       />
+      {packName && (
+        <div className="vocab-custom-pack-chip" role="status">
+          <Link to="/feed/library" className="vocab-custom-pack-name">
+            Gói của bạn: {packName}
+          </Link>
+          <button type="button" onClick={clearCustomPack} aria-label="Thoát gói của bạn">
+            ×
+          </button>
+        </div>
+      )}
       <SavedDrawer open={savedOpen} onOpenChange={setSavedOpen} />
       <VocabularyStream
-        key={`${seed}:${filters.topic}:${filters.level}:${filters.difficulty}`}
+        key={`${packName ?? ""}:${seed}:${filters.topic}:${filters.level}:${filters.difficulty}`}
         seed={seed}
         filters={filters}
         presentation={presentation}
         reducedMotion={reducedMotion}
-        suspended={orientationGated || optionsOpen || savedOpen || !fontsReady || exportOpen}
+        suspended={optionsOpen || savedOpen || !fontsReady || exportOpen}
         exportOpen={isAdmin && exportOpen}
         onCloseExport={closeExport}
         history={viewHistory.history}

@@ -1,0 +1,969 @@
+[
+ {
+  "word": "猫",
+  "pos": "noun",
+  "ipa": "māo",
+  "defVi": "Con=vật nuôi nhỏ | lông mềm_mại, | thích bắt chuột.",
+  "leadVi": "Kẻ lười_biếng | nằm sưởi nắng | trên bậu=cửa sổ.",
+  "anticipateVi": "Kẻ nào rình chuột đêm?",
+  "usageEn": "我家有一只小_____。",
+  "usageVi": "Nhà tôi có một con mèo nhỏ.",
+  "topics": [
+   "nature",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "mềm mại",
+   "lười biếng"
+  ]
+ },
+ {
+  "word": "狗",
+  "pos": "noun",
+  "ipa": "gǒu",
+  "defVi": "Con=vật nuôi | trung_thành, | biết giữ=nhà và sủa.",
+  "leadVi": "Thấy chủ về | là vẫy đuôi | mừng rối_rít.",
+  "anticipateVi": "Người bạn bốn chân là ai?",
+  "usageEn": "这只_____很聪明。",
+  "usageVi": "Con chó này rất thông minh.",
+  "topics": [
+   "nature",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "trung thành",
+   "rối rít"
+  ]
+ },
+ {
+  "word": "苹果",
+  "pos": "noun",
+  "ipa": "píngguǒ",
+  "defVi": "Loại quả tròn | vỏ đỏ hoặc xanh, | ăn giòn ngọt.",
+  "leadVi": "Truyện cổ kể | nàng công_chúa | cắn nhầm quả độc.",
+  "anticipateVi": "Loại quả nào đỏ mọng?",
+  "usageEn": "我每天吃一个_____。",
+  "usageVi": "Mỗi ngày tôi ăn một quả táo.",
+  "topics": [
+   "food",
+   "health"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "giòn ngọt",
+   "công chúa"
+  ]
+ },
+ {
+  "word": "米饭",
+  "pos": "noun",
+  "ipa": "mǐfàn",
+  "defVi": "Món chính | nấu từ hạt gạo, | ăn cùng thức_ăn.",
+  "leadVi": "Bữa nào cũng có | một bát=trắng | thơm phức.",
+  "anticipateVi": "Bát gì ngày ba bữa?",
+  "usageEn": "我中午吃了两碗_____。",
+  "usageVi": "Trưa nay tôi ăn hai bát cơm.",
+  "topics": [
+   "food",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "hạt gạo",
+   "thơm phức"
+  ]
+ },
+ {
+  "word": "茶",
+  "pos": "noun",
+  "ipa": "chá",
+  "defVi": "Thức_uống pha | từ lá cây, | có vị chát nhẹ.",
+  "leadVi": "Ông ngồi nhâm_nhi | bên ấm nóng | mỗi sáng.",
+  "anticipateVi": "Ấm nào đang bốc khói?",
+  "usageEn": "你想喝_____吗？",
+  "usageVi": "Bạn muốn uống trà không?",
+  "topics": [
+   "food",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "vị chát",
+   "nhâm nhi"
+  ]
+ },
+ {
+  "word": "电脑",
+  "pos": "noun",
+  "ipa": "diànnǎo",
+  "defVi": "Thiết_bị điện_tử | để xử_lý | và lưu thông_tin.",
+  "leadVi": "Có bàn_phím, | màn_hình | và chuột nằm cạnh.",
+  "anticipateVi": "Gõ phím lách cách gì đây?",
+  "usageEn": "我用_____写作业。",
+  "usageVi": "Tôi dùng máy tính làm bài tập.",
+  "topics": [
+   "technology",
+   "study"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "xử lý",
+   "bàn phím"
+  ]
+ },
+ {
+  "word": "飞机",
+  "pos": "noun",
+  "ipa": "fēijī",
+  "defVi": "Phương_tiện có cánh | bay trên trời | chở người đi xa.",
+  "leadVi": "Tiếng động_cơ gầm | trên đường_băng | trước lúc cất_cánh.",
+  "anticipateVi": "Cánh sắt bay về đâu?",
+  "usageEn": "我坐_____去北京。",
+  "usageVi": "Tôi đi máy bay đến Bắc Kinh.",
+  "topics": [
+   "travel",
+   "technology"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "Phương tiện",
+   "cất cánh"
+  ]
+ },
+ {
+  "word": "学校",
+  "pos": "noun",
+  "ipa": "xuéxiào",
+  "defVi": "Nơi học_sinh | đến học | và thầy_cô giảng bài.",
+  "leadVi": "Tiếng trống vang lên, | bọn trẻ ùa vào=lớp.",
+  "anticipateVi": "Sáng nào cũng đến đây?",
+  "usageEn": "我的_____很大。",
+  "usageVi": "Trường của tôi rất lớn.",
+  "topics": [
+   "study"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "giảng bài",
+   "Tiếng trống"
+  ]
+ },
+ {
+  "word": "老师",
+  "pos": "noun",
+  "ipa": "lǎoshī",
+  "defVi": "Người dạy_dỗ | và truyền kiến_thức | cho học_trò.",
+  "leadVi": "Đứng trên bục, | cầm phấn | viết lên bảng đen.",
+  "anticipateVi": "Phấn trắng trong tay ai?",
+  "usageEn": "我们的_____很年轻。",
+  "usageVi": "Thầy giáo của chúng tôi rất trẻ.",
+  "topics": [
+   "study",
+   "work"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "dạy dỗ",
+   "bảng đen"
+  ]
+ },
+ {
+  "word": "医生",
+  "pos": "noun",
+  "ipa": "yīshēng",
+  "defVi": "Người khám bệnh | và chữa_trị | cho bệnh_nhân.",
+  "leadVi": "Áo trắng tinh, | ống_nghe | đeo lủng_lẳng trước ngực.",
+  "anticipateVi": "Áo trắng ấy là ai?",
+  "usageEn": "我想当_____。",
+  "usageVi": "Tôi muốn làm bác sĩ.",
+  "topics": [
+   "health",
+   "work"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "khám bệnh",
+   "ống nghe"
+  ]
+ },
+ {
+  "word": "商店",
+  "pos": "noun",
+  "ipa": "shāngdiàn",
+  "defVi": "Nơi bày bán | hàng_hóa | cho khách đến mua.",
+  "leadVi": "Cửa mở cả ngày, | kệ đầy | những món=đồ.",
+  "anticipateVi": "Mua đồ ở chốn nào?",
+  "usageEn": "这家_____的东西很便宜。",
+  "usageVi": "Đồ ở cửa hàng này rất rẻ.",
+  "topics": [
+   "daily",
+   "money"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "hàng hóa",
+   "kệ đầy"
+  ]
+ },
+ {
+  "word": "天气",
+  "pos": "noun",
+  "ipa": "tiānqì",
+  "defVi": "Trạng_thái nắng mưa, | nóng lạnh | của bầu_trời mỗi ngày.",
+  "leadVi": "Sáng nay | có cần mang ô | khi ra=đường?",
+  "anticipateVi": "Trời hôm nay ra sao?",
+  "usageEn": "今天_____很好。",
+  "usageVi": "Hôm nay thời tiết rất đẹp.",
+  "topics": [
+   "nature",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "nắng mưa",
+   "mang ô"
+  ]
+ },
+ {
+  "word": "下雨",
+  "pos": "verb",
+  "ipa": "xiàyǔ",
+  "defVi": "Nước từ mây | rơi xuống mặt_đất | thành từng giọt.",
+  "leadVi": "Mái tôn kêu lộp_độp, | đường phố | ướt sũng.",
+  "anticipateVi": "Mây đen kéo đến chưa?",
+  "usageEn": "外面在_____，带伞吧。",
+  "usageVi": "Ngoài trời đang mưa, mang ô đi.",
+  "topics": [
+   "nature",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "rơi xuống",
+   "lộp độp"
+  ]
+ },
+ {
+  "word": "衣服",
+  "pos": "noun",
+  "ipa": "yīfu",
+  "defVi": "Đồ vải mặc | trên người | để che và giữ ấm.",
+  "leadVi": "Tủ đầy ắp | mà sáng nào | cũng than chẳng có gì.",
+  "anticipateVi": "Tủ đầy mà vẫn thiếu?",
+  "usageEn": "这件_____很好看。",
+  "usageVi": "Bộ quần áo này rất đẹp.",
+  "topics": [
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "giữ ấm",
+   "đầy ắp"
+  ]
+ },
+ {
+  "word": "杯子",
+  "pos": "noun",
+  "ipa": "bēizi",
+  "defVi": "Đồ_dùng nhỏ | để đựng nước | hay đồ_uống.",
+  "leadVi": "Chạm nhẹ vào nhau, | mọi người hô | một hai ba.",
+  "anticipateVi": "Nước rót vào đâu nhỉ?",
+  "usageEn": "我的_____在桌子上。",
+  "usageVi": "Cái cốc của tôi ở trên bàn.",
+  "topics": [
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "đựng nước",
+   "Chạm nhẹ"
+  ]
+ },
+ {
+  "word": "钱",
+  "pos": "noun",
+  "ipa": "qián",
+  "defVi": "Thứ dùng để trao_đổi | và mua bán | hàng_hóa.",
+  "leadVi": "Cuối tháng | ví lép kẹp, | đầu tháng lại đầy.",
+  "anticipateVi": "Giấy gì ai cũng thích?",
+  "usageEn": "我没有_____了。",
+  "usageVi": "Tôi hết tiền rồi.",
+  "topics": [
+   "money"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "trao đổi",
+   "lép kẹp"
+  ]
+ },
+ {
+  "word": "东西",
+  "pos": "noun",
+  "ipa": "dōngxi",
+  "defVi": "Từ chỉ chung | đồ_vật, | món này món kia.",
+  "leadVi": "Ra chợ | mua lỉnh_kỉnh | đủ thứ mang về.",
+  "anticipateVi": "Trong túi đựng gì vậy?",
+  "usageEn": "你买什么_____？",
+  "usageVi": "Bạn mua đồ gì?",
+  "topics": [
+   "daily",
+   "general"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "đồ vật",
+   "lỉnh kỉnh"
+  ]
+ },
+ {
+  "word": "名字",
+  "pos": "noun",
+  "ipa": "míngzi",
+  "defVi": "Tên gọi | dùng để phân_biệt | người này với người kia.",
+  "leadVi": "Bố_mẹ đặt cho | từ ngày | mới chào_đời.",
+  "anticipateVi": "Gọi bạn là gì đây?",
+  "usageEn": "你叫什么_____？",
+  "usageVi": "Bạn tên là gì?",
+  "topics": [
+   "communication",
+   "society"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "phân biệt",
+   "chào đời"
+  ]
+ },
+ {
+  "word": "睡觉",
+  "pos": "verb",
+  "ipa": "shuìjiào",
+  "defVi": "Nhắm mắt | nghỉ_ngơi | để cơ_thể hồi_phục.",
+  "leadVi": "Đèn tắt, | chăn ấm | và một giấc mơ đẹp.",
+  "anticipateVi": "Gối êm đang chờ chưa?",
+  "usageEn": "太晚了，快去_____吧。",
+  "usageVi": "Muộn rồi, mau đi ngủ đi.",
+  "topics": [
+   "daily",
+   "health"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "hồi phục",
+   "giấc mơ"
+  ]
+ },
+ {
+  "word": "吃饭",
+  "pos": "verb",
+  "ipa": "chīfàn",
+  "defVi": "Dùng bữa | với cơm | và các món_ăn.",
+  "leadVi": "Cả nhà quây_quần | bên mâm | lúc chiều tối.",
+  "anticipateVi": "Mâm cơm dọn ra chưa?",
+  "usageEn": "你_____了吗？",
+  "usageVi": "Bạn ăn cơm chưa?",
+  "topics": [
+   "food",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "Dùng bữa",
+   "quây quần"
+  ]
+ },
+ {
+  "word": "喝",
+  "pos": "verb",
+  "ipa": "hē",
+  "defVi": "Đưa chất_lỏng | vào miệng | rồi nuốt xuống.",
+  "leadVi": "Trưa hè | khát khô cổ, | cần ngay một cốc.",
+  "anticipateVi": "Khát rồi làm sao?",
+  "usageEn": "我想_____一杯水。",
+  "usageVi": "Tôi muốn uống một cốc nước.",
+  "topics": [
+   "food",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "chất lỏng",
+   "khát khô"
+  ]
+ },
+ {
+  "word": "看见",
+  "pos": "verb",
+  "ipa": "kànjiàn",
+  "defVi": "Dùng mắt | nhận ra | người hay vật trước mặt.",
+  "leadVi": "Giữa đám đông, | bỗng nhận ra | dáng quen.",
+  "anticipateVi": "Mắt bạn bắt gặp gì?",
+  "usageEn": "我_____他在学校门口。",
+  "usageVi": "Tôi nhìn thấy anh ấy ở cổng trường.",
+  "topics": [
+   "perception"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "nhận ra",
+   "đám đông"
+  ]
+ },
+ {
+  "word": "听",
+  "pos": "verb",
+  "ipa": "tīng",
+  "defVi": "Dùng tai | để tiếp_nhận | âm_thanh xung_quanh.",
+  "leadVi": "Đeo tai_nghe, | nhắm mắt | thả hồn theo nhạc.",
+  "anticipateVi": "Tai bạn bắt được gì?",
+  "usageEn": "我喜欢_____音乐。",
+  "usageVi": "Tôi thích nghe nhạc.",
+  "topics": [
+   "perception",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "âm thanh",
+   "tai nghe"
+  ]
+ },
+ {
+  "word": "写",
+  "pos": "verb",
+  "ipa": "xiě",
+  "defVi": "Dùng bút | tạo thành chữ | trên giấy hay bảng.",
+  "leadVi": "Ngòi bút | lướt đều | trên trang=giấy trắng.",
+  "anticipateVi": "Bút chạy trên giấy à?",
+  "usageEn": "请在这里_____你的名字。",
+  "usageVi": "Vui lòng viết tên bạn vào đây.",
+  "topics": [
+   "study",
+   "communication"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "tạo thành",
+   "Ngòi bút"
+  ]
+ },
+ {
+  "word": "买",
+  "pos": "verb",
+  "ipa": "mǎi",
+  "defVi": "Trả tiền | để có được | món hàng mình cần.",
+  "leadVi": "Xách giỏ ra chợ, | về nhà | đầy ắp rau.",
+  "anticipateVi": "Giỏ đầy từ đâu ra?",
+  "usageEn": "我想_____一本书。",
+  "usageVi": "Tôi muốn mua một quyển sách.",
+  "topics": [
+   "money",
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "Trả tiền",
+   "ra chợ"
+  ]
+ },
+ {
+  "word": "开",
+  "pos": "verb",
+  "ipa": "kāi",
+  "defVi": "Làm cho cửa | hay vật đang đóng | mở ra.",
+  "leadVi": "Xoay nhẹ tay_nắm, | cánh cửa | kêu cót_két.",
+  "anticipateVi": "Chìa khóa để làm chi?",
+  "usageEn": "请_____门。",
+  "usageVi": "Làm ơn mở cửa.",
+  "topics": [
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "mở ra",
+   "cót két"
+  ]
+ },
+ {
+  "word": "坐",
+  "pos": "verb",
+  "ipa": "zuò",
+  "defVi": "Đặt mông xuống | ghế hay mặt_đất | để nghỉ.",
+  "leadVi": "Đứng lâu mỏi chân, | thấy ghế | là sà xuống.",
+  "anticipateVi": "Ghế trống mời ai đây?",
+  "usageEn": "请_____这儿。",
+  "usageVi": "Mời ngồi đây.",
+  "topics": [
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "Đặt mông",
+   "mỏi chân"
+  ]
+ },
+ {
+  "word": "回家",
+  "pos": "verb",
+  "ipa": "huíjiā",
+  "defVi": "Trở về | nơi mình sống | cùng gia_đình.",
+  "leadVi": "Tan học, | chân bước nhanh | về mái_ấm thân_thương.",
+  "anticipateVi": "Tan ca rồi đi đâu?",
+  "usageEn": "我六点_____。",
+  "usageVi": "Tôi về nhà lúc sáu giờ.",
+  "topics": [
+   "daily"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "gia đình",
+   "mái ấm"
+  ]
+ },
+ {
+  "word": "工作",
+  "pos": "verb",
+  "ipa": "gōngzuò",
+  "defVi": "Làm một công_việc | để tạo ra | thu_nhập hằng tháng.",
+  "leadVi": "Sáng xách cặp | ra cửa, | tối mới về.",
+  "anticipateVi": "Văn phòng đông vui nhỉ?",
+  "usageEn": "我爸爸在银行_____。",
+  "usageVi": "Bố tôi làm việc ở ngân hàng.",
+  "topics": [
+   "work",
+   "money"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "thu nhập",
+   "xách cặp"
+  ]
+ },
+ {
+  "word": "打电话",
+  "pos": "verb",
+  "ipa": "dǎ diànhuà",
+  "defVi": "Dùng điện_thoại | để nói_chuyện | với người ở xa.",
+  "leadVi": "Chuông reo, | đầu dây bên kia | là giọng mẹ.",
+  "anticipateVi": "Reng reng, ai gọi thế?",
+  "usageEn": "晚上我给你_____。",
+  "usageVi": "Tối tôi gọi điện cho bạn.",
+  "topics": [
+   "communication",
+   "technology"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "nói chuyện",
+   "đầu dây"
+  ]
+ },
+ {
+  "word": "认识",
+  "pos": "verb",
+  "ipa": "rènshi",
+  "defVi": "Đã gặp | và biết rõ | một người nào đó.",
+  "leadVi": "Bắt tay lần đầu, | trao nhau | lời chào thân_thiện.",
+  "anticipateVi": "Gặp nhau rồi phải không?",
+  "usageEn": "很高兴_____你。",
+  "usageVi": "Rất vui được làm quen với bạn.",
+  "topics": [
+   "society",
+   "communication"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "biết rõ",
+   "Bắt tay"
+  ]
+ },
+ {
+  "word": "高兴",
+  "pos": "adj",
+  "ipa": "gāoxìng",
+  "defVi": "Cảm_thấy vui_vẻ, | phấn_khởi | trong lòng.",
+  "leadVi": "Nhận điểm mười, | em nhảy cẫng lên | sung_sướng.",
+  "anticipateVi": "Nụ cười rạng rỡ kìa?",
+  "usageEn": "见到你我很_____。",
+  "usageVi": "Gặp bạn tôi rất vui.",
+  "topics": [
+   "emotion"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "phấn khởi",
+   "nhảy cẫng"
+  ]
+ },
+ {
+  "word": "冷",
+  "pos": "adj",
+  "ipa": "lěng",
+  "defVi": "Nhiệt_độ thấp | khiến cơ_thể | thấy buốt giá.",
+  "leadVi": "Gió bấc thổi | qua khe cửa, | tay chân tê cóng.",
+  "anticipateVi": "Răng va lập cập chưa?",
+  "usageEn": "今天太_____了，多穿点衣服。",
+  "usageVi": "Hôm nay lạnh quá, mặc thêm áo vào.",
+  "topics": [
+   "nature",
+   "health"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "buốt giá",
+   "tê cóng"
+  ]
+ },
+ {
+  "word": "热",
+  "pos": "adj",
+  "ipa": "rè",
+  "defVi": "Nhiệt_độ cao | làm người ta | toát mồ_hôi.",
+  "leadVi": "Trưa tháng sáu, | nhựa đường | như muốn chảy ra.",
+  "anticipateVi": "Quạt phành phạch cả ngày?",
+  "usageEn": "夏天这里很_____。",
+  "usageVi": "Mùa hè ở đây rất nóng.",
+  "topics": [
+   "nature"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "mồ hôi",
+   "nhựa đường"
+  ]
+ },
+ {
+  "word": "大",
+  "pos": "adj",
+  "ipa": "dà",
+  "defVi": "Có kích_thước | hay số_lượng | vượt mức bình_thường.",
+  "leadVi": "Con=voi | đứng cạnh chú=chuột | trông khổng_lồ.",
+  "anticipateVi": "Voi hay kiến đây?",
+  "usageEn": "这个房间很_____。",
+  "usageVi": "Căn phòng này rất rộng.",
+  "topics": [
+   "general"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "kích thước",
+   "khổng lồ"
+  ]
+ },
+ {
+  "word": "小",
+  "pos": "adj",
+  "ipa": "xiǎo",
+  "defVi": "Có kích_thước | hay tuổi | kém hơn mức thường.",
+  "leadVi": "Chú=kiến tí_hon | len_lỏi | qua khe=đất.",
+  "anticipateVi": "Tí hon cỡ nào nhỉ?",
+  "usageEn": "我家有一只_____狗。",
+  "usageVi": "Nhà tôi có một chú chó nhỏ.",
+  "topics": [
+   "general"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "kém hơn",
+   "len lỏi"
+  ]
+ },
+ {
+  "word": "个",
+  "pos": "noun",
+  "ipa": "gè",
+  "defVi": "Lượng_từ phổ_biến nhất, | đứng trước | người hay vật.",
+  "leadVi": "Đếm táo, | đếm người, | chỗ nào cũng dùng được.",
+  "anticipateVi": "Đếm thế nào cho chuẩn?",
+  "usageEn": "我有两_____妹妹。",
+  "usageVi": "Tôi có hai em gái.",
+  "topics": [
+   "general"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "phổ biến",
+   "Đếm táo"
+  ]
+ },
+ {
+  "word": "本",
+  "pos": "noun",
+  "ipa": "běn",
+  "defVi": "Lượng_từ dùng | để đếm sách, | vở và tạp_chí.",
+  "leadVi": "Trên giá | xếp thẳng hàng | những cuốn dày cộp.",
+  "anticipateVi": "Giá sách có bao cuốn?",
+  "usageEn": "我买了三_____书。",
+  "usageVi": "Tôi đã mua ba quyển sách.",
+  "topics": [
+   "study"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "tạp chí",
+   "dày cộp"
+  ]
+ },
+ {
+  "word": "杯",
+  "pos": "noun",
+  "ipa": "bēi",
+  "defVi": "Lượng_từ dùng | để đong đồ_uống | theo từng cốc.",
+  "leadVi": "Gọi thêm | hai ly cà_phê sữa | cho bàn số năm.",
+  "anticipateVi": "Ly thứ mấy rồi?",
+  "usageEn": "我要一_____咖啡。",
+  "usageVi": "Tôi muốn một cốc cà phê.",
+  "topics": [
+   "food"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "đồ uống",
+   "cà phê"
+  ]
+ },
+ {
+  "word": "块",
+  "pos": "noun",
+  "ipa": "kuài",
+  "defVi": "Lượng_từ chỉ | đơn_vị tiền | trong khẩu_ngữ hằng ngày.",
+  "leadVi": "Chủ quán | cười bảo: | mười đồng một bát.",
+  "anticipateVi": "Trả mấy đồng đây?",
+  "usageEn": "这个苹果三_____钱。",
+  "usageVi": "Quả táo này giá ba tệ.",
+  "topics": [
+   "money"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "đơn vị",
+   "Chủ quán"
+  ]
+ },
+ {
+  "word": "谢谢",
+  "pos": "verb",
+  "ipa": "xièxie",
+  "defVi": "Lời cảm_ơn | khi được | ai đó giúp_đỡ.",
+  "leadVi": "Nhận món quà nhỏ, | khẽ cúi đầu | mỉm cười.",
+  "anticipateVi": "Nhận quà nên nói gì?",
+  "usageEn": "_____你的帮助。",
+  "usageVi": "Cảm ơn sự giúp đỡ của bạn.",
+  "topics": [
+   "communication",
+   "society"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "giúp đỡ",
+   "cúi đầu"
+  ]
+ },
+ {
+  "word": "不客气",
+  "pos": "phrase",
+  "ipa": "bù kèqi",
+  "defVi": "Câu đáp lại | lời cảm_ơn | một cách lịch_sự.",
+  "leadVi": "Bạn rối_rít cảm_ơn, | mình xua tay | cười hiền.",
+  "anticipateVi": "Xua tay đáp thế nào?",
+  "usageEn": "_____，这是我应该做的。",
+  "usageVi": "Đừng khách sáo, đây là việc tôi nên làm.",
+  "topics": [
+   "communication",
+   "society"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "lịch sự",
+   "xua tay"
+  ]
+ },
+ {
+  "word": "没关系",
+  "pos": "phrase",
+  "ipa": "méi guānxi",
+  "defVi": "Lời trấn_an | rằng chuyện ấy | chẳng có gì nghiêm_trọng.",
+  "leadVi": "Bạn lỡ giẫm chân, | mình cười | xua đi ngay.",
+  "anticipateVi": "Chuyện nhỏ thôi mà?",
+  "usageEn": "_____，我不生气。",
+  "usageVi": "Không sao đâu, tôi không giận.",
+  "topics": [
+   "communication",
+   "emotion"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "trấn an",
+   "giẫm chân"
+  ]
+ },
+ {
+  "word": "再见",
+  "pos": "phrase",
+  "ipa": "zàijiàn",
+  "defVi": "Lời chào | khi chia_tay | và hẹn gặp lại.",
+  "leadVi": "Đứng ở cổng, | vẫy tay | dõi theo bóng bạn.",
+  "anticipateVi": "Vẫy tay ra về chứ?",
+  "usageEn": "老师，_____！",
+  "usageVi": "Chào thầy, em về ạ!",
+  "topics": [
+   "communication",
+   "society"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "chia tay",
+   "vẫy tay"
+  ]
+ },
+ {
+  "word": "你好",
+  "pos": "phrase",
+  "ipa": "nǐ hǎo",
+  "defVi": "Câu chào | phổ_biến nhất | khi gặp ai đó.",
+  "leadVi": "Lần đầu gặp mặt, | câu mở_đầu | thân_thiện nhất.",
+  "anticipateVi": "Mở lời thế nào nhỉ?",
+  "usageEn": "_____，我叫小明。",
+  "usageVi": "Xin chào, tôi tên là Tiểu Minh.",
+  "topics": [
+   "communication"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "phổ biến",
+   "mở đầu"
+  ]
+ },
+ {
+  "word": "水果",
+  "pos": "noun",
+  "ipa": "shuǐguǒ",
+  "defVi": "Các loại quả | ăn được, | thường ngọt và nhiều nước.",
+  "leadVi": "Đĩa cam, xoài, nho | bày ra | sau bữa_cơm.",
+  "anticipateVi": "Đĩa tráng miệng có gì?",
+  "usageEn": "我很喜欢吃_____。",
+  "usageVi": "Tôi rất thích ăn hoa quả.",
+  "topics": [
+   "food",
+   "health"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "nhiều nước",
+   "bữa cơm"
+  ]
+ },
+ {
+  "word": "朋友",
+  "pos": "noun",
+  "ipa": "péngyou",
+  "defVi": "Người thân_thiết | mà ta quý_mến | và tin_tưởng.",
+  "leadVi": "Cùng ta | chia_sẻ niềm_vui | lẫn nỗi_buồn.",
+  "anticipateVi": "Tri kỷ của bạn đâu?",
+  "usageEn": "他是我最好的_____。",
+  "usageVi": "Anh ấy là người bạn tốt nhất của tôi.",
+  "topics": [
+   "society"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "tin tưởng",
+   "chia sẻ"
+  ]
+ },
+ {
+  "word": "家",
+  "pos": "noun",
+  "ipa": "jiā",
+  "defVi": "Nơi một gia_đình | cùng sinh_sống | và quây_quần.",
+  "leadVi": "Đi đâu xa | cũng mong | được trở về đây.",
+  "anticipateVi": "Chốn bình yên là đâu?",
+  "usageEn": "我_____有四口人。",
+  "usageVi": "Nhà tôi có bốn người.",
+  "topics": [
+   "daily",
+   "society"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "sinh sống",
+   "trở về"
+  ]
+ },
+ {
+  "word": "妈妈",
+  "pos": "noun",
+  "ipa": "māma",
+  "defVi": "Người phụ_nữ | sinh ra | và nuôi_nấng con.",
+  "leadVi": "Tiếng ru à_ơi | bên cánh võng | những trưa hè.",
+  "anticipateVi": "Lời ru ngọt từ ai?",
+  "usageEn": "我_____是老师。",
+  "usageVi": "Mẹ tôi là giáo viên.",
+  "topics": [
+   "society",
+   "emotion"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "nuôi nấng",
+   "Tiếng ru"
+  ]
+ },
+ {
+  "word": "今天",
+  "pos": "noun",
+  "ipa": "jīntiān",
+  "defVi": "Ngày đang | diễn ra | ngay lúc ta nói.",
+  "leadVi": "Không phải hôm_qua, | cũng chưa tới | ngày mai.",
+  "anticipateVi": "Tờ lịch đang ở đâu?",
+  "usageEn": "_____是星期一。",
+  "usageVi": "Hôm nay là thứ hai.",
+  "topics": [
+   "time"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "diễn ra",
+   "hôm qua"
+  ]
+ },
+ {
+  "word": "明天",
+  "pos": "noun",
+  "ipa": "míngtiān",
+  "defVi": "Ngày tiếp_theo | ngay sau | ngày hôm_nay.",
+  "leadVi": "Ngủ một giấc dậy | là tới | ngày mới.",
+  "anticipateVi": "Sau đêm nay là gì?",
+  "usageEn": "_____我们去公园吧。",
+  "usageVi": "Ngày mai chúng mình đi công viên nhé.",
+  "topics": [
+   "time"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "tiếp theo",
+   "ngày mới"
+  ]
+ },
+ {
+  "word": "星期",
+  "pos": "noun",
+  "ipa": "xīngqī",
+  "defVi": "Khoảng thời_gian | bảy ngày | từ thứ hai | đến chủ_nhật.",
+  "leadVi": "Hết thứ hai, | thứ ba | rồi lại | vòng về đầu.",
+  "anticipateVi": "Bảy ngày gọi là gì?",
+  "usageEn": "这个_____我很忙。",
+  "usageVi": "Tuần này tôi rất bận.",
+  "topics": [
+   "time"
+  ],
+  "exams": [],
+  "emphasisVi": [
+   "chủ nhật",
+   "vòng về"
+  ]
+ }
+]

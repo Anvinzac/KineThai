@@ -16,6 +16,7 @@ import {
   type Entrance,
 } from "@/features/canvas";
 import {
+  getPunctuationPhraseEdges,
   getDataEmphasisWordSpans,
   getEmphasisPhraseKeysForLayout,
   getEmphasizedRunPhraseKeys,
@@ -32,6 +33,7 @@ import {
 } from "@/features/kinetic-text";
 import { getEmphasizedWordIndexes } from "../lib/feed-emphasis";
 import { getEntranceStyle } from "../lib/entrances";
+import { EntranceClockContext, useEntranceClock } from "../hooks/usePausableEntrance";
 import {
   EMPHASIS_FONT_SCALE,
   EMPHASIS_SCALE_FIT_GUARD,
@@ -39,6 +41,7 @@ import {
   VIETNAMESE_SCALE_FIT_GUARD,
 } from "../lib/playback-timing";
 import { estimateSoloRevealFit } from "../lib/solo-text-fit";
+import { useMeasuredLines, type MeasuredLayoutBudget } from "../hooks/useMeasuredLines";
 import { useWordSequenceFit } from "../hooks/useWordSequenceFit";
 import { WordSequenceLines } from "./WordSequenceLines";
 
@@ -72,6 +75,12 @@ export type WordSequenceTextProps = {
   /** Optional upstream emphasis annotations; only phrases occurring in this page's text match. */
   dataEmphasis?: string[];
   /**
+   * Phrases the source text marked as ONE word ("ba lô"). On a packed page each is an
+   * unbreakable segment — it moves to the next line whole rather than leaving a syllable
+   * behind — and a highlight never covers only part of one.
+   */
+  boundPhrases?: string[];
+  /**
    * Optional second highlight drawn with its own effect. It bypasses both the
    * annotation budget and the per-language one-word cap, so a page can carry two
    * marks that read differently — the vocabulary letter-count clue boxes its
@@ -97,6 +106,14 @@ export type WordSequenceTextProps = {
    * card raises it for a reader who picked a slower reading speed.
    */
   timeScale?: number;
+  /**
+   * Lay a Vietnamese page out from measured widths instead of the character-count
+   * estimate: every unbreakable segment is measured as drawn, and the line breaks and
+   * the font size are solved together inside these limits (see useMeasuredLines).
+   * Omitted — every community post — the estimate-packed lines and the fit solver stand
+   * exactly as before. Han pages keep their own packing either way.
+   */
+  measuredLayout?: MeasuredLayoutBudget;
 };
 
 /**
@@ -120,10 +137,12 @@ export function WordSequenceText({
   fitAsUnit = false,
   lineSpacingScale = 1,
   dataEmphasis,
+  boundPhrases,
   secondaryEmphasis,
   allowFrameEmphasis = true,
   emphasisPool,
   timeScale = 1,
+  measuredLayout,
 }: WordSequenceTextProps): ReactElement {
   // A Han page tokenizes per character before anything else: a whole Chinese sample
   // sentence is one whitespace token, and as one token it rendered as a single
@@ -140,8 +159,8 @@ export function WordSequenceText({
   // packed-page fit floor. `fitAsUnit` pages (solo reveals) always stay one line.
   const isPackedLines = isVietnamese || isHan;
   const emphasized = useMemo(
-    () => getEmphasizedWordIndexes(words, dataEmphasis),
-    [words, dataEmphasis],
+    () => getEmphasizedWordIndexes(words, dataEmphasis, boundPhrases),
+    [words, dataEmphasis, boundPhrases],
   );
   // Read the primitives, not the object, so a caller re-creating the literal each
   // render cannot churn the memo and rebuild the index set every frame.
@@ -166,9 +185,10 @@ export function WordSequenceText({
   const phraseKeys = useMemo(
     () => [
       ...getEmphasisPhraseKeysForLayout(dataEmphasis),
+      ...getEmphasisPhraseKeysForLayout(boundPhrases),
       ...getEmphasizedRunPhraseKeys(words, emphasized),
     ],
-    [dataEmphasis, words, emphasized],
+    [dataEmphasis, boundPhrases, words, emphasized],
   );
   const isSolo = words.length <= 1;
   const visualScaleGuard = Math.max(
@@ -207,13 +227,67 @@ export function WordSequenceText({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const staticRender = revealed || measure;
+  // Everything that can change how wide a segment is drawn. The measured layout keeps
+  // its measurements for as long as this stands.
+  const measuredSignature = useMemo(
+    () =>
+      [
+        spec.text,
+        spec.font,
+        spec.weight,
+        spec.letterSpacing,
+        lineSpacingScale,
+        allowFrameEmphasis,
+        [...emphasized].join(","),
+        secondaryEmphasized ? [...secondaryEmphasized].join(",") : "",
+        secondaryVariant ?? "",
+        emphasisPool?.join(",") ?? "",
+        phraseKeys.map((key) => key.join(" ")).join("|"),
+      ].join("\u0001"),
+    [
+      spec.text,
+      spec.font,
+      spec.weight,
+      spec.letterSpacing,
+      lineSpacingScale,
+      allowFrameEmphasis,
+      emphasized,
+      secondaryEmphasized,
+      secondaryVariant,
+      emphasisPool,
+      phraseKeys,
+    ],
+  );
+  // Where the page's own phrases meet: a comma, full stop or semicolon closes the phrase it
+  // ends. A break is welcome right after one, never one word away from it.
+  const phraseEdges = useMemo(
+    () => (isVietnamese ? getPunctuationPhraseEdges(words) : undefined),
+    [isVietnamese, words],
+  );
+  const measuredLines = useMeasuredLines({
+    budget: measuredLayout,
+    enabled: isVietnamese && !measure,
+    lines: packedLayout.lines,
+    signature: measuredSignature,
+    phraseEdges,
+    lineSpacingScale,
+    wrapperRef,
+    textRef,
+  });
+  // The words are mounted afresh whenever the breaks change. Moving a word to another
+  // line remounts it on its own otherwise, part-way through an entrance its neighbours
+  // are already running; starting the block again keeps every word on one clock.
+  const layoutKey = measuredLines
+    ? measuredLines.lines.map((line) => line.segments.length).join(".")
+    : "estimate";
   const { fontSize, soloInlineScale, safeCenterY } = useWordSequenceFit({
-    initialFit,
-    measurementKey: `${playKey}-${staticRender}`,
+    // A measured page arrives at its size already; the solver only places it.
+    initialFit: measuredLines ? 1 : initialFit,
+    measurementKey: `${playKey}-${staticRender}-${layoutKey}`,
     canvasWidth,
     background,
-    spec,
-    disableFit: disableFit && !isSolo,
+    spec: measuredLines ? { ...spec, size: measuredLines.fontSize } : spec,
+    disableFit: (disableFit || !!measuredLines) && !isSolo,
     onFitScale,
     isSolo,
     isPackedLines,
@@ -231,78 +305,81 @@ export function WordSequenceText({
     ? "min(90%, calc(100% - 2.5rem))"
     : TEXT_SAFE_MAX_WIDTH;
   const loopAnimation = getLoopAnimation(spec.loop, spec.tempo);
+  const entranceClock = useEntranceClock(paused, `${playKey}-${staticRender}`);
 
   return (
-    <div
-      ref={wrapperRef}
-      aria-hidden={measure || undefined}
-      className="pointer-events-none absolute select-none"
-      style={{
-        left: `${spec.x}%`,
-        top: `${safeCenterY}%`,
-        transform: "translate(-50%, -50%)",
-        width: textSafeMaxWidth,
-        maxWidth: textSafeMaxWidth,
-        visibility: measure ? "hidden" : undefined,
-      }}
-    >
-      <motion.div
-        ref={textRef}
-        key={`${playKey}-${staticRender ? "revealed" : "animated"}`}
-        className={
-          isPackedLines
-            ? "flex flex-col items-stretch"
-            : leftAnchoredText
-              ? "flex flex-wrap items-baseline justify-start"
-              : "flex flex-wrap items-center justify-center"
-        }
-        initial={staticRender ? false : "hidden"}
-        animate="show"
+    <EntranceClockContext.Provider value={entranceClock}>
+      <div
+        ref={wrapperRef}
+        aria-hidden={measure || undefined}
+        className="pointer-events-none absolute select-none"
         style={{
-          width: "100%",
-          // A solo page is one unbreakable span, so it cannot wrap anyway; naming the
-          // intent keeps the single-line answer from depending on that accident.
-          flexWrap: isSolo ? "nowrap" : undefined,
-          columnGap: isPackedLines ? undefined : "0.34em",
-          rowGap: isPackedLines ? undefined : `${0.08 * lineSpacingScale}em`,
-          fontFamily: spec.font,
-          fontSize,
-          color: textColor,
-          fontWeight: spec.weight,
-          letterSpacing: `${spec.letterSpacing}em`,
-          lineHeight: (isPackedLines ? 1.04 : 0.9) * lineSpacingScale,
-          textAlign: leftAnchoredText ? "left" : "center",
-          textShadow: photoTextShadow ?? "0 4px 40px rgba(0,0,0,0.45)",
-          transform: `rotate(${spec.rotation}deg)`,
-          animation: loopAnimation
-            ? `${loopAnimation} ${paused ? "paused" : "running"}`
-            : undefined,
+          left: `${spec.x}%`,
+          top: `${safeCenterY}%`,
+          transform: "translate(-50%, -50%)",
+          width: textSafeMaxWidth,
+          maxWidth: textSafeMaxWidth,
+          visibility: measure ? "hidden" : undefined,
         }}
       >
-        <WordSequenceLines
-          isVietnamese={isPackedLines}
-          lineSpacingScale={lineSpacingScale}
-          vietnameseLines={packedLayout.lines}
-          words={words}
-          emphasized={emphasized}
-          phraseKeys={phraseKeys}
-          secondaryEmphasized={secondaryEmphasized}
-          secondaryVariant={secondaryVariant}
-          allowFrame={allowFrameEmphasis}
-          pool={emphasisPool}
-          spotlightEmphasis={spotlightEmphasis}
-          spec={spec}
-          staticRender={staticRender}
-          paused={paused}
-          isSolo={isSolo}
-          soloInlineScale={soloInlineScale}
-          leftAnchoredText={leftAnchoredText}
-          textColor={textColor}
-          emphasisColor={emphasisColor}
-          entranceStyle={entranceStyle}
-          timeScale={timeScale}
-        />
-      </motion.div>
-    </div>
+        <motion.div
+          ref={textRef}
+          key={`${playKey}-${staticRender ? "revealed" : "animated"}-${layoutKey}`}
+          className={
+            isPackedLines
+              ? "flex flex-col items-stretch"
+              : leftAnchoredText
+                ? "flex flex-wrap items-baseline justify-start"
+                : "flex flex-wrap items-center justify-center"
+          }
+          initial={staticRender ? false : "hidden"}
+          animate="show"
+          style={{
+            width: "100%",
+            // A solo page is one unbreakable span, so it cannot wrap anyway; naming the
+            // intent keeps the single-line answer from depending on that accident.
+            flexWrap: isSolo ? "nowrap" : undefined,
+            columnGap: isPackedLines ? undefined : "0.34em",
+            rowGap: isPackedLines ? undefined : `${0.08 * lineSpacingScale}em`,
+            fontFamily: spec.font,
+            fontSize,
+            color: textColor,
+            fontWeight: spec.weight,
+            letterSpacing: `${spec.letterSpacing}em`,
+            lineHeight: (isPackedLines ? 1.04 : 0.9) * lineSpacingScale,
+            textAlign: leftAnchoredText ? "left" : "center",
+            textShadow: photoTextShadow ?? "0 4px 40px rgba(0,0,0,0.45)",
+            transform: `rotate(${spec.rotation}deg)`,
+            animation: loopAnimation
+              ? `${loopAnimation} ${paused ? "paused" : "running"}`
+              : undefined,
+          }}
+        >
+          <WordSequenceLines
+            isVietnamese={isPackedLines}
+            lineSpacingScale={lineSpacingScale}
+            vietnameseLines={measuredLines?.lines ?? packedLayout.lines}
+            words={words}
+            emphasized={emphasized}
+            phraseKeys={phraseKeys}
+            secondaryEmphasized={secondaryEmphasized}
+            secondaryVariant={secondaryVariant}
+            allowFrame={allowFrameEmphasis}
+            pool={emphasisPool}
+            spotlightEmphasis={spotlightEmphasis}
+            spec={spec}
+            staticRender={staticRender}
+            paused={paused}
+            isSolo={isSolo}
+            soloInlineScale={soloInlineScale}
+            leftAnchoredText={leftAnchoredText}
+            textColor={textColor}
+            emphasisColor={emphasisColor}
+            entranceStyle={entranceStyle}
+            timeScale={timeScale}
+          />
+        </motion.div>
+      </div>
+    </EntranceClockContext.Provider>
   );
 }

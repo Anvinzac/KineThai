@@ -1,0 +1,292 @@
+/**
+ * Line layout for a packed Vietnamese page, solved from MEASURED widths.
+ *
+ * The character-count packer in ./page-metrics decides breaks from an estimate (every
+ * character 0.58em wide, at the size the page starts at) and never revisits them. A
+ * page set in a narrow face, or shrunk afterwards to fit its widest unbreakable phrase,
+ * is then left with half-empty lines and a syllable alone on a row it did not need.
+ *
+ * Here nothing is placed on a line until its real width is known to fit. The caller
+ * measures every unbreakable segment as it is actually drawn — typeface, emphasis size,
+ * frame padding and all — and this module tries every way of breaking them into lines,
+ * works out the largest font each arrangement can be set in without leaving its bounds,
+ * and keeps the one that reads best: large type first, then no syllable stranded on a
+ * line of its own, then even lines.
+ *
+ * Phrase edges. A page may also say where its phrases meet: the generator's `|` mark, or
+ * the reader's own equivalents — a word that ends in a comma, a full stop or a semicolon.
+ * A break is welcome right after an edge, and never one word away from it: a line must not
+ * end one word after the mark, nor begin with the one word that carries it. That word
+ * would read as cut off from its phrase.
+ *
+ * Exports: MeasuredSegment, MeasuredLineBounds, MeasuredLines, MeasuredLineOptions,
+ *          MAX_MEASURED_SEGMENTS, getPunctuationPhraseEdges, isBreakOneWordFromEdge,
+ *          solveMeasuredLines
+ * Depends on: ./page-metrics getVietnameseLineIndentEm, ./types
+ */
+
+import { getVietnameseLineIndentEm } from "./page-metrics";
+import type { WordLine, WordSegment } from "./types";
+
+/** One unbreakable segment and the size it is drawn at, in em of the page font. */
+export type MeasuredSegment = {
+  segment: WordSegment;
+  widthEm: number;
+  heightEm: number;
+};
+
+/** The box the lines have to stay inside, and the sizes the page may be set in. */
+export type MeasuredLineBounds = {
+  /** Room one line has, its indent included, in px. */
+  lineWidthPx: number;
+  /** Tallest the whole block may physically be, in px. */
+  hardHeightPx: number;
+  /** Vertical room the caller budgets for the block, in px… */
+  budgetHeightPx: number;
+  /** …counted at this many em per line. */
+  budgetLineEm: number;
+  /** Largest font the page may be set in, px. */
+  maxFontPx: number;
+  /**
+   * Legibility floor, px. The height BUDGET gives way to it (a page is not shrunk under
+   * this size just to stay inside the budget); the hard width and height never do.
+   */
+  floorFontPx: number;
+  /** Gap between two segments on a line, em. */
+  gapEm: number;
+  /** Extra space above every line but the first, em. */
+  lineGapEm: number;
+};
+
+export type MeasuredLines = { lines: WordLine[]; fontPx: number };
+
+/** What the page says about its own structure, beyond its measured segments. */
+export type MeasuredLineOptions = {
+  /**
+   * Word indices (into the page's tokens) at which a phrase begins. Omitted or empty, the
+   * page is not phrased and lays out exactly as it would without this option.
+   */
+  phraseEdges?: readonly number[];
+};
+
+/**
+ * Every arrangement is tried, so the work doubles with each segment. A Vietnamese page
+ * is paginated to about ten words; past this many segments the caller keeps the
+ * estimate-packed lines instead.
+ */
+export const MAX_MEASURED_SEGMENTS = 15;
+
+/**
+ * What a line holding one lone word costs, as the share of the font size the layout
+ * keeps when it accepts one. The cost follows how the line LOOKS, not how the word is
+ * spelt: a word that spans most of the widest line is a short line like any other and
+ * costs almost nothing, while a scrap under a third of that width is the stranded
+ * syllable this layout exists to avoid — worth setting the whole page about a third
+ * smaller to be rid of. Measured, so it holds for any script.
+ */
+const LONE_FULL_SHARE = 0.62;
+const LONE_SCRAP_SHARE = 0.3;
+const LONE_FULL_FACTOR = 0.96;
+const LONE_SCRAP_FACTOR = 0.68;
+/** How much uneven lines count against an arrangement — a tie-breaker, not a driver. */
+const RAGGED_WEIGHT = 0.1;
+/**
+ * A break one word away from a phrase edge. The rule says "never"; the layout keeps one
+ * escape for a page that cannot be set any other way, so such a break is only taken when
+ * every arrangement without one would have to be set at less than about half the size.
+ */
+const PHRASE_SPLIT_FACTOR = 0.45;
+/** Any other break inside a phrase, against one on an edge: an edge wins close calls. */
+const INSIDE_PHRASE_FACTOR = 0.98;
+/** A word that ends a phrase: it carries a comma, full stop or semicolon, perhaps inside closing quotes. */
+const PHRASE_END = /[,.;]["'\u201D\u2019\u00BB)\]]*$/u;
+const HAS_GLYPH = /\p{L}|\p{N}/u;
+
+/**
+ * The phrase edges a page's own punctuation makes — the reader's equivalents of `|`. A
+ * word that ends in a comma, a full stop or a semicolon closes its phrase; the next one
+ * starts after it. A mark inside a word or number ("1.000") is not at its end and makes no
+ * edge, and the end of the page is not an edge.
+ * @param words - the page's tokens
+ * @returns Word indices at which a phrase begins, ascending
+ * @pure true
+ */
+export function getPunctuationPhraseEdges(words: readonly string[]): number[] {
+  const edges: number[] = [];
+  for (let index = 0; index < words.length - 1; index += 1) {
+    if (PHRASE_END.test(words[index]!)) edges.push(index + 1);
+  }
+  return edges;
+}
+
+/**
+ * Whether a break before token `at` is one word away from a phrase edge, counting each
+ * token that draws a letter or digit as a word — for callers that break between single
+ * tokens, such as pages. The measured layout counts unbreakable segments instead.
+ * @param words - the tokens being broken
+ * @param edges - word indices at which a phrase begins
+ * @param at - the token the break would come before
+ * @returns True when the break would leave one word between it and an edge
+ * @pure true
+ */
+export function isBreakOneWordFromEdge(
+  words: readonly string[],
+  edges: readonly number[],
+  at: number,
+): boolean {
+  if (edges.includes(at)) return false;
+  const between = (from: number, to: number) => {
+    let total = 0;
+    for (let index = from; index < to; index += 1)
+      if (HAS_GLYPH.test(words[index] ?? "")) total += 1;
+    return total;
+  };
+  return edges.some((edge) => (at < edge ? between(at, edge) <= 1 : between(edge, at) === 1));
+}
+
+/**
+ * What each possible break costs under the phrase rule: one factor per gap between two
+ * segments, 1 for an unphrased page.
+ *
+ * A word, here, is a segment that draws something: a joined word, a bonded pair or a
+ * single syllable each count once, and a mark standing on its own counts not at all. A
+ * break is one word away from an edge when exactly one word lies between them — or, before
+ * the edge, none, which would open the next line with the mark itself.
+ */
+function getBreakFactors(
+  segments: readonly MeasuredSegment[],
+  phraseEdges: readonly number[] | undefined,
+): number[] {
+  const count = segments.length;
+  const factors = new Array<number>(Math.max(0, count - 1)).fill(1);
+  if (!phraseEdges?.length || count < 2) return factors;
+  const starts = segments.map(({ segment }) => segment.words[0]!.index);
+  const drawn = segments.map(({ segment }) =>
+    segment.words.some((word) => HAS_GLYPH.test(word.text)) ? 1 : 0,
+  );
+  const first = starts[0]!;
+  const end = segments[count - 1]!.segment.words.at(-1)!.index + 1;
+  const edges = [...new Set(phraseEdges)].filter((edge) => edge > first && edge < end);
+  if (!edges.length) return factors;
+  // Words drawn between two word indices, whichever way round they come.
+  const wordsBetween = (from: number, to: number) =>
+    starts.reduce(
+      (total, start, index) => (start >= from && start < to ? total + drawn[index]! : total),
+      0,
+    );
+  for (let gap = 0; gap < count - 1; gap += 1) {
+    const at = starts[gap + 1]!;
+    if (edges.includes(at)) continue;
+    const tooClose = edges.some((edge) =>
+      at < edge ? wordsBetween(at, edge) <= 1 : wordsBetween(edge, at) === 1,
+    );
+    factors[gap] = tooClose ? PHRASE_SPLIT_FACTOR : INSIDE_PHRASE_FACTOR;
+  }
+  return factors;
+}
+
+function loneWordFactor(share: number): number {
+  const scrap = Math.min(
+    1,
+    Math.max(0, (LONE_FULL_SHARE - share) / (LONE_FULL_SHARE - LONE_SCRAP_SHARE)),
+  );
+  return LONE_FULL_FACTOR - (LONE_FULL_FACTOR - LONE_SCRAP_FACTOR) * scrap;
+}
+
+/**
+ * Choose line breaks and a font size for measured segments.
+ * @param segments - the page's unbreakable segments in reading order, with measured sizes
+ * @param bounds - the box and the font sizes allowed
+ * @param options - the page's phrase edges, when it has any
+ * @returns The best arrangement and the font it fits at, or null when there is nothing
+ *   to solve (no segments, too many to try, or no room measured yet)
+ * @pure true
+ */
+export function solveMeasuredLines(
+  segments: readonly MeasuredSegment[],
+  bounds: MeasuredLineBounds,
+  options: MeasuredLineOptions = {},
+): MeasuredLines | null {
+  const count = segments.length;
+  if (count === 0 || count > MAX_MEASURED_SEGMENTS) return null;
+  if (!(bounds.lineWidthPx > 0) || !(bounds.maxFontPx > 0)) return null;
+  if (segments.some((item) => !(item.widthEm > 0))) return null;
+
+  const floorPx = Math.min(bounds.maxFontPx, bounds.floorFontPx);
+  // Widths of the lines that hold one lone word, refilled for every arrangement.
+  const loneWidths: number[] = [];
+  const breakFactors = getBreakFactors(segments, options.phraseEdges);
+
+  let best: { mask: number; fontPx: number; score: number; lines: number } | null = null;
+  // Bit i set = the line breaks after segment i.
+  const arrangements = 1 << (count - 1);
+  for (let mask = 0; mask < arrangements; mask += 1) {
+    let lineIndex = 0;
+    let lineWidth = 0;
+    let lineHeight = 0;
+    let lineSegments = 0;
+    let widest = 0;
+    let widthSum = 0;
+    let blockHeight = 0;
+    let phrasing = 1;
+    loneWidths.length = 0;
+    for (let index = 0; index < count; index += 1) {
+      const item = segments[index]!;
+      lineWidth += (lineSegments > 0 ? bounds.gapEm : 0) + item.widthEm;
+      lineHeight = Math.max(lineHeight, item.heightEm);
+      lineSegments += 1;
+      const last = index === count - 1;
+      if (!last && !(mask & (1 << index))) continue;
+      // The line is closed. Its reach includes the stagger, which is what has to fit.
+      const reach = lineWidth + getVietnameseLineIndentEm(lineIndex);
+      widest = Math.max(widest, reach);
+      widthSum += reach;
+      blockHeight += lineHeight + (lineIndex > 0 ? bounds.lineGapEm : 0);
+      // A segment of several words is a whole phrase on its line, not a stranded word.
+      if (lineSegments === 1 && item.segment.words.length === 1) loneWidths.push(lineWidth);
+      if (!last) phrasing *= breakFactors[index]!;
+      lineIndex += 1;
+      lineWidth = 0;
+      lineHeight = 0;
+      lineSegments = 0;
+    }
+    const lines = lineIndex;
+    let penalty = phrasing;
+    // A page that is one word on one line is not a stranded word; it is the page.
+    if (lines > 1) for (const width of loneWidths) penalty *= loneWordFactor(width / widest);
+
+    // Verified bounds: no line wider than its room, the block no taller than the band.
+    const widthFont = bounds.lineWidthPx / widest;
+    const hardHeightFont = bounds.hardHeightPx > 0 ? bounds.hardHeightPx / blockHeight : Infinity;
+    const budgetFont = bounds.budgetHeightPx / (lines * bounds.budgetLineEm);
+    const fontPx = Math.min(
+      bounds.maxFontPx,
+      widthFont,
+      hardHeightFont,
+      Math.max(budgetFont, floorPx),
+    );
+    const ragged = 1 - widthSum / lines / widest;
+    const score = fontPx * penalty * (1 - RAGGED_WEIGHT * ragged);
+    // On an exact tie the arrangement with fewer lines stands, then the earlier one, so
+    // the same page always breaks the same way.
+    if (
+      !best ||
+      score > best.score + 1e-9 ||
+      (Math.abs(score - best.score) <= 1e-9 && lines < best.lines)
+    ) {
+      best = { mask, fontPx, score, lines };
+    }
+  }
+  if (!best) return null;
+
+  const lines: WordLine[] = [];
+  let current: WordSegment[] = [];
+  segments.forEach(({ segment }, index) => {
+    current.push(segment);
+    if (index === count - 1 || best!.mask & (1 << index)) {
+      lines.push({ indentEm: getVietnameseLineIndentEm(lines.length), segments: current });
+      current = [];
+    }
+  });
+  return { lines, fontPx: best.fontPx };
+}

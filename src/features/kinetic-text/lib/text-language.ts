@@ -30,8 +30,16 @@ export {
   SHORT_SENTENCE_MAX_WORDS,
   countSentenceWords,
   limitShortSentenceEmphasis,
+  MAX_MEASURED_SEGMENTS,
+  getPunctuationPhraseEdges,
+  isBreakOneWordFromEdge,
+  solveMeasuredLines,
 } from "./text-language/index";
 export type {
+  MeasuredLineBounds,
+  MeasuredLineOptions,
+  MeasuredLines,
+  MeasuredSegment,
   VietnameseLayoutMetrics,
   VietnameseLineLayoutOptions,
   WordLine,

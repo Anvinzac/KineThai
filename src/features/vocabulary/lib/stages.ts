@@ -1,4 +1,4 @@
-/** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, hanzi script detection, kinetic-text emphasis types, locale + i18n + clues (KineThai overlay). */
+/** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, word-joiner, hanzi script detection, kinetic-text emphasis types, locale + i18n + clues (KineThai overlay). */
 import type { EmphasisVariant } from "@/features/kinetic-text";
 import { answerPattern, type NarrativeStyle, type VocabularyWord } from "./schema";
 import { isHanAnswer } from "./hanzi";
@@ -6,6 +6,7 @@ import { paginateText } from "@/features/post-player";
 import { resolveClue } from "./clues";
 import { hanLettersSentence, leadLabel, lettersSentence, stageLabel } from "./i18n";
 import { BASE_LOCALE, DEFAULT_LOCALE, type Locale } from "./locale";
+import { splitWordJoiners, stripWordJoiners } from "./word-joiner";
 
 /**
  * Effect used for the starting initial on the letter-count clue. `frame` draws a
@@ -24,21 +25,29 @@ export type LearningStage = {
   reveal?: boolean;
   /** Emphasis phrases extracted from /word/ markers in the source text field. */
   dataEmphasis?: string[];
+  /**
+   * Words the source text joined (see ./word-joiner), each written with plain spaces.
+   * Their syllables are one word and must stay on one line.
+   */
+  boundPhrases?: string[];
   /** Second highlight drawn with its own effect, independent of `dataEmphasis`. */
   secondaryEmphasis?: { phrase: string; variant: EmphasisVariant };
 };
 
 /**
- * Parse /word/ emphasis markers from a text field.
- * Returns the clean text (markers stripped) and the list of marked phrases.
+ * Parse /word/ emphasis markers and word joins from a text field.
+ * Returns the clean text (markers stripped, joins written as plain spaces), the list of
+ * marked phrases, and the joined words that must stay whole.
  */
-function parseEmphasisMarkers(text: string): { clean: string; markers: string[] } {
+function parseEmphasisMarkers(text: string): { clean: string; markers: string[]; bound: string[] } {
   const markers: string[] = [];
-  const clean = text.replace(/\/([^/]+)\//g, (_, word) => {
-    markers.push(word.trim());
+  const unmarked = text.replace(/\/([^/]+)\//g, (_, word) => {
+    // A highlight is matched token by token, so it is kept without its joins.
+    markers.push(stripWordJoiners(word.trim()));
     return word.trim();
   });
-  return { clean, markers };
+  const { text: clean, bound } = splitWordJoiners(unmarked);
+  return { clean, markers, bound };
 }
 
 /**
@@ -85,7 +94,7 @@ export function buildStages(
       : BASE_LOCALE;
   const stages: LearningStage[] = [];
   if (word.leadVi) {
-    const { clean, markers } = parseEmphasisMarkers(
+    const { clean, markers, bound } = parseEmphasisMarkers(
       resolveClue(word, "lead", locale) || word.leadVi,
     );
     stages.push({
@@ -94,16 +103,20 @@ export function buildStages(
       text: mask(clean),
       lang: clueLang,
       dataEmphasis: markers.length ? markers : undefined,
+      boundPhrases: bound.length ? bound : undefined,
     });
   }
   {
-    const { clean, markers } = parseEmphasisMarkers(resolveClue(word, "def", locale) || word.defVi);
+    const { clean, markers, bound } = parseEmphasisMarkers(
+      resolveClue(word, "def", locale) || word.defVi,
+    );
     stages.push({
       id: "definition",
       label: stageLabel("definition", locale),
       text: mask(clean),
       lang: clueLang,
       dataEmphasis: markers.length ? markers : undefined,
+      boundPhrases: bound.length ? bound : undefined,
     });
   }
   const hanCount = (word.word.match(/\p{Script=Han}/gu) ?? []).length;
@@ -137,7 +150,7 @@ export function buildStages(
     });
   const example = word.usage[0];
   if (example) {
-    const { clean: enClean, markers: enMarkers } = parseEmphasisMarkers(example.en);
+    const { clean: enClean, markers: enMarkers, bound: enBound } = parseEmphasisMarkers(example.en);
     const { clean: viClean } = parseEmphasisMarkers(
       resolveClue(word, "hint", locale) || example.vi,
     );
@@ -148,10 +161,11 @@ export function buildStages(
       secondary: mask(viClean),
       lang: answerLang,
       dataEmphasis: enMarkers.length ? enMarkers : undefined,
+      boundPhrases: enBound.length ? enBound : undefined,
     });
   }
   if (word.anticipateVi) {
-    const { clean, markers } = parseEmphasisMarkers(
+    const { clean, markers, bound } = parseEmphasisMarkers(
       resolveClue(word, "guess", locale) || word.anticipateVi,
     );
     stages.push({
@@ -160,6 +174,7 @@ export function buildStages(
       text: mask(clean),
       lang: clueLang,
       dataEmphasis: markers.length ? markers : undefined,
+      boundPhrases: bound.length ? bound : undefined,
     });
   }
   stages.push({
@@ -171,7 +186,8 @@ export function buildStages(
   });
   return stages.flatMap((stage) => {
     if (stage.reveal) return [stage];
-    return paginateText(stage.text).map((text, index) => ({
+    // Pages break like lines: never one word away from a comma, full stop or semicolon.
+    return paginateText(stage.text, { keepPhraseEdges: true }).map((text, index) => ({
       ...stage,
       id: `${stage.id}-${index}`,
       text,

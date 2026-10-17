@@ -4,11 +4,12 @@
  * no account.
  *
  * Exports: SavedWord, getWordsWithReaction, getSavedWords, getFavoriteWords,
- *   countWordsWithReaction, lookupWord
+ *   countWordsWithReaction, lookupWord, findWordByShareCode
  * Depends on: ./catalog-source, ./schema, ./history, ./reactions
  */
 
 import { catalogFor } from "./catalog-source";
+import { normalizeShareCode } from "./share-code";
 import { resolveTarget } from "./target-language";
 import type { VocabularyWord } from "./schema";
 import { loadHistory } from "./history";
@@ -56,6 +57,31 @@ function resolveSavedAt(
 /** Resolve a catalog word by id (undefined when the deck no longer holds it). */
 export function lookupWord(id: string): VocabularyWord | undefined {
   return wordsByIdMap().get(id);
+}
+
+/** Share code → word, resolved lazily against THIS host's deck, same as byId. */
+let byShareCode: Map<string, VocabularyWord> | undefined;
+
+/**
+ * Resolve a word from a challenge link's share code.
+ *
+ * Codes are per-deck: each locale's catalog issues its own, and a host serves one
+ * deck, so `/w/K7F` means whatever this host's catalog says it means.
+ * @param code Raw code from the URL. Normalised here, so a lower-case or
+ *   lightly mistyped one still resolves.
+ * @returns The word, or undefined when the code is unknown — which includes a
+ *   code whose word has since left the deck.
+ */
+export function findWordByShareCode(code: string): VocabularyWord | undefined {
+  if (!byShareCode) {
+    const host = typeof window === "undefined" ? "" : window.location.host;
+    byShareCode = new Map(
+      catalogFor(resolveTarget(host)).words.flatMap((word) =>
+        word.shareCode ? [[word.shareCode, word] as const] : [],
+      ),
+    );
+  }
+  return byShareCode.get(normalizeShareCode(code));
 }
 
 /**
