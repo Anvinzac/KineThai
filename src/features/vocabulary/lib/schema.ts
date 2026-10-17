@@ -46,6 +46,19 @@ const wordSchema = z.object({
     // An English headword (2+ chars, letters with inner ' or -) or a Chinese one
     // (one or more Han characters) for a locale deck served on its own domain.
     .regex(/^(?:(?=.{2})[a-zA-Z]+(?:['’-][a-zA-Z]+)*|\p{Script=Han}+)$/u),
+  /**
+   * The short handle used to share this word as a challenge (`/w/K7F`). Assigned
+   * once by scripts/assign-share-codes.ts and then permanent: codes escape into
+   * chat threads and must keep meaning the same word forever. Optional on the
+   * type so a deck authored before codes existed still parses; check:share-codes
+   * is what requires every PUBLISHED word to carry one.
+   */
+  shareCode: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .regex(/^[0-9A-HJKMNP-TV-Z]{3}$/)
+    .optional(),
   defVi: z.string().trim().min(2).max(400),
   leadVi: optionalText(240),
   anticipateVi: optionalText(180),

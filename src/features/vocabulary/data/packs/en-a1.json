@@ -47,7 +47,8 @@
           "en": "I eat an _____ every morning.",
           "vi": "Sáng nào tôi cũng=ăn một=quả táo."
         }
-      ]
+      ],
+      "shareCode": "T22"
     },
     {
       "id": "bag",
@@ -73,7 +74,8 @@
           "en": "She put her phone in her _____.",
           "vi": "Cô ấy cất điện_thoại | vào=túi_xách."
         }
-      ]
+      ],
+      "shareCode": "XRF"
     },
     {
       "id": "bed",
@@ -99,7 +101,8 @@
           "en": "I go to _____ at ten o'clock.",
           "vi": "Tôi đi ngủ | lúc mười giờ."
         }
-      ]
+      ],
+      "shareCode": "H46"
     },
     {
       "id": "bike",
@@ -126,7 +129,8 @@
           "en": "I ride my _____ to school.",
           "vi": "Tôi đạp xe | đến trường."
         }
-      ]
+      ],
+      "shareCode": "5K4"
     },
     {
       "id": "bird",
@@ -152,7 +156,8 @@
           "en": "A small _____ is singing in the tree.",
           "vi": "Một con=chim nhỏ | đang hót trên cây."
         }
-      ]
+      ],
+      "shareCode": "JKV"
     },
     {
       "id": "book",
@@ -179,7 +184,8 @@
           "en": "This _____ is very interesting.",
           "vi": "Cuốn=sách này | rất=thú_vị."
         }
-      ]
+      ],
+      "shareCode": "W9H"
     },
     {
       "id": "bread",
@@ -205,7 +211,8 @@
           "en": "I have _____ and milk for breakfast.",
           "vi": "Bữa sáng tôi ăn bánh_mì | với sữa."
         }
-      ]
+      ],
+      "shareCode": "ZV6"
     },
     {
       "id": "brother",
@@ -232,7 +239,8 @@
           "en": "My _____ is two years older than me.",
           "vi": "Anh trai tôi | lớn hơn tôi hai tuổi."
         }
-      ]
+      ],
+      "shareCode": "R61"
     },
     {
       "id": "bus",
@@ -258,7 +266,8 @@
           "en": "I take the _____ to work.",
           "vi": "Tôi đi xe_buýt | đi làm."
         }
-      ]
+      ],
+      "shareCode": "AQJ"
     },
     {
       "id": "cake",
@@ -284,7 +293,8 @@
           "en": "Mom made a chocolate _____ for my birthday.",
           "vi": "Mẹ làm bánh sô_cô_la | cho=sinh_nhật tôi."
         }
-      ]
+      ],
+      "shareCode": "37B"
     },
     {
       "id": "car",
@@ -310,7 +320,8 @@
           "en": "My father drives a red _____.",
           "vi": "Bố tôi lái một=chiếc ô_tô đỏ."
         }
-      ]
+      ],
+      "shareCode": "SGB"
     },
     {
       "id": "cat",
@@ -337,7 +348,8 @@
           "en": "Our _____ sleeps on the sofa.",
           "vi": "Con=mèo nhà tôi | ngủ trên ghế dài."
         }
-      ]
+      ],
+      "shareCode": "1PY"
     },
     {
       "id": "chair",
@@ -363,7 +375,8 @@
           "en": "Please sit on this _____.",
           "vi": "Mời bạn ngồi | lên chiếc=ghế này."
         }
-      ]
+      ],
+      "shareCode": "GDH"
     },
     {
       "id": "child",
@@ -390,7 +403,8 @@
           "en": "The _____ is playing in the garden.",
           "vi": "Đứa trẻ | đang=chơi trong vườn."
         }
-      ]
+      ],
+      "shareCode": "7KX"
     },
     {
       "id": "city",
@@ -417,7 +431,8 @@
           "en": "Hanoi is a big _____.",
           "vi": "Hà_Nội | là một=thành_phố lớn."
         }
-      ]
+      ],
+      "shareCode": "2Z3"
     },
     {
       "id": "clock",
@@ -444,7 +459,8 @@
           "en": "The _____ on the wall is slow.",
           "vi": "Cái=đồng_hồ trên tường | chạy chậm."
         }
-      ]
+      ],
+      "shareCode": "CYR"
     },
     {
       "id": "coat",
@@ -470,7 +486,8 @@
           "en": "Put on your _____, it's cold outside.",
           "vi": "Mặc áo khoác vào, | ngoài trời lạnh đấy."
         }
-      ]
+      ],
+      "shareCode": "F6A"
     },
     {
       "id": "cold",
@@ -497,7 +514,8 @@
           "en": "It is very _____ today.",
           "vi": "Hôm nay | trời rất=lạnh."
         }
-      ]
+      ],
+      "shareCode": "9X6"
     },
     {
       "id": "cook",
@@ -524,7 +542,8 @@
           "en": "My mother _____ dinner every evening.",
           "vi": "Mẹ tôi | nấu bữa tối hằng ngày."
         }
-      ]
+      ],
+      "shareCode": "26W"
     },
     {
       "id": "cup",
@@ -551,7 +570,8 @@
           "en": "Would you like a _____ of tea?",
           "vi": "Bạn uống một=tách trà nhé?"
         }
-      ]
+      ],
+      "shareCode": "53F"
     },
     {
       "id": "dance",
@@ -578,7 +598,8 @@
           "en": "They love to _____ at parties.",
           "vi": "Họ thích nhảy múa | trong các=bữa tiệc."
         }
-      ]
+      ],
+      "shareCode": "5Y2"
     },
     {
       "id": "day",
@@ -604,7 +625,8 @@
           "en": "There are seven _____s in a week.",
           "vi": "Một tuần | có bảy ngày."
         }
-      ]
+      ],
+      "shareCode": "Z3R"
     },
     {
       "id": "desk",
@@ -631,7 +653,8 @@
           "en": "My books are on my _____.",
           "vi": "Sách của=tôi | nằm trên bàn học."
         }
-      ]
+      ],
+      "shareCode": "JXC"
     },
     {
       "id": "dog",
@@ -658,7 +681,8 @@
           "en": "The _____ is barking at the gate.",
           "vi": "Con=chó | đang=sủa ở cổng."
         }
-      ]
+      ],
+      "shareCode": "YBF"
     },
     {
       "id": "door",
@@ -684,7 +708,8 @@
           "en": "Please close the _____.",
           "vi": "Làm ơn | đóng cửa lại."
         }
-      ]
+      ],
+      "shareCode": "4K2"
     },
     {
       "id": "drink",
@@ -711,7 +736,8 @@
           "en": "You should _____ more water.",
           "vi": "Bạn nên uống | nhiều nước hơn."
         }
-      ]
+      ],
+      "shareCode": "M0E"
     },
     {
       "id": "egg",
@@ -737,7 +763,8 @@
           "en": "I want a fried _____ for breakfast.",
           "vi": "Tôi muốn ăn trứng ốp | cho=bữa sáng."
         }
-      ]
+      ],
+      "shareCode": "T0N"
     },
     {
       "id": "eye",
@@ -764,7 +791,8 @@
           "en": "She has big brown _____s.",
           "vi": "Cô ấy | có đôi mắt nâu to."
         }
-      ]
+      ],
+      "shareCode": "EA5"
     },
     {
       "id": "family",
@@ -791,7 +819,8 @@
           "en": "I live with my _____.",
           "vi": "Tôi sống | cùng gia_đình."
         }
-      ]
+      ],
+      "shareCode": "11A"
     },
     {
       "id": "farm",
@@ -818,7 +847,8 @@
           "en": "My uncle has a big _____.",
           "vi": "Chú tôi | có một=trang_trại lớn."
         }
-      ]
+      ],
+      "shareCode": "BJZ"
     },
     {
       "id": "father",
@@ -845,7 +875,8 @@
           "en": "My _____ is a doctor.",
           "vi": "Bố tôi | là bác_sĩ."
         }
-      ]
+      ],
+      "shareCode": "MR5"
     },
     {
       "id": "fish",
@@ -872,7 +903,8 @@
           "en": "We had _____ for dinner.",
           "vi": "Bữa tối | chúng_tôi ăn cá."
         }
-      ]
+      ],
+      "shareCode": "JH4"
     },
     {
       "id": "flower",
@@ -898,7 +930,8 @@
           "en": "She gave me a red _____.",
           "vi": "Cô ấy tặng tôi | một=bông hoa đỏ."
         }
-      ]
+      ],
+      "shareCode": "SDB"
     },
     {
       "id": "friend",
@@ -925,7 +958,8 @@
           "en": "Tom is my best _____.",
           "vi": "Tom là bạn thân nhất | của=tôi."
         }
-      ]
+      ],
+      "shareCode": "SCJ"
     },
     {
       "id": "fruit",
@@ -952,7 +986,8 @@
           "en": "Eat more fresh _____.",
           "vi": "Hãy ăn | nhiều trái_cây tươi."
         }
-      ]
+      ],
+      "shareCode": "13N"
     },
     {
       "id": "game",
@@ -978,7 +1013,8 @@
           "en": "Let's play a _____ after dinner.",
           "vi": "Ăn tối xong | mình chơi trò_chơi nhé."
         }
-      ]
+      ],
+      "shareCode": "SNV"
     },
     {
       "id": "garden",
@@ -1005,7 +1041,8 @@
           "en": "We grow vegetables in our _____.",
           "vi": "Chúng_tôi trồng rau | trong vườn."
         }
-      ]
+      ],
+      "shareCode": "A5P"
     },
     {
       "id": "glass",
@@ -1032,7 +1069,8 @@
           "en": "Can I have a _____ of water?",
           "vi": "Cho tôi | một=ly nước nhé?"
         }
-      ]
+      ],
+      "shareCode": "PWD"
     },
     {
       "id": "happy",
@@ -1058,7 +1096,8 @@
           "en": "I am very _____ to see you.",
           "vi": "Tôi rất=vui | được gặp bạn."
         }
-      ]
+      ],
+      "shareCode": "8AB"
     },
     {
       "id": "hat",
@@ -1084,7 +1123,8 @@
           "en": "Wear a _____, it's sunny.",
           "vi": "Đội mũ vào, | trời nắng đấy."
         }
-      ]
+      ],
+      "shareCode": "FNG"
     },
     {
       "id": "help",
@@ -1111,7 +1151,8 @@
           "en": "Can you _____ me carry this box?",
           "vi": "Bạn giúp tôi | bê thùng này nhé?"
         }
-      ]
+      ],
+      "shareCode": "F0B"
     },
     {
       "id": "home",
@@ -1137,7 +1178,8 @@
           "en": "I am going _____ now.",
           "vi": "Bây_giờ | tôi về nhà."
         }
-      ]
+      ],
+      "shareCode": "8RR"
     },
     {
       "id": "horse",
@@ -1164,7 +1206,8 @@
           "en": "He rides a white _____.",
           "vi": "Anh ấy cưỡi | một=con ngựa trắng."
         }
-      ]
+      ],
+      "shareCode": "X3N"
     },
     {
       "id": "hot",
@@ -1191,7 +1234,8 @@
           "en": "Be careful, the soup is _____.",
           "vi": "Cẩn_thận, | canh nóng đấy."
         }
-      ]
+      ],
+      "shareCode": "1E9"
     },
     {
       "id": "house",
@@ -1217,7 +1261,8 @@
           "en": "They live in a big _____.",
           "vi": "Họ sống | trong một=ngôi nhà lớn."
         }
-      ]
+      ],
+      "shareCode": "VEB"
     },
     {
       "id": "ice",
@@ -1244,7 +1289,8 @@
           "en": "Put some _____ in my drink, please.",
           "vi": "Cho thêm | ít đá vào ly tôi nhé."
         }
-      ]
+      ],
+      "shareCode": "AGV"
     },
     {
       "id": "juice",
@@ -1270,7 +1316,8 @@
           "en": "I drink orange _____ every day.",
           "vi": "Ngày nào tôi cũng=uống | nước cam."
         }
-      ]
+      ],
+      "shareCode": "9Q0"
     },
     {
       "id": "key",
@@ -1296,7 +1343,8 @@
           "en": "I can't find my _____.",
           "vi": "Tôi không=tìm thấy | chìa_khóa."
         }
-      ]
+      ],
+      "shareCode": "PFA"
     },
     {
       "id": "leg",
@@ -1322,7 +1370,8 @@
           "en": "I hurt my _____ playing football.",
           "vi": "Tôi bị đau chân | khi đá bóng."
         }
-      ]
+      ],
+      "shareCode": "AZQ"
     },
     {
       "id": "letter",
@@ -1348,7 +1397,8 @@
           "en": "I wrote a _____ to my grandma.",
           "vi": "Tôi viết thư | cho=bà."
         }
-      ]
+      ],
+      "shareCode": "XJS"
     },
     {
       "id": "milk",
@@ -1375,7 +1425,8 @@
           "en": "Babies drink a lot of _____.",
           "vi": "Em bé | uống rất=nhiều sữa."
         }
-      ]
+      ],
+      "shareCode": "6XT"
     },
     {
       "id": "money",
@@ -1401,7 +1452,8 @@
           "en": "I don't have much _____.",
           "vi": "Tôi không=có | nhiều tiền."
         }
-      ]
+      ],
+      "shareCode": "YNF"
     },
     {
       "id": "moon",
@@ -1427,7 +1479,8 @@
           "en": "The _____ is full tonight.",
           "vi": "Đêm nay | trăng tròn."
         }
-      ]
+      ],
+      "shareCode": "HJJ"
     },
     {
       "id": "morning",
@@ -1453,7 +1506,8 @@
           "en": "I run every _____.",
           "vi": "Tôi chạy bộ | mỗi buổi sáng."
         }
-      ]
+      ],
+      "shareCode": "W6F"
     },
     {
       "id": "mother",
@@ -1480,7 +1534,8 @@
           "en": "My _____ cooks very well.",
           "vi": "Mẹ tôi | nấu ăn rất=ngon."
         }
-      ]
+      ],
+      "shareCode": "D2P"
     },
     {
       "id": "mouth",
@@ -1506,7 +1561,8 @@
           "en": "Open your _____, please.",
           "vi": "Há miệng ra nào."
         }
-      ]
+      ],
+      "shareCode": "Y57"
     },
     {
       "id": "music",
@@ -1533,7 +1589,8 @@
           "en": "I listen to _____ every night.",
           "vi": "Tối nào tôi cũng=nghe nhạc."
         }
-      ]
+      ],
+      "shareCode": "KHD"
     },
     {
       "id": "name",
@@ -1559,7 +1616,8 @@
           "en": "What is your _____?",
           "vi": "Bạn tên là gì?"
         }
-      ]
+      ],
+      "shareCode": "FXX"
     },
     {
       "id": "night",
@@ -1585,7 +1643,8 @@
           "en": "I can't sleep at _____.",
           "vi": "Ban_đêm | tôi không=ngủ được."
         }
-      ]
+      ],
+      "shareCode": "JH7"
     },
     {
       "id": "nose",
@@ -1612,7 +1671,8 @@
           "en": "He has a cold and a red _____.",
           "vi": "Anh ấy bị cảm, | mũi đỏ ửng."
         }
-      ]
+      ],
+      "shareCode": "XVB"
     },
     {
       "id": "open",
@@ -1638,7 +1698,8 @@
           "en": "Please _____ the window.",
           "vi": "Làm ơn | mở cửa_sổ ra."
         }
-      ]
+      ],
+      "shareCode": "4RY"
     },
     {
       "id": "park",
@@ -1665,7 +1726,8 @@
           "en": "We walk in the _____ on Sundays.",
           "vi": "Chủ_nhật | chúng_tôi đi dạo công_viên."
         }
-      ]
+      ],
+      "shareCode": "BZD"
     },
     {
       "id": "pen",
@@ -1691,7 +1753,8 @@
           "en": "Can I use your _____?",
           "vi": "Tôi dùng bút | của=bạn được không?"
         }
-      ]
+      ],
+      "shareCode": "4EK"
     },
     {
       "id": "phone",
@@ -1718,7 +1781,8 @@
           "en": "My _____ is ringing.",
           "vi": "Điện_thoại của=tôi | đang=reo."
         }
-      ]
+      ],
+      "shareCode": "ZF7"
     },
     {
       "id": "picture",
@@ -1744,7 +1808,8 @@
           "en": "She drew a _____ of her cat.",
           "vi": "Cô bé vẽ | một=bức tranh về con=mèo."
         }
-      ]
+      ],
+      "shareCode": "3WR"
     },
     {
       "id": "rain",
@@ -1770,7 +1835,8 @@
           "en": "We stayed home because of the _____.",
           "vi": "Chúng_tôi ở nhà | vì trời mưa."
         }
-      ]
+      ],
+      "shareCode": "4VP"
     },
     {
       "id": "read",
@@ -1796,7 +1862,8 @@
           "en": "I like to _____ before bed.",
           "vi": "Tôi thích đọc | trước khi ngủ."
         }
-      ]
+      ],
+      "shareCode": "KMV"
     },
     {
       "id": "rice",
@@ -1822,7 +1889,8 @@
           "en": "We eat _____ every day.",
           "vi": "Ngày nào chúng_tôi cũng=ăn cơm."
         }
-      ]
+      ],
+      "shareCode": "BKQ"
     },
     {
       "id": "river",
@@ -1848,7 +1916,8 @@
           "en": "The _____ is very wide here.",
           "vi": "Ở đây | con=sông rất=rộng."
         }
-      ]
+      ],
+      "shareCode": "7KM"
     },
     {
       "id": "room",
@@ -1874,7 +1943,8 @@
           "en": "My _____ is small but tidy.",
           "vi": "Phòng tôi | nhỏ nhưng gọn_gàng."
         }
-      ]
+      ],
+      "shareCode": "H4H"
     },
     {
       "id": "run",
@@ -1900,7 +1970,8 @@
           "en": "I _____ in the park every morning.",
           "vi": "Sáng nào tôi cũng=chạy | trong công_viên."
         }
-      ]
+      ],
+      "shareCode": "RKX"
     },
     {
       "id": "sad",
@@ -1926,7 +1997,8 @@
           "en": "She felt _____ when her friend left.",
           "vi": "Cô ấy buồn | khi bạn rời đi."
         }
-      ]
+      ],
+      "shareCode": "3YW"
     },
     {
       "id": "school",
@@ -1952,7 +2024,8 @@
           "en": "I walk to _____ every day.",
           "vi": "Ngày nào tôi cũng=đi bộ | đến trường."
         }
-      ]
+      ],
+      "shareCode": "1AQ"
     },
     {
       "id": "sea",
@@ -1979,7 +2052,8 @@
           "en": "We swam in the _____ last summer.",
           "vi": "Hè năm ngoái | chúng_tôi bơi ở biển."
         }
-      ]
+      ],
+      "shareCode": "1GF"
     },
     {
       "id": "shoe",
@@ -2005,7 +2079,8 @@
           "en": "These _____s are too small for me.",
           "vi": "Đôi giày này | chật với tôi."
         }
-      ]
+      ],
+      "shareCode": "3KE"
     },
     {
       "id": "shop",
@@ -2032,7 +2107,8 @@
           "en": "The _____ opens at eight.",
           "vi": "Cửa_hàng | mở cửa lúc tám giờ."
         }
-      ]
+      ],
+      "shareCode": "6PV"
     },
     {
       "id": "sing",
@@ -2059,7 +2135,8 @@
           "en": "She likes to _____ in the shower.",
           "vi": "Cô ấy thích hát | khi tắm."
         }
-      ]
+      ],
+      "shareCode": "C9Y"
     },
     {
       "id": "sister",
@@ -2086,7 +2163,8 @@
           "en": "My _____ is a nurse.",
           "vi": "Chị gái tôi | là y_tá."
         }
-      ]
+      ],
+      "shareCode": "NG1"
     },
     {
       "id": "sleep",
@@ -2113,7 +2191,8 @@
           "en": "Babies _____ a lot.",
           "vi": "Em bé | ngủ rất=nhiều."
         }
-      ]
+      ],
+      "shareCode": "E68"
     },
     {
       "id": "small",
@@ -2139,7 +2218,8 @@
           "en": "This shirt is too _____ for me.",
           "vi": "Cái=áo này | quá chật với tôi."
         }
-      ]
+      ],
+      "shareCode": "DWW"
     },
     {
       "id": "snow",
@@ -2165,7 +2245,8 @@
           "en": "Children play in the _____ in winter.",
           "vi": "Mùa đông | trẻ_em chơi đùa trong tuyết."
         }
-      ]
+      ],
+      "shareCode": "4PC"
     },
     {
       "id": "song",
@@ -2192,7 +2273,8 @@
           "en": "This is my favourite _____.",
           "vi": "Đây là | bài hát tôi thích nhất."
         }
-      ]
+      ],
+      "shareCode": "FKK"
     },
     {
       "id": "star",
@@ -2218,7 +2300,8 @@
           "en": "I can see many _____s tonight.",
           "vi": "Đêm nay | tôi thấy nhiều ngôi sao."
         }
-      ]
+      ],
+      "shareCode": "VY7"
     },
     {
       "id": "sun",
@@ -2244,7 +2327,8 @@
           "en": "The _____ is very bright today.",
           "vi": "Hôm nay | mặt_trời rất=chói."
         }
-      ]
+      ],
+      "shareCode": "TKS"
     },
     {
       "id": "swim",
@@ -2271,7 +2355,8 @@
           "en": "Can you _____?",
           "vi": "Bạn biết bơi không?"
         }
-      ]
+      ],
+      "shareCode": "2SK"
     },
     {
       "id": "table",
@@ -2297,7 +2382,8 @@
           "en": "Put the plates on the _____.",
           "vi": "Đặt đĩa | lên bàn đi."
         }
-      ]
+      ],
+      "shareCode": "DMT"
     },
     {
       "id": "teacher",
@@ -2324,7 +2410,8 @@
           "en": "Our _____ is very kind.",
           "vi": "Cô giáo của=chúng_tôi | rất=hiền."
         }
-      ]
+      ],
+      "shareCode": "FEF"
     },
     {
       "id": "tea",
@@ -2350,7 +2437,8 @@
           "en": "Would you like some green _____?",
           "vi": "Bạn uống | chút trà xanh nhé?"
         }
-      ]
+      ],
+      "shareCode": "4SM"
     },
     {
       "id": "tree",
@@ -2376,7 +2464,8 @@
           "en": "There is a big _____ in front of my house.",
           "vi": "Trước nhà tôi | có một=cái cây to."
         }
-      ]
+      ],
+      "shareCode": "W9N"
     },
     {
       "id": "walk",
@@ -2403,7 +2492,8 @@
           "en": "I _____ to work every day.",
           "vi": "Ngày nào tôi cũng=đi bộ | đi làm."
         }
-      ]
+      ],
+      "shareCode": "CGC"
     },
     {
       "id": "wash",
@@ -2430,7 +2520,8 @@
           "en": "_____ your hands before eating.",
           "vi": "Rửa tay | trước khi ăn nhé."
         }
-      ]
+      ],
+      "shareCode": "9ZW"
     },
     {
       "id": "window",
@@ -2456,7 +2547,8 @@
           "en": "Can you open the _____?",
           "vi": "Bạn mở cửa_sổ | được không?"
         }
-      ]
+      ],
+      "shareCode": "7NS"
     },
     {
       "id": "write",
@@ -2483,7 +2575,8 @@
           "en": "Please _____ your name here.",
           "vi": "Hãy viết tên bạn | vào đây."
         }
-      ]
+      ],
+      "shareCode": "7AB"
     },
     {
       "id": "big",
@@ -2509,7 +2602,8 @@
           "en": "They live in a _____ house.",
           "vi": "Họ sống | trong một=ngôi nhà to."
         }
-      ]
+      ],
+      "shareCode": "EC2"
     },
     {
       "id": "red",
@@ -2535,7 +2629,8 @@
           "en": "She is wearing a _____ dress.",
           "vi": "Cô ấy mặc | một=chiếc váy đỏ."
         }
-      ]
+      ],
+      "shareCode": "FSN"
     },
     {
       "id": "eat",
@@ -2562,7 +2657,8 @@
           "en": "We _____ lunch at noon.",
           "vi": "Chúng_tôi ăn trưa | lúc mười hai giờ."
         }
-      ]
+      ],
+      "shareCode": "HJA"
     },
     {
       "id": "baby",
@@ -2589,7 +2685,8 @@
           "en": "The _____ is sleeping now.",
           "vi": "Em bé | đang=ngủ."
         }
-      ]
+      ],
+      "shareCode": "8CF"
     },
     {
       "id": "chicken",
@@ -2616,7 +2713,8 @@
           "en": "We had roast _____ for dinner.",
           "vi": "Bữa tối | chúng_tôi ăn gà quay."
         }
-      ]
+      ],
+      "shareCode": "SKG"
     }
   ]
 }

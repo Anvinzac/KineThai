@@ -10,6 +10,7 @@ import type { LearningStage } from "../lib/stages";
 import { VOCAB_LINE_SPACING_SCALE } from "../lib/presets";
 import { FilledUsage, MarkedText } from "./MarkedText";
 import { RevealBurst } from "./RevealBurst";
+import { ShareChallengeButton } from "./ShareChallengeButton";
 
 /** Horizontal travel of a clue page as it arrives and leaves, in px. */
 const PAGE_ENTER_OFFSET = 34;
@@ -274,6 +275,9 @@ export function VocabularyStage({
               </p>
             </div>
           ))}
+          {/* Last child and sticky, so it sits in the panel's bottom-right corner
+              and stays there while a long definition scrolls under it. */}
+          <ShareChallengeButton code={word.shareCode} />
         </motion.div>
       )}
     </motion.div>

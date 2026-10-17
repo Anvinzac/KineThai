@@ -44,7 +44,8 @@
         }
       ],
       "chars": 12,
-      "initial": "A"
+      "initial": "A",
+      "shareCode": "PHZ"
     },
     {
       "id": "animated",
@@ -72,7 +73,8 @@
         }
       ],
       "chars": 8,
-      "initial": "A"
+      "initial": "A",
+      "shareCode": "90D"
     },
     {
       "id": "anticipation",
@@ -102,7 +104,8 @@
         }
       ],
       "chars": 12,
-      "initial": "A"
+      "initial": "A",
+      "shareCode": "YZ7"
     },
     {
       "id": "awe",
@@ -132,7 +135,8 @@
         }
       ],
       "chars": 3,
-      "initial": "A"
+      "initial": "A",
+      "shareCode": "DKC"
     },
     {
       "id": "bleak",
@@ -163,7 +167,8 @@
         }
       ],
       "chars": 5,
-      "initial": "B"
+      "initial": "B",
+      "shareCode": "CEG"
     },
     {
       "id": "cheerfulness",
@@ -190,7 +195,8 @@
         }
       ],
       "chars": 12,
-      "initial": "C"
+      "initial": "C",
+      "shareCode": "313"
     },
     {
       "id": "comforting",
@@ -217,7 +223,8 @@
         }
       ],
       "chars": 10,
-      "initial": "C"
+      "initial": "C",
+      "shareCode": "7J9"
     },
     {
       "id": "dazed",
@@ -244,7 +251,8 @@
         }
       ],
       "chars": 5,
-      "initial": "D"
+      "initial": "D",
+      "shareCode": "5TX"
     },
     {
       "id": "detached",
@@ -272,7 +280,8 @@
         }
       ],
       "chars": 8,
-      "initial": "D"
+      "initial": "D",
+      "shareCode": "KZM"
     },
     {
       "id": "disgust",
@@ -298,7 +307,8 @@
         }
       ],
       "chars": 7,
-      "initial": "D"
+      "initial": "D",
+      "shareCode": "JPC"
     },
     {
       "id": "disillusioned",
@@ -329,7 +339,8 @@
         }
       ],
       "chars": 13,
-      "initial": "D"
+      "initial": "D",
+      "shareCode": "Q9C"
     },
     {
       "id": "dismay",
@@ -358,7 +369,8 @@
         }
       ],
       "chars": 6,
-      "initial": "D"
+      "initial": "D",
+      "shareCode": "GNK"
     },
     {
       "id": "dread",
@@ -385,7 +397,8 @@
         }
       ],
       "chars": 5,
-      "initial": "D"
+      "initial": "D",
+      "shareCode": "BD4"
     },
     {
       "id": "elated",
@@ -414,7 +427,8 @@
         }
       ],
       "chars": 6,
-      "initial": "E"
+      "initial": "E",
+      "shareCode": "0A3"
     },
     {
       "id": "expressive",
@@ -442,7 +456,8 @@
         }
       ],
       "chars": 10,
-      "initial": "E"
+      "initial": "E",
+      "shareCode": "R3Z"
     },
     {
       "id": "fearful",
@@ -468,7 +483,8 @@
         }
       ],
       "chars": 7,
-      "initial": "F"
+      "initial": "F",
+      "shareCode": "V2C"
     },
     {
       "id": "fearless",
@@ -495,7 +511,8 @@
         }
       ],
       "chars": 8,
-      "initial": "F"
+      "initial": "F",
+      "shareCode": "QPX"
     },
     {
       "id": "frantic",
@@ -524,7 +541,8 @@
         }
       ],
       "chars": 7,
-      "initial": "F"
+      "initial": "F",
+      "shareCode": "E8H"
     },
     {
       "id": "fulfilment",
@@ -554,7 +572,8 @@
         }
       ],
       "chars": 10,
-      "initial": "F"
+      "initial": "F",
+      "shareCode": "68H"
     },
     {
       "id": "fury",
@@ -580,7 +599,8 @@
         }
       ],
       "chars": 4,
-      "initial": "F"
+      "initial": "F",
+      "shareCode": "GHH"
     },
     {
       "id": "gasp",
@@ -607,7 +627,8 @@
         }
       ],
       "chars": 4,
-      "initial": "G"
+      "initial": "G",
+      "shareCode": "TAP"
     },
     {
       "id": "giggle",
@@ -634,7 +655,8 @@
         }
       ],
       "chars": 6,
-      "initial": "G"
+      "initial": "G",
+      "shareCode": "0BJ"
     },
     {
       "id": "grim",
@@ -661,7 +683,8 @@
         }
       ],
       "chars": 4,
-      "initial": "G"
+      "initial": "G",
+      "shareCode": "PMD"
     },
     {
       "id": "humiliated",
@@ -687,7 +710,8 @@
         }
       ],
       "chars": 10,
-      "initial": "H"
+      "initial": "H",
+      "shareCode": "V54"
     },
     {
       "id": "humility",
@@ -717,7 +741,8 @@
         }
       ],
       "chars": 8,
-      "initial": "H"
+      "initial": "H",
+      "shareCode": "WKK"
     },
     {
       "id": "impatience",
@@ -745,7 +770,8 @@
         }
       ],
       "chars": 10,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "5ZB"
     },
     {
       "id": "impulse",
@@ -775,7 +801,8 @@
         }
       ],
       "chars": 7,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "B8J"
     },
     {
       "id": "inferiority",
@@ -805,7 +832,8 @@
         }
       ],
       "chars": 11,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "6AB"
     },
     {
       "id": "inhibition",
@@ -832,7 +860,8 @@
         }
       ],
       "chars": 10,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "7QZ"
     },
     {
       "id": "insecurity",
@@ -862,7 +891,8 @@
         }
       ],
       "chars": 10,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "3EA"
     },
     {
       "id": "irrational",
@@ -892,7 +922,8 @@
         }
       ],
       "chars": 10,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "5VS"
     },
     {
       "id": "irritable",
@@ -919,7 +950,8 @@
         }
       ],
       "chars": 9,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "DQ0"
     },
     {
       "id": "irritation",
@@ -946,7 +978,8 @@
         }
       ],
       "chars": 10,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "E53"
     },
     {
       "id": "loathe",
@@ -972,7 +1005,8 @@
         }
       ],
       "chars": 6,
-      "initial": "L"
+      "initial": "L",
+      "shareCode": "5QK"
     },
     {
       "id": "longing",
@@ -998,7 +1032,8 @@
         }
       ],
       "chars": 7,
-      "initial": "L"
+      "initial": "L",
+      "shareCode": "616"
     },
     {
       "id": "moan",
@@ -1025,7 +1060,8 @@
         }
       ],
       "chars": 4,
-      "initial": "M"
+      "initial": "M",
+      "shareCode": "XAW"
     },
     {
       "id": "nostalgia",
@@ -1055,7 +1091,8 @@
         }
       ],
       "chars": 9,
-      "initial": "N"
+      "initial": "N",
+      "shareCode": "BSH"
     },
     {
       "id": "possessive",
@@ -1082,7 +1119,8 @@
         }
       ],
       "chars": 10,
-      "initial": "P"
+      "initial": "P",
+      "shareCode": "KM9"
     },
     {
       "id": "reassurance",
@@ -1110,7 +1148,8 @@
         }
       ],
       "chars": 11,
-      "initial": "R"
+      "initial": "R",
+      "shareCode": "X1X"
     },
     {
       "id": "remorse",
@@ -1139,7 +1178,8 @@
         }
       ],
       "chars": 7,
-      "initial": "R"
+      "initial": "R",
+      "shareCode": "ZA5"
     },
     {
       "id": "resent",
@@ -1166,7 +1206,8 @@
         }
       ],
       "chars": 6,
-      "initial": "R"
+      "initial": "R",
+      "shareCode": "C6P"
     },
     {
       "id": "resentment",
@@ -1197,7 +1238,8 @@
         }
       ],
       "chars": 10,
-      "initial": "R"
+      "initial": "R",
+      "shareCode": "HVB"
     },
     {
       "id": "reserved",
@@ -1224,7 +1266,8 @@
         }
       ],
       "chars": 8,
-      "initial": "R"
+      "initial": "R",
+      "shareCode": "8MN"
     },
     {
       "id": "sadden",
@@ -1250,7 +1293,8 @@
         }
       ],
       "chars": 6,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "NGR"
     },
     {
       "id": "self-assured",
@@ -1277,7 +1321,8 @@
         }
       ],
       "chars": 11,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "T91"
     },
     {
       "id": "self-control",
@@ -1307,7 +1352,8 @@
         }
       ],
       "chars": 11,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "NCA"
     },
     {
       "id": "self-respect",
@@ -1334,7 +1380,8 @@
         }
       ],
       "chars": 11,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "319"
     },
     {
       "id": "sentimental",
@@ -1361,7 +1408,8 @@
         }
       ],
       "chars": 11,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "X5V"
     },
     {
       "id": "serene",
@@ -1392,7 +1440,8 @@
         }
       ],
       "chars": 6,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "GTA"
     },
     {
       "id": "shaken",
@@ -1418,7 +1467,8 @@
         }
       ],
       "chars": 6,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "RR2"
     },
     {
       "id": "shattered",
@@ -1444,7 +1494,8 @@
         }
       ],
       "chars": 9,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "574"
     },
     {
       "id": "soothing",
@@ -1471,7 +1522,8 @@
         }
       ],
       "chars": 8,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "PQ5"
     },
     {
       "id": "sorrow",
@@ -1497,7 +1549,8 @@
         }
       ],
       "chars": 6,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "713"
     },
     {
       "id": "suspense",
@@ -1523,7 +1576,8 @@
         }
       ],
       "chars": 8,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "T45"
     },
     {
       "id": "sympathize",
@@ -1550,7 +1604,8 @@
         }
       ],
       "chars": 10,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "ZXP"
     },
     {
       "id": "temper",
@@ -1577,7 +1632,8 @@
         }
       ],
       "chars": 6,
-      "initial": "T"
+      "initial": "T",
+      "shareCode": "ZY7"
     },
     {
       "id": "thrill",
@@ -1603,7 +1659,8 @@
         }
       ],
       "chars": 6,
-      "initial": "T"
+      "initial": "T",
+      "shareCode": "1HS"
     },
     {
       "id": "timid",
@@ -1633,7 +1690,8 @@
         }
       ],
       "chars": 5,
-      "initial": "T"
+      "initial": "T",
+      "shareCode": "S3C"
     },
     {
       "id": "tiresome",
@@ -1660,7 +1718,8 @@
         }
       ],
       "chars": 8,
-      "initial": "T"
+      "initial": "T",
+      "shareCode": "NW0"
     },
     {
       "id": "traumatic",
@@ -1690,7 +1749,8 @@
         }
       ],
       "chars": 9,
-      "initial": "T"
+      "initial": "T",
+      "shareCode": "Z6Q"
     },
     {
       "id": "turmoil",
@@ -1721,7 +1781,8 @@
         }
       ],
       "chars": 7,
-      "initial": "T"
+      "initial": "T",
+      "shareCode": "N55"
     },
     {
       "id": "weep",
@@ -1747,7 +1808,8 @@
         }
       ],
       "chars": 4,
-      "initial": "W"
+      "initial": "W",
+      "shareCode": "X0Q"
     },
     {
       "id": "wretched",
@@ -1774,7 +1836,8 @@
         }
       ],
       "chars": 8,
-      "initial": "W"
+      "initial": "W",
+      "shareCode": "Q55"
     },
     {
       "id": "yearn",
@@ -1800,7 +1863,8 @@
         }
       ],
       "chars": 5,
-      "initial": "Y"
+      "initial": "Y",
+      "shareCode": "A7C"
     },
     {
       "id": "wary",
@@ -1832,7 +1896,8 @@
         }
       ],
       "chars": 4,
-      "initial": "W"
+      "initial": "W",
+      "shareCode": "FME"
     },
     {
       "id": "weary",
@@ -1859,7 +1924,8 @@
         }
       ],
       "chars": 5,
-      "initial": "W"
+      "initial": "W",
+      "shareCode": "VZZ"
     },
     {
       "id": "indifferent",
@@ -1891,7 +1957,8 @@
         }
       ],
       "chars": 11,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "5Z2"
     },
     {
       "id": "empathy",
@@ -1922,7 +1989,8 @@
         }
       ],
       "chars": 7,
-      "initial": "E"
+      "initial": "E",
+      "shareCode": "1HG"
     },
     {
       "id": "relish",
@@ -1952,7 +2020,8 @@
         }
       ],
       "chars": 6,
-      "initial": "R"
+      "initial": "R",
+      "shareCode": "JKP"
     },
     {
       "id": "shudder",
@@ -1979,7 +2048,8 @@
         }
       ],
       "chars": 7,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "7B3"
     }
   ]
 }

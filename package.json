@@ -26,7 +26,9 @@
     "check:landscape": "npx tsx scripts/check-landscape-geometry.ts",
     "check:orientation-gate": "npx tsx scripts/check-orientation-gate.ts",
     "build:hanzi": "npx tsx scripts/build-hanzi-strokes.ts",
-    "mock:saved": "npx tsx scripts/mock-saved-words.ts"
+    "mock:saved": "npx tsx scripts/mock-saved-words.ts",
+    "share:codes": "npx tsx scripts/assign-share-codes.ts",
+    "check:share-codes": "npx tsx scripts/check-share-codes.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

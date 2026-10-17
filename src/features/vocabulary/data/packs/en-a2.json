@@ -53,7 +53,8 @@
           "en": "I need to go to the _____ today.",
           "vi": "Hôm nay | tôi cần ra ngân_hàng."
         }
-      ]
+      ],
+      "shareCode": "F25"
     },
     {
       "id": "beach",
@@ -80,7 +81,8 @@
           "en": "We built sandcastles on the _____.",
           "vi": "Chúng_tôi xây lâu_đài cát | trên bãi_biển."
         }
-      ]
+      ],
+      "shareCode": "39V"
     },
     {
       "id": "boring",
@@ -106,7 +108,8 @@
           "en": "The film was so _____ that I fell asleep.",
           "vi": "Bộ=phim chán đến mức | tôi ngủ quên."
         }
-      ]
+      ],
+      "shareCode": "C52"
     },
     {
       "id": "bottle",
@@ -133,7 +136,8 @@
           "en": "She bought a _____ of water.",
           "vi": "Cô ấy mua | một=chai nước."
         }
-      ]
+      ],
+      "shareCode": "BV5"
     },
     {
       "id": "bridge",
@@ -159,7 +163,8 @@
           "en": "They are building a new _____.",
           "vi": "Họ đang=xây | một=cây cầu mới."
         }
-      ]
+      ],
+      "shareCode": "WN1"
     },
     {
       "id": "carry",
@@ -185,7 +190,8 @@
           "en": "Can you _____ this bag for me?",
           "vi": "Bạn xách giúp tôi | cái túi này nhé?"
         }
-      ]
+      ],
+      "shareCode": "CQZ"
     },
     {
       "id": "clean",
@@ -212,7 +218,8 @@
           "en": "Keep your room _____ and tidy.",
           "vi": "Hãy giữ phòng | sạch_sẽ và gọn_gàng."
         }
-      ]
+      ],
+      "shareCode": "A3M"
     },
     {
       "id": "cloud",
@@ -238,7 +245,8 @@
           "en": "Dark _____s mean rain is coming.",
           "vi": "Mây đen kéo đến | là sắp mưa."
         }
-      ]
+      ],
+      "shareCode": "2ZD"
     },
     {
       "id": "collect",
@@ -264,7 +272,8 @@
           "en": "My brother _____s old coins.",
           "vi": "Anh tôi | sưu_tầm tiền xu cổ."
         }
-      ]
+      ],
+      "shareCode": "TJ4"
     },
     {
       "id": "cousin",
@@ -290,7 +299,8 @@
           "en": "My _____ lives in Da Nang.",
           "vi": "Em họ tôi | sống ở Đà_Nẵng."
         }
-      ]
+      ],
+      "shareCode": "41S"
     },
     {
       "id": "dark",
@@ -317,7 +327,8 @@
           "en": "It gets _____ early in winter.",
           "vi": "Mùa đông | trời tối sớm."
         }
-      ]
+      ],
+      "shareCode": "9Y7"
     },
     {
       "id": "dentist",
@@ -343,7 +354,8 @@
           "en": "I go to the _____ twice a year.",
           "vi": "Mỗi năm | tôi đi nha_sĩ hai lần."
         }
-      ]
+      ],
+      "shareCode": "6X0"
     },
     {
       "id": "different",
@@ -369,7 +381,8 @@
           "en": "My sister and I are very _____.",
           "vi": "Chị tôi và tôi | rất=khác nhau."
         }
-      ]
+      ],
+      "shareCode": "0H6"
     },
     {
       "id": "difficult",
@@ -395,7 +408,8 @@
           "en": "This exercise is too _____ for me.",
           "vi": "Bài tập này | quá khó với tôi."
         }
-      ]
+      ],
+      "shareCode": "ZTV"
     },
     {
       "id": "doctor",
@@ -422,7 +436,8 @@
           "en": "You should see a _____.",
           "vi": "Bạn nên | đi khám bác_sĩ."
         }
-      ]
+      ],
+      "shareCode": "NT2"
     },
     {
       "id": "dream",
@@ -449,7 +464,8 @@
           "en": "I had a strange _____ last night.",
           "vi": "Đêm qua | tôi có một=giấc mơ lạ."
         }
-      ]
+      ],
+      "shareCode": "MXZ"
     },
     {
       "id": "early",
@@ -475,7 +491,8 @@
           "en": "I get up _____ every day.",
           "vi": "Ngày nào tôi cũng=dậy sớm."
         }
-      ]
+      ],
+      "shareCode": "RQD"
     },
     {
       "id": "easy",
@@ -502,7 +519,8 @@
           "en": "The test was very _____.",
           "vi": "Bài kiểm_tra | rất=dễ."
         }
-      ]
+      ],
+      "shareCode": "GAM"
     },
     {
       "id": "exam",
@@ -528,7 +546,8 @@
           "en": "I have a maths _____ tomorrow.",
           "vi": "Ngày mai | tôi có bài thi toán."
         }
-      ]
+      ],
+      "shareCode": "YPG"
     },
     {
       "id": "fast",
@@ -554,7 +573,8 @@
           "en": "He is a very _____ runner.",
           "vi": "Anh ấy | chạy rất=nhanh."
         }
-      ]
+      ],
+      "shareCode": "BKW"
     },
     {
       "id": "fill",
@@ -580,7 +600,8 @@
           "en": "Please _____ the glass with water.",
           "vi": "Làm ơn | rót đầy ly nước."
         }
-      ]
+      ],
+      "shareCode": "NYH"
     },
     {
       "id": "finish",
@@ -607,7 +628,8 @@
           "en": "I _____ my homework at nine.",
           "vi": "Tôi làm xong bài | lúc chín giờ."
         }
-      ]
+      ],
+      "shareCode": "2GV"
     },
     {
       "id": "free",
@@ -633,7 +655,8 @@
           "en": "Entry to the museum is _____.",
           "vi": "Vào bảo_tàng | không mất tiền."
         }
-      ]
+      ],
+      "shareCode": "YR2"
     },
     {
       "id": "grow",
@@ -659,7 +682,8 @@
           "en": "Plants need sun to _____.",
           "vi": "Cây cần ánh nắng | để lớn lên."
         }
-      ]
+      ],
+      "shareCode": "R4V"
     },
     {
       "id": "guitar",
@@ -686,7 +710,8 @@
           "en": "He plays the _____ very well.",
           "vi": "Anh ấy | chơi ghi_ta rất=hay."
         }
-      ]
+      ],
+      "shareCode": "4M4"
     },
     {
       "id": "healthy",
@@ -712,7 +737,8 @@
           "en": "Eat fruit to stay _____.",
           "vi": "Ăn trái_cây | để luôn khỏe_mạnh."
         }
-      ]
+      ],
+      "shareCode": "PRV"
     },
     {
       "id": "heavy",
@@ -738,7 +764,8 @@
           "en": "This box is too _____.",
           "vi": "Thùng này | nặng quá."
         }
-      ]
+      ],
+      "shareCode": "GAS"
     },
     {
       "id": "hospital",
@@ -764,7 +791,8 @@
           "en": "She works at a _____.",
           "vi": "Cô ấy làm_việc | ở bệnh_viện."
         }
-      ]
+      ],
+      "shareCode": "6V6"
     },
     {
       "id": "kind",
@@ -790,7 +818,8 @@
           "en": "It was _____ of you to help me.",
           "vi": "Bạn thật tốt_bụng | khi giúp tôi."
         }
-      ]
+      ],
+      "shareCode": "JST"
     },
     {
       "id": "lake",
@@ -816,7 +845,8 @@
           "en": "We walked around the _____.",
           "vi": "Chúng_tôi đi dạo | quanh hồ."
         }
-      ]
+      ],
+      "shareCode": "FSY"
     },
     {
       "id": "late",
@@ -842,7 +872,8 @@
           "en": "Sorry I'm _____.",
           "vi": "Xin lỗi | tôi đến muộn."
         }
-      ]
+      ],
+      "shareCode": "FCB"
     },
     {
       "id": "learn",
@@ -868,7 +899,8 @@
           "en": "I want to _____ Japanese.",
           "vi": "Tôi muốn học | tiếng Nhật."
         }
-      ]
+      ],
+      "shareCode": "70T"
     },
     {
       "id": "lose",
@@ -894,7 +926,8 @@
           "en": "I always _____ my keys.",
           "vi": "Tôi lúc_nào | cũng làm mất chìa_khóa."
         }
-      ]
+      ],
+      "shareCode": "FP1"
     },
     {
       "id": "map",
@@ -920,7 +953,8 @@
           "en": "Can you show me on the _____?",
           "vi": "Bạn chỉ tôi | trên bản_đồ được không?"
         }
-      ]
+      ],
+      "shareCode": "89A"
     },
     {
       "id": "meal",
@@ -946,7 +980,8 @@
           "en": "Breakfast is my favourite _____.",
           "vi": "Bữa sáng | là bữa ăn tôi thích nhất."
         }
-      ]
+      ],
+      "shareCode": "Q8T"
     },
     {
       "id": "medicine",
@@ -972,7 +1007,8 @@
           "en": "Take this _____ after meals.",
           "vi": "Uống thuốc này | sau bữa ăn."
         }
-      ]
+      ],
+      "shareCode": "4AZ"
     },
     {
       "id": "message",
@@ -999,7 +1035,8 @@
           "en": "I sent her a _____.",
           "vi": "Tôi đã=gửi | cho cô ấy một=tin nhắn."
         }
-      ]
+      ],
+      "shareCode": "ZDQ"
     },
     {
       "id": "mountain",
@@ -1026,7 +1063,8 @@
           "en": "We climbed the _____ last summer.",
           "vi": "Hè năm ngoái | chúng_tôi đã=leo núi."
         }
-      ]
+      ],
+      "shareCode": "T3Z"
     },
     {
       "id": "museum",
@@ -1053,7 +1091,8 @@
           "en": "We visited the history _____.",
           "vi": "Chúng_tôi tham_quan | bảo_tàng lịch_sử."
         }
-      ]
+      ],
+      "shareCode": "7S1"
     },
     {
       "id": "noisy",
@@ -1080,7 +1119,8 @@
           "en": "The street is very _____ at night.",
           "vi": "Ban_đêm | con=phố rất=ồn."
         }
-      ]
+      ],
+      "shareCode": "K2T"
     },
     {
       "id": "plan",
@@ -1107,7 +1147,8 @@
           "en": "What's your _____ for the weekend?",
           "vi": "Cuối_tuần | bạn định làm gì?"
         }
-      ]
+      ],
+      "shareCode": "0BT"
     },
     {
       "id": "plant",
@@ -1133,7 +1174,8 @@
           "en": "Water the _____s every day.",
           "vi": "Tưới cây | mỗi ngày nhé."
         }
-      ]
+      ],
+      "shareCode": "Z5X"
     },
     {
       "id": "ready",
@@ -1159,7 +1201,8 @@
           "en": "Are you _____ to go?",
           "vi": "Bạn sẵn_sàng | đi chưa?"
         }
-      ]
+      ],
+      "shareCode": "CGF"
     },
     {
       "id": "remember",
@@ -1185,7 +1228,8 @@
           "en": "I _____ my first day at school.",
           "vi": "Tôi vẫn nhớ | ngày đầu đến trường."
         }
-      ]
+      ],
+      "shareCode": "XXF"
     },
     {
       "id": "restaurant",
@@ -1214,7 +1258,8 @@
           "en": "Let's have dinner at that _____.",
           "vi": "Mình ăn tối | ở nhà_hàng đó nhé."
         }
-      ]
+      ],
+      "shareCode": "WD5"
     },
     {
       "id": "ring",
@@ -1240,7 +1285,8 @@
           "en": "He gave her a gold _____.",
           "vi": "Anh ấy tặng cô | một=chiếc nhẫn vàng."
         }
-      ]
+      ],
+      "shareCode": "N9A"
     },
     {
       "id": "road",
@@ -1266,7 +1312,8 @@
           "en": "This _____ goes to the city centre.",
           "vi": "Con=đường này | dẫn vào trung_tâm thành_phố."
         }
-      ]
+      ],
+      "shareCode": "F3V"
     },
     {
       "id": "sell",
@@ -1293,7 +1340,8 @@
           "en": "They _____ fresh fruit at the market.",
           "vi": "Họ bán trái_cây tươi | ở chợ."
         }
-      ]
+      ],
+      "shareCode": "VHH"
     },
     {
       "id": "send",
@@ -1319,7 +1367,8 @@
           "en": "I will _____ you a postcard.",
           "vi": "Tôi sẽ=gửi | cho bạn một=tấm bưu_thiếp."
         }
-      ]
+      ],
+      "shareCode": "S28"
     },
     {
       "id": "sick",
@@ -1345,7 +1394,8 @@
           "en": "She is _____ today.",
           "vi": "Hôm nay | cô ấy bị ốm."
         }
-      ]
+      ],
+      "shareCode": "WYZ"
     },
     {
       "id": "simple",
@@ -1371,7 +1421,8 @@
           "en": "The rules are very _____.",
           "vi": "Luật chơi | rất=đơn_giản."
         }
-      ]
+      ],
+      "shareCode": "672"
     },
     {
       "id": "sky",
@@ -1397,7 +1448,8 @@
           "en": "The _____ is clear today.",
           "vi": "Hôm nay | bầu_trời quang_đãng."
         }
-      ]
+      ],
+      "shareCode": "FQN"
     },
     {
       "id": "soft",
@@ -1423,7 +1475,8 @@
           "en": "This pillow is very _____.",
           "vi": "Cái=gối này | rất=mềm."
         }
-      ]
+      ],
+      "shareCode": "1DB"
     },
     {
       "id": "sport",
@@ -1449,7 +1502,8 @@
           "en": "Football is my favourite _____.",
           "vi": "Bóng_đá | là môn thể_thao tôi thích nhất."
         }
-      ]
+      ],
+      "shareCode": "CRF"
     },
     {
       "id": "storm",
@@ -1475,7 +1529,8 @@
           "en": "The _____ broke many trees.",
           "vi": "Cơn bão | làm gãy nhiều cây."
         }
-      ]
+      ],
+      "shareCode": "99Y"
     },
     {
       "id": "strong",
@@ -1502,7 +1557,8 @@
           "en": "He is _____ enough to lift the box.",
           "vi": "Anh ấy | đủ khỏe để nhấc thùng."
         }
-      ]
+      ],
+      "shareCode": "WBM"
     },
     {
       "id": "tooth",
@@ -1528,7 +1584,8 @@
           "en": "My _____ hurts.",
           "vi": "Tôi bị đau răng."
         }
-      ]
+      ],
+      "shareCode": "969"
     },
     {
       "id": "town",
@@ -1554,7 +1611,8 @@
           "en": "I grew up in a small _____.",
           "vi": "Tôi lớn lên | ở một=thị_trấn nhỏ."
         }
-      ]
+      ],
+      "shareCode": "E04"
     },
     {
       "id": "village",
@@ -1581,7 +1639,8 @@
           "en": "My grandparents live in a _____.",
           "vi": "Ông bà tôi | sống ở làng quê."
         }
-      ]
+      ],
+      "shareCode": "WJ6"
     },
     {
       "id": "wake",
@@ -1607,7 +1666,8 @@
           "en": "I _____ up at six every day.",
           "vi": "Ngày nào tôi cũng=thức dậy | lúc sáu giờ."
         }
-      ]
+      ],
+      "shareCode": "JQ9"
     },
     {
       "id": "weather",
@@ -1633,7 +1693,8 @@
           "en": "The _____ is nice today.",
           "vi": "Hôm nay | thời_tiết đẹp."
         }
-      ]
+      ],
+      "shareCode": "FM1"
     },
     {
       "id": "wind",
@@ -1659,7 +1720,8 @@
           "en": "The _____ is very strong today.",
           "vi": "Hôm nay | gió rất=mạnh."
         }
-      ]
+      ],
+      "shareCode": "FMQ"
     },
     {
       "id": "worry",
@@ -1685,7 +1747,8 @@
           "en": "Don't _____, everything will be fine.",
           "vi": "Đừng lo, | mọi chuyện sẽ ổn thôi."
         }
-      ]
+      ],
+      "shareCode": "JYW"
     }
   ]
 }

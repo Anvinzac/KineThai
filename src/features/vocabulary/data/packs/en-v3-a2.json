@@ -49,7 +49,8 @@
           "en": "She didn't _____ that she was moving abroad.",
           "vi": "Cô ấy không=hề nhắc | rằng mình sắp ra nước_ngoài sống."
         }
-      ]
+      ],
+      "shareCode": "FW4"
     },
     {
       "id": "schedule",
@@ -79,7 +80,8 @@
           "en": "My _____ is very busy this week.",
           "vi": "Lịch_trình của=tôi | tuần này rất=kín."
         }
-      ]
+      ],
+      "shareCode": "RC4"
     },
     {
       "id": "colleague",
@@ -108,7 +110,8 @@
           "en": "I had lunch with a _____ from the marketing team.",
           "vi": "Tôi ăn trưa | với một=đồng_nghiệp bên nhóm tiếp_thị."
         }
-      ]
+      ],
+      "shareCode": "F2N"
     },
     {
       "id": "achieve",
@@ -139,7 +142,8 @@
           "en": "She worked hard to _____ her dream of becoming a doctor.",
           "vi": "Cô ấy làm việc chăm_chỉ | để đạt được ước_mơ làm bác_sĩ."
         }
-      ]
+      ],
+      "shareCode": "R16"
     },
     {
       "id": "notice",
@@ -166,7 +170,8 @@
           "en": "Did you _____ the new painting in the hall?",
           "vi": "Bạn có để_ý | bức=tranh mới ở hành_lang không?"
         }
-      ]
+      ],
+      "shareCode": "1NP"
     },
     {
       "id": "consider",
@@ -192,7 +197,8 @@
           "en": "Please _____ my offer before you decide.",
           "vi": "Hãy cân_nhắc lời đề_nghị của=tôi | trước khi quyết_định."
         }
-      ]
+      ],
+      "shareCode": "DVK"
     },
     {
       "id": "polite",
@@ -219,7 +225,8 @@
           "en": "It's _____ to say thank you.",
           "vi": "Nói lời cảm_ơn | là phép lịch_sự."
         }
-      ]
+      ],
+      "shareCode": "AAZ"
     },
     {
       "id": "lazy",
@@ -245,7 +252,8 @@
           "en": "Don't be so _____, help me clean up!",
           "vi": "Đừng=lười thế, phụ mình dọn_dẹp đi!"
         }
-      ]
+      ],
+      "shareCode": "043"
     },
     {
       "id": "complain",
@@ -274,7 +282,8 @@
           "en": "Customers often _____ about the slow Wi-Fi.",
           "vi": "Khách_hàng hay phàn_nàn | về Wi-Fi chậm."
         }
-      ]
+      ],
+      "shareCode": "3F6"
     },
     {
       "id": "promise",
@@ -300,7 +309,8 @@
           "en": "I _____ I'll call you tonight.",
           "vi": "Mình hứa | tối nay sẽ=gọi cho bạn."
         }
-      ]
+      ],
+      "shareCode": "16M"
     },
     {
       "id": "argue",
@@ -326,7 +336,8 @@
           "en": "My brothers _____ about everything.",
           "vi": "Mấy anh_em trai tôi | cãi_nhau đủ thứ chuyện."
         }
-      ]
+      ],
+      "shareCode": "P28"
     },
     {
       "id": "realize",
@@ -352,7 +363,8 @@
           "en": "I didn't _____ how late it was.",
           "vi": "Tôi không=nhận_ra | là đã=khuya đến thế."
         }
-      ]
+      ],
+      "shareCode": "W6H"
     },
     {
       "id": "habit",
@@ -378,7 +390,8 @@
           "en": "Biting your nails is a bad _____.",
           "vi": "Cắn móng_tay | là một=thói_quen xấu."
         }
-      ]
+      ],
+      "shareCode": "BVG"
     },
     {
       "id": "borrow",
@@ -405,7 +418,8 @@
           "en": "Can I _____ your charger?",
           "vi": "Mình mượn cục=sạc của=bạn | được không?"
         }
-      ]
+      ],
+      "shareCode": "06K"
     },
     {
       "id": "salary",
@@ -435,7 +449,8 @@
           "en": "She asked for a higher _____.",
           "vi": "Cô=ấy đề_nghị | được tăng lương."
         }
-      ]
+      ],
+      "shareCode": "XVV"
     },
     {
       "id": "nervous",
@@ -461,7 +476,8 @@
           "en": "I always get _____ before exams.",
           "vi": "Tôi lúc_nào cũng=hồi_hộp | trước kỳ=thi."
         }
-      ]
+      ],
+      "shareCode": "3AE"
     },
     {
       "id": "lucky",
@@ -488,7 +504,8 @@
           "en": "You're _____ to have such good friends.",
           "vi": "Bạn thật may_mắn | khi có những=người bạn tốt như_vậy."
         }
-      ]
+      ],
+      "shareCode": "CZ0"
     },
     {
       "id": "careful",
@@ -515,7 +532,8 @@
           "en": "Be _____, the floor is wet.",
           "vi": "Cẩn_thận nhé, sàn_nhà đang=ướt."
         }
-      ]
+      ],
+      "shareCode": "J7X"
     },
     {
       "id": "clever",
@@ -542,7 +560,8 @@
           "en": "What a _____ idea!",
           "vi": "Ý_tưởng thông_minh quá!"
         }
-      ]
+      ],
+      "shareCode": "CM2"
     },
     {
       "id": "crowded",
@@ -569,7 +588,8 @@
           "en": "The bus was so _____ that I had to stand.",
           "vi": "Xe_buýt đông đến mức | tôi phải đứng."
         }
-      ]
+      ],
+      "shareCode": "FAB"
     },
     {
       "id": "empty",
@@ -595,7 +615,8 @@
           "en": "The streets are _____ during Tet.",
           "vi": "Ngày Tết | đường_phố vắng_tanh."
         }
-      ]
+      ],
+      "shareCode": "FZ9"
     },
     {
       "id": "rude",
@@ -622,7 +643,8 @@
           "en": "It's _____ to talk with your mouth full.",
           "vi": "Vừa nhai vừa nói | là bất lịch_sự."
         }
-      ]
+      ],
+      "shareCode": "54C"
     },
     {
       "id": "worried",
@@ -648,7 +670,8 @@
           "en": "My parents get _____ when I travel alone.",
           "vi": "Bố_mẹ lo_lắng | mỗi khi tôi đi một=mình."
         }
-      ]
+      ],
+      "shareCode": "JKJ"
     },
     {
       "id": "strange",
@@ -675,7 +698,8 @@
           "en": "I heard a _____ noise outside.",
           "vi": "Tôi nghe thấy một=tiếng_động lạ | bên ngoài."
         }
-      ]
+      ],
+      "shareCode": "GJ9"
     },
     {
       "id": "huge",
@@ -702,7 +726,8 @@
           "en": "They live in a _____ house.",
           "vi": "Họ sống trong một=căn nhà rất=lớn."
         }
-      ]
+      ],
+      "shareCode": "M1N"
     },
     {
       "id": "fresh",
@@ -729,7 +754,8 @@
           "en": "These vegetables are really _____.",
           "vi": "Rau này tươi thật."
         }
-      ]
+      ],
+      "shareCode": "J8S"
     },
     {
       "id": "comfortable",
@@ -755,7 +781,8 @@
           "en": "These shoes are very _____.",
           "vi": "Đôi=giày này | đi rất=êm chân."
         }
-      ]
+      ],
+      "shareCode": "5BK"
     },
     {
       "id": "surprised",
@@ -781,7 +808,8 @@
           "en": "I was _____ to see him at the party.",
           "vi": "Tôi ngạc_nhiên | khi thấy anh=ấy ở bữa=tiệc."
         }
-      ]
+      ],
+      "shareCode": "TW9"
     },
     {
       "id": "tidy",
@@ -808,7 +836,8 @@
           "en": "Keep your room _____, please.",
           "vi": "Con giữ phòng gọn_gàng nhé."
         }
-      ]
+      ],
+      "shareCode": "BWQ"
     },
     {
       "id": "accident",
@@ -835,7 +864,8 @@
           "en": "He broke his leg in a car _____.",
           "vi": "Anh=ấy bị gãy chân | trong một=vụ tai_nạn ô_tô."
         }
-      ]
+      ],
+      "shareCode": "MDS"
     },
     {
       "id": "adventure",
@@ -861,7 +891,8 @@
           "en": "Our trip to Ha Giang was a real _____.",
           "vi": "Chuyến đi Hà_Giang | thật_sự là một=cuộc phiêu_lưu."
         }
-      ]
+      ],
+      "shareCode": "821"
     },
     {
       "id": "gift",
@@ -888,7 +919,8 @@
           "en": "This watch was a _____ from my dad.",
           "vi": "Chiếc=đồng_hồ này | là quà bố tặng tôi."
         }
-      ]
+      ],
+      "shareCode": "G0W"
     },
     {
       "id": "recipe",
@@ -914,7 +946,8 @@
           "en": "Can you send me your _____ for this soup?",
           "vi": "Bạn gửi mình công_thức | nấu món canh này được không?"
         }
-      ]
+      ],
+      "shareCode": "ABT"
     },
     {
       "id": "invitation",
@@ -944,7 +977,8 @@
           "en": "Thanks for the _____ to your party.",
           "vi": "Cảm_ơn bạn đã=mời mình | dự tiệc."
         }
-      ]
+      ],
+      "shareCode": "YMV"
     },
     {
       "id": "wedding",
@@ -970,7 +1004,8 @@
           "en": "We're going to my cousin's _____ on Sunday.",
           "vi": "Chủ_nhật này | chúng_tôi đi đám_cưới em họ."
         }
-      ]
+      ],
+      "shareCode": "8KF"
     },
     {
       "id": "headache",
@@ -996,7 +1031,8 @@
           "en": "I have a terrible _____ today.",
           "vi": "Hôm_nay tôi đau đầu | kinh_khủng."
         }
-      ]
+      ],
+      "shareCode": "6B0"
     },
     {
       "id": "secret",
@@ -1023,7 +1059,8 @@
           "en": "Can you keep a _____?",
           "vi": "Bạn giữ bí_mật được không?"
         }
-      ]
+      ],
+      "shareCode": "KQK"
     },
     {
       "id": "joke",
@@ -1050,7 +1087,8 @@
           "en": "He told a _____ and everyone laughed.",
           "vi": "Anh=ấy kể một=câu đùa | và mọi_người đều cười."
         }
-      ]
+      ],
+      "shareCode": "M3G"
     },
     {
       "id": "prize",
@@ -1077,7 +1115,8 @@
           "en": "She won first _____ in the singing contest.",
           "vi": "Cô=ấy đoạt giải nhất | cuộc_thi hát."
         }
-      ]
+      ],
+      "shareCode": "NRE"
     },
     {
       "id": "guest",
@@ -1104,7 +1143,8 @@
           "en": "Our _____ will arrive at seven.",
           "vi": "Khách của=chúng_tôi | sẽ=đến lúc bảy giờ."
         }
-      ]
+      ],
+      "shareCode": "C65"
     },
     {
       "id": "pocket",
@@ -1130,7 +1170,8 @@
           "en": "My keys are in my _____.",
           "vi": "Chìa_khóa ở trong túi tôi."
         }
-      ]
+      ],
+      "shareCode": "ZJJ"
     },
     {
       "id": "mirror",
@@ -1156,7 +1197,8 @@
           "en": "She looked at herself in the _____.",
           "vi": "Cô=ấy ngắm mình trong gương."
         }
-      ]
+      ],
+      "shareCode": "ZF3"
     },
     {
       "id": "fridge",
@@ -1183,7 +1225,8 @@
           "en": "Put the milk back in the _____.",
           "vi": "Cất sữa lại vào tủ_lạnh đi."
         }
-      ]
+      ],
+      "shareCode": "FQ5"
     },
     {
       "id": "rubbish",
@@ -1210,7 +1253,8 @@
           "en": "Please put your _____ in the bin.",
           "vi": "Vui_lòng bỏ rác vào thùng."
         }
-      ]
+      ],
+      "shareCode": "TGB"
     },
     {
       "id": "uniform",
@@ -1238,7 +1282,8 @@
           "en": "Students must wear a _____ at my school.",
           "vi": "Ở trường tôi, học_sinh phải mặc đồng_phục."
         }
-      ]
+      ],
+      "shareCode": "XJ3"
     },
     {
       "id": "thief",
@@ -1265,7 +1310,8 @@
           "en": "The police caught the _____.",
           "vi": "Cảnh_sát đã=bắt được tên trộm."
         }
-      ]
+      ],
+      "shareCode": "G70"
     },
     {
       "id": "celebrity",
@@ -1294,7 +1340,8 @@
           "en": "She became a _____ after the TV show.",
           "vi": "Cô=ấy trở_thành người nổi_tiếng | sau chương_trình truyền_hình đó."
         }
-      ]
+      ],
+      "shareCode": "YZ0"
     },
     {
       "id": "charity",
@@ -1324,7 +1371,8 @@
           "en": "She gives money to _____ every month.",
           "vi": "Tháng nào | cô=ấy cũng quyên_góp cho quỹ từ_thiện."
         }
-      ]
+      ],
+      "shareCode": "81W"
     },
     {
       "id": "permission",
@@ -1354,7 +1402,8 @@
           "en": "You need _____ to park here.",
           "vi": "Phải được phép | mới được đỗ xe ở đây."
         }
-      ]
+      ],
+      "shareCode": "B0V"
     },
     {
       "id": "pet",
@@ -1381,7 +1430,8 @@
           "en": "My cat is the best _____ ever.",
           "vi": "Con=mèo của=tôi | là thú_cưng tuyệt nhất."
         }
-      ]
+      ],
+      "shareCode": "2JC"
     },
     {
       "id": "celebrate",
@@ -1408,7 +1458,8 @@
           "en": "Let's _____ your new job tonight!",
           "vi": "Tối nay | mình ăn_mừng công_việc mới của=bạn nhé!"
         }
-      ]
+      ],
+      "shareCode": "TF5"
     },
     {
       "id": "earn",
@@ -1435,7 +1486,8 @@
           "en": "How much do you _____ a month?",
           "vi": "Mỗi tháng | bạn kiếm được bao_nhiêu?"
         }
-      ]
+      ],
+      "shareCode": "NDS"
     },
     {
       "id": "lend",
@@ -1462,7 +1514,8 @@
           "en": "Can you _____ me your pen?",
           "vi": "Bạn cho mình mượn | cây=bút được không?"
         }
-      ]
+      ],
+      "shareCode": "PM4"
     },
     {
       "id": "hide",
@@ -1488,7 +1541,8 @@
           "en": "The cat likes to _____ under the bed.",
           "vi": "Con=mèo thích trốn | dưới gầm giường."
         }
-      ]
+      ],
+      "shareCode": "KSZ"
     },
     {
       "id": "steal",
@@ -1515,7 +1569,8 @@
           "en": "Someone tried to _____ my bike.",
           "vi": "Có người định lấy_trộm | xe_đạp của=tôi."
         }
-      ]
+      ],
+      "shareCode": "3FP"
     },
     {
       "id": "repair",
@@ -1544,7 +1599,8 @@
           "en": "How much does it cost to _____ the TV?",
           "vi": "Sửa cái=tivi | tốn bao_nhiêu tiền?"
         }
-      ]
+      ],
+      "shareCode": "Z60"
     },
     {
       "id": "refuse",
@@ -1571,7 +1627,8 @@
           "en": "I can't _____ such a kind offer.",
           "vi": "Tôi không nỡ từ_chối | lời đề_nghị tử_tế như_vậy."
         }
-      ]
+      ],
+      "shareCode": "N2G"
     },
     {
       "id": "recommend",
@@ -1601,7 +1658,8 @@
           "en": "Can you _____ a good restaurant nearby?",
           "vi": "Bạn gợi_ý giúp mình | một=quán ngon gần đây được không?"
         }
-      ]
+      ],
+      "shareCode": "Z8G"
     },
     {
       "id": "shout",
@@ -1627,7 +1685,8 @@
           "en": "Don't _____ at me!",
           "vi": "Đừng quát mình!"
         }
-      ]
+      ],
+      "shareCode": "V53"
     },
     {
       "id": "pack",
@@ -1653,7 +1712,8 @@
           "en": "Don't forget to _____ your swimsuit.",
           "vi": "Nhớ xếp đồ bơi | vào va_li nhé."
         }
-      ]
+      ],
+      "shareCode": "G06"
     },
     {
       "id": "disappear",
@@ -1679,7 +1739,8 @@
           "en": "My socks always _____ in the washing machine.",
           "vi": "Tất của=tôi cứ biến_mất | trong máy_giặt."
         }
-      ]
+      ],
+      "shareCode": "3VC"
     },
     {
       "id": "cry",
@@ -1705,7 +1766,8 @@
           "en": "The baby started to _____.",
           "vi": "Em_bé bắt_đầu khóc."
         }
-      ]
+      ],
+      "shareCode": "04D"
     }
   ]
 }

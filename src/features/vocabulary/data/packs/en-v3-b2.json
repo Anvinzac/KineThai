@@ -42,7 +42,8 @@
           "en": "Kids are naturally _____ about the world around them.",
           "vi": "Trẻ_con vốn tò_mò | về thế_giới xung_quanh."
         }
-      ]
+      ],
+      "shareCode": "DTW"
     },
     {
       "id": "patient",
@@ -68,7 +69,8 @@
           "en": "Please be _____; the doctor will see you soon.",
           "vi": "Xin hãy kiên_nhẫn, bác_sĩ sẽ=khám | cho bạn ngay."
         }
-      ]
+      ],
+      "shareCode": "5VT"
     },
     {
       "id": "stubborn",
@@ -94,7 +96,8 @@
           "en": "He's too _____ to admit he was wrong.",
           "vi": "Anh ta quá bướng_bỉnh | nên không=chịu nhận sai."
         }
-      ]
+      ],
+      "shareCode": "T0F"
     },
     {
       "id": "relieved",
@@ -120,7 +123,8 @@
           "en": "We were _____ to hear that everyone was safe.",
           "vi": "Chúng_tôi nhẹ_nhõm | khi nghe tin mọi người đều an_toàn."
         }
-      ]
+      ],
+      "shareCode": "BCG"
     },
     {
       "id": "interrupt",
@@ -146,7 +150,8 @@
           "en": "Please don't _____ me while I'm speaking.",
           "vi": "Làm ơn đừng ngắt_lời | khi tôi đang=nói."
         }
-      ]
+      ],
+      "shareCode": "BA3"
     },
     {
       "id": "punctual",
@@ -176,7 +181,8 @@
           "en": "She is always _____ for meetings.",
           "vi": "Cô ấy luôn đến họp | đúng giờ."
         }
-      ]
+      ],
+      "shareCode": "CNY"
     },
     {
       "id": "delay",
@@ -206,7 +212,8 @@
           "en": "Heavy traffic may _____ our arrival.",
           "vi": "Kẹt xe có_thể khiến chúng_tôi | đến trễ."
         }
-      ]
+      ],
+      "shareCode": "W2R"
     },
     {
       "id": "efficient",
@@ -237,7 +244,8 @@
           "en": "This new heater is more _____ and uses less energy.",
           "vi": "Chiếc máy sưởi mới này | hoạt_động hiệu_quả hơn, tốn ít điện hơn."
         }
-      ]
+      ],
+      "shareCode": "T90"
     },
     {
       "id": "commute",
@@ -268,7 +276,8 @@
           "en": "My daily _____ takes about forty minutes.",
           "vi": "Quãng đường đi làm mỗi ngày của=tôi | mất khoảng bốn mươi phút."
         }
-      ]
+      ],
+      "shareCode": "XVP"
     },
     {
       "id": "rush",
@@ -295,7 +304,8 @@
           "en": "There's no need to _____, we have time.",
           "vi": "Không=cần vội đâu, mình còn thời_gian."
         }
-      ]
+      ],
+      "shareCode": "GYM"
     }
   ]
 }

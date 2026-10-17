@@ -52,7 +52,8 @@
           "en": "They had to _____ the car in the snow.",
           "vi": "Họ đành bỏ lại chiếc=xe | giữa trời tuyết."
         }
-      ]
+      ],
+      "shareCode": "BSD"
     },
     {
       "id": "accurate",
@@ -83,7 +84,8 @@
           "en": "The weather forecast was _____.",
           "vi": "Dự_báo thời_tiết | rất=chính_xác."
         }
-      ]
+      ],
+      "shareCode": "QNG"
     },
     {
       "id": "acknowledge",
@@ -112,7 +114,8 @@
           "en": "He _____d that he had made a mistake.",
           "vi": "Anh ấy thừa_nhận | mình đã=mắc lỗi."
         }
-      ]
+      ],
+      "shareCode": "7C0"
     },
     {
       "id": "adapt",
@@ -143,7 +146,8 @@
           "en": "It took me months to _____ to the new job.",
           "vi": "Tôi mất mấy tháng | để thích_nghi với công_việc mới."
         }
-      ]
+      ],
+      "shareCode": "8NS"
     },
     {
       "id": "adequate",
@@ -173,7 +177,8 @@
           "en": "The food was _____ for ten people.",
           "vi": "Thức_ăn | đủ cho mười người."
         }
-      ]
+      ],
+      "shareCode": "QQY"
     },
     {
       "id": "aggressive",
@@ -200,7 +205,8 @@
           "en": "The dog became _____ when strangers came near.",
           "vi": "Con=chó trở_nên hung_hăng | khi người lạ đến gần."
         }
-      ]
+      ],
+      "shareCode": "VM8"
     },
     {
       "id": "ambition",
@@ -230,7 +236,8 @@
           "en": "Her _____ is to become a judge.",
           "vi": "Hoài_bão của=cô ấy | là trở_thành thẩm_phán."
         }
-      ]
+      ],
+      "shareCode": "M7Y"
     },
     {
       "id": "anxiety",
@@ -257,7 +264,8 @@
           "en": "Exams cause a lot of _____ for students.",
           "vi": "Kỳ thi | gây nhiều lo_âu cho học_sinh."
         }
-      ]
+      ],
+      "shareCode": "R45"
     },
     {
       "id": "appeal",
@@ -288,7 +296,8 @@
           "en": "The idea of living abroad doesn't _____ to me.",
           "vi": "Ý_tưởng sống ở nước_ngoài | không hấp_dẫn tôi."
         }
-      ]
+      ],
+      "shareCode": "MG6"
     },
     {
       "id": "approach",
@@ -319,7 +328,8 @@
           "en": "We need a new _____ to this problem.",
           "vi": "Chúng_ta cần | cách tiếp_cận mới cho vấn_đề này."
         }
-      ]
+      ],
+      "shareCode": "JZ8"
     },
     {
       "id": "assess",
@@ -350,7 +360,8 @@
           "en": "Teachers _____ students' progress every term.",
           "vi": "Giáo_viên đánh_giá | tiến_bộ của=học_sinh mỗi kỳ."
         }
-      ]
+      ],
+      "shareCode": "7X1"
     },
     {
       "id": "assume",
@@ -379,7 +390,8 @@
           "en": "I _____d you already knew.",
           "vi": "Tôi cứ tưởng | bạn biết rồi."
         }
-      ]
+      ],
+      "shareCode": "XXX"
     },
     {
       "id": "attitude",
@@ -409,7 +421,8 @@
           "en": "She has a positive _____ to life.",
           "vi": "Cô ấy có thái_độ | tích_cực với cuộc_sống."
         }
-      ]
+      ],
+      "shareCode": "YWQ"
     },
     {
       "id": "authority",
@@ -440,7 +453,8 @@
           "en": "Only the manager has the _____ to sign this.",
           "vi": "Chỉ quản_lý | mới có thẩm_quyền ký văn_bản này."
         }
-      ]
+      ],
+      "shareCode": "7WG"
     },
     {
       "id": "aware",
@@ -470,7 +484,8 @@
           "en": "Are you _____ of the risks?",
           "vi": "Bạn có nhận_thức được | những rủi_ro không?"
         }
-      ]
+      ],
+      "shareCode": "VF8"
     },
     {
       "id": "benefit",
@@ -501,7 +516,8 @@
           "en": "Exercise has many health _____s.",
           "vi": "Tập_luyện | mang lại nhiều lợi_ích cho sức_khỏe."
         }
-      ]
+      ],
+      "shareCode": "408"
     },
     {
       "id": "brief",
@@ -532,7 +548,8 @@
           "en": "She gave a _____ speech.",
           "vi": "Cô ấy có | một=bài phát_biểu ngắn."
         }
-      ]
+      ],
+      "shareCode": "F96"
     },
     {
       "id": "capable",
@@ -563,7 +580,8 @@
           "en": "He is _____ of running the team.",
           "vi": "Anh ấy đủ khả_năng | điều_hành cả nhóm."
         }
-      ]
+      ],
+      "shareCode": "F8Z"
     },
     {
       "id": "cautious",
@@ -592,7 +610,8 @@
           "en": "Be _____ when investing your money.",
           "vi": "Hãy thận_trọng | khi đầu_tư tiền của=bạn."
         }
-      ]
+      ],
+      "shareCode": "T04"
     },
     {
       "id": "circumstance",
@@ -622,7 +641,8 @@
           "en": "Under no _____s should you open this door.",
           "vi": "Trong bất_cứ hoàn_cảnh nào | bạn cũng không được mở cửa này."
         }
-      ]
+      ],
+      "shareCode": "FXG"
     },
     {
       "id": "commitment",
@@ -653,7 +673,8 @@
           "en": "Marriage is a big _____.",
           "vi": "Hôn_nhân | là một=cam_kết lớn."
         }
-      ]
+      ],
+      "shareCode": "QTA"
     },
     {
       "id": "compromise",
@@ -684,7 +705,8 @@
           "en": "After long talks, they reached a _____.",
           "vi": "Sau nhiều cuộc bàn_bạc, | họ đã=đạt được thỏa_hiệp."
         }
-      ]
+      ],
+      "shareCode": "MWQ"
     },
     {
       "id": "conclude",
@@ -715,7 +737,8 @@
           "en": "The report _____s that prices will rise.",
           "vi": "Bản báo_cáo kết_luận | rằng giá sẽ tăng."
         }
-      ]
+      ],
+      "shareCode": "Z04"
     },
     {
       "id": "consequence",
@@ -746,7 +769,8 @@
           "en": "You must accept the _____s of your actions.",
           "vi": "Bạn phải chấp_nhận | hậu_quả từ hành_động của=mình."
         }
-      ]
+      ],
+      "shareCode": "XZS"
     },
     {
       "id": "consistent",
@@ -776,7 +800,8 @@
           "en": "Her work has been _____ all year.",
           "vi": "Cả năm nay | công_việc của=cô ấy rất=ổn_định."
         }
-      ]
+      ],
+      "shareCode": "XED"
     },
     {
       "id": "contribute",
@@ -807,7 +832,8 @@
           "en": "Everyone _____d to the project.",
           "vi": "Mọi người | đều đóng_góp vào dự_án."
         }
-      ]
+      ],
+      "shareCode": "T2X"
     },
     {
       "id": "controversial",
@@ -838,7 +864,8 @@
           "en": "The new law is very _____.",
           "vi": "Luật mới | đang gây nhiều tranh_cãi."
         }
-      ]
+      ],
+      "shareCode": "1XG"
     },
     {
       "id": "cope",
@@ -868,7 +895,8 @@
           "en": "She _____d well with the pressure.",
           "vi": "Cô ấy đã=đối_phó tốt | với áp_lực."
         }
-      ]
+      ],
+      "shareCode": "A3H"
     },
     {
       "id": "crucial",
@@ -899,7 +927,8 @@
           "en": "This decision is _____ for our future.",
           "vi": "Quyết_định này | then_chốt cho tương_lai chúng_ta."
         }
-      ]
+      ],
+      "shareCode": "9Z0"
     },
     {
       "id": "decline",
@@ -930,7 +959,8 @@
           "en": "Sales have _____d this year.",
           "vi": "Năm nay | doanh_số đã=sụt_giảm."
         }
-      ]
+      ],
+      "shareCode": "FEE"
     },
     {
       "id": "demand",
@@ -961,7 +991,8 @@
           "en": "There is a high _____ for electric cars.",
           "vi": "Nhu_cầu | về xe điện đang rất=cao."
         }
-      ]
+      ],
+      "shareCode": "2AS"
     },
     {
       "id": "deny",
@@ -987,7 +1018,8 @@
           "en": "He _____d breaking the window.",
           "vi": "Anh ta phủ_nhận | việc làm vỡ cửa kính."
         }
-      ]
+      ],
+      "shareCode": "9TT"
     },
     {
       "id": "determine",
@@ -1018,7 +1050,8 @@
           "en": "Tests will _____ the cause of the illness.",
           "vi": "Các=xét_nghiệm | sẽ xác_định nguyên_nhân gây bệnh."
         }
-      ]
+      ],
+      "shareCode": "BCR"
     },
     {
       "id": "distract",
@@ -1047,7 +1080,8 @@
           "en": "Don't _____ me while I'm driving.",
           "vi": "Đừng làm tôi | xao_nhãng khi lái xe."
         }
-      ]
+      ],
+      "shareCode": "D57"
     },
     {
       "id": "diverse",
@@ -1078,7 +1112,8 @@
           "en": "London is a very _____ city.",
           "vi": "Luân_Đôn | là thành_phố rất=đa_dạng."
         }
-      ]
+      ],
+      "shareCode": "MB9"
     },
     {
       "id": "eager",
@@ -1104,7 +1139,8 @@
           "en": "The children are _____ to start school.",
           "vi": "Bọn trẻ | háo_hức được đi học."
         }
-      ]
+      ],
+      "shareCode": "QHM"
     },
     {
       "id": "emerge",
@@ -1135,7 +1171,8 @@
           "en": "The sun _____d from behind the clouds.",
           "vi": "Mặt_trời | ló ra sau đám mây."
         }
-      ]
+      ],
+      "shareCode": "YGX"
     },
     {
       "id": "emphasize",
@@ -1165,7 +1202,8 @@
           "en": "He _____d the need for safety.",
           "vi": "Ông ấy nhấn_mạnh | sự cần_thiết của=an_toàn."
         }
-      ]
+      ],
+      "shareCode": "TDM"
     },
     {
       "id": "encounter",
@@ -1196,7 +1234,8 @@
           "en": "We _____ed many problems on the trip.",
           "vi": "Chúng_tôi gặp phải | nhiều trục_trặc trong chuyến đi."
         }
-      ]
+      ],
+      "shareCode": "K0S"
     },
     {
       "id": "enhance",
@@ -1226,7 +1265,8 @@
           "en": "Good lighting can _____ a photo.",
           "vi": "Ánh_sáng tốt | có_thể làm bức ảnh đẹp hơn."
         }
-      ]
+      ],
+      "shareCode": "32X"
     },
     {
       "id": "estimate",
@@ -1257,7 +1297,8 @@
           "en": "They _____ the cost at two million.",
           "vi": "Họ ước_tính | chi_phí khoảng hai triệu."
         }
-      ]
+      ],
+      "shareCode": "BB3"
     },
     {
       "id": "evidence",
@@ -1288,7 +1329,8 @@
           "en": "There is no _____ that he was there.",
           "vi": "Không có bằng_chứng | nào cho thấy anh ta ở đó."
         }
-      ]
+      ],
+      "shareCode": "N06"
     },
     {
       "id": "evaluate",
@@ -1319,7 +1361,8 @@
           "en": "We must _____ the results carefully.",
           "vi": "Chúng_ta phải đánh_giá | kết_quả thật cẩn_thận."
         }
-      ]
+      ],
+      "shareCode": "W12"
     },
     {
       "id": "exaggerate",
@@ -1345,7 +1388,8 @@
           "en": "Don't _____, it wasn't that bad.",
           "vi": "Đừng phóng_đại, | nó không tệ đến thế."
         }
-      ]
+      ],
+      "shareCode": "QVT"
     },
     {
       "id": "expand",
@@ -1376,7 +1420,8 @@
           "en": "The company plans to _____ into Asia.",
           "vi": "Công_ty dự_định | mở_rộng sang châu Á."
         }
-      ]
+      ],
+      "shareCode": "RZP"
     },
     {
       "id": "expose",
@@ -1406,7 +1451,8 @@
           "en": "Don't _____ your skin to the sun too long.",
           "vi": "Đừng để da | tiếp_xúc ánh nắng quá lâu."
         }
-      ]
+      ],
+      "shareCode": "HDT"
     },
     {
       "id": "flexible",
@@ -1436,7 +1482,8 @@
           "en": "I have a _____ work schedule.",
           "vi": "Tôi có | lịch làm_việc linh_hoạt."
         }
-      ]
+      ],
+      "shareCode": "H16"
     },
     {
       "id": "fundamental",
@@ -1467,7 +1514,8 @@
           "en": "Education is a _____ right.",
           "vi": "Giáo_dục | là quyền cơ_bản."
         }
-      ]
+      ],
+      "shareCode": "9FG"
     },
     {
       "id": "genuine",
@@ -1494,7 +1542,8 @@
           "en": "This is a _____ leather bag.",
           "vi": "Đây là | túi da thật."
         }
-      ]
+      ],
+      "shareCode": "5JS"
     },
     {
       "id": "guarantee",
@@ -1525,7 +1574,8 @@
           "en": "We _____ delivery within 24 hours.",
           "vi": "Chúng_tôi bảo_đảm | giao hàng trong hai mươi bốn giờ."
         }
-      ]
+      ],
+      "shareCode": "DVZ"
     },
     {
       "id": "hesitate",
@@ -1552,7 +1602,8 @@
           "en": "Don't _____ to ask questions.",
           "vi": "Đừng ngần_ngại | đặt câu hỏi."
         }
-      ]
+      ],
+      "shareCode": "M0D"
     },
     {
       "id": "identify",
@@ -1583,7 +1634,8 @@
           "en": "Can you _____ the man in the photo?",
           "vi": "Bạn nhận_diện được | người đàn_ông trong ảnh không?"
         }
-      ]
+      ],
+      "shareCode": "MC1"
     },
     {
       "id": "impact",
@@ -1614,7 +1666,8 @@
           "en": "Technology has a big _____ on our lives.",
           "vi": "Công_nghệ | có ảnh_hưởng lớn đến cuộc_sống."
         }
-      ]
+      ],
+      "shareCode": "39A"
     },
     {
       "id": "inevitable",
@@ -1645,7 +1698,8 @@
           "en": "Change is _____.",
           "vi": "Thay_đổi | là điều không_thể tránh khỏi."
         }
-      ]
+      ],
+      "shareCode": "SS6"
     },
     {
       "id": "influence",
@@ -1676,7 +1730,8 @@
           "en": "My mother had a great _____ on me.",
           "vi": "Mẹ có ảnh_hưởng | rất=lớn đến tôi."
         }
-      ]
+      ],
+      "shareCode": "V2F"
     },
     {
       "id": "insist",
@@ -1703,7 +1758,8 @@
           "en": "She _____ed on paying for dinner.",
           "vi": "Cô ấy nhất_quyết | trả tiền bữa tối."
         }
-      ]
+      ],
+      "shareCode": "S1F"
     },
     {
       "id": "intend",
@@ -1732,7 +1788,8 @@
           "en": "I _____ to visit my grandparents next week.",
           "vi": "Tôi định | tuần sau thăm ông bà."
         }
-      ]
+      ],
+      "shareCode": "S1Y"
     },
     {
       "id": "interpret",
@@ -1763,7 +1820,8 @@
           "en": "How do you _____ this poem?",
           "vi": "Bạn hiểu | bài thơ này thế_nào?"
         }
-      ]
+      ],
+      "shareCode": "488"
     },
     {
       "id": "investigate",
@@ -1793,7 +1851,8 @@
           "en": "Police are _____ing the accident.",
           "vi": "Cảnh_sát | đang điều_tra vụ tai_nạn."
         }
-      ]
+      ],
+      "shareCode": "9N4"
     },
     {
       "id": "justify",
@@ -1823,7 +1882,8 @@
           "en": "How can you _____ such high prices?",
           "vi": "Bạn biện_minh thế_nào | cho mức giá cao như vậy?"
         }
-      ]
+      ],
+      "shareCode": "XPE"
     },
     {
       "id": "launch",
@@ -1854,7 +1914,8 @@
           "en": "The company will _____ a new phone next month.",
           "vi": "Tháng sau | công_ty sẽ ra_mắt điện_thoại mới."
         }
-      ]
+      ],
+      "shareCode": "0VS"
     },
     {
       "id": "maintain",
@@ -1885,7 +1946,8 @@
           "en": "It's hard to _____ a healthy weight.",
           "vi": "Thật khó | để duy_trì cân nặng hợp_lý."
         }
-      ]
+      ],
+      "shareCode": "X62"
     },
     {
       "id": "minor",
@@ -1915,7 +1977,8 @@
           "en": "There are a few _____ errors in the report.",
           "vi": "Bản báo_cáo | có vài lỗi nhỏ."
         }
-      ]
+      ],
+      "shareCode": "T43"
     },
     {
       "id": "negotiate",
@@ -1946,7 +2009,8 @@
           "en": "We _____d a better price.",
           "vi": "Chúng_tôi đã=thương_lượng | được giá tốt hơn."
         }
-      ]
+      ],
+      "shareCode": "R1W"
     },
     {
       "id": "obvious",
@@ -1976,7 +2040,8 @@
           "en": "It's _____ that she is tired.",
           "vi": "Rõ_ràng là | cô ấy đang=mệt."
         }
-      ]
+      ],
+      "shareCode": "TKV"
     },
     {
       "id": "obstacle",
@@ -2007,7 +2072,8 @@
           "en": "Lack of money is the main _____.",
           "vi": "Thiếu tiền | là trở_ngại chính."
         }
-      ]
+      ],
+      "shareCode": "TBK"
     },
     {
       "id": "occur",
@@ -2038,7 +2104,8 @@
           "en": "The accident _____red at night.",
           "vi": "Vụ tai_nạn | xảy ra vào ban_đêm."
         }
-      ]
+      ],
+      "shareCode": "G3Q"
     },
     {
       "id": "overcome",
@@ -2068,7 +2135,8 @@
           "en": "She _____ her fear of flying.",
           "vi": "Cô ấy đã=vượt qua | nỗi sợ đi máy_bay."
         }
-      ]
+      ],
+      "shareCode": "HFB"
     },
     {
       "id": "perspective",
@@ -2098,7 +2166,8 @@
           "en": "Travel gives you a new _____ on life.",
           "vi": "Du_lịch cho bạn | góc nhìn mới về cuộc_sống."
         }
-      ]
+      ],
+      "shareCode": "W53"
     },
     {
       "id": "potential",
@@ -2129,7 +2198,8 @@
           "en": "This student has great _____.",
           "vi": "Cậu học_sinh này | có tiềm_năng lớn."
         }
-      ]
+      ],
+      "shareCode": "3AD"
     },
     {
       "id": "precise",
@@ -2159,7 +2229,8 @@
           "en": "Please give me the _____ time.",
           "vi": "Hãy cho tôi | thời_gian chính_xác."
         }
-      ]
+      ],
+      "shareCode": "JWA"
     },
     {
       "id": "priority",
@@ -2190,7 +2261,8 @@
           "en": "Safety is our top _____.",
           "vi": "An_toàn | là ưu_tiên hàng_đầu của=chúng_tôi."
         }
-      ]
+      ],
+      "shareCode": "JQP"
     },
     {
       "id": "profit",
@@ -2221,7 +2293,8 @@
           "en": "The shop made a large _____ this year.",
           "vi": "Năm nay | cửa_hàng thu lợi_nhuận lớn."
         }
-      ]
+      ],
+      "shareCode": "JTH"
     },
     {
       "id": "pursue",
@@ -2251,7 +2324,8 @@
           "en": "She wants to _____ a career in law.",
           "vi": "Cô ấy muốn | theo_đuổi nghề luật."
         }
-      ]
+      ],
+      "shareCode": "2ST"
     },
     {
       "id": "rapid",
@@ -2282,7 +2356,8 @@
           "en": "The city has seen _____ growth.",
           "vi": "Thành_phố | phát_triển nhanh_chóng."
         }
-      ]
+      ],
+      "shareCode": "8NT"
     },
     {
       "id": "reluctant",
@@ -2308,7 +2383,8 @@
           "en": "He was _____ to help.",
           "vi": "Anh ấy | miễn_cưỡng giúp_đỡ."
         }
-      ]
+      ],
+      "shareCode": "D0C"
     },
     {
       "id": "rely",
@@ -2339,7 +2415,8 @@
           "en": "You can _____ on me.",
           "vi": "Bạn có_thể | trông_cậy vào tôi."
         }
-      ]
+      ],
+      "shareCode": "CGJ"
     },
     {
       "id": "resolve",
@@ -2370,7 +2447,8 @@
           "en": "We need to _____ this conflict quickly.",
           "vi": "Chúng_ta cần nhanh_chóng | giải_quyết mâu_thuẫn này."
         }
-      ]
+      ],
+      "shareCode": "KAP"
     },
     {
       "id": "resource",
@@ -2401,7 +2479,8 @@
           "en": "Water is a precious natural _____.",
           "vi": "Nước là tài_nguyên | thiên_nhiên quý_giá."
         }
-      ]
+      ],
+      "shareCode": "AAK"
     },
     {
       "id": "restrict",
@@ -2431,7 +2510,8 @@
           "en": "The law _____s smoking in public places.",
           "vi": "Luật hạn_chế | hút thuốc ở nơi công_cộng."
         }
-      ]
+      ],
+      "shareCode": "C68"
     },
     {
       "id": "reveal",
@@ -2461,7 +2541,8 @@
           "en": "She _____ed her secret to me.",
           "vi": "Cô ấy tiết_lộ | bí_mật cho tôi."
         }
-      ]
+      ],
+      "shareCode": "VXQ"
     },
     {
       "id": "rural",
@@ -2492,7 +2573,8 @@
           "en": "Many young people leave _____ areas.",
           "vi": "Nhiều người trẻ | rời bỏ vùng nông_thôn."
         }
-      ]
+      ],
+      "shareCode": "29B"
     },
     {
       "id": "significant",
@@ -2523,7 +2605,8 @@
           "en": "There has been a _____ increase in prices.",
           "vi": "Giá_cả | đã tăng đáng_kể."
         }
-      ]
+      ],
+      "shareCode": "B9E"
     },
     {
       "id": "strategy",
@@ -2554,7 +2637,8 @@
           "en": "We need a new marketing _____.",
           "vi": "Chúng_ta cần | chiến_lược tiếp_thị mới."
         }
-      ]
+      ],
+      "shareCode": "KAE"
     },
     {
       "id": "sufficient",
@@ -2584,7 +2668,8 @@
           "en": "We don't have _____ time.",
           "vi": "Chúng_tôi | không=có đủ thời_gian."
         }
-      ]
+      ],
+      "shareCode": "PQP"
     },
     {
       "id": "sustainable",
@@ -2615,7 +2700,8 @@
           "en": "We need _____ energy sources.",
           "vi": "Chúng_ta cần | nguồn năng_lượng bền_vững."
         }
-      ]
+      ],
+      "shareCode": "CM3"
     },
     {
       "id": "tendency",
@@ -2645,7 +2731,8 @@
           "en": "He has a _____ to talk too much.",
           "vi": "Anh ấy | có xu_hướng nói quá nhiều."
         }
-      ]
+      ],
+      "shareCode": "A5Z"
     },
     {
       "id": "threat",
@@ -2676,7 +2763,8 @@
           "en": "Pollution is a serious _____ to wildlife.",
           "vi": "Ô_nhiễm | là mối đe_dọa lớn với động_vật hoang_dã."
         }
-      ]
+      ],
+      "shareCode": "0M8"
     },
     {
       "id": "tolerate",
@@ -2703,7 +2791,8 @@
           "en": "I can't _____ rude behaviour.",
           "vi": "Tôi không_thể chịu_đựng | thái_độ thô_lỗ."
         }
-      ]
+      ],
+      "shareCode": "40M"
     },
     {
       "id": "transform",
@@ -2734,7 +2823,8 @@
           "en": "The internet has _____ed the way we work.",
           "vi": "Mạng toàn_cầu | đã thay_đổi cách chúng_ta làm_việc."
         }
-      ]
+      ],
+      "shareCode": "376"
     },
     {
       "id": "unique",
@@ -2764,7 +2854,8 @@
           "en": "Each snowflake is _____.",
           "vi": "Mỗi bông tuyết | đều độc_nhất vô_nhị."
         }
-      ]
+      ],
+      "shareCode": "7KP"
     },
     {
       "id": "vague",
@@ -2791,7 +2882,8 @@
           "en": "He gave a _____ answer.",
           "vi": "Anh ấy | trả_lời rất=mơ_hồ."
         }
-      ]
+      ],
+      "shareCode": "N05"
     },
     {
       "id": "volunteer",
@@ -2817,7 +2909,8 @@
           "en": "She works as a _____ at the hospital.",
           "vi": "Cô ấy làm tình_nguyện_viên | ở bệnh_viện."
         }
-      ]
+      ],
+      "shareCode": "898"
     },
     {
       "id": "witness",
@@ -2843,7 +2936,8 @@
           "en": "The police are looking for a _____.",
           "vi": "Cảnh_sát | đang tìm nhân_chứng."
         }
-      ]
+      ],
+      "shareCode": "W55"
     },
     {
       "id": "relevant",
@@ -2874,7 +2968,8 @@
           "en": "Please include only _____ information.",
           "vi": "Vui_lòng chỉ đưa | thông_tin có liên_quan."
         }
-      ]
+      ],
+      "shareCode": "NAB"
     },
     {
       "id": "reputation",
@@ -2905,7 +3000,8 @@
           "en": "The restaurant has a good _____.",
           "vi": "Nhà_hàng này | có tiếng_tăm tốt."
         }
-      ]
+      ],
+      "shareCode": "4RS"
     }
   ]
 }

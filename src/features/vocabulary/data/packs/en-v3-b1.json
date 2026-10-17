@@ -41,7 +41,8 @@
         }
       ],
       "chars": 8,
-      "initial": "G"
+      "initial": "G",
+      "shareCode": "RQK"
     },
     {
       "id": "grateful",
@@ -67,7 +68,8 @@
         }
       ],
       "chars": 8,
-      "initial": "G"
+      "initial": "G",
+      "shareCode": "6DP"
     },
     {
       "id": "embarrassed",
@@ -93,7 +95,8 @@
         }
       ],
       "chars": 11,
-      "initial": "E"
+      "initial": "E",
+      "shareCode": "TEP"
     },
     {
       "id": "apologize",
@@ -119,7 +122,8 @@
         }
       ],
       "chars": 9,
-      "initial": "A"
+      "initial": "A",
+      "shareCode": "57V"
     },
     {
       "id": "ignore",
@@ -146,7 +150,8 @@
         }
       ],
       "chars": 6,
-      "initial": "I"
+      "initial": "I",
+      "shareCode": "74M"
     },
     {
       "id": "doubt",
@@ -172,7 +177,8 @@
         }
       ],
       "chars": 5,
-      "initial": "D"
+      "initial": "D",
+      "shareCode": "PFQ"
     },
     {
       "id": "chore",
@@ -198,7 +204,8 @@
         }
       ],
       "chars": 5,
-      "initial": "C"
+      "initial": "C",
+      "shareCode": "7ZQ"
     },
     {
       "id": "jealous",
@@ -224,7 +231,8 @@
         }
       ],
       "chars": 7,
-      "initial": "J"
+      "initial": "J",
+      "shareCode": "T41"
     },
     {
       "id": "lonely",
@@ -250,7 +258,8 @@
         }
       ],
       "chars": 6,
-      "initial": "L"
+      "initial": "L",
+      "shareCode": "MYA"
     },
     {
       "id": "proud",
@@ -276,7 +285,8 @@
         }
       ],
       "chars": 5,
-      "initial": "P"
+      "initial": "P",
+      "shareCode": "EC6"
     },
     {
       "id": "confused",
@@ -303,7 +313,8 @@
         }
       ],
       "chars": 8,
-      "initial": "C"
+      "initial": "C",
+      "shareCode": "EA8"
     },
     {
       "id": "exhausted",
@@ -330,7 +341,8 @@
         }
       ],
       "chars": 9,
-      "initial": "E"
+      "initial": "E",
+      "shareCode": "9VS"
     },
     {
       "id": "honest",
@@ -356,7 +368,8 @@
         }
       ],
       "chars": 6,
-      "initial": "H"
+      "initial": "H",
+      "shareCode": "PJQ"
     },
     {
       "id": "brave",
@@ -382,7 +395,8 @@
         }
       ],
       "chars": 5,
-      "initial": "B"
+      "initial": "B",
+      "shareCode": "4DC"
     },
     {
       "id": "selfish",
@@ -408,7 +422,8 @@
         }
       ],
       "chars": 7,
-      "initial": "S"
+      "initial": "S",
+      "shareCode": "NJ3"
     },
     {
       "id": "encourage",
@@ -435,7 +450,8 @@
         }
       ],
       "chars": 9,
-      "initial": "E"
+      "initial": "E",
+      "shareCode": "ZAJ"
     },
     {
       "id": "afford",
@@ -461,7 +477,8 @@
         }
       ],
       "chars": 6,
-      "initial": "A"
+      "initial": "A",
+      "shareCode": "V9Z"
     }
   ]
 }
