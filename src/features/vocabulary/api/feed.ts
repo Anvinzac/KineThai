@@ -2,7 +2,7 @@
 import { VOCAB_PAGE_LIMIT } from "../lib/backfill";
 import { readVocabularyPage } from "../lib/feed-pager";
 import { readCustomPage } from "../lib/custom-pack";
-import { resolveTarget } from "../lib/target-language";
+import { resolveTarget, type TargetLocale } from "../lib/target-language";
 import type { FeedCursor, FeedPage, VocabularyFilters } from "../types";
 
 export class VocabularyRequestError extends Error {
@@ -42,6 +42,7 @@ function buildQuery(
   filters: VocabularyFilters,
   cursor: FeedCursor,
   includeRevision: boolean,
+  locale?: TargetLocale,
 ): string {
   return new URLSearchParams({
     seed,
@@ -51,6 +52,7 @@ function buildQuery(
     position: String(cursor.position),
     limit: String(VOCAB_PAGE_LIMIT),
     ...(includeRevision && cursor.revision ? { revision: cursor.revision } : {}),
+    ...(locale ? { locale } : {}),
   }).toString();
 }
 
@@ -61,14 +63,18 @@ function buildQuery(
  * When the app is served as pure static files (e.g. GitHub Pages) and that route
  * does not exist, it transparently falls back to the bundled deterministic pager —
  * so the feed loads on static hosts with zero server. @param input Stream/cursor
- * context. @returns The page, from the server or the local pager.
+ * context. @param locale Override target locale (defaults to host-based detection).
+ * @returns The page, from the server or the local pager.
  */
-export async function fetchVocabularyPage(input: {
-  seed: string;
-  filters: VocabularyFilters;
-  cursor: FeedCursor;
-  signal: AbortSignal;
-}): Promise<FeedPage> {
+export async function fetchVocabularyPage(
+  input: {
+    seed: string;
+    filters: VocabularyFilters;
+    cursor: FeedCursor;
+    signal: AbortSignal;
+  },
+  locale?: TargetLocale,
+): Promise<FeedPage> {
   // An imported pack plays entirely in the browser: no request, only its own words.
   const local = readCustomPage({
     seed: input.seed,
@@ -83,7 +89,7 @@ export async function fetchVocabularyPage(input: {
   if (input.signal.aborted) controller.abort();
   const timeout = setTimeout(abort, 15_000);
   try {
-    const query = buildQuery(input.seed, input.filters, input.cursor, true);
+    const query = buildQuery(input.seed, input.filters, input.cursor, true, locale);
     const response = await fetch(`${SERVER_ROUTE}?${query}`, {
       signal: controller.signal,
       credentials: "omit",
@@ -94,6 +100,9 @@ export async function fetchVocabularyPage(input: {
       // catalog. The deck follows the visited host exactly like the server
       // (`catalogFor(resolveTarget(host))`), so the fallback can never disagree
       // with SSR — on a static host the host always resolves to English.
+      // If a locale override is provided (from user preference), use it; otherwise
+      // fall back to host-based detection.
+      const effectiveLocale = locale ?? resolveTarget(window.location.host);
       return readVocabularyPage(
         {
           seed: input.seed,
@@ -103,7 +112,7 @@ export async function fetchVocabularyPage(input: {
           position: input.cursor.position,
           limit: VOCAB_PAGE_LIMIT,
         },
-        resolveTarget(window.location.host),
+        effectiveLocale,
       );
     }
 

@@ -33,16 +33,17 @@ function hash(text: string): string {
 
 type RawWord = Record<string, unknown>;
 
-/** Level named in a file name or URL (deck-v3-A1.json, hsk2.json), if any. */
+/** Level named in a file name or URL (deck-v3-A1.json, hsk2.json, jp-highschool.json), if any. */
 function levelFromSource(source: string): string | undefined {
-  const m = source.match(/(?:^|[^a-z0-9])(a1|a2|b1|b2|c1|c2|hsk[1-9])(?=[^a-z0-9]|$)/i);
+  const m = source.match(
+    /(?:^|[^a-z0-9])(a1|a2|b1|b2|c1|c2|hsk[1-9]|jprim|jsec|jhigh|jcoll)(?=[^a-z0-9]|$)/i,
+  );
   return m?.[1]?.toUpperCase();
 }
 
 /**
- * Accept the word packs this app already uses: the WordCrawler batch decks
- * (docs/Batches/*.json — a bare array with usageEn/usageVi/emphasisVi, no ids) and the
- * compiled packs (data/packs/*.json — { revision, words: [...] }). Both become the
+ * Accept the word packs this app already uses: the compiled packs
+ * (data/packs/*.json — { revision, words: [...] }). Both become the
  * schema's word shape before validation.
  */
 function toDeck(json: unknown, source: string): { meta?: { name: string }; words: RawWord[] } {

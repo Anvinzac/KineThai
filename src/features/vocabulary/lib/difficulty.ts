@@ -12,7 +12,8 @@
  * Exports: DifficultyTrack, DIFFICULTY_TRACKS, DIFFICULTY_IDS, DIFFICULTY_ALL,
  *          LEVEL_SAMPLE_PRIORITY, tracksFor, CEFR_TRACKS, HSK_TRACKS,
  *          difficultyLevels, formatLevelBand, countTrackWords,
- *          trackCeiling, isTrackAvailable
+ *          trackCeiling, isTrackAvailable, japaneseTrackForLevel,
+ *          japaneseLevelForDifficulty
  * Depends on: ./schema, ./target-language
  */
 
@@ -54,9 +55,13 @@ export const LEVEL_SAMPLE_PRIORITY: Partial<Record<VocabularyLevel, readonly str
   A2: ["proud", "honest", "polite", "lazy"],
   HSK1: ["饥饿", "口渴", "累", "生气"],
   HSK2: ["骄傲", "诚实", "礼貌", "懒"],
+  JPRIM: ["birthday", "gift", "doctor", "festival"],
+  JSEC: ["airport", "beach", "guitar", "holiday"],
+  JHIGH: ["airport", "bank", "museum", "passport"],
+  JCOLL: ["medicine", "exam", "market", "passport"],
 };
 
-/** The ten CEFR tracks for the English (and ko/ja) feed. */
+/** The ten CEFR tracks for the English (and ko) feed. */
 export const CEFR_TRACKS: readonly DifficultyTrack[] = [
   {
     id: "vo-long",
@@ -208,23 +213,99 @@ export const HSK_TRACKS: readonly DifficultyTrack[] = [
   },
 ];
 
-/** Track ids shared by both sets (same id appears in CEFR_TRACKS and HSK_TRACKS). */
+/** Track ids shared by CEFR and HSK sets. */
 const SHARED_TRACK_IDS = CEFR_TRACKS.map((track) => track.id);
+
+/** Japanese (JLPT-style) tracks for the nhật (Japanese) feed. */
+export const JP_TRACKS: readonly DifficultyTrack[] = [
+  {
+    id: "jp-highschool",
+    label: "trung học",
+    hint: "Trung học phổ thông",
+    emoji: "🎓",
+    levels: ["JHIGH"],
+    sampleLevel: "JHIGH",
+  },
+  {
+    id: "jp-secondary",
+    label: "cấp 2",
+    hint: "Trung học cơ sở",
+    emoji: "🎒",
+    levels: ["JSEC"],
+    sampleLevel: "JSEC",
+  },
+  {
+    id: "jp-college",
+    label: "đại học",
+    hint: "Đại học và sau đại học",
+    emoji: "🏫",
+    levels: ["JCOLL"],
+    sampleLevel: "JCOLL",
+  },
+  {
+    id: "jp-primary",
+    label: "tiểu học",
+    hint: "Tiểu học",
+    emoji: "📚",
+    levels: ["JPRIM"],
+    sampleLevel: "JPRIM",
+  },
+];
+
+/** All track ids across all locales. */
+const ALL_TRACKS = [...CEFR_TRACKS, ...HSK_TRACKS, ...JP_TRACKS];
 
 /** Default export for consumers that don't branch by locale (the English UI). */
 export const DIFFICULTY_TRACKS: readonly DifficultyTrack[] = CEFR_TRACKS;
 
 /** Every track id, for request validation. */
-export const DIFFICULTY_IDS = SHARED_TRACK_IDS;
+export const DIFFICULTY_IDS = ALL_TRACKS.map((track) => track.id);
 
 /**
  * Resolve the locale-appropriate difficulty tracks.
  * @param locale Deck locale
- * @returns HSK tracks for zh, CEFR tracks for en/ko/ja
+ * @returns HSK tracks for zh, JP tracks for ja, CEFR tracks for en/ko
  * @pure true
  */
 export function tracksFor(locale: TargetLocale): readonly DifficultyTrack[] {
-  return locale === "zh" ? HSK_TRACKS : CEFR_TRACKS;
+  if (locale === "zh") return HSK_TRACKS;
+  if (locale === "ja") return JP_TRACKS;
+  return CEFR_TRACKS;
+}
+
+/**
+ * The Japanese track that serves one school level.
+ * @param level Japanese level, or "" for no level
+ * @returns The matching track, or undefined when the level is not Japanese
+ * @pure true
+ */
+export function japaneseTrackForLevel(level: VocabularyLevel | ""): DifficultyTrack | undefined {
+  if (!level) return undefined;
+  return JP_TRACKS.find((track) => track.levels.includes(level));
+}
+
+/**
+ * The single Japanese level a difficulty selection stands for.
+ *
+ * The level picker and the difficulty picker edit the same choice: a single Japanese
+ * track means exactly one level. "All levels", a mixed selection, or a non-Japanese
+ * track has no single level, so it returns "".
+ * @param difficulty Comma-joined track ids, or the empty sentinel for all
+ * @returns The level, or "" when the selection is not one Japanese track
+ * @pure true
+ */
+export function japaneseLevelForDifficulty(difficulty: string): VocabularyLevel | "" {
+  const ids = [
+    ...new Set(
+      difficulty
+        .split(",")
+        .map((id) => id.trim())
+        .filter(Boolean),
+    ),
+  ];
+  if (ids.length !== 1) return "";
+  const track = JP_TRACKS.find((entry) => entry.id === ids[0]);
+  return track?.levels.length === 1 ? track.levels[0]! : "";
 }
 
 /**
@@ -284,14 +365,14 @@ export function difficultyLevels(
     .map((id) => id.trim())
     .filter(Boolean);
   if (!ids.length) return null;
-  const allTracks = [...CEFR_TRACKS, ...HSK_TRACKS];
+  const allTracks = [...CEFR_TRACKS, ...HSK_TRACKS, ...JP_TRACKS];
   const union = new Set<VocabularyLevel>();
   for (const id of ids) {
     // Find the track matching this id whose levels intersect with the catalog's levels.
     // When no catalogLevels provided, prefer the first match (CEFR order).
     const matches = allTracks.filter((entry) => entry.id === id);
     const track = catalogLevels
-      ? matches.find((t) => isTrackAvailable(t, catalogLevels)) ?? matches[0]
+      ? (matches.find((t) => isTrackAvailable(t, catalogLevels)) ?? matches[0])
       : matches[0];
     if (!track) continue;
     if (catalogLevels && !isTrackAvailable(track, catalogLevels)) continue;

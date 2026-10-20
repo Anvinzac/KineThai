@@ -16,6 +16,8 @@ export type Preferences = {
   weeklyDigest: boolean;
   audience: "public" | "followers" | "private";
   defaultFormat: "text" | "image" | "video";
+  japaneseLevel: "JPRIM" | "JSEC" | "JHIGH" | "JCOLL" | "";
+  targetLanguage: "en" | "zh" | "ko" | "ja" | "";
 };
 
 /** localStorage key for persisted settings preferences. */
@@ -33,6 +35,8 @@ export const DEFAULT_PREFS: Preferences = {
   weeklyDigest: true,
   audience: "public",
   defaultFormat: "text",
+  japaneseLevel: "",
+  targetLanguage: "",
 };
 
 /**

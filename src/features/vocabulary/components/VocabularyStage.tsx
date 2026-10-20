@@ -277,7 +277,13 @@ export function VocabularyStage({
               </p>
             )}
             <p lang={locale}>
-              <MarkedText text={resolveClue(word, "def", locale)} />
+              <MarkedText
+                text={
+                  locale === "ja" && word.meaningJP
+                    ? word.meaningJP
+                    : resolveClue(word, "def", locale)
+                }
+              />
             </p>
             {word.usage.map((example, index) => (
               <div className="vocab-example" key={index}>

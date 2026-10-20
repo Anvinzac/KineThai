@@ -93,7 +93,9 @@ export function ChallengePage(): React.ReactElement {
               </p>
             )}
             <p className="vocab-challenge-def" lang={ui}>
-              <MarkedText text={resolveClue(word, "def", ui)} />
+              <MarkedText
+                text={ui === "ja" && word.meaningJP ? word.meaningJP : resolveClue(word, "def", ui)}
+              />
             </p>
             <p className="vocab-challenge-body">{t(ui, "challenge.solved")}</p>
             <Link className="vocab-light-button" to="/feed">

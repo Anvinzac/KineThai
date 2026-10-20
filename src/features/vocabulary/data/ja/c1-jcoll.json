@@ -1,0 +1,2213 @@
+{
+  "revision": "2eabe336866c299a8deb88fa",
+  "name": "WordCrawler vocabulary",
+  "count": 50,
+  "topics": [
+    "attention",
+    "character",
+    "communication",
+    "emotion",
+    "general",
+    "health",
+    "money",
+    "nature",
+    "perception",
+    "society",
+    "study",
+    "technology",
+    "thinking",
+    "time",
+    "work"
+  ],
+  "levels": [
+    "JCOLL"
+  ],
+  "words": [
+    {
+      "id": "abundant-jcoll",
+      "word": "abundant",
+      "defVi": "Dồi dào. Có nhiều hơn hẳn lượng cần dùng, đầy đủ thoải mái.",
+      "leadVi": "Trên bàn tiệc liên hoan, bánh kẹo và nước ngọt bày ra nhiều đến mức ăn không xuể.",
+      "anticipateVi": "Nhiều cỡ nào vậy trời!?",
+      "localized": {
+        "ja": {
+          "lead": "打ち上げの テーブルに、 | お菓子や ジュースが | 食べきれないほど 並んだ。",
+          "def": "必要な 量を | はるかに 上回って、 | 十分に ある 様子。",
+          "guess": "どんだけ | あるの！？"
+        }
+      },
+      "meaningJP": "豊富な、潤沢な",
+      "emphasis": [
+        "上回って",
+        "食べきれないほど",
+        "豊富な"
+      ],
+      "pos": "adj",
+      "ipa": "/əˈbʌn.dənt/",
+      "topic": "nature",
+      "topics": [
+        "nature",
+        "general"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The region has _____ natural resources.",
+          "vi": "その地域には豊富な天然資源がある。",
+          "glosses": {
+            "ja": "その 地域には | 豊富な 天然資源が | ある。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "A",
+      "shareCode": "7K7"
+    },
+    {
+      "id": "accumulate-jcoll",
+      "word": "accumulate",
+      "defVi": "Tích tụ. Gom lại từng chút một, dần dần nhiều lên.",
+      "leadVi": "Trước kỳ thi, giấy bài tập được trả về cứ chồng thành núi trên bàn.",
+      "anticipateVi": "Góp gió thành bão…?",
+      "localized": {
+        "ja": {
+          "lead": "テスト前、 | 返された プリントが | 机の 上で | どんどん 山に なる。",
+          "def": "少しずつ 寄り集まり、 | 時間と ともに | 量が 増えて=いく=こと。",
+          "guess": "ちりも | 積もれば…？"
+        }
+      },
+      "meaningJP": "蓄積する、たまる",
+      "emphasis": [
+        "少しずつ",
+        "プリント",
+        "たまる"
+      ],
+      "pos": "verb",
+      "ipa": "/əˈkjuː.mjə.leɪt/",
+      "topic": "money",
+      "topics": [
+        "money",
+        "general"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Dust _____s quickly in this room.",
+          "vi": "この部屋はほこりがすぐたまる。",
+          "glosses": {
+            "ja": "この 部屋は | ほこりが すぐ | たまる。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "A",
+      "shareCode": "WZV"
+    },
+    {
+      "id": "adversity-jcoll",
+      "word": "adversity",
+      "defVi": "Nghịch cảnh. Tình cảnh khổ sở khi những điều cay đắng cứ nối tiếp nhau.",
+      "leadVi": "Át chủ bài bị chấn thương phải nghỉ, cả đội chỉ còn năm người. Dù vậy vẫn không bỏ buổi tập sáng nào.",
+      "anticipateVi": "Vẫn chưa bỏ cuộc đâu!",
+      "localized": {
+        "ja": {
+          "lead": "けがで エースが 抜け、 | 部員は 五人だけ。 | それでも 朝練は 休まない。",
+          "def": "困難や 不運が | 次々と 重なる、 | 苦しい 境遇。",
+          "guess": "まだ | あきらめない！"
+        }
+      },
+      "meaningJP": "逆境、苦境",
+      "emphasis": [
+        "次々と",
+        "朝練",
+        "逆境"
+      ],
+      "pos": "noun",
+      "ipa": "/ədˈvɜː.sə.ti/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She showed great courage in the face of _____.",
+          "vi": "彼女は逆境の中でも強い勇気を見せた。",
+          "glosses": {
+            "ja": "彼女は | 逆境の 中でも | 強い 勇気を 見せた。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "A",
+      "shareCode": "HD1"
+    },
+    {
+      "id": "aesthetic-jcoll",
+      "word": "aesthetic",
+      "defVi": "Thẩm mỹ. Liên quan đến vẻ đẹp bề ngoài và cảm nhận về cái đẹp.",
+      "leadVi": "Chỉ có vải trắng và ghế gỗ. Quán cà phê ở lễ hội trường đông nghịt người chụp ảnh.",
+      "anticipateVi": "Lên hình đẹp quá đi!",
+      "localized": {
+        "ja": {
+          "lead": "白い 布と 木の いすだけ。 | 文化祭の カフェは | 写真を 撮る 人で いっぱい。",
+          "def": "美の 感覚や、 | 美しさの 判断に | 関わる 様子。",
+          "guess": "めっちゃ | 映えてる！"
+        }
+      },
+      "meaningJP": "美的な、審美的な",
+      "emphasis": [
+        "感覚",
+        "布",
+        "美的な"
+      ],
+      "pos": "adj",
+      "ipa": "/esˈθet.ɪk/",
+      "topic": "perception",
+      "topics": [
+        "perception",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The building has great _____ value.",
+          "vi": "その建物は美的な価値が高い。",
+          "glosses": {
+            "ja": "その 建物は | 美的な 価値が | 高い。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "A",
+      "shareCode": "MS5"
+    },
+    {
+      "id": "allocate-jcoll",
+      "word": "allocate",
+      "defVi": "Phân bổ. Chia tiền bạc hay thời gian theo từng mục đích và quyết định phần cho mỗi việc.",
+      "leadVi": "Ngân sách lễ hội trường là ba vạn yên. “Mười nghìn cho đồ trang trí, hai mươi nghìn cho nguyên liệu nhé?”",
+      "anticipateVi": "Chia thế nào đây?",
+      "localized": {
+        "ja": {
+          "lead": "文化祭の 予算は 三万円。 | 「飾りに 一万、 | 材料に 二万で どう？」",
+          "def": "資金や 人手を、 | 目的に 応じて | 振り分ける=こと。",
+          "guess": "どう | 分けよう？"
+        }
+      },
+      "meaningJP": "割り当てる、配分する",
+      "emphasis": [
+        "振り分ける",
+        "飾り",
+        "割り当てた"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈæl.ə.keɪt/",
+      "topic": "money",
+      "topics": [
+        "money",
+        "work"
+      ],
+      "exams": [
+        "ielts",
+        "toeic"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The government _____d funds for new schools.",
+          "vi": "政府は新しい学校のために資金を割り当てた。",
+          "glosses": {
+            "ja": "政府は | 新しい 学校の=ために | 資金を 割り当てた。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "A",
+      "shareCode": "FZY"
+    },
+    {
+      "id": "bias-jcoll",
+      "word": "bias",
+      "defVi": "Thiên vị, định kiến. Bị cách nhìn áp đặt chi phối nên không đánh giá sự việc công bằng.",
+      "leadVi": "Cùng mắc lỗi như nhau, nhưng người bị nhắc nhở lúc nào cũng chỉ có tớ.",
+      "anticipateVi": "Vậy chẳng phải là gian sao?",
+      "localized": {
+        "ja": {
+          "lead": "同じ ミスを しても、 | 注意されるのは | いつも ぼくだけ。",
+          "def": "先入観に 左右されて、 | 物事を 公平に | 判断できない=こと。",
+          "guess": "それって | ずるくない？"
+        }
+      },
+      "meaningJP": "偏見、偏り",
+      "emphasis": [
+        "先入観",
+        "注意される",
+        "偏見"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈbaɪ.əs/",
+      "topic": "thinking",
+      "topics": [
+        "thinking",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The judge showed no _____.",
+          "vi": "裁判官は少しも偏見を見せなかった。",
+          "glosses": {
+            "ja": "裁判官は | 少しも 偏見を | 見せなかった。"
+          }
+        }
+      ],
+      "chars": 4,
+      "initial": "B",
+      "shareCode": "CWP"
+    },
+    {
+      "id": "ambiguous-jcoll",
+      "word": "ambiguous",
+      "defVi": "Mơ hồ, nước đôi. Có thể hiểu theo nhiều nghĩa, không rõ ràng.",
+      "leadVi": "Tin trả lời của bạn chỉ có đúng một câu “Được thôi”. Là đồng ý, hay là đang giận đây?",
+      "anticipateVi": "Nghĩa nào vậy trời!?",
+      "localized": {
+        "ja": {
+          "lead": "友だちの 返信は | 「いいよ」だけ。 | 賛成なのか、 | 怒って=いるのか……。",
+          "def": "複数の 意味に | 解釈できて、 | はっきりしない 様子。",
+          "guess": "どっちの | 意味！？"
+        }
+      },
+      "meaningJP": "曖昧な、両義的な",
+      "emphasis": [
+        "解釈できて",
+        "返信",
+        "曖昧だった"
+      ],
+      "pos": "adj",
+      "ipa": "/æmˈbɪɡ.ju.əs/",
+      "topic": "communication",
+      "topics": [
+        "communication",
+        "thinking"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The instructions were _____.",
+          "vi": "その指示は曖昧だった。",
+          "glosses": {
+            "ja": "その 指示は | 曖昧だった。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "A",
+      "shareCode": "QT9"
+    },
+    {
+      "id": "aspire-jcoll",
+      "word": "aspire",
+      "defVi": "Khao khát, hướng tới. Quyết tâm trong lòng một mục tiêu cao và nhắm tới nó.",
+      "leadVi": "Sau giờ học, ngày nào cũng ngồi ở thư viện giải đề thi các năm trước của khoa y.",
+      "anticipateVi": "Ước mơ phải thật lớn!",
+      "localized": {
+        "ja": {
+          "lead": "放課後の 図書室で、 | 医学部の 過去問を | 毎日 解いて=いる。",
+          "def": "高い 理想や 目標を | 心に 抱き、 | 実現を 目指す=こと。",
+          "guess": "夢は | でっかく！"
+        }
+      },
+      "meaningJP": "志す、熱望する",
+      "emphasis": [
+        "理想",
+        "過去問",
+        "志している"
+      ],
+      "pos": "verb",
+      "ipa": "/əˈspaɪər/",
+      "topic": "character",
+      "topics": [
+        "character",
+        "work"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "He _____s to become a surgeon.",
+          "vi": "彼は外科医を志している。",
+          "glosses": {
+            "ja": "彼は | 外科医を | 志して=いる。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "A",
+      "shareCode": "7YH"
+    },
+    {
+      "id": "deficiency-jcoll",
+      "word": "deficiency",
+      "defVi": "Sự thiếu hụt. Tình trạng cơ thể không có đủ những chất cần thiết.",
+      "leadVi": "Đang tập thì choáng váng, bị cô giáo bảo: “Em thiếu sắt rồi đấy.”",
+      "anticipateVi": "Thiếu cái gì vậy?",
+      "localized": {
+        "ja": {
+          "lead": "練習中に くらっと して、 | 「鉄分が 足りないね」と | 先生に 言われた。",
+          "def": "体に 必要な 栄養などが | 十分に | 足りて=いない 状態。",
+          "guess": "何が | 足りないの？"
+        }
+      },
+      "meaningJP": "欠乏、不足",
+      "emphasis": [
+        "栄養など",
+        "くらっと",
+        "ビタミン不足"
+      ],
+      "pos": "noun",
+      "ipa": "/dɪˈfɪʃ.ən.si/",
+      "topic": "health",
+      "topics": [
+        "health"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Vitamin _____ can cause illness.",
+          "vi": "ビタミン不足は病気の原因になることがある。",
+          "glosses": {
+            "ja": "ビタミン不足は | 病気の 原因に | なる=ことが ある。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "D",
+      "shareCode": "FD7"
+    },
+    {
+      "id": "coherent-jcoll",
+      "word": "coherent",
+      "defVi": "Mạch lạc. Trình tự và lý lẽ của câu chuyện nối kết với nhau chặt chẽ.",
+      "leadVi": "Trong trận tranh biện, lập luận của đội trưởng câu lạc bộ đến cuối cùng chẳng hề dao động.",
+      "anticipateVi": "Câu chuyện có ăn khớp không đấy?",
+      "localized": {
+        "ja": {
+          "lead": "ディベートの 試合で、 | 部長の 主張は | 最後まで ぶれない。",
+          "def": "全体の 論理が | 矛盾なく | 首尾一貫して=いる 様子。",
+          "guess": "話、 | つながってる？"
+        }
+      },
+      "meaningJP": "筋の通った、一貫した",
+      "emphasis": [
+        "矛盾なく",
+        "ぶれない",
+        "筋の通った"
+      ],
+      "pos": "adj",
+      "ipa": "/kəʊˈhɪə.rənt/",
+      "topic": "thinking",
+      "topics": [
+        "thinking",
+        "study"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Your essay needs a more _____ argument.",
+          "vi": "君の小論文にはもっと筋の通った主張が必要だ。",
+          "glosses": {
+            "ja": "君の 小論文には | もっと 筋の_通った | 主張が 必要だ。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "C",
+      "shareCode": "K6N"
+    },
+    {
+      "id": "coincide-jcoll",
+      "word": "coincide",
+      "defVi": "Trùng, trùng hợp. Hai việc trở lên xảy ra cùng một lúc.",
+      "leadVi": "Ngày thi cuối cùng lại trùng đúng ngày concert của thần tượng.",
+      "anticipateVi": "Sao lại đúng ngày đó chứ!?",
+      "localized": {
+        "ja": {
+          "lead": "テストの 最終日が、 | 推しの ライブと | まさかの 同じ 日。",
+          "def": "二つ以上の 物事が | 同じ 時期に | 起こる=こと。",
+          "guess": "よりによって | その 日！？"
+        }
+      },
+      "meaningJP": "重なる、一致する",
+      "emphasis": [
+        "時期",
+        "ライブ",
+        "重なる"
+      ],
+      "pos": "verb",
+      "ipa": "/ˌkəʊ.ɪnˈsaɪd/",
+      "topic": "time",
+      "topics": [
+        "time"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "My birthday _____s with the festival.",
+          "vi": "私の誕生日はお祭りの日と重なる。",
+          "glosses": {
+            "ja": "私の 誕生日は | お祭りの 日と | 重なる。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "C",
+      "shareCode": "985"
+    },
+    {
+      "id": "scrutiny-jcoll",
+      "word": "scrutiny",
+      "defVi": "Sự soi xét kỹ. Xem xét cẩn thận từng điểm nhỏ một.",
+      "leadVi": "Thầy giáo kiểm tra bản kế hoạch lễ hội trường từng dòng một bằng bút đỏ.",
+      "anticipateVi": "Bị soi đến mức nào đây?",
+      "localized": {
+        "ja": {
+          "lead": "文化祭の 企画書を、 | 先生が 一行ずつ | 赤ペンで チェックする。",
+          "def": "細部に 至るまで、 | 注意深く | 調べ上げる=こと。",
+          "guess": "どこまで | 見られてる？"
+        }
+      },
+      "meaningJP": "精査、綿密な検討",
+      "emphasis": [
+        "細部",
+        "赤ペン",
+        "精査"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈskruː.tɪ.ni/",
+      "topic": "attention",
+      "topics": [
+        "attention",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The plan is under close _____.",
+          "vi": "その計画は今、厳しい精査を受けている。",
+          "glosses": {
+            "ja": "その 計画は 今、 | 厳しい 精査を | 受けて=いる。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "S",
+      "shareCode": "2AE"
+    },
+    {
+      "id": "facilitate-jcoll",
+      "word": "facilitate",
+      "defVi": "Tạo điều kiện thuận lợi. Hỗ trợ để mọi việc tiến triển suôn sẻ.",
+      "leadVi": "Lớp lập nhóm chat xong, việc chuẩn bị lễ hội trường tiến triển vèo vèo.",
+      "anticipateVi": "Nhẹ nhàng hẳn luôn!",
+      "localized": {
+        "ja": {
+          "lead": "クラスの チャットが | できて、 | 文化祭の 準備が | 一気に 進んだ。",
+          "def": "物事が 円滑に | 進むように | 条件を 整える=こと。",
+          "guess": "めっちゃ | 楽に なった！"
+        }
+      },
+      "meaningJP": "促進する、円滑にする",
+      "emphasis": [
+        "整える",
+        "一気に",
+        "促進する"
+      ],
+      "pos": "verb",
+      "ipa": "/fəˈsɪl.ɪ.teɪt/",
+      "topic": "work",
+      "topics": [
+        "work",
+        "technology"
+      ],
+      "exams": [
+        "ielts",
+        "toeic"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The new software _____s communication.",
+          "vi": "新しいソフトがコミュニケーションを促進する。",
+          "glosses": {
+            "ja": "新しい ソフトが | コミュニケーションを | 促進する。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "F",
+      "shareCode": "A9P"
+    },
+    {
+      "id": "articulate-jcoll",
+      "word": "articulate",
+      "defVi": "Ăn nói lưu loát. Có thể diễn đạt suy nghĩ thành lời rõ ràng, dễ hiểu.",
+      "leadVi": "Trong bài diễn thuyết của hội học sinh, chẳng cần nhìn giấy mà cả trường đều chăm chú lắng nghe.",
+      "anticipateVi": "Nói hay quá rồi đó?",
+      "localized": {
+        "ja": {
+          "lead": "生徒会の 演説で、 | メモも 見ずに 話し、 | 全校が 聞き入った。",
+          "def": "考えや 気持ちを、 | 明快な 言葉で | 筋道立てて 話せる 様子。",
+          "guess": "話、 | うますぎない？"
+        }
+      },
+      "meaningJP": "弁が立つ、表現力のある",
+      "emphasis": [
+        "明快な",
+        "聞き入った",
+        "弁が立つ"
+      ],
+      "pos": "adj",
+      "ipa": "/ɑːˈtɪk.jə.lət/",
+      "topic": "communication",
+      "topics": [
+        "communication"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She is an _____ speaker.",
+          "vi": "彼女は弁が立つ話し手だ。",
+          "glosses": {
+            "ja": "彼女は | 弁が_立つ | 話し手だ。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "A",
+      "shareCode": "3QE"
+    },
+    {
+      "id": "hypothesis-jcoll",
+      "word": "hypothesis",
+      "defVi": "Giả thuyết. Ý tưởng tạm đặt ra trước khi kiểm chứng đúng hay sai.",
+      "leadVi": "“Cà chua được nghe nhạc có ngọt hơn không?” Đề tài nghiên cứu tự do bắt đầu.",
+      "anticipateVi": "Nếu đúng như vậy thì sao?",
+      "localized": {
+        "ja": {
+          "lead": "「音楽を 聞かせた トマトは | 甘く なる？」 | 自由研究が | 始まった。",
+          "def": "検証の 前に、 | 現象を 説明する=ために | 仮に 立てる 考え。",
+          "guess": "もし | そうだったら？"
+        }
+      },
+      "meaningJP": "仮説",
+      "emphasis": [
+        "仮に",
+        "トマト",
+        "仮説"
+      ],
+      "pos": "noun",
+      "ipa": "/haɪˈpɒθ.ə.sɪs/",
+      "topic": "study",
+      "topics": [
+        "study",
+        "thinking"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Scientists tested the _____.",
+          "vi": "科学者たちはその仮説を検証した。",
+          "glosses": {
+            "ja": "科学者たちは | その 仮説を | 検証した。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "H",
+      "shareCode": "T13"
+    },
+    {
+      "id": "complacent-jcoll",
+      "word": "complacent",
+      "defVi": "Chủ quan, tự mãn. Hài lòng vì mọi thứ đang suôn sẻ nên lơ là.",
+      "leadVi": "Dẫn hai điểm, “Thắng chắc rồi.” Năm phút cuối thì bị gỡ hòa.",
+      "anticipateVi": "Đã kết thúc đâu!",
+      "localized": {
+        "ja": {
+          "lead": "二点 リードで | 「もう 勝ちだな」。 | 最後の 五分で | 追いつかれた。",
+          "def": "現状に 満足しきって、 | 危機感を | 失って=いる 様子。",
+          "guess": "まだ | 終わってないよ！"
+        }
+      },
+      "meaningJP": "慢心した、油断した",
+      "emphasis": [
+        "危機感",
+        "勝ちだな",
+        "油断している"
+      ],
+      "pos": "adj",
+      "ipa": "/kəmˈpleɪ.sənt/",
+      "topic": "character",
+      "topics": [
+        "character"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "We can't afford to be _____.",
+          "vi": "私たちに油断している余裕はない。",
+          "glosses": {
+            "ja": "私たちに | 油断して=いる | 余裕は ない。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "C",
+      "shareCode": "QC1"
+    },
+    {
+      "id": "deteriorate-jcoll",
+      "word": "deteriorate",
+      "defVi": "Xấu đi. Tình trạng ngày càng tệ hơn so với trước.",
+      "leadVi": "Vết nứt trên chiếc điện thoại bị đánh rơi, ngày qua ngày cứ lan rộng dần.",
+      "anticipateVi": "Phải sửa sớm thôi!",
+      "localized": {
+        "ja": {
+          "lead": "落とした スマホの ひび。 | 日に 日に | 少しずつ 広がって=いく。",
+          "def": "状態や 質が | 以前より | 次第に 悪く なる=こと。",
+          "guess": "早く | 直さなきゃ！"
+        }
+      },
+      "meaningJP": "悪化する、劣化する",
+      "emphasis": [
+        "次第に",
+        "ひび",
+        "悪化した"
+      ],
+      "pos": "verb",
+      "ipa": "/dɪˈtɪə.ri.ə.reɪt/",
+      "topic": "health",
+      "topics": [
+        "health",
+        "general"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "His health _____d quickly.",
+          "vi": "彼の体調は急速に悪化した。",
+          "glosses": {
+            "ja": "彼の 体調は | 急速に | 悪化した。"
+          }
+        }
+      ],
+      "chars": 11,
+      "initial": "D",
+      "shareCode": "7GF"
+    },
+    {
+      "id": "nuance-jcoll",
+      "word": "nuance",
+      "defVi": "Sắc thái. Sự khác biệt rất nhỏ về cảm giác ẩn trong lời nói hay nét mặt.",
+      "leadVi": "“Cảm ơn.” và “Cảm ơn nha!”, cùng một nghĩa mà cảm giác lại khác nhau.",
+      "anticipateVi": "Chẳng phải giống nhau sao?",
+      "localized": {
+        "ja": {
+          "lead": "「ありがとう。」と | 「ありがと！」、 | 同じ 意味なのに | 感じが 違う。",
+          "def": "言葉や 表現に 込められた、 | わずかな 意味や | 感情の 違い。",
+          "guess": "同じ じゃ | ないの？"
+        }
+      },
+      "meaningJP": "ニュアンス、微妙な違い",
+      "emphasis": [
+        "込められた",
+        "感じ",
+        "ニュアンス"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈnjuː.ɑːns/",
+      "topic": "communication",
+      "topics": [
+        "communication",
+        "perception"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Translators must understand every _____.",
+          "vi": "翻訳者はすべてのニュアンスを理解しなければならない。",
+          "glosses": {
+            "ja": "翻訳者は | すべての ニュアンスを | 理解しなければ ならない。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "N",
+      "shareCode": "Y31"
+    },
+    {
+      "id": "dispel-jcoll",
+      "word": "dispel",
+      "defVi": "Xua tan. Làm tan biến hoàn toàn nỗi lo hay sự nghi ngờ.",
+      "leadVi": "Đang bứt rứt vì mãi không thấy trả lời, thì tin nhắn đến: “Xin lỗi, tớ ngủ quên mất!”",
+      "anticipateVi": "Hết bứt rứt chưa?",
+      "localized": {
+        "ja": {
+          "lead": "返信が なくて | もやもやして=いたら、 | 「ごめん、寝てた！」",
+          "def": "不安や 疑念を、 | 跡形も なく | 取り除く=こと。",
+          "guess": "もやもや、 | 晴れた？"
+        }
+      },
+      "meaningJP": "払拭する、一掃する",
+      "emphasis": [
+        "跡形",
+        "もやもや",
+        "払拭した"
+      ],
+      "pos": "verb",
+      "ipa": "/dɪˈspel/",
+      "topic": "thinking",
+      "topics": [
+        "thinking",
+        "emotion"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The report _____led fears about the economy.",
+          "vi": "その報告は経済への不安を払拭した。",
+          "glosses": {
+            "ja": "その 報告は | 経済への 不安を | 払拭した。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "D",
+      "shareCode": "Y7V"
+    },
+    {
+      "id": "innovative-jcoll",
+      "word": "innovative",
+      "defVi": "Đổi mới, sáng tạo. Áp dụng ý tưởng hay cách làm mới chưa từng có.",
+      "leadVi": "Ở gian hàng lễ hội trường, cả lớp làm ra hệ thống đặt món bằng điện thoại.",
+      "anticipateVi": "Ý tưởng đó chưa ai nghĩ ra!",
+      "localized": {
+        "ja": {
+          "lead": "文化祭の 屋台で、 | スマホから 注文できる | 仕組みを 作った。",
+          "def": "従来に ない | 新しい 発想や 方法を | 取り入れる 様子。",
+          "guess": "その 発想は | なかった！"
+        }
+      },
+      "meaningJP": "革新的な、斬新な",
+      "emphasis": [
+        "取り入れる",
+        "スマホ",
+        "革新的な"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈɪn.ə.və.tɪv/",
+      "topic": "technology",
+      "topics": [
+        "technology",
+        "work"
+      ],
+      "exams": [
+        "ielts",
+        "toeic"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The company is known for its _____ products.",
+          "vi": "その企業は革新的な製品で知られている。",
+          "glosses": {
+            "ja": "その 企業は | 革新的な 製品で | 知られて=いる。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "I",
+      "shareCode": "SPG"
+    },
+    {
+      "id": "meticulous-jcoll",
+      "word": "meticulous",
+      "defVi": "Tỉ mỉ. Để ý đến cả những chỗ nhỏ nhặt và làm thật cẩn thận.",
+      "leadVi": "Vở ghi trước kỳ thi dùng ba màu bút, không lệch một dòng nào.",
+      "anticipateVi": "Đúng là thợ thủ công luôn!",
+      "localized": {
+        "ja": {
+          "lead": "テスト前の ノートは、 | 色ペン 三色で | 一行も ずれない。",
+          "def": "細部にまで | 注意を 払い、 | 丁寧に 物事を 進める 様子。",
+          "guess": "もはや | 職人じゃん！"
+        }
+      },
+      "meaningJP": "綿密な、細心の",
+      "emphasis": [
+        "注意",
+        "ずれない",
+        "綿密な"
+      ],
+      "pos": "adj",
+      "ipa": "/məˈtɪk.jə.ləs/",
+      "topic": "character",
+      "topics": [
+        "character",
+        "attention"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She keeps _____ records.",
+          "vi": "彼女は綿密な記録をつけている。",
+          "glosses": {
+            "ja": "彼女は | 綿密な 記録を | つけて=いる。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "M",
+      "shareCode": "JME"
+    },
+    {
+      "id": "mitigate-jcoll",
+      "word": "mitigate",
+      "defVi": "Giảm nhẹ. Làm cho nỗi khổ hay thiệt hại nhẹ đi dù chỉ một chút.",
+      "leadVi": "Tập câu lạc bộ giữa mùa hè, quấn khăn lạnh quanh cổ để chống chọi.",
+      "anticipateVi": "Đỡ hơn chút nào không?",
+      "localized": {
+        "ja": {
+          "lead": "真夏の 部活、 | 首に 冷えた タオルを | 巻いて しのぐ。",
+          "def": "苦痛や 被害の 度合いを | 少しでも | 軽く する=こと。",
+          "guess": "少しは | マシに なる？"
+        }
+      },
+      "meaningJP": "軽減する、緩和する",
+      "emphasis": [
+        "度合い",
+        "タオル",
+        "軽減する"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈmɪt.ɪ.ɡeɪt/",
+      "topic": "nature",
+      "topics": [
+        "nature",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Trees help _____ flooding.",
+          "vi": "木は洪水の被害を軽減するのに役立つ。",
+          "glosses": {
+            "ja": "木は | 洪水の 被害を | 軽減するのに 役立つ。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "M",
+      "shareCode": "7RK"
+    },
+    {
+      "id": "unprecedented-jcoll",
+      "word": "unprecedented",
+      "defVi": "Chưa từng có. Chưa từng xảy ra lấy một lần cho đến nay.",
+      "leadVi": "Bản tin đêm bão. Dòng chữ “lần đầu tiên trong lịch sử quan trắc” được phát đi phát lại.",
+      "anticipateVi": "Chuyện này lần đầu luôn hả?",
+      "localized": {
+        "ja": {
+          "lead": "台風の 夜の ニュース。 | 「観測史上 初」が | 何度も 流れる。",
+          "def": "これまでに | 一度も 例の ない、 | 初めての 様子。",
+          "guess": "こんなの | 初めてじゃない？"
+        }
+      },
+      "meaningJP": "前例のない、未曽有の",
+      "emphasis": [
+        "一度も",
+        "観測史上",
+        "前例のない"
+      ],
+      "pos": "adj",
+      "ipa": "/ʌnˈpres.ɪ.den.tɪd/",
+      "topic": "society",
+      "topics": [
+        "society",
+        "time"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The city faced _____ floods.",
+          "vi": "その都市は前例のない洪水に見舞われた。",
+          "glosses": {
+            "ja": "その 都市は | 前例の_ない 洪水に | 見舞われた。"
+          }
+        }
+      ],
+      "chars": 13,
+      "initial": "U",
+      "shareCode": "YFV"
+    },
+    {
+      "id": "discrepancy-jcoll",
+      "word": "discrepancy",
+      "defVi": "Sự sai lệch. Những thứ lẽ ra phải giống nhau lại không khớp, bị lệch đi.",
+      "leadVi": "Tổng hóa đơn là năm vạn yên. Thế mà trong két chỉ còn bốn vạn tám nghìn.",
+      "anticipateVi": "Hai nghìn yên đi đâu rồi?",
+      "localized": {
+        "ja": {
+          "lead": "レシートの 合計は 五万円。 | でも 金庫には | 四万八千円しか ない。",
+          "def": "二つの 内容が | 一致せず、 | ずれて=いる=こと。",
+          "guess": "二千円、 | どこ行った？"
+        }
+      },
+      "meaningJP": "食い違い、齟齬《そご》",
+      "emphasis": [
+        "一致せず",
+        "レシート",
+        "食い違い"
+      ],
+      "pos": "noun",
+      "ipa": "/dɪˈskrep.ən.si/",
+      "topic": "work",
+      "topics": [
+        "work",
+        "money"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "There is a _____ between the two reports.",
+          "vi": "二つの報告書には食い違いがある。",
+          "glosses": {
+            "ja": "二つの 報告書には | 食い違いが ある。"
+          }
+        }
+      ],
+      "chars": 11,
+      "initial": "D",
+      "shareCode": "1Z7"
+    },
+    {
+      "id": "depict-jcoll",
+      "word": "depict",
+      "defVi": "Miêu tả, khắc họa. Thể hiện dáng vẻ của người hay cảnh vật bằng tranh vẽ hoặc văn chương.",
+      "leadVi": "Giờ mỹ thuật, dùng màu vẽ chép lại khu phố mua sắm nhìn thấy từ cửa sổ.",
+      "anticipateVi": "Sẽ thành bức tranh thế nào nhỉ?",
+      "localized": {
+        "ja": {
+          "lead": "美術の 時間、 | 窓から 見える 商店街を | 絵の具で 写しとる。",
+          "def": "人物や 情景を、 | 絵画や 文章で | 生き生きと 表す=こと。",
+          "guess": "どんな | 絵に なる？"
+        }
+      },
+      "meaningJP": "描く、描写する",
+      "emphasis": [
+        "生き生きと",
+        "絵の具",
+        "描いている"
+      ],
+      "pos": "verb",
+      "ipa": "/dɪˈpɪkt/",
+      "topic": "study",
+      "topics": [
+        "study",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The painting _____s a busy market.",
+          "vi": "その絵はにぎやかな市場を描いている。",
+          "glosses": {
+            "ja": "その 絵は | にぎやかな 市場を | 描いて=いる。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "D",
+      "shareCode": "CKG"
+    },
+    {
+      "id": "intricate-jcoll",
+      "word": "intricate",
+      "defVi": "Phức tạp, tinh xảo. Có nhiều chi tiết nhỏ kết hợp với nhau, được làm rất công phu.",
+      "leadVi": "Bức tranh cắt giấy của câu lạc bộ mỹ thuật ở lễ hội văn hóa có những đường nét mảnh chồng lên nhau nhiều lớp.",
+      "anticipateVi": "Cái này làm bằng tay à?",
+      "localized": {
+        "ja": {
+          "lead": "文化祭の | 美術部の 切り絵は、 | 細い 線が | 何重にも 重なって=いた。",
+          "def": "細部が | 幾重にも 組み合わさった、 | 精巧で 手の_込んだ 様子。",
+          "guess": "これ、 | 手作りなの？"
+        }
+      },
+      "meaningJP": "複雑な、精巧な",
+      "emphasis": [
+        "細部",
+        "切り絵",
+        "精巧な"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈɪn.trɪ.kət/",
+      "topic": "perception",
+      "topics": [
+        "perception"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The carpet has an _____ pattern.",
+          "vi": "このじゅうたんには精巧な模様が施されている。",
+          "glosses": {
+            "ja": "この じゅうたんには | 精巧な 模様が | 施されて=いる。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "I",
+      "shareCode": "BYB"
+    },
+    {
+      "id": "provoke-jcoll",
+      "word": "provoke",
+      "defVi": "Gây ra, khiêu khích. Dùng lời nói hay hành động khiến người khác nảy sinh cảm xúc mạnh.",
+      "leadVi": "Giờ ra chơi, cứ trêu chọc mãi thì sắc mặt cậu bạn bỗng thay đổi.",
+      "anticipateVi": "Cố tình làm vậy đúng không?",
+      "localized": {
+        "ja": {
+          "lead": "休み時間に しつこく | からかい続けたら、 | 友人の 顔色が | さっと 変わった。",
+          "def": "言動に よって、 | 相手の 強い 感情や 反応を | 引き出す=こと。",
+          "guess": "わざと | やってるでしょ？"
+        }
+      },
+      "meaningJP": "引き起こす、挑発する",
+      "emphasis": [
+        "引き出す",
+        "顔色",
+        "引き起こした"
+      ],
+      "pos": "verb",
+      "ipa": "/prəˈvəʊk/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "communication"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "His comments _____d anger.",
+          "vi": "彼の発言が人々の怒りを引き起こした。",
+          "glosses": {
+            "ja": "彼の 発言が | 人々の 怒りを | 引き起こした。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "P",
+      "shareCode": "R42"
+    },
+    {
+      "id": "intuitive-jcoll",
+      "word": "intuitive",
+      "defVi": "Trực quan, dễ dùng. Không cần đọc hướng dẫn mà vẫn hiểu ngay bằng cảm giác.",
+      "leadVi": "Lần đầu dùng điện thoại thông minh mà bà vẫn gửi ảnh đến không chút lúng túng.",
+      "anticipateVi": "Cứ thế là tự hiểu luôn hả?",
+      "localized": {
+        "ja": {
+          "lead": "祖母が | 初めての スマホで、 | 迷わず 写真を | 送って=きた。",
+          "def": "説明が なくても、 | 感覚的に すぐ | 理解できる 様子。",
+          "guess": "なんとなく | 分かっちゃう？"
+        }
+      },
+      "meaningJP": "直感的な、分かりやすい",
+      "emphasis": [
+        "理解できる",
+        "迷わず",
+        "直感的だ"
+      ],
+      "pos": "adj",
+      "ipa": "/ɪnˈtjuː.ɪ.tɪv/",
+      "topic": "thinking",
+      "topics": [
+        "thinking",
+        "technology"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The app is very _____.",
+          "vi": "このアプリはとても直感的だ。",
+          "glosses": {
+            "ja": "この アプリは | とても=直感的だ。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "I",
+      "shareCode": "7AA"
+    },
+    {
+      "id": "thrive-jcoll",
+      "word": "thrive",
+      "defVi": "Phát triển mạnh. Sinh vật hay sự vật lớn lên khỏe mạnh ở môi trường phù hợp.",
+      "leadVi": "Trong kỳ nghỉ hè, cây cà chua bi ở phòng thí nghiệm đã vươn cao gần chạm trần.",
+      "anticipateVi": "Kỳ nghỉ hè đã có chuyện gì vậy?",
+      "localized": {
+        "ja": {
+          "lead": "理科室の ミニトマトが、 | 夏休みの 間に | 天井近くまで 伸びた。",
+          "def": "適した 環境で、 | 生き物や 物事が | 勢いよく 成長する=こと。",
+          "guess": "夏休みの 間に | 何が あった？"
+        }
+      },
+      "meaningJP": "繁栄する、よく育つ",
+      "emphasis": [
+        "勢いよく",
+        "ミニトマト",
+        "育つ"
+      ],
+      "pos": "verb",
+      "ipa": "/θraɪv/",
+      "topic": "nature",
+      "topics": [
+        "nature",
+        "general"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "These plants _____ in warm weather.",
+          "vi": "この植物は温暖な気候でよく育つ。",
+          "glosses": {
+            "ja": "この 植物は | 温暖な 気候で | よく 育つ。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "T",
+      "shareCode": "AXG"
+    },
+    {
+      "id": "prevalent-jcoll",
+      "word": "prevalent",
+      "defVi": "Phổ biến, lan rộng. Thường thấy ở khắp nơi trong một vùng hay một thời kỳ nào đó.",
+      "leadVi": "Mùa cúm, một nửa số chỗ ngồi trong lớp bỏ trống.",
+      "anticipateVi": "Ai cũng bị lây hết à?",
+      "localized": {
+        "ja": {
+          "lead": "インフルエンザの 季節、 | 教室の 席が | 半分 空いて=いた。",
+          "def": "特定の 地域や 時代に、 | 広く 行き渡って=いる 様子。",
+          "guess": "みんな | かかってるの？"
+        }
+      },
+      "meaningJP": "広く見られる、流行する",
+      "emphasis": [
+        "行き渡っている",
+        "インフルエンザ",
+        "流行している"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈprev.əl.ənt/",
+      "topic": "health",
+      "topics": [
+        "health",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "This disease is _____ in tropical areas.",
+          "vi": "この病気は熱帯地域で広く流行している。",
+          "glosses": {
+            "ja": "この 病気は | 熱帯地域で | 広く 流行して=いる。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "P",
+      "shareCode": "NXE"
+    },
+    {
+      "id": "wary-jcoll",
+      "word": "wary",
+      "defVi": "Dè chừng, cảnh giác. Cảm thấy có gì đó nguy hiểm nên không lơi lỏng mà luôn đề phòng.",
+      "leadVi": "Nhận được tin nhắn từ người lạ: “Lần tới gặp nhau không?”. Mình đã không trả lời.",
+      "anticipateVi": "Cái này có đáng ngờ không?",
+      "localized": {
+        "ja": {
+          "lead": "知らない 人から | 「今度 会わない？」と | 来た メッセージ。 | 返事は しなかった。",
+          "def": "危険を 感じ取り、 | 気を 緩めずに | 身構えて=いる 様子。",
+          "guess": "これ、 | 怪しくない？"
+        }
+      },
+      "meaningJP": "用心深い、警戒する",
+      "emphasis": [
+        "身構えている",
+        "返事",
+        "警戒"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈweə.ri/",
+      "topic": "character",
+      "topics": [
+        "character",
+        "attention"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Be _____ of strangers online.",
+          "vi": "ネットの見知らぬ相手には警戒を怠らないで。",
+          "glosses": {
+            "ja": "ネットの 見知らぬ 相手には | 警戒を 怠らないで。"
+          }
+        }
+      ],
+      "chars": 4,
+      "initial": "W",
+      "shareCode": "KWY"
+    },
+    {
+      "id": "disparity-jcoll",
+      "word": "disparity",
+      "defVi": "Sự chênh lệch. Giữa các nhóm có sự khác biệt lớn về mức sung túc hay điều kiện.",
+      "leadVi": "Tiền tiêu vặt cho chuyến đi tham quan, có bạn mang năm vạn yên, có bạn chỉ có một nghìn yên.",
+      "anticipateVi": "Khác nhau đến thế cơ à?",
+      "localized": {
+        "ja": {
+          "lead": "修学旅行の お小遣い、 | 五万円の 子も いれば | 千円の 子も いた。",
+          "def": "集団の 間で、 | 豊かさや 条件に | 大きな 開きが ある=こと。",
+          "guess": "そんなに | 違うの？"
+        }
+      },
+      "meaningJP": "格差、不均衡",
+      "emphasis": [
+        "開き",
+        "五万円",
+        "格差"
+      ],
+      "pos": "noun",
+      "ipa": "/dɪˈspær.ə.ti/",
+      "topic": "society",
+      "topics": [
+        "society",
+        "money"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "There is a growing _____ between rich and poor.",
+          "vi": "貧富の格差が年々拡大している。",
+          "glosses": {
+            "ja": "貧富の 格差が | 年々 | 拡大して=いる。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "D",
+      "shareCode": "YWX"
+    },
+    {
+      "id": "foster-jcoll",
+      "word": "foster",
+      "defVi": "Nuôi dưỡng, vun đắp. Kiên nhẫn hỗ trợ để năng lực hay tình cảm tốt đẹp lớn lên.",
+      "leadVi": "Lần nào cũng được thầy cô dạy mỹ thuật khen, mình dần thích vẽ tranh.",
+      "anticipateVi": "Hóa ra niềm yêu thích sinh ra như thế!",
+      "localized": {
+        "ja": {
+          "lead": "美術の 先生に | 毎回 褒められて、 | 絵を 描くのが | 好きに なった。",
+          "def": "能力や 意識が | 健やかに 伸びるよう、 | 長い 目で 支える=こと。",
+          "guess": "好きって、 | こうして 生まれるんだ！"
+        }
+      },
+      "meaningJP": "育む、促進する",
+      "emphasis": [
+        "支える",
+        "褒められて",
+        "育むべきだ"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈfɒs.tər/",
+      "topic": "society",
+      "topics": [
+        "society",
+        "study"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Schools should _____ creativity.",
+          "vi": "学校は創造性を育むべきだ。",
+          "glosses": {
+            "ja": "学校は | 創造性を | 育むべきだ。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "F",
+      "shareCode": "Q97"
+    },
+    {
+      "id": "reconcile-jcoll",
+      "word": "reconcile",
+      "defVi": "Làm lành, hòa giải. Thôi cãi nhau, tranh chấp và quay lại mối quan hệ tốt như trước.",
+      "leadVi": "Hai người không nói chuyện với nhau suốt ba năm, đến lễ tốt nghiệp lại đứng cạnh nhau chụp ảnh.",
+      "anticipateVi": "Cuối cùng cũng như xưa rồi à?",
+      "localized": {
+        "ja": {
+          "lead": "三年間 | 口を_きかなかった 二人が、 | 卒業式で | 並んで 写真を 撮った。",
+          "def": "争いや 対立を 解き、 | 再び 良好な 関係を | 取り戻す=こと。",
+          "guess": "やっと | 元通り？"
+        }
+      },
+      "meaningJP": "仲直りする、和解する",
+      "emphasis": [
+        "取り戻す",
+        "並んで",
+        "和解した"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈrek.ən.saɪl/",
+      "topic": "society",
+      "topics": [
+        "society",
+        "emotion"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "They _____d after years of conflict.",
+          "vi": "二人は長年の確執を経て和解した。",
+          "glosses": {
+            "ja": "二人は | 長年の 確執を 経て | 和解した。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "R",
+      "shareCode": "H68"
+    },
+    {
+      "id": "obsolete-jcoll",
+      "word": "obsolete",
+      "defVi": "Lỗi thời. Đã có thứ mới hơn nên không còn được dùng nữa.",
+      "leadVi": "Từ ngăn kéo bàn của bố lòi ra một chiếc điện thoại cũ với những nút bấm to.",
+      "anticipateVi": "Cái này dùng kiểu gì vậy?",
+      "localized": {
+        "ja": {
+          "lead": "父の 机の 引き出しから、 | ボタンの 大きい | 古い ケータイが 出て=きた。",
+          "def": "新たな ものに | 取って代わられ、 | 用いられなく なった 様子。",
+          "guess": "これ、 | どうやって 使うの？"
+        }
+      },
+      "meaningJP": "時代遅れ、廃れた",
+      "emphasis": [
+        "取って代わられ",
+        "ケータイ",
+        "時代遅れだ"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈɒb.səl.iːt/",
+      "topic": "technology",
+      "topics": [
+        "technology"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "This technology is now _____.",
+          "vi": "この技術はもはや時代遅れだ。",
+          "glosses": {
+            "ja": "この 技術は | もはや | 時代遅れだ。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "O",
+      "shareCode": "GVF"
+    },
+    {
+      "id": "perceive-jcoll",
+      "word": "perceive",
+      "defVi": "Nhìn nhận, cảm nhận. Cảm nhận và tiếp nhận sự việc theo cách của riêng mình.",
+      "leadVi": "Cùng một ngày mưa, có bạn bảo “tệ nhất”, có bạn lại vui vì thấy “thật cảm xúc”.",
+      "anticipateVi": "Mỗi người nhìn một kiểu à?",
+      "localized": {
+        "ja": {
+          "lead": "同じ 雨の 日でも、 | 「最悪」と 言う 人と、 | 「エモい」と 喜ぶ 人。",
+          "def": "物事を | 自分の 感覚や 経験を 通して | 捉える=こと。",
+          "guess": "見え方って | 人それぞれ？"
+        }
+      },
+      "meaningJP": "認識する、見なす",
+      "emphasis": [
+        "捉える",
+        "同じ",
+        "認識している"
+      ],
+      "pos": "verb",
+      "ipa": "/pəˈsiːv/",
+      "topic": "perception",
+      "topics": [
+        "perception",
+        "thinking"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Many people _____ him as a leader.",
+          "vi": "多くの人が彼をリーダーと認識している。",
+          "glosses": {
+            "ja": "多くの 人が | 彼を リーダーと | 認識して=いる。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "P",
+      "shareCode": "GFM"
+    },
+    {
+      "id": "vulnerable-jcoll",
+      "word": "vulnerable",
+      "defVi": "Dễ bị tổn thương. Cơ thể hay tâm hồn dễ bị tổn thương, ít được bảo vệ.",
+      "leadVi": "Trước kỳ thi, thức khuya liên tục nên chỉ hơi lạnh một chút là bị sốt.",
+      "anticipateVi": "Cơ thể có ổn không đó?",
+      "localized": {
+        "ja": {
+          "lead": "テスト前に | 夜更かしが 続き、 | 少し 冷えただけで | 熱を 出した。",
+          "def": "心身が | 外部からの 害に 対して | 無防備な 様子。",
+          "guess": "体、 | 大丈夫？"
+        }
+      },
+      "meaningJP": "弱い、傷つきやすい",
+      "emphasis": [
+        "無防備な",
+        "夜更かし",
+        "弱い"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈvʌl.nər.ə.bəl/",
+      "topic": "health",
+      "topics": [
+        "health",
+        "emotion"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Old people are _____ to cold weather.",
+          "vi": "高齢者は寒さに弱い。",
+          "glosses": {
+            "ja": "高齢者は | 寒さに 弱い。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "V",
+      "shareCode": "D86"
+    },
+    {
+      "id": "incentive-jcoll",
+      "word": "incentive",
+      "defVi": "Động lực, sự khuyến khích. Phần thưởng được chuẩn bị để người ta muốn cố gắng làm điều gì đó.",
+      "leadVi": "“Được tám mươi điểm thì mua điện thoại mới nhé.” Từ hôm đó, tối nào mình cũng ngồi vào bàn học.",
+      "anticipateVi": "Thế thì phải nghiêm túc thôi!",
+      "localized": {
+        "ja": {
+          "lead": "「八十点 取れたら | 新しい スマホね」。 | その 日から | 毎晩 机に 向かった。",
+          "def": "人の 意欲を 引き出し、 | 行動を 促す | 報酬や 仕組み。",
+          "guess": "それなら | 本気 出す！"
+        }
+      },
+      "meaningJP": "動機づけ、奨励策",
+      "emphasis": [
+        "報酬",
+        "八十点",
+        "動機づけ"
+      ],
+      "pos": "noun",
+      "ipa": "/ɪnˈsen.tɪv/",
+      "topic": "work",
+      "topics": [
+        "work",
+        "money"
+      ],
+      "exams": [
+        "ielts",
+        "toeic"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Bonuses are an _____ to work harder.",
+          "vi": "ボーナスは仕事への意欲を高める動機づけになる。",
+          "glosses": {
+            "ja": "ボーナスは | 仕事への 意欲を 高める | 動機づけに なる。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "I",
+      "shareCode": "ASX"
+    },
+    {
+      "id": "integrity-jcoll",
+      "word": "integrity",
+      "defVi": "Sự chính trực. Tấm lòng không nói dối và luôn giữ đúng điều mình cho là đúng.",
+      "leadVi": "Phòng học sau giờ tan trường không có ai, mình mang tờ một nghìn yên rơi dưới sàn lên phòng giáo viên.",
+      "anticipateVi": "Dù chẳng ai nhìn thấy sao?",
+      "localized": {
+        "ja": {
+          "lead": "誰も いない 放課後、 | 教室に 落ちて=いた 千円を | 職員室に 届けた。",
+          "def": "誰も 見て=いなくても | 正直で、 | 信念を 曲げない 人柄。",
+          "guess": "誰も | 見てないのに？"
+        }
+      },
+      "meaningJP": "誠実さ、高潔さ",
+      "emphasis": [
+        "信念",
+        "職員室",
+        "高潔な"
+      ],
+      "pos": "noun",
+      "ipa": "/ɪnˈteɡ.rə.ti/",
+      "topic": "character",
+      "topics": [
+        "character"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "He is a man of great _____.",
+          "vi": "彼は高潔な人物だ。",
+          "glosses": {
+            "ja": "彼は | 高潔な 人物だ。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "I",
+      "shareCode": "V0Y"
+    },
+    {
+      "id": "assert-jcoll",
+      "word": "assert",
+      "defVi": "Khẳng định. Nói rõ ràng và mạnh mẽ suy nghĩ hay lập trường của mình.",
+      "leadVi": "Trong buổi sinh hoạt lớp, giữa lúc mọi người im lặng, một bạn đứng dậy: “Tớ phản đối.”",
+      "anticipateVi": "Nói chắc nịch luôn à?",
+      "localized": {
+        "ja": {
+          "lead": "学級会で、 | 皆が 黙る 中、 | 「僕は 反対です」と | 立ち上がった。",
+          "def": "自分の 意見や 権利を、 | 確信を もって | 強く 言い切る=こと。",
+          "guess": "言い切っちゃう？"
+        }
+      },
+      "meaningJP": "主張する、断言する",
+      "emphasis": [
+        "言い切る",
+        "立ち上がった",
+        "断言した"
+      ],
+      "pos": "verb",
+      "ipa": "/əˈsɜːt/",
+      "topic": "communication",
+      "topics": [
+        "communication"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She _____ed that she was innocent.",
+          "vi": "彼女は自らの無実を断言した。",
+          "glosses": {
+            "ja": "彼女は | 自らの 無実を | 断言した。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "A",
+      "shareCode": "ZNW"
+    },
+    {
+      "id": "comprehensive-jcoll",
+      "word": "comprehensive",
+      "defVi": "Toàn diện. Bao quát rộng toàn bộ mà không bỏ sót phần quan trọng nào.",
+      "leadVi": "Cuốn vở ôn thi của anh trai tóm tắt sách giáo khoa từ đầu đến cuối.",
+      "anticipateVi": "Ghi hết cả rồi còn gì!",
+      "localized": {
+        "ja": {
+          "lead": "兄の 受験ノートは、 | 教科書の 隅から 隅まで | まとめて=あった。",
+          "def": "必要な 要素を | 漏れなく 含み、 | 全体を 網羅する 様子。",
+          "guess": "全部 | 書いて=あるじゃん！"
+        }
+      },
+      "meaningJP": "包括的な、総合的な",
+      "emphasis": [
+        "網羅する",
+        "受験ノート",
+        "包括的な"
+      ],
+      "pos": "adj",
+      "ipa": "/ˌkɒm.prɪˈhen.sɪv/",
+      "topic": "study",
+      "topics": [
+        "study",
+        "work"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "We need a _____ review of the system.",
+          "vi": "システムの包括的な見直しが必要だ。",
+          "glosses": {
+            "ja": "システムの | 包括的な 見直しが | 必要だ。"
+          }
+        }
+      ],
+      "chars": 13,
+      "initial": "C",
+      "shareCode": "Q15"
+    },
+    {
+      "id": "fluctuate-jcoll",
+      "word": "fluctuate",
+      "defVi": "Dao động, lên xuống. Con số hay số lượng cứ lặp đi lặp lại việc tăng rồi giảm.",
+      "leadVi": "Giá vé xem thần tượng hôm qua là tám nghìn yên, hôm nay đã là mười lăm nghìn yên!",
+      "anticipateVi": "Ơ, mỗi ngày một giá à?",
+      "localized": {
+        "ja": {
+          "lead": "推しの チケット代が、 | 昨日は 八千円、 | 今日は 一万五千円！",
+          "def": "数値や 状態が | 一定せず、 | 上下を 繰り返す=こと。",
+          "guess": "え、 | 毎日 違う？"
+        }
+      },
+      "meaningJP": "変動する、上下する",
+      "emphasis": [
+        "一定せず",
+        "チケット代",
+        "変動する"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈflʌk.tʃu.eɪt/",
+      "topic": "money",
+      "topics": [
+        "money",
+        "general"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Prices _____ throughout the year.",
+          "vi": "価格は年間を通じて変動する。",
+          "glosses": {
+            "ja": "価格は | 年間を 通じて | 変動する。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "F",
+      "shareCode": "AB5"
+    },
+    {
+      "id": "subtle-jcoll",
+      "word": "subtle",
+      "defVi": "Tinh tế, khó nhận ra. Rất nhỏ, nếu không để ý kỹ thì không nhận ra.",
+      "leadVi": "Bánh pudding mới của cửa hàng tiện lợi ngọt dịu hơn loại cũ một chút.",
+      "anticipateVi": "Bạn nhận ra sự khác biệt đó không?",
+      "localized": {
+        "ja": {
+          "lead": "コンビニの 新作プリンは、 | 前のより | ほんのり 甘さ 控えめ。",
+          "def": "ごく わずかで、 | 注意深く 見ないと | 捉えにくい 様子。",
+          "guess": "その 差、 | 分かる？"
+        }
+      },
+      "meaningJP": "微妙な、かすかな",
+      "emphasis": [
+        "捉えにくい",
+        "ほんのり",
+        "微妙な"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈsʌt.əl/",
+      "topic": "perception",
+      "topics": [
+        "perception"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "There is a _____ difference between them.",
+          "vi": "両者の間には微妙な差異がある。",
+          "glosses": {
+            "ja": "両者の 間には | 微妙な 差異が ある。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "S",
+      "shareCode": "R33"
+    },
+    {
+      "id": "alleviate-jcoll",
+      "word": "alleviate",
+      "defVi": "Làm dịu, giảm nhẹ. Làm cho cơn đau, sự khổ sở hay nỗi phiền muộn nhẹ bớt đi.",
+      "leadVi": "Chườm đá lên mắt cá chân bị trẹo khi tập câu lạc bộ, cơn đau nhức dịu ngay.",
+      "anticipateVi": "Đỡ hơn chút nào chưa?",
+      "localized": {
+        "ja": {
+          "lead": "部活で ひねった 足首に | 氷を 当てたら、 | ズキズキが すっと 引いた。",
+          "def": "苦痛や 負担を | 少しでも | 軽く する=こと。",
+          "guess": "ちょっと | 楽に なった？"
+        }
+      },
+      "meaningJP": "和らげる、軽減する",
+      "emphasis": [
+        "負担",
+        "ズキズキ",
+        "軽減される"
+      ],
+      "pos": "verb",
+      "ipa": "/əˈliː.vi.eɪt/",
+      "topic": "health",
+      "topics": [
+        "health"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "This medicine will _____ the pain.",
+          "vi": "この薬で痛みが軽減されるはずだ。",
+          "glosses": {
+            "ja": "この 薬で | 痛みが 軽減される=はずだ。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "A",
+      "shareCode": "JYA"
+    },
+    {
+      "id": "compelling-jcoll",
+      "word": "compelling",
+      "defVi": "Thuyết phục, cuốn hút. Lôi cuốn lòng người mạnh mẽ đến mức ai cũng bất giác tâm phục.",
+      "leadVi": "Họp chọn tiết mục cho lễ hội văn hóa. Nghe lớp trưởng nói xong, tất cả đều giơ tay.",
+      "anticipateVi": "Thế thì không cãi lại được rồi!",
+      "localized": {
+        "ja": {
+          "lead": "文化祭の 出し物決め。 | 委員長の 話を 聞いて、 | 全員の 手が 挙がった。",
+          "def": "反論できないほど | 説得力が あり、 | 強く 心を つかむ 様子。",
+          "guess": "それ、 | 反論できないわ！"
+        }
+      },
+      "meaningJP": "説得力のある、魅力的な",
+      "emphasis": [
+        "つかむ",
+        "全員",
+        "説得力"
+      ],
+      "pos": "adj",
+      "ipa": "/kəmˈpel.ɪŋ/",
+      "topic": "thinking",
+      "topics": [
+        "thinking",
+        "communication"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She made a _____ case for change.",
+          "vi": "彼女は改革の必要性を、説得力のある論理で訴えた。",
+          "glosses": {
+            "ja": "彼女は | 改革の 必要性を、 | 説得力の ある | 論理で 訴えた。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "C",
+      "shareCode": "G5P"
+    },
+    {
+      "id": "embody-jcoll",
+      "word": "embody",
+      "defVi": "Thể hiện, là hiện thân. Thể hiện rõ suy nghĩ hay lý tưởng bằng chính hành động và dáng vẻ của mình.",
+      "leadVi": "Bóng lưng của đội trưởng, người vẫn hô vang đến phút cuối dù đội đang thua.",
+      "anticipateVi": "Kiểu người nói bằng hành động à?",
+      "localized": {
+        "ja": {
+          "lead": "負けて=いても、 | 最後まで 声を 出し続ける | キャプテンの 背中。",
+          "def": "抽象的な 理念や 精神を、 | 具体的な 行動や 形で | 示す=こと。",
+          "guess": "背中で | 語る タイプ？"
+        }
+      },
+      "meaningJP": "体現する、具現する",
+      "emphasis": [
+        "具体的な",
+        "背中",
+        "体現している"
+      ],
+      "pos": "verb",
+      "ipa": "/ɪmˈbɒd.i/",
+      "topic": "thinking",
+      "topics": [
+        "thinking",
+        "character"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She _____ies the spirit of the team.",
+          "vi": "彼女はチームの精神そのものを体現している。",
+          "glosses": {
+            "ja": "彼女は | チームの 精神そのものを | 体現して=いる。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "E",
+      "shareCode": "RA2"
+    },
+    {
+      "id": "diligent-jcoll",
+      "word": "diligent",
+      "defVi": "Chăm chỉ, cần cù. Không lười biếng, ngày nào cũng kiên trì nỗ lực.",
+      "leadVi": "Mỗi ngày trước buổi tập sáng, bạn ấy học thuộc mười từ tiếng Anh.",
+      "anticipateVi": "Ngày nào cũng làm đều vậy à?",
+      "localized": {
+        "ja": {
+          "lead": "朝練の 前に、 | 毎日 英単語を | 十個ずつ 覚えて=いる。",
+          "def": "怠ける=ことなく、 | 地道に | 努力を 重ねる 性格。",
+          "guess": "毎日 | 続けてるの？"
+        }
+      },
+      "meaningJP": "勤勉な、熱心な",
+      "emphasis": [
+        "努力",
+        "朝練",
+        "勤勉な"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈdɪl.ɪ.dʒənt/",
+      "topic": "character",
+      "topics": [
+        "character",
+        "study"
+      ],
+      "exams": [
+        "ielts",
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She is a _____ student.",
+          "vi": "彼女は勤勉な学生だ。",
+          "glosses": {
+            "ja": "彼女は | 勤勉な 学生だ。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "D",
+      "shareCode": "4D5"
+    },
+    {
+      "id": "hinder-jcoll",
+      "word": "hinder",
+      "defVi": "Cản trở. Gây trở ngại khiến sự việc không tiến triển suôn sẻ.",
+      "leadVi": "Hôm trước lễ hội văn hóa, mưa lớn khiến việc chuẩn bị ngoài trời chẳng tiến triển gì.",
+      "anticipateVi": "Mưa ơi, biết điều chút đi!",
+      "localized": {
+        "ja": {
+          "lead": "文化祭の 前日、 | 大雨で | 外の 準備が | まったく 進まなかった。",
+          "def": "物事の 進行を | 遅らせたり | 止めたり する=こと。",
+          "guess": "雨、 | 空気 読んで！"
+        }
+      },
+      "meaningJP": "妨げる、阻む",
+      "emphasis": [
+        "進行",
+        "大雨",
+        "阻まれた"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈhɪn.dər/",
+      "topic": "general",
+      "topics": [
+        "general"
+      ],
+      "exams": [
+        "ielts",
+        "toefl"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Bad weather _____ed the rescue.",
+          "vi": "悪天候に救助活動が阻まれた。",
+          "glosses": {
+            "ja": "悪天候に | 救助活動が | 阻まれた。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "H",
+      "shareCode": "DA1"
+    },
+    {
+      "id": "profound-jcoll",
+      "word": "profound",
+      "defVi": "Sâu sắc. Mạnh mẽ và lớn lao đến mức đọng lại lâu trong lòng và suy nghĩ.",
+      "leadVi": "Đi tình nguyện ở vùng bị thiên tai. Trên chuyến xe buýt trở về, ai cũng im lặng suốt.",
+      "anticipateVi": "Điều gì đọng lại trong lòng?",
+      "localized": {
+        "ja": {
+          "lead": "ボランティアで | 行った 被災地。 | 帰りの バスは、 | ずっと 静かだった。",
+          "def": "物事の 本質に 根ざし、 | 影響が | 計り知れない 様子。",
+          "guess": "何が 心に | 残った？"
+        }
+      },
+      "meaningJP": "深い、深遠な",
+      "emphasis": [
+        "計り知れない",
+        "被災地",
+        "深い"
+      ],
+      "pos": "adj",
+      "ipa": "/prəˈfaʊnd/",
+      "topic": "thinking",
+      "topics": [
+        "thinking",
+        "emotion"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The book had a _____ effect on me.",
+          "vi": "その本は私に深い影響を与えた。",
+          "glosses": {
+            "ja": "その 本は | 私に | 深い 影響を 与えた。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "P",
+      "shareCode": "B03"
+    },
+    {
+      "id": "discern-jcoll",
+      "word": "discern",
+      "defVi": "Nhận ra, phân biệt. Nhìn kỹ những thứ không rõ ràng để phân biệt cho đúng.",
+      "leadVi": "Tin nhắn “Không sao đâu” bạn gửi tới. Không biết có thật là không sao không, mình đọc đi đọc lại mấy lần.",
+      "anticipateVi": "Câu “không sao” đó là thật à?",
+      "localized": {
+        "ja": {
+          "lead": "友人から 届いた | 「大丈夫」。 | 本当に そうなのか、 | 何度も 読み返した。",
+          "def": "分かりにくい 違いや 本質を | 注意深く | 見分ける=こと。",
+          "guess": "その 「大丈夫」、 | 本当？"
+        }
+      },
+      "meaningJP": "見抜く、見極める",
+      "emphasis": [
+        "注意深く",
+        "読み返した",
+        "見極める"
+      ],
+      "pos": "verb",
+      "ipa": "/dɪˈsɜːn/",
+      "topic": "perception",
+      "topics": [
+        "perception",
+        "thinking"
+      ],
+      "exams": [
+        "gre",
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "It was hard to _____ his true feelings.",
+          "vi": "彼の本心を見極めるのは困難だった。",
+          "glosses": {
+            "ja": "彼の 本心を | 見極めるのは | 困難だった。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "D",
+      "shareCode": "AK2"
+    }
+  ]
+}

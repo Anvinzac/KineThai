@@ -164,12 +164,12 @@ that cannot be set any other way still gets set:
 A kana-bearing field is Japanese (detection is by content in `isLikelyJapaneseText`, not by
 locale). Its marks mean:
 
-| Mark | Means                                             | Display        |
-| ---- | ------------------------------------------------- | -------------- |
-| ` `  | separates 文節 for tokenising only                | removed        |
-| `_`  | one lexical unit (idiom, one dictionary entry)    | removed, joined |
-| `=`  | a dependent 文節 bound to its host                | removed, joined |
-| `\|` | edge between chunks (the pause / reveal unit)     | removed        |
+| Mark | Means                                          | Display         |
+| ---- | ---------------------------------------------- | --------------- |
+| ` `  | separates 文節 for tokenising only             | removed         |
+| `_`  | one lexical unit (idiom, one dictionary entry) | removed, joined |
+| `=`  | a dependent 文節 bound to its host             | removed, joined |
+| `\|` | edge between chunks (the pause / reveal unit)  | removed         |
 
 The display rule is §3 with Japanese arithmetic: the reader renders 文節 **flush** (no
 inter-word gap), `_`/`=` units are **one token** and never split, and a line break may fall
@@ -195,8 +195,24 @@ Japanese clue and the challenge page never reveal `_`, `=`, or `|`.
 Flat generated decks are accepted too: `normalizeDeck` lifts `defJa`, `leadJa`,
 `anticipateJa`, `usageJa` and `emphasisJa` into `localized.ja` (raw marks kept for the
 reader) and writes a mark-free display base (`defVi`, `leadVi`, `anticipateVi`,
-`usage[0].vi`). Compile one with `npm run vocab:import -- deck.json --locale ja --pack
-<name>`; the browser import panel accepts the same bare array.
+`usage[0].vi`). The short gloss `meaningJP` (or the flat deck's `meaningJa`) is kept as
+`meaningJP` — the answer panel's line — while the long `def` stays the clue page. Compile
+one with `npm run vocab:import -- deck.json --locale ja --pack <name>`; the browser
+import panel accepts the same bare array.
+
+Multi-level (0B) decks are accepted too: each word may carry
+`levels: { JPRIM?, JSEC, JHIGH, JCOLL }` with per-level Japanese fields. Import the file
+once with a pack stem: `npm run vocab:import -- deck.json --locale ja --pack <stem>` writes
+one flat pack per level (`<stem>-jprim` … `<stem>-jcoll`, ids `<word>-<level>`) and shares
+the Vietnamese lines. `--level <CODE>` imports only one level. `mergeCatalogs` keys
+Japanese entries by headword **and** level, while the paged feed shows one card per
+headword (preferring `JHIGH`) and counts unique headwords; JPRIM is the `jp-primary`
+track. The settings level picker and the difficulty picker edit the same choice: picking
+a school level selects its track and vice versa, so the two filters cannot contradict
+each other. The app Settings target language overrides the host for the feed (the
+preference is sent as the API's `locale` parameter), and its Japanese proficiency opens
+the matching track on the next feed load. Flat `defJa`/`leadJa` decks keep the
+single-pack path above.
 
 ## 4. Where the code goes
 

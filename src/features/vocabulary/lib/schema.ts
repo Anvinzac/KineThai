@@ -3,7 +3,7 @@ import { z } from "zod";
 import { parseJapaneseMarkup, stripJapaneseMarks } from "./ja-text";
 import type { TargetLocale } from "./target-language";
 
-/** CEFR levels — used by the English (and ko/ja) vocabulary pages. */
+/** CEFR levels — used by the English (and ko) vocabulary pages. */
 export const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 /** HSK 3.0 (2021) proficiency levels — the official Chinese word-frequency standard for the hoa domain. */
 export const HSK_LEVELS = [
@@ -17,8 +17,15 @@ export const HSK_LEVELS = [
   "HSK8",
   "HSK9",
 ] as const;
+/** Japanese reader levels for the school curriculum, easiest first. */
+export const JP_LEVELS = ["JPRIM", "JSEC", "JHIGH", "JCOLL"] as const;
 /** Master enum accepted by the word schema; covers both proficiency systems. */
-export const LEVELS = [...CEFR_LEVELS, ...HSK_LEVELS] as const;
+export const LEVELS = [...CEFR_LEVELS, ...HSK_LEVELS, ...JP_LEVELS] as const;
+export type JapaneseLevel = (typeof JP_LEVELS)[number];
+/** @param level Any word level. @returns True when it belongs to the Japanese school ladder. */
+export function isJapaneseLevel(level: string | undefined): level is JapaneseLevel {
+  return !!level && (JP_LEVELS as readonly string[]).includes(level);
+}
 export const STYLE_IDS = ["detective", "speed", "confession", "minimal"] as const;
 const optionalText = (max: number) => z.string().trim().max(max).optional().default("");
 /** The localized leading phrases for one locale (lead / meaning / guess). */
@@ -86,6 +93,12 @@ const wordSchema = z.object({
    * above); any other locale here is preferred over the base when selected. Adding a
    * language is data-only — populate this and a label set in i18n.ts. */
   localized: z.record(z.enum(["vi", "th", "zh", "ko", "ja", "fil"]), localizedWord).optional(),
+  /**
+   * Short Japanese gloss shown in the answer panel (the meaning panel). The long
+   * `localized.ja.def` stays the clue page; this is the "what it means" line the
+   * reader gets after the reveal. Flat generator decks name it `meaningJa`/`meaningJP`.
+   */
+  meaningJP: z.string().trim().max(180).optional(),
   emphasis: z.array(emphasisPhrase).max(6).optional(),
   pos: optionalText(40),
   ipa: optionalText(120),
@@ -130,11 +143,13 @@ const deckSchema = z.object({
 export type VocabularyWord = z.infer<typeof wordSchema>;
 export type VocabularyLevel = (typeof LEVELS)[number];
 export type NarrativeStyle = (typeof STYLE_IDS)[number];
-export type LevelSystem = "cefr" | "hsk";
+export type LevelSystem = "cefr" | "hsk" | "jlpt";
 
 /** Which proficiency standard applies to a deck locale. */
 export function levelSystemFor(locale: TargetLocale): LevelSystem {
-  return locale === "zh" ? "hsk" : "cefr";
+  if (locale === "zh") return "hsk";
+  if (locale === "ja") return "jlpt";
+  return "cefr";
 }
 export type Catalog = {
   revision: string;
@@ -205,6 +220,11 @@ function withFlatJapanese(entry: Record<string, unknown>, index: number): Record
   const guessJa = typeof entry.anticipateJa === "string" ? entry.anticipateJa.trim() : "";
   const usageJa = typeof entry.usageJa === "string" ? entry.usageJa.trim() : "";
   const usageEn = typeof entry.usageEn === "string" ? entry.usageEn.trim() : "";
+  // The short gloss is the answer panel's line; `meaningJP` is the newer name and wins.
+  const meaningJP =
+    (typeof entry.meaningJP === "string" && entry.meaningJP.trim()) ||
+    (typeof entry.meaningJa === "string" && entry.meaningJa.trim()) ||
+    "";
   localized.ja = {
     ...existing,
     def: defJa,
@@ -264,8 +284,139 @@ function withFlatJapanese(entry: Record<string, unknown>, index: number): Record
         : stripJapaneseMarks(guessJa),
     localized,
     usage,
+    ...(meaningJP ? { meaningJP } : {}),
     emphasis: entry.emphasis ?? (emphasisJa.length ? emphasisJa : undefined),
   };
+}
+
+/**
+ * Flatten one 0B entry to a single reader level. The level object carries the Japanese
+ * fields; the shared `defVi`/`leadVi`/`anticipateVi` and English metadata stay on the
+ * entry. The id gains the level suffix so the same English word can live once per level
+ * without colliding when the per-level packs are merged back together.
+ * @param entry Raw 0B entry.
+ * @param level Reader level to keep.
+ * @param index Position in the deck, for a deterministic fallback id.
+ * @returns The flat entry for that level.
+ * @pure true
+ */
+function withJapaneseLevel(
+  entry: Record<string, unknown>,
+  level: JapaneseLevel,
+  index: number,
+): Record<string, unknown> {
+  const levels = entry.levels;
+  if (!levels || typeof levels !== "object" || Array.isArray(levels)) {
+    throw new Error(`words.${index}.levels: Expected an object for the ${level} level`);
+  }
+  const data = (levels as Record<string, unknown>)[level];
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error(`words.${index}.levels.${level}: Missing level data`);
+  }
+  const fields = data as Record<string, unknown>;
+  if (typeof fields.defJa !== "string" || !fields.defJa.trim()) {
+    throw new Error(`words.${index}.levels.${level}.defJa: Required`);
+  }
+
+  const headword = typeof entry.word === "string" ? entry.word : "";
+  const baseId =
+    typeof entry.id === "string" && entry.id.trim()
+      ? entry.id.trim()
+      : headword
+          .toLowerCase()
+          .replace(/[^a-z0-9_-]+/gu, "-")
+          .replace(/^-+|-+$/g, "") || `ja-${index}`;
+  const suffix = `-${level.toLowerCase()}`;
+  const id = baseId.toLowerCase().endsWith(suffix) ? baseId : `${baseId}${suffix}`;
+  // The level object is the only author of the Japanese fields; shared aliases on the
+  // 0B root must not shadow it (the format has none, but an editor could add them).
+  const {
+    levels: _levels,
+    defaultLevel: _defaultLevel,
+    localized: _localized,
+    emphasis: _emphasis,
+    ...rest
+  } = entry;
+  return withFlatJapanese(
+    {
+      ...rest,
+      id,
+      level,
+      meaningJP: fields.meaningJP,
+      defJa: fields.defJa,
+      leadJa: fields.leadJa,
+      anticipateJa: fields.anticipateJa,
+      usageJa: fields.usageJa,
+      emphasisJa: fields.emphasisJa,
+    },
+    index,
+  );
+}
+
+/**
+ * Split a 0B multi-level Japanese deck (`levels: { JPRIM?, JSEC, JHIGH, JCOLL }`) into
+ * one flat deck per reader level. Flat decks return null, so the importer keeps its
+ * existing single-output path for them. Every level deck shares the English metadata and
+ * Vietnamese companion lines but gets its own Japanese text and level-suffixed ids.
+ *
+ * The 0B spec says all entries carry the same levels; a mix of nested and flat entries,
+ * an unknown level, or mismatched level sets is reported instead of guessed at.
+ * @param input Parsed deck JSON.
+ * @returns One flat deck per level, easiest first, or null for a flat deck.
+ */
+export function splitJapaneseDeck(
+  input: unknown,
+): { level: JapaneseLevel; input: Record<string, unknown> }[] | null {
+  const root = Array.isArray(input) ? { words: input } : input;
+  if (!root || typeof root !== "object") return null;
+  const rawWords = (root as { words?: unknown }).words;
+  if (!Array.isArray(rawWords)) return null;
+
+  const parsed = rawWords.map((entry, index) => {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry) || !("levels" in entry)) {
+      return null;
+    }
+    const levels = (entry as { levels?: unknown }).levels;
+    if (!levels || typeof levels !== "object" || Array.isArray(levels)) {
+      throw new Error(`words.${index}.levels: Expected an object`);
+    }
+    const keys = Object.keys(levels);
+    if (!keys.length) throw new Error(`words.${index}.levels: No reader levels`);
+    const invalid = keys.find((key) => !isJapaneseLevel(key));
+    if (invalid) throw new Error(`words.${index}.levels: Unknown reader level "${invalid}"`);
+    return JP_LEVELS.filter((level) => keys.includes(level));
+  });
+
+  const nested = parsed.filter((levels) => levels !== null).length;
+  if (nested === 0) return null;
+  const flatIndex = parsed.findIndex((levels) => levels === null);
+  if (flatIndex !== -1) {
+    throw new Error(
+      `words.${flatIndex}: A multi-level deck cannot mix nested levels with flat entries`,
+    );
+  }
+
+  const first = parsed[0]!;
+  parsed.forEach((levels, index) => {
+    if (
+      levels!.length !== first.length ||
+      levels!.some((level, position) => level !== first[position])
+    ) {
+      throw new Error(
+        `words.${index}.levels: Must carry the same reader levels as words.0 (${first.join(", ")})`,
+      );
+    }
+  });
+
+  return first.map((level) => ({
+    level,
+    input: {
+      ...(root as Record<string, unknown>),
+      words: rawWords.map((entry, index) =>
+        withJapaneseLevel(entry as Record<string, unknown>, level, index),
+      ),
+    },
+  }));
 }
 
 /** Validate the complete deck before allowing any output. @param input Untrusted JSON. @returns Normalized content without a revision. */
@@ -333,6 +484,9 @@ export function normalizeDeck(input: unknown): Omit<Catalog, "revision"> {
       chars: (word.match(/\p{L}/gu) ?? []).length,
       initial: word[0].toUpperCase(),
       emphasis: normalizeEmphasisPhrases(entry.emphasis),
+      // The answer panel is prose, not a kinetic page: store it already in display
+      // form, so a kanji-only gloss with a join mark can never leak that mark.
+      meaningJP: entry.meaningJP ? stripJapaneseMarks(entry.meaningJP) || undefined : undefined,
     };
   });
   if (errors.length) throw new Error(errors.join("\n"));
@@ -378,27 +532,30 @@ function stableHash(input: string, hexChars = 24): string {
 /**
  * Merge compiled catalogs — the admin-editable base plus any number of read-only
  * third-party packs — into the single catalog the feed serves. Words are de-duplicated
- * by id and by headword with the FIRST catalog winning, so the base always overrides a
- * provider pack that ships the same word. `count`, `topics`, `levels`, `revision` and
- * `name` are recomputed from the merged words so filters and deterministic pagination
- * reflect the union rather than any one input.
+ * by id and by target, with the FIRST catalog winning: the target is the headword alone
+ * for ordinary decks, but `headword:level` for Japanese decks so one English word can
+ * keep a card at each reader level. `count`, `topics`, `levels`, `revision` and `name`
+ * are recomputed from the merged words so filters and deterministic pagination reflect
+ * the union rather than any one input.
  * @param catalogs - base catalog first, then packs in a stable (sorted-by-path) order
  * @returns One merged Catalog
  * @pure true
  */
 export function mergeCatalogs(...catalogs: Catalog[]): Catalog {
   const seenIds = new Set<string>();
-  const seenWords = new Set<string>();
+  const seenTargets = new Set<string>();
   const words: VocabularyWord[] = [];
   for (const source of catalogs) {
     for (const word of source.words) {
       const id = word.id.toLowerCase();
       const head = word.word.toLowerCase();
-      // First pack wins: a duplicate id or headword from a later pack is dropped so the
-      // feed never shows the same word twice and reaction/storage keys stay unambiguous.
-      if (seenIds.has(id) || seenWords.has(head)) continue;
+      // Japanese decks legitimately carry one card per reader level for the same English
+      // headword, so those are deduplicated per level; every other deck keeps the old
+      // first-pack-wins rule and can never introduce a second card for a word.
+      const target = isJapaneseLevel(word.level) ? `${head}:${word.level}` : head;
+      if (seenIds.has(id) || seenTargets.has(target)) continue;
       seenIds.add(id);
-      seenWords.add(head);
+      seenTargets.add(target);
       words.push(word);
     }
   }

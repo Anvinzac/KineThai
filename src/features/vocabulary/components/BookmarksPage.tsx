@@ -324,7 +324,13 @@ function SavedRow({
               </p>
             )}
             <p className="vocab-saved-def" lang={ui}>
-              <MarkedText text={resolveClue(entry.word, "def", ui)} />
+              <MarkedText
+                text={
+                  ui === "ja" && entry.word.meaningJP
+                    ? entry.word.meaningJP
+                    : resolveClue(entry.word, "def", ui)
+                }
+              />
             </p>
             {entry.word.usage[0] && (
               <p className="vocab-saved-usage" lang="en">

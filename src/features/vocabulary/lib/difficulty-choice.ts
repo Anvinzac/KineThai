@@ -9,24 +9,30 @@
  * Depends on: ./difficulty (track ids, for validation)
  */
 
-import { DIFFICULTY_IDS } from "./difficulty";
+import { DIFFICULTY_IDS, tracksFor } from "./difficulty";
+import type { TargetLocale } from "./target-language";
 
 export const DIFFICULTY_CHOICE_KEY = "kinetic.vocab.difficulty";
 
 /**
  * Read the stored choice.
+ * @param locale Deck locale; when given, ids that belong to another language's tracks
+ *   are dropped (an old CEFR pick must not empty a Japanese feed)
  * @returns Comma-joined track ids ("" = every level), or null when nothing was ever chosen
  *   or storage is unavailable. Ids the app no longer knows are dropped rather than trusted.
  */
-export function readDifficultyChoice(): string | null {
+export function readDifficultyChoice(locale?: TargetLocale): string | null {
   try {
     if (typeof localStorage === "undefined") return null;
     const raw = localStorage.getItem(DIFFICULTY_CHOICE_KEY);
     if (raw === null) return null;
+    const allowed = locale
+      ? new Set(tracksFor(locale).map((track) => track.id))
+      : new Set(DIFFICULTY_IDS);
     return raw
       .split(",")
       .map((id) => id.trim())
-      .filter((id) => DIFFICULTY_IDS.includes(id))
+      .filter((id) => allowed.has(id))
       .join(",");
   } catch {
     return null;

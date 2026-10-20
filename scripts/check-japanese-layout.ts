@@ -19,8 +19,17 @@ import {
 } from "../src/features/vocabulary/lib/ja-text";
 import { encodeWordJoiners } from "../src/features/vocabulary/lib/word-joiner";
 import { buildStages } from "../src/features/vocabulary/lib/stages";
-import { normalizeDeck } from "../src/features/vocabulary/lib/schema";
+import {
+  mergeCatalogs,
+  normalizeDeck,
+  splitJapaneseDeck,
+} from "../src/features/vocabulary/lib/schema";
 import type { VocabularyWord } from "../src/features/vocabulary/lib/schema";
+import { readCatalogPage } from "../src/features/vocabulary/lib/paging";
+import {
+  japaneseLevelForDifficulty,
+  japaneseTrackForLevel,
+} from "../src/features/vocabulary/lib/difficulty";
 
 // ── Detection: kana is the signal; Vietnamese, English and Chinese never trigger.
 assert.equal(isLikelyJapaneseText("目を とじるだけで、"), true);
@@ -188,6 +197,7 @@ const flatDeck = [
 ];
 const [flatWord] = normalizeDeck(flatDeck).words;
 assert.equal(flatWord!.id, "airport");
+assert.equal(flatWord!.meaningJP, "空港");
 assert.equal(flatWord!.defVi, "飛行機が飛び立ち、人を乗せたり降ろしたりする場所。");
 assert.equal(
   flatWord!.localized?.ja?.def,
@@ -204,6 +214,118 @@ assert.ok(
   flatStages.some((stage) => stage.id.startsWith("lead")),
   "the flat lead reaches the reader",
 );
+const [named] = normalizeDeck([
+  { word: "bank", defJa: "銀行が ある 場所。", meaningJa: "ぎんこう", meaningJP: "銀行" },
+]).words;
+assert.equal(named!.meaningJP, "銀行", "meaningJP wins over meaningJa");
+const [kanjiOnly] = normalizeDeck([
+  { word: "robbery", defJa: "銀行から お金を 盗む こと。", meaningJa: "銀行_強盗" },
+]).words;
+assert.equal(kanjiOnly!.meaningJP, "銀行強盗", "a kanji-only gloss is stored in display form");
 console.log("OK — a flat generated Japanese deck normalizes and plays");
+
+// ── A 0B multi-level deck becomes one flat deck per reader level, then merges back so
+//    every level keeps its own card for the same English word.
+const multiDeck = {
+  words: [
+    {
+      word: "airport",
+      pos: "noun",
+      usageEn: "We arrived at the _____ two hours early.",
+      topics: ["travel"],
+      exams: ["toeic"],
+      defaultLevel: "JHIGH",
+      levels: {
+        JPRIM: {
+          kanjiTier: 0,
+          meaningJP: "空港",
+          defJa: "ひこうきが 空へ とび立ち、 | 人を 乗せたり | おろしたり する 場所。",
+          leadJa: "大きな かばんを 引いて、 | ひこうきに のる 前に | ロビーで 待つ。",
+          anticipateJa: "どこから | とび立つのかな？",
+          usageJa: "わたしたちは | 二時間 早く | 空港に 着いた。",
+          emphasisJa: ["とび立ち", "かばん", "空港"],
+        },
+        JSEC: {
+          kanjiTier: 1,
+          meaningJP: "空港",
+          defJa: "飛行機が 飛び立ち、 | 人を 乗せたり | 降ろしたり する 場所。",
+          leadJa: "スーツケースを 引いて、 | 飛行機に 乗る 前に | ロビーで 待つ。",
+          anticipateJa: "どこから | 飛び立つのかな？",
+          usageJa: "私たちは | 二時間 早く | 空港に 着いた。",
+          emphasisJa: ["飛び立ち", "スーツケース", "空港"],
+        },
+        JHIGH: {
+          kanjiTier: 2,
+          meaningJP: "空港",
+          defJa: "飛行機が 飛び立ち、 | 乗客を 乗せたり | 降ろしたり する 場所。",
+          leadJa: "スーツケースを 引いて、 | 飛行機に 乗る 前に | ロビーで 待つ。",
+          anticipateJa: "どこから | 飛び立つのかな？",
+          usageJa: "私たちは | 二時間 早く | 空港に 着いた。",
+          emphasisJa: ["飛び立ち", "スーツケース", "空港"],
+        },
+        JCOLL: {
+          kanjiTier: 3,
+          meaningJP: "空港",
+          defJa: "飛行機が 離着陸し、 | 乗客が | 乗り降りする 場所。",
+          leadJa: "スーツケースを 引いて、 | 搭乗前に | 出発ロビーで 待つ。",
+          anticipateJa: "どこから | 飛び立つのかな？",
+          usageJa: "私たちは | 二時間 早く | 空港に 到着した。",
+          emphasisJa: ["離着陸", "スーツケース", "空港"],
+        },
+      },
+      defVi: "Sân bay. Nơi máy bay cất cánh, đón và trả hành khách.",
+      leadVi: "Kéo va li, ngồi chờ ở sảnh trước khi lên máy bay.",
+      anticipateVi: "Máy bay cất cánh từ đâu nhỉ?",
+    },
+  ],
+};
+const split = splitJapaneseDeck(multiDeck);
+assert.deepEqual(
+  split?.map((deck) => deck.level),
+  ["JPRIM", "JSEC", "JHIGH", "JCOLL"],
+);
+const splitWords = split!.map(({ level, input }) => {
+  const word = normalizeDeck(input).words[0]!;
+  assert.equal(word.id, `airport-${level.toLowerCase()}`);
+  assert.equal(word.level, level);
+  assert.equal(word.meaningJP, "空港");
+  assert.ok(word.localized?.ja?.def);
+  assert.equal(word.defVi, "Sân bay. Nơi máy bay cất cánh, đón và trả hành khách.");
+  return word;
+});
+assert.equal(splitJapaneseDeck(flatDeck), null, "a flat deck is not split");
+const multiCatalog = mergeCatalogs(
+  ...split!.map(({ level, input }) => ({
+    revision: level,
+    name: level,
+    ...normalizeDeck(input),
+  })),
+);
+assert.equal(multiCatalog.words.length, 4, "same headword survives at every reader level");
+assert.equal(new Set(multiCatalog.words.map((word) => word.word)).size, 1);
+const multiPage = readCatalogPage(multiCatalog, {
+  seed: "multi-level",
+  topic: "",
+  level: "",
+  difficulty: "",
+  position: 0,
+  limit: 4,
+});
+assert.equal(multiPage.total, 1, "the catalog summary counts unique words");
+assert.equal(multiPage.matching, 1, "the feed shows one card per headword");
+assert.equal(multiPage.entries[0]!.word.level, "JHIGH", "the default level is preferred");
+assert.equal(splitWords.length, 4);
+console.log("OK — a 0B multi-level deck splits, merges and streams once per word");
+
+// ── Proficiency: one Japanese level and one track are two views of the same choice.
+assert.equal(japaneseTrackForLevel("JPRIM")?.id, "jp-primary");
+assert.equal(japaneseTrackForLevel("JCOLL")?.id, "jp-college");
+assert.equal(japaneseTrackForLevel(""), undefined);
+assert.equal(japaneseLevelForDifficulty("jp-primary"), "JPRIM");
+assert.equal(japaneseLevelForDifficulty("jp-highschool"), "JHIGH");
+assert.equal(japaneseLevelForDifficulty(""), "");
+assert.equal(japaneseLevelForDifficulty("jp-primary,jp-secondary"), "");
+assert.equal(japaneseLevelForDifficulty("vo-long"), "");
+console.log("OK — the Japanese level picker and difficulty track stay in step");
 
 console.log("\nAll Japanese layout checks passed.");

@@ -282,7 +282,14 @@ export function VocabularyCard({
       ...stages.map((stage) =>
         Math.round(
           getPageDuration(
-            [stage.text, stage.reveal ? resolveClue(entry.word, "def", ui) : ""]
+            [
+              stage.text,
+              stage.reveal
+                ? ui === "ja" && entry.word.meaningJP
+                  ? entry.word.meaningJP
+                  : resolveClue(entry.word, "def", ui)
+                : "",
+            ]
               .filter(Boolean)
               .join(" "),
             style.tempo,
@@ -292,7 +299,7 @@ export function VocabularyCard({
       ),
       spellingDuration,
     ],
-    [stages, entry.word.defVi, style.tempo, style.rhythm, spellingDuration, paceFactor],
+    [stages, entry.word, ui, style.tempo, style.rhythm, spellingDuration, paceFactor],
   );
   const looping = presentation.advance === false && !exportLayout;
   // While the report panel is open the card holds still: the reader is describing

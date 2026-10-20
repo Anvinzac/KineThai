@@ -14,7 +14,7 @@
 
 import type { Locale } from "./locale";
 import { BASE_LOCALE } from "./locale";
-import { DIFFICULTY_TRACKS } from "./difficulty";
+import { DIFFICULTY_TRACKS, JP_TRACKS } from "./difficulty";
 
 /** Vietnamese base — the source strings, verbatim. */
 const VI = {
@@ -34,6 +34,12 @@ const VI = {
   "theme.label": "Giao diện",
   "theme.mix": "Trộn giao diện",
   "theme.reset": "Chọn lại tất cả",
+  "japanese.label": "Trình độ tiếng Nhật",
+  "japanese.all": "Tất cả trình độ",
+  "japanese.JPRIM": "Tiểu học",
+  "japanese.JSEC": "THCS",
+  "japanese.JHIGH": "THPT",
+  "japanese.JCOLL": "Đại học",
   "difficulty.aria": "Độ khó: {label}. Đổi độ khó",
   "autoplay.label": "Tự động phát luồng",
   "autoplay.reduced": "Bạn đang bật chế độ giảm chuyển động, nên gợi ý lật thủ công.",
@@ -274,6 +280,12 @@ const TH: Partial<Record<CopyKey, string>> = {
   "theme.label": "ธีม",
   "theme.mix": "สุ่มธีม",
   "theme.reset": "เลือกทั้งหมดใหม่",
+  "japanese.label": "ระดับภาษาญี่ปุ่น",
+  "japanese.all": "ทุกระดับ",
+  "japanese.JPRIM": "ประถมศึกษา",
+  "japanese.JSEC": "มัธยมต้น",
+  "japanese.JHIGH": "มัธยมปลาย",
+  "japanese.JCOLL": "มหาวิทยาลัย",
   "difficulty.aria": "ระดับความยาก: {label} เปลี่ยนระดับ",
   "autoplay.label": "เล่นอัตโนมัติ",
   "autoplay.reduced": "คุณเปิดโหมดลดการเคลื่อนไหว แนะนำให้ปัดเอง",
@@ -501,6 +513,12 @@ const JA: Partial<Record<CopyKey, string>> = {
   "theme.label": "テーマ",
   "theme.mix": "テーマをミックス",
   "theme.reset": "すべて選び直す",
+  "japanese.label": "日本語レベル",
+  "japanese.all": "すべてのレベル",
+  "japanese.JPRIM": "小学校",
+  "japanese.JSEC": "中学校",
+  "japanese.JHIGH": "高校",
+  "japanese.JCOLL": "大学",
   "difficulty.aria": "難易度: {label}。変更する",
   "autoplay.label": "自動再生",
   "autoplay.reduced": "視差効果を減らす設定のため、手動でめくってください。",
@@ -737,7 +755,10 @@ export function t(locale: Locale, key: CopyKey, params?: Record<string, string |
 type TrackCopy = { label: string; hint: string };
 
 const DIFFICULTY_VI: Record<string, TrackCopy> = Object.fromEntries(
-  DIFFICULTY_TRACKS.map((track) => [track.id, { label: track.label, hint: track.hint }]),
+  [...DIFFICULTY_TRACKS, ...JP_TRACKS].map((track) => [
+    track.id,
+    { label: track.label, hint: track.hint },
+  ]),
 );
 
 const DIFFICULTY_TH: Record<string, TrackCopy> = {
@@ -764,6 +785,11 @@ const DIFFICULTY_JA: Record<string, TrackCopy> = {
   "viet-lach": { label: "文章", hint: "書くときに使う語" },
   "du-hoc": { label: "留学", hint: "アカデミック英語" },
   "van-chuong": { label: "文学", hint: "美しく希少な言葉" },
+  // Japanese school-level tracks
+  "jp-primary": { label: "小学校", hint: "小学校レベルの語彙" },
+  "jp-secondary": { label: "中学校", hint: "中学校レベルの語彙" },
+  "jp-highschool": { label: "高校", hint: "高校レベルの語彙" },
+  "jp-college": { label: "大学", hint: "大学レベルの語彙" },
 };
 
 /** Track label/hint copy per locale. */

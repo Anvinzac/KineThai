@@ -32,6 +32,10 @@ const requestSchema = z
       .regex(/^[a-z0-9-]*$/)
       .default(""),
     level: z.union([z.enum(LEVELS), z.literal("")]).default(""),
+    // Public deck locale override. Host detection remains the default; a reader who
+    // picks a target language in Settings sends it explicitly so the server and the
+    // static fallback always page the same catalog.
+    locale: z.enum(["en", "zh", "ko", "ja"]).optional(),
     // Difficulty is multi-select: a comma-joined list of track ids, or "" for all.
     // Every segment is validated against the declared list, so an unknown id is a 400
     // rather than a silently empty stream.
@@ -77,7 +81,7 @@ export function vocabularyResponse(request: Request): Response {
       },
       { status: 400, headers },
     );
-  const locale = resolveTarget(request.headers.get("host") ?? url.host);
+  const locale = parsed.data.locale ?? resolveTarget(request.headers.get("host") ?? url.host);
   if (parsed.data.revision && parsed.data.revision !== catalogFor(locale).revision) {
     return Response.json(
       { code: "CATALOG_CHANGED", error: "The vocabulary catalog changed. Start a fresh stream." },

@@ -7,6 +7,17 @@ import type { FeedPage, FeedRequest } from "../types";
 export const MAX_POSITION = 1_000_000_000_000;
 const pools = new Map<string, Uint32Array>();
 const orders = new Map<string, Uint32Array>();
+const totals = new WeakMap<Catalog, number>();
+
+/** Unique headwords in a catalog; Japanese decks carry one card per reader level. */
+function uniqueHeadwords(catalog: Catalog): number {
+  const cached = totals.get(catalog);
+  if (cached !== undefined) return cached;
+  const heads = new Set<string>();
+  for (const word of catalog.words) heads.add(word.word.toLowerCase());
+  totals.set(catalog, heads.size);
+  return heads.size;
+}
 
 function remember(cache: Map<string, Uint32Array>, key: string, value: Uint32Array, cap: number) {
   cache.delete(key);
@@ -44,7 +55,11 @@ function matchingPool(
   const existing = pools.get(key);
   if (existing) return remember(pools, key, existing, 64);
   const allowed = allowedLevels(catalog, level, difficulty);
-  const matches: number[] = [];
+  // A Japanese deck carries one card per reader level for the same English word. A
+  // single-level track admits only one, but "all levels" (or several tracks) would
+  // otherwise repeat the word on every card. Keep one card per headword, preferring the
+  // generator's JHIGH default; elsewhere the rule is still first-pack-wins.
+  const matches = new Map<string, number>();
   catalog.words.forEach((word, index) => {
     // A word carries several usage domains; the legacy single `topic` is the fallback
     // for a deck compiled before the axis became multi-valued.
@@ -52,9 +67,16 @@ function matchingPool(
     // A word with no CEFR level cannot belong to any band, so a filtered stream
     // excludes it while an unfiltered one still offers it.
     if (allowed && !(word.level && allowed.has(word.level))) return;
-    matches.push(index);
+    const head = word.word.toLowerCase();
+    const previous = matches.get(head);
+    if (
+      previous === undefined ||
+      (word.level === "JHIGH" && catalog.words[previous]!.level !== "JHIGH")
+    ) {
+      matches.set(head, index);
+    }
   });
-  return remember(pools, key, Uint32Array.from(matches), 64);
+  return remember(pools, key, Uint32Array.from(matches.values()), 64);
 }
 
 /** Sample words kept per level: enough for every track that shares a top level. */
@@ -87,12 +109,12 @@ function levelTally(catalog: Catalog, topic: string) {
   if (cached) return cached;
   const counts: Partial<Record<VocabularyLevel, number>> = {};
   const samples: FeedPage["levelSamples"] = {};
-  let total = 0;
+  const heads = new Set<string>();
   // Index every matching word per level so the priority pass can look up by name.
   const byLevel = new Map<VocabularyLevel, typeof catalog.words>();
   for (const word of catalog.words) {
     if (topic && !(word.topics?.includes(topic) ?? word.topic === topic)) continue;
-    total += 1;
+    heads.add(word.word.toLowerCase());
     if (!word.level) continue;
     counts[word.level] = (counts[word.level] ?? 0) + 1;
     if (!byLevel.has(word.level)) byLevel.set(word.level, []);
@@ -119,7 +141,7 @@ function levelTally(catalog: Catalog, topic: string) {
     }
     samples[level] = picked;
   }
-  const tally = { counts, samples, total };
+  const tally = { counts, samples, total: heads.size };
   if (levelTallies.size > 32) levelTallies.clear();
   levelTallies.set(key, tally);
   return tally;
@@ -177,7 +199,7 @@ export function readCatalogPage(catalog: Catalog, input: FeedRequest): FeedPage 
     position,
     previousPosition: position > 0 && pool.length ? Math.max(0, position - limit) : null,
     nextPosition: pool.length && position + limit <= MAX_POSITION ? position + limit : null,
-    total: catalog.count,
+    total: uniqueHeadwords(catalog),
     matching: pool.length,
     levelCounts: tally.counts,
     levelSamples: tally.samples,

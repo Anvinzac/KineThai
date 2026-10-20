@@ -1,0 +1,2081 @@
+{
+  "revision": "80c00deb484ed66b17ab2c36",
+  "name": "WordCrawler vocabulary",
+  "count": 50,
+  "topics": [
+    "character",
+    "communication",
+    "daily",
+    "emotion",
+    "general",
+    "health",
+    "perception",
+    "society",
+    "thinking",
+    "time",
+    "work"
+  ],
+  "levels": [
+    "JCOLL"
+  ],
+  "words": [
+    {
+      "id": "affectionate-jcoll",
+      "word": "affectionate",
+      "defVi": "Trìu mến, giàu tình cảm. Hay thể hiện tình thương bằng cử chỉ như ôm hay khen ngợi.",
+      "leadVi": "Nghỉ hè về quê, bà ôm chầm lấy mình ngay ở cửa.",
+      "anticipateVi": "Chắc sắp bị ôm chặt rồi!",
+      "localized": {
+        "ja": {
+          "lead": "夏休みに 帰ると、 | おばあちゃんが ぎゅっと | 抱きしめて=くれた。",
+          "def": "抱きしめたり | ほめたりして、 | 慈しむ 気持ちを 素直に | 表す 様子。",
+          "guess": "ぎゅーって | されちゃうかも！"
+        }
+      },
+      "meaningJP": "愛情深い、情愛のこもった",
+      "emphasis": [
+        "表す",
+        "抱きしめて",
+        "愛情深い"
+      ],
+      "pos": "adj",
+      "ipa": "/əˈfek.ʃən.ət/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "character"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "My grandmother is very _____ with the kids.",
+          "vi": "うちのおばあちゃんは子どもたちにとても愛情深い。",
+          "glosses": {
+            "ja": "うちの おばあちゃんは | 子どもたちに | とても=愛情深い。"
+          }
+        }
+      ],
+      "chars": 12,
+      "initial": "A",
+      "shareCode": "0PP"
+    },
+    {
+      "id": "anticipation-jcoll",
+      "word": "anticipation",
+      "defVi": "Sự háo hức chờ đợi. Cảm giác mong chờ điều sắp xảy ra.",
+      "leadVi": "Đêm trước chuyến đi tham quan của trường, kiểm tra hành lý mãi mà không sao ngủ được.",
+      "anticipateVi": "Còn mấy ngày nữa là đi nhỉ?",
+      "localized": {
+        "ja": {
+          "lead": "修学旅行の 前の 夜、 | 何度も 荷物を 確かめて、 | なかなか 寝付けない。",
+          "def": "これから 起こる=ことを | 楽しみに 待つ | 気持ち。",
+          "guess": "あと 何日で | 出発だっけ？"
+        }
+      },
+      "meaningJP": "期待、楽しみに待つ気持ち",
+      "emphasis": [
+        "楽しみ",
+        "確かめて",
+        "期待"
+      ],
+      "pos": "noun",
+      "ipa": "/ænˌtɪ.sɪˈpeɪ.ʃən/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "time"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The children were breathless with _____.",
+          "vi": "子どもたちは期待に息を詰めていた。",
+          "glosses": {
+            "ja": "子どもたちは 期待に | 息を_詰めて=いた。"
+          }
+        }
+      ],
+      "chars": 12,
+      "initial": "A",
+      "shareCode": "1N4"
+    },
+    {
+      "id": "gasp-jcoll",
+      "word": "gasp",
+      "defVi": "Há hốc miệng, hít mạnh. Vì ngạc nhiên mà bất giác hít mạnh một hơi.",
+      "leadVi": "Chân chạy cuối của đội tiếp sức vấp ngay trước vạch đích, cả khán đài “Á!” rồi đứng hình.",
+      "anticipateVi": "Vừa rồi thấy không?!",
+      "localized": {
+        "ja": {
+          "lead": "リレーの アンカーが | ゴール前で つまずき、 | 客席が | 「あっ」と 固まった。",
+          "def": "驚きの あまり、 | 思わず はっと | 息を 吸い込む=こと。",
+          "guess": "今の、 | 見た？！"
+        }
+      },
+      "meaningJP": "息をのむ、はっとする",
+      "emphasis": [
+        "吸い込む",
+        "つまずき",
+        "息をのむ"
+      ],
+      "pos": "verb",
+      "ipa": "/gɑːsp/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "health"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "People always _____ at that part of the magic show.",
+          "vi": "マジックのあの場面で、みんないつも息をのむ。",
+          "glosses": {
+            "ja": "マジックの あの 場面で、 | みんな いつも | 息を_のむ。"
+          }
+        }
+      ],
+      "chars": 4,
+      "initial": "G",
+      "shareCode": "RNN"
+    },
+    {
+      "id": "animated-jcoll",
+      "word": "animated",
+      "defVi": "Sôi nổi, đầy sức sống. Giọng nói và cử chỉ tràn đầy hào hứng, vui vẻ.",
+      "leadVi": "Hễ nói đến thần tượng, bạn tôi lại nhổm người về phía trước và nói không ngừng.",
+      "anticipateVi": "Nói mãi không dừng luôn!",
+      "localized": {
+        "ja": {
+          "lead": "推しの 話に なると、 | 友だちは 身を 乗り出して | 止まらなく なる。",
+          "def": "声や 身ぶりに | 活気と 熱意が | あふれる 様子。",
+          "guess": "しゃべるの、 | 止まんないじゃん！"
+        }
+      },
+      "meaningJP": "生き生きした、活発な",
+      "emphasis": [
+        "あふれる",
+        "乗り出して",
+        "生き生きと"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈæn.ɪ.meɪ.tɪd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "communication",
+        "character"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The two friends had a very _____ conversation.",
+          "vi": "友人二人は実に生き生きと語り合っていた。",
+          "glosses": {
+            "ja": "友人 二人は | 実に 生き生きと | 語り合って=いた。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "A",
+      "shareCode": "Q3Q"
+    },
+    {
+      "id": "awe-jcoll",
+      "word": "awe",
+      "defVi": "Sự kính sợ, choáng ngợp. Cảm giác vừa sợ vừa xúc động đến lặng người trước điều vô cùng lớn lao.",
+      "leadVi": "Trong chuyến đi tham quan của trường, khoảnh khắc ngước nhìn tượng Đại Phật, không ai thốt nên lời.",
+      "anticipateVi": "To quá trời, chẳng nói nổi câu nào…!",
+      "localized": {
+        "ja": {
+          "lead": "修学旅行で 大仏を | 見上げた 瞬間、 | 誰も 口を_きけなかった。",
+          "def": "圧倒的な ものを 前に、 | 恐れと 感動で | 言葉を 失う 気持ち。",
+          "guess": "でかすぎて | 声も 出ない…！"
+        }
+      },
+      "meaningJP": "畏敬の念",
+      "emphasis": [
+        "失う",
+        "見上げた",
+        "畏敬の念"
+      ],
+      "pos": "noun",
+      "ipa": "/ɔː/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "perception"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "We stood in _____ of the giant cave.",
+          "vi": "巨大な洞窟を前に、私たちは畏敬の念に打たれて立ち尽くした。",
+          "glosses": {
+            "ja": "巨大な 洞窟を 前に、 | 私たちは 畏敬の_念に | 打たれて 立ち尽くした。"
+          }
+        }
+      ],
+      "chars": 3,
+      "initial": "A",
+      "shareCode": "2Y1"
+    },
+    {
+      "id": "loathe-jcoll",
+      "word": "loathe",
+      "defVi": "Căm ghét. Ghét từ tận đáy lòng, đến mức nhìn thôi cũng thấy khó chịu.",
+      "leadVi": "Chỉ ngửi thấy mùi rau mùi là bịt mũi bỏ chạy.",
+      "anticipateVi": "Nghe tên thôi đã không chịu nổi!",
+      "localized": {
+        "ja": {
+          "lead": "パクチーの においが | しただけで、 | 鼻を つまんで 逃げ出した。",
+          "def": "見るのも 嫌なほど、 | 心の 底から | 嫌う=こと。",
+          "guess": "名前を 聞くのも | ムリ！"
+        }
+      },
+      "meaningJP": "忌み嫌う、大嫌いだ",
+      "emphasis": [
+        "嫌う",
+        "つまんで",
+        "大嫌い"
+      ],
+      "pos": "verb",
+      "ipa": "/ləʊð/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "I absolutely _____ waking up early.",
+          "vi": "朝早く起きるのが本当に大嫌い。",
+          "glosses": {
+            "ja": "朝 早く 起きるのが | 本当に | 大嫌い。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "L",
+      "shareCode": "MKK"
+    },
+    {
+      "id": "bleak-jcoll",
+      "word": "bleak",
+      "defVi": "Ảm đạm, không hy vọng. Gần như không có triển vọng gì sẽ tốt lên trong tương lai.",
+      "leadVi": "Khu phố mua sắm trước ga toàn cửa hàng đóng cửa, chẳng thấy bóng người.",
+      "anticipateVi": "Cái này… hết cứu rồi nhỉ?",
+      "localized": {
+        "ja": {
+          "lead": "駅前の 商店街は | シャッターの 店ばかりで、 | 人の 姿も ない。",
+          "def": "この 先、 | 好転する 見込みが | ほとんど ない 様子。",
+          "guess": "これ、 | もう 無理じゃない？"
+        }
+      },
+      "meaningJP": "暗い、荒涼とした",
+      "emphasis": [
+        "見込み",
+        "シャッター",
+        "暗そうだ"
+      ],
+      "pos": "adj",
+      "ipa": "/bliːk/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "general"
+      ],
+      "exams": [
+        "ielts",
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The future looks _____ for small shops.",
+          "vi": "小さな商店の先行きは暗そうだ。",
+          "glosses": {
+            "ja": "小さな 商店の | 先行きは | 暗そうだ。"
+          }
+        }
+      ],
+      "chars": 5,
+      "initial": "B",
+      "shareCode": "A3W"
+    },
+    {
+      "id": "fulfilment-jcoll",
+      "word": "fulfilment",
+      "defVi": "Sự mãn nguyện. Cảm giác lòng tràn đầy khi làm trọn được điều mình muốn làm.",
+      "leadVi": "Đàn em mình kèm cặp lần đầu thắng trận, mình bất giác mỉm cười.",
+      "anticipateVi": "Cố gắng thật đáng giá!",
+      "localized": {
+        "ja": {
+          "lead": "教えて=きた 後輩が | 初めて 試合に 勝ち、 | 思わず 笑顔に なった。",
+          "def": "やりたかった=ことを | やり遂げて、 | 心が 満たされる 気持ち。",
+          "guess": "がんばって | よかった！"
+        }
+      },
+      "meaningJP": "充実感、満足感",
+      "emphasis": [
+        "満たされる",
+        "後輩",
+        "充実感"
+      ],
+      "pos": "noun",
+      "ipa": "/fʊlˈfɪl.mənt/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "work"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She finds real _____ in teaching.",
+          "vi": "彼女は教えることに真の充実感を見いだしている。",
+          "glosses": {
+            "ja": "彼女は 教える=ことに | 真の 充実感を | 見いだして=いる。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "F",
+      "shareCode": "4H4"
+    },
+    {
+      "id": "relish-jcoll",
+      "word": "relish",
+      "defVi": "Tận hưởng, thích thú. Thưởng thức điều mình thích một cách chậm rãi, say sưa.",
+      "leadVi": "Chủ nhật sau khi thi xong, mình mải mê đọc bộ manga yêu thích.",
+      "anticipateVi": "A, ngày nghỉ tuyệt nhất!",
+      "localized": {
+        "ja": {
+          "lead": "テストが 終わった 日曜日、 | 好きな マンガを | ひたすら 読みふけった。",
+          "def": "好きな ものを | じっくり 味わい、 | 心ゆくまで 楽しむ=こと。",
+          "guess": "あー、 | 最高の 休日！"
+        }
+      },
+      "meaningJP": "楽しむ、享受する",
+      "emphasis": [
+        "味わい",
+        "読みふけった",
+        "楽しめそう"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈrel.ɪʃ/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "daily"
+      ],
+      "exams": [
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "I don't _____ the thought of a twelve-hour flight.",
+          "vi": "十二時間のフライトは想像しても楽しめそうにない。",
+          "glosses": {
+            "ja": "十二時間の フライトは | 想像しても | 楽しめそうに ない。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "R",
+      "shareCode": "FFE"
+    },
+    {
+      "id": "impulse-jcoll",
+      "word": "impulse",
+      "defVi": "Sự thôi thúc, bốc đồng. Cảm giác mạnh mẽ bỗng muốn làm gì đó trước khi kịp suy nghĩ kỹ.",
+      "leadVi": "Ghé cửa hàng tiện lợi trên đường về, lúc nhận ra thì đã mua tới hai món tráng miệng mới.",
+      "anticipateVi": "Chưa kịp nghĩ thì tay đã với rồi!",
+      "localized": {
+        "ja": {
+          "lead": "帰り道の コンビニで、 | 新作スイーツを | 気づいたら | 二つも 買って=いた。",
+          "def": "よく 考える 前に、 | 急に 何かを | したく なる 強い 気持ち。",
+          "guess": "考える 前に、 | 手が 出ちゃう！"
+        }
+      },
+      "meaningJP": "衝動",
+      "emphasis": [
+        "急に",
+        "新作スイーツ",
+        "衝動"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈɪm.pʌls/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "thinking"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "My first _____ was to run away.",
+          "vi": "真っ先にわいた衝動は、逃げ出すことだった。",
+          "glosses": {
+            "ja": "真っ先に わいた 衝動は、 | 逃げ出す=ことだった。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "I",
+      "shareCode": "YX4"
+    },
+    {
+      "id": "indifferent-jcoll",
+      "word": "indifferent",
+      "defVi": "Thờ ơ. Hoàn toàn không để tâm đến người hay chuyện xung quanh.",
+      "leadVi": "Gửi tin bàn chuyện lễ hội văn hóa vào nhóm chat của lớp, cả nhóm đã xem mà không ai trả lời.",
+      "anticipateVi": "Ơ, không ai trả lời luôn à?",
+      "localized": {
+        "ja": {
+          "lead": "文化祭の 相談を 送っても、 | クラスの グループは | 既読スルーの まま。",
+          "def": "周囲の 人や 物事を | まったく | 気に_かけない 様子。",
+          "guess": "え、 | 誰も 返事 なし？"
+        }
+      },
+      "meaningJP": "無関心な、冷淡な",
+      "emphasis": [
+        "気にかけない",
+        "既読スルー",
+        "無関心な"
+      ],
+      "pos": "adj",
+      "ipa": "/ɪnˈdɪf.ər.ənt/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "character",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "He seemed _____ to her problems.",
+          "vi": "彼は彼女の悩みに無関心なようだった。",
+          "glosses": {
+            "ja": "彼は | 彼女の 悩みに | 無関心な=ようだった。"
+          }
+        }
+      ],
+      "chars": 11,
+      "initial": "I",
+      "shareCode": "45J"
+    },
+    {
+      "id": "dread-jcoll",
+      "word": "dread",
+      "defVi": "Sợ hãi, lo sợ. Nghĩ tới chuyện sắp xảy ra là lo lắng không chịu nổi.",
+      "leadVi": "Từ tối Chủ nhật đã chỉ biết thở dài vì bài kiểm tra ngày thứ Hai.",
+      "anticipateVi": "Thứ Hai ơi, đừng tới!",
+      "localized": {
+        "ja": {
+          "lead": "日曜の 夜から、 | 月曜の テストの=ことで | ため息ばかり。",
+          "def": "これから 起こる=ことを | 思うと 不安で | たまらなく なる=こと。",
+          "guess": "月曜、 | 来ないで！"
+        }
+      },
+      "meaningJP": "恐れる、怖がる",
+      "emphasis": [
+        "不安",
+        "ため息",
+        "怖くて"
+      ],
+      "pos": "verb",
+      "ipa": "/dred/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "time"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "I _____ my first day at the new school.",
+          "vi": "新しい学校での初日が怖くて仕方ない。",
+          "glosses": {
+            "ja": "新しい 学校での | 初日が | 怖くて 仕方ない。"
+          }
+        }
+      ],
+      "chars": 5,
+      "initial": "D",
+      "shareCode": "R2F"
+    },
+    {
+      "id": "comforting-jcoll",
+      "word": "comforting",
+      "defVi": "An ủi, ấm lòng. Làm dịu đi lo âu, buồn bã và khiến lòng thấy nhẹ nhàng.",
+      "leadVi": "Thua trận ở câu lạc bộ trở về, mẹ chẳng nói gì mà đã nấu sẵn món mình thích.",
+      "anticipateVi": "Thấy lòng ấm áp quá…",
+      "localized": {
+        "ja": {
+          "lead": "部活で 負けて 帰ると、 | 母が 何も 言わずに | 好物を 作って=くれて=いた。",
+          "def": "不安や 悲しみを | 和らげ、 | 心を 楽に して=くれる 様子。",
+          "guess": "あったかい | 気持ちに なる…"
+        }
+      },
+      "meaningJP": "慰めになる、ほっとする",
+      "emphasis": [
+        "和らげ",
+        "好物",
+        "慰め"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈkʌmpf.ə.tɪŋ/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "communication"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "He said a few _____ words.",
+          "vi": "彼は慰めの言葉をいくつかかけてくれた。",
+          "glosses": {
+            "ja": "彼は | 慰めの 言葉を | いくつか かけて=くれた。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "C",
+      "shareCode": "0AQ"
+    },
+    {
+      "id": "disgust-jcoll",
+      "word": "disgust",
+      "defVi": "Sự ghê tởm. Cảm giác cực kỳ khó chịu trước thứ bẩn thỉu hay hành vi tồi tệ.",
+      "leadVi": "Thấy đống rác như núi bị vứt ở bãi sông, bất giác nhăn mặt.",
+      "anticipateVi": "Ôi trời, không thể tin nổi!",
+      "localized": {
+        "ja": {
+          "lead": "川原に 捨てられた | 山の=ような ゴミを 見て、 | 思わず 顔を しかめた。",
+          "def": "汚い ものや | ひどい 行いに | 強い 不快を 覚える 気持ち。",
+          "guess": "うわっ、 | ありえない！"
+        }
+      },
+      "meaningJP": "嫌悪感、むかつき",
+      "emphasis": [
+        "不快",
+        "しかめた",
+        "嫌悪感"
+      ],
+      "pos": "noun",
+      "ipa": "/dɪsˈgʌst/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She walked out in _____.",
+          "vi": "彼女は嫌悪感を顔に出して、出ていった。",
+          "glosses": {
+            "ja": "彼女は | 嫌悪感を 顔に 出して、 | 出て=いった。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "D",
+      "shareCode": "TYH"
+    },
+    {
+      "id": "resent-jcoll",
+      "word": "resent",
+      "defVi": "Oán giận, bất bình. Tức giận trước sự đối xử bất công và mãi ôm lòng bất mãn.",
+      "leadVi": "Chuẩn bị bài thuyết trình nhóm gần như một mình, vậy mà người được khen lại là bạn khác.",
+      "anticipateVi": "Sao thấy ấm ức thế nhỉ!",
+      "localized": {
+        "ja": {
+          "lead": "グループ発表の 準備を | ほぼ 一人で やったのに、 | ほめられたのは 別の 子。",
+          "def": "不公平な 扱いに | 腹を_立て、 | 不満を 持ち続ける=こと。",
+          "guess": "なんか、 | もやもやする！"
+        }
+      },
+      "meaningJP": "恨む、不満に思う",
+      "emphasis": [
+        "扱い",
+        "一人で",
+        "恨めしい"
+      ],
+      "pos": "verb",
+      "ipa": "/rɪˈzent/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "work"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "I _____ having to work every weekend.",
+          "vi": "毎週末働かされるのが正直恨めしい。",
+          "glosses": {
+            "ja": "毎週末 働かされるのが | 正直 | 恨めしい。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "R",
+      "shareCode": "ZHG"
+    },
+    {
+      "id": "dazed-jcoll",
+      "word": "dazed",
+      "defVi": "Choáng váng, ngơ ngác. Bị sốc nên đầu óc không tỉnh táo.",
+      "leadVi": "Quả bóng chuyền đập thẳng vào đầu, cứ thế chớp mắt lia lịa.",
+      "anticipateVi": "Sao bay vòng vòng trên đầu kìa!",
+      "localized": {
+        "ja": {
+          "lead": "バレーの ボールが | 頭に 直撃し、 | 目を ぱちぱち させて=いた。",
+          "def": "衝撃や ショックで、 | 意識が はっきり | しない 様子。",
+          "guess": "頭の 上で | 星が 回ってる！"
+        }
+      },
+      "meaningJP": "ぼうっとした、目が回った",
+      "emphasis": [
+        "はっきり",
+        "直撃し",
+        "ぼうっとした"
+      ],
+      "pos": "adj",
+      "ipa": "/deɪzd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "health"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "He looked _____ after the fall.",
+          "vi": "転んだあと、彼はぼうっとした様子だった。",
+          "glosses": {
+            "ja": "転んだ あと、 | 彼は ぼうっとした | 様子だった。"
+          }
+        }
+      ],
+      "chars": 5,
+      "initial": "D",
+      "shareCode": "68J"
+    },
+    {
+      "id": "irritation-jcoll",
+      "word": "irritation",
+      "defVi": "Sự bực mình. Cảm giác bực bội khi những chuyện khó chịu nhỏ cứ chồng chất.",
+      "leadVi": "Đang ôn thi, tiếng chơi game của em trai cứ vọng sang mãi.",
+      "anticipateVi": "Trời ơi, không tập trung được!",
+      "localized": {
+        "ja": {
+          "lead": "テスト勉強中、 | 弟の ゲームの 音が | ずっと 聞こえて=くる。",
+          "def": "小さな 嫌な=ことが | 重なって | 不快に なる 気持ち。",
+          "guess": "もう、 | 集中できない！"
+        }
+      },
+      "meaningJP": "苛立ち、いらいら",
+      "emphasis": [
+        "重なって",
+        "ゲーム",
+        "苛立ち"
+      ],
+      "pos": "noun",
+      "ipa": "/ˌɪr.ɪˈteɪ.ʃən/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "daily"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Traffic noise is a constant _____.",
+          "vi": "車の騒音は絶えない苛立ちの種だ。",
+          "glosses": {
+            "ja": "車の 騒音は | 絶えない | 苛立ちの 種だ。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "I",
+      "shareCode": "QNR"
+    },
+    {
+      "id": "shudder-jcoll",
+      "word": "shudder",
+      "defVi": "Rùng mình. Nhớ lại chuyện đáng sợ khiến cơ thể khẽ run lên.",
+      "leadVi": "Đêm trại hè, ở cuối hành lang tối thấy một bóng người trắng.",
+      "anticipateVi": "Lạnh cả sống lưng!",
+      "localized": {
+        "ja": {
+          "lead": "夏合宿の 夜、 | 暗い 廊下の 先に | 白い 人影が 見えた。",
+          "def": "怖い=ことを 思い出し、 | 体が 小さく | 震える=こと。",
+          "guess": "背中が | ひやっと した！"
+        }
+      },
+      "meaningJP": "身震いする、ぞっとする",
+      "emphasis": [
+        "震える",
+        "人影",
+        "ぞっとする"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈʃʌd.ər/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "perception"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "I _____ when I think about that night.",
+          "vi": "あの夜を思い出すと、今でもぞっとする。",
+          "glosses": {
+            "ja": "あの 夜を 思い出すと、 | 今でも | ぞっとする。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "S",
+      "shareCode": "N1C"
+    },
+    {
+      "id": "grim-jcoll",
+      "word": "grim",
+      "defVi": "Nghiêm trọng, u ám. Tình hình rất tệ, chẳng thể nào thấy lạc quan.",
+      "leadVi": "Hôm trước chuyến đi tham quan, dự báo thời tiết báo bão lớn sắp đổ bộ.",
+      "anticipateVi": "Chắc bị hủy mất rồi…?",
+      "localized": {
+        "ja": {
+          "lead": "修学旅行の 前日、 | 天気予報は | 大型台風の 上陸。",
+          "def": "事態が きわめて 悪く、 | 楽観できる 余地が | ない 様子。",
+          "guess": "これ、 | 中止かも…？"
+        }
+      },
+      "meaningJP": "深刻な、厳しい",
+      "emphasis": [
+        "楽観",
+        "大型台風",
+        "深刻な"
+      ],
+      "pos": "adj",
+      "ipa": "/grɪm/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "general"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The doctor had some _____ news.",
+          "vi": "医者は深刻な知らせを告げた。",
+          "glosses": {
+            "ja": "医者は | 深刻な 知らせを | 告げた。"
+          }
+        }
+      ],
+      "chars": 4,
+      "initial": "G",
+      "shareCode": "ZBR"
+    },
+    {
+      "id": "resentment-jcoll",
+      "word": "resentment",
+      "defVi": "Sự oán giận, bất mãn. Nỗi tức giận, bất mãn đọng lại mãi trong lòng vì thấy bất công.",
+      "leadVi": "Đội trưởng lúc nào cũng chỉ cho bạn thân ra thi đấu. Các học sinh năm nhất chẳng dám nói gì.",
+      "anticipateVi": "Có ngày nổi khùng mất thôi…!",
+      "localized": {
+        "ja": {
+          "lead": "部長は いつも | 仲の いい 子ばかり | 試合に 出す。 | 一年生は 何も 言えない。",
+          "def": "不公平だと 感じて、 | 心に ずっと 残る | 怒りや 不満。",
+          "guess": "いつか | キレそう…！"
+        }
+      },
+      "meaningJP": "恨み、反感",
+      "emphasis": [
+        "残る",
+        "仲の",
+        "反感"
+      ],
+      "pos": "noun",
+      "ipa": "/rɪˈzent.mənt/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "society",
+        "work"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Unfair pay causes _____ among staff.",
+          "vi": "不公平な給料は社員の間に反感を生む。",
+          "glosses": {
+            "ja": "不公平な 給料は | 社員の 間に | 反感を 生む。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "R",
+      "shareCode": "7WS"
+    },
+    {
+      "id": "irrational-jcoll",
+      "word": "irrational",
+      "defVi": "Phi lý. Không có lý do rõ ràng, chỉ bị cảm xúc chi phối.",
+      "leadVi": "Dù nghe nói tuyệt đối an toàn, cứ lên vòng đu quay là chân run lên.",
+      "anticipateVi": "Chẳng có lý do gì mà vẫn sợ!",
+      "localized": {
+        "ja": {
+          "lead": "絶対 安全だと 聞いても、 | 観覧車に 乗ると | 足が 震える。",
+          "def": "筋の 通った 根拠が なく、 | 感情だけに | 動かされる 様子。",
+          "guess": "理由は | ないのに 怖い！"
+        }
+      },
+      "meaningJP": "不合理な、理屈に合わない",
+      "emphasis": [
+        "根拠",
+        "観覧車",
+        "不合理だ"
+      ],
+      "pos": "adj",
+      "ipa": "/ɪˈræʃ.ən.əl/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "thinking"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Her fear of flying is completely _____.",
+          "vi": "彼女が飛行機を怖がるのは、まったく不合理だ。",
+          "glosses": {
+            "ja": "彼女が 飛行機を | 怖がるのは、 | まったく 不合理だ。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "I",
+      "shareCode": "3XH"
+    },
+    {
+      "id": "giggle-jcoll",
+      "word": "giggle",
+      "defVi": "Cười khúc khích. Nén giọng, cười nho nhỏ đầy thích thú.",
+      "leadVi": "Trong giờ học, phát hiện áo sơ mi của thầy mặc ngược, liền đưa mắt nhìn bạn.",
+      "anticipateVi": "Thôi xong, nhịn không nổi!",
+      "localized": {
+        "ja": {
+          "lead": "授業中、 | 先生の シャツが | 後ろ前なのに 気づき、 | 友だちと 目を 合わせた。",
+          "def": "声を 抑えて、 | 小さく 楽しそうに | 笑う=こと。",
+          "guess": "ダメだ、 | こらえきれない！"
+        }
+      },
+      "meaningJP": "くすくす笑う",
+      "emphasis": [
+        "抑えて",
+        "後ろ前",
+        "くすくす"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈgɪg.l/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "communication"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The kids began to _____ during the lesson.",
+          "vi": "授業中に子どもたちがくすくす笑い出した。",
+          "glosses": {
+            "ja": "授業中に 子どもたちが | くすくす | 笑い出した。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "G",
+      "shareCode": "4HD"
+    },
+    {
+      "id": "dismay-jcoll",
+      "word": "dismay",
+      "defVi": "Sự thất vọng, hụt hẫng. Thất vọng và hoảng hốt trước chuyện xấu bất ngờ.",
+      "leadVi": "Đăng ký bao nhiêu lần vé concert của thần tượng, kết quả trượt hết.",
+      "anticipateVi": "Ơ, không thể nào…?",
+      "localized": {
+        "ja": {
+          "lead": "何回も 申し込んだ | 推しの ライブチケット、 | 結果は 全部 ハズレ。",
+          "def": "思いがけない 悪い=ことに | がっかりして、 | うろたえる 気持ち。",
+          "guess": "え、 | うそでしょ…？"
+        }
+      },
+      "meaningJP": "落胆、うろたえ",
+      "emphasis": [
+        "がっかり",
+        "ハズレ",
+        "落胆した"
+      ],
+      "pos": "noun",
+      "ipa": "/dɪˈsmeɪ/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "exams": [
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "To our _____, it started raining.",
+          "vi": "雨が降り出して、私たちは落胆した。",
+          "glosses": {
+            "ja": "雨が 降り出して、 | 私たちは | 落胆した。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "D",
+      "shareCode": "KB7"
+    },
+    {
+      "id": "impatience-jcoll",
+      "word": "impatience",
+      "defVi": "Sự sốt ruột, nóng lòng. Cảm giác bực bội khi phải chờ đợi hay mọi việc mãi không tiến triển.",
+      "leadVi": "Trong lúc chờ tin nhắn trả lời, cứ mở rồi lại tắt điện thoại liên tục.",
+      "anticipateVi": "Chưa à? Vẫn chưa sao?",
+      "localized": {
+        "ja": {
+          "lead": "返信を 待つ 間、 | 何度も スマホを | 開いては 閉じる。",
+          "def": "待たされたり、 | 物事が 進まなかったりして | いらいらする 気持ち。",
+          "guess": "まだ？ | まだなの？"
+        }
+      },
+      "meaningJP": "焦り、もどかしさ",
+      "emphasis": [
+        "いらいら",
+        "スマホ",
+        "焦って"
+      ],
+      "pos": "noun",
+      "ipa": "/ɪmˈpeɪ.ʃənts/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "character",
+        "time"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "His _____ was obvious as he checked his watch.",
+          "vi": "時計を何度も見て、彼は見るからに焦っていた。",
+          "glosses": {
+            "ja": "時計を 何度も 見て、 | 彼は 見るからに | 焦って=いた。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "I",
+      "shareCode": "V73"
+    },
+    {
+      "id": "soothing-jcoll",
+      "word": "soothing",
+      "defVi": "Êm dịu, dễ chịu. Làm dịu cảm xúc, khiến cả tâm trí lẫn cơ thể thấy thư thái.",
+      "leadVi": "Buổi chiều tiếng mưa rả rích mãi, ngồi trong lớp mà bất giác gà gật.",
+      "anticipateVi": "Cứ thế này chắc ngủ mất…",
+      "localized": {
+        "ja": {
+          "lead": "雨の 音が | しとしと 続く 午後、 | 教室で つい | うとうと した。",
+          "def": "気持ちを 和らげ、 | 心も 体も | ほっと させる 様子。",
+          "guess": "このまま | 寝ちゃいそう…"
+        }
+      },
+      "meaningJP": "心地よい、癒やされる",
+      "emphasis": [
+        "和らげ",
+        "しとしと",
+        "心地よい"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈsuː.ðɪŋ/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "health"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "We listened to some _____ music.",
+          "vi": "私たちは心地よい音楽に耳を傾けた。",
+          "glosses": {
+            "ja": "私たちは | 心地よい 音楽に | 耳を_傾けた。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "S",
+      "shareCode": "DN1"
+    },
+    {
+      "id": "tiresome-jcoll",
+      "word": "tiresome",
+      "defVi": "Phiền toái, chán ngắt. Thấy chán ghét vì cùng một việc cứ lặp đi lặp lại mãi.",
+      "leadVi": "Giấy tờ cho chuyến tập huấn của câu lạc bộ, phải viết tay tên và địa chỉ tận năm lần.",
+      "anticipateVi": "Hả, vẫn còn phải viết nữa á?",
+      "localized": {
+        "ja": {
+          "lead": "部活の 合宿の 書類に、 | 名前と 住所を | 五回も 手書きした。",
+          "def": "単調な 繰り返しに | 嫌気が_差す 様子。",
+          "guess": "え、 | まだ 書くの？"
+        }
+      },
+      "meaningJP": "面倒な、うんざりする",
+      "emphasis": [
+        "嫌気が差す",
+        "手書きした",
+        "面倒な"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈtaɪə.səm/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "daily"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Filling in forms is a _____ job.",
+          "vi": "書類の記入って本当に面倒な作業だ。",
+          "glosses": {
+            "ja": "書類の 記入って | 本当に | 面倒な 作業だ。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "T",
+      "shareCode": "BWN"
+    },
+    {
+      "id": "turmoil-jcoll",
+      "word": "turmoil",
+      "defVi": "Hỗn loạn, rối bời. Trạng thái tâm trạng hay tình hình bị xáo trộn dữ dội, không sao yên được.",
+      "leadVi": "Ngày trước lễ hội văn hóa, diễn viên chính lên cơn sốt, cả lớp náo loạn.",
+      "anticipateVi": "Trong đầu rối tung cả lên!",
+      "localized": {
+        "ja": {
+          "lead": "文化祭の 前日に | 主役が 熱を 出し、 | クラスは 大騒ぎ。",
+          "def": "心や 状況が | 激しく 乱れ、 | 収拾が つかない 状態。",
+          "guess": "頭の 中、 | ぐちゃぐちゃ！"
+        }
+      },
+      "meaningJP": "混乱、動揺",
+      "emphasis": [
+        "乱れ",
+        "大騒ぎ",
+        "混乱して"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈtɜː.mɔɪl/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "society"
+      ],
+      "exams": [
+        "ielts",
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Her mind was in _____ after the news.",
+          "vi": "知らせを受けて、彼女の心は激しく混乱していた。",
+          "glosses": {
+            "ja": "知らせを 受けて、 | 彼女の 心は | 激しく 混乱して=いた。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "T",
+      "shareCode": "TJ0"
+    },
+    {
+      "id": "moan-jcoll",
+      "word": "moan",
+      "defVi": "Than vãn, cằn nhằn. Cứ lẩm bẩm mãi về những điều mình không vừa ý.",
+      "leadVi": "Cứ mỗi buổi tập sáng, “lạnh quá”, “buồn ngủ quá” lại là câu cửa miệng của anh khóa trên.",
+      "anticipateVi": "Lại bắt đầu rồi đấy!",
+      "localized": {
+        "ja": {
+          "lead": "朝練の たびに、 | 「寒い」「眠い」が | 先輩の 口癖。",
+          "def": "不満や 不平を | くどくどと | 口に_する=こと。",
+          "guess": "また | 始まったよ！"
+        }
+      },
+      "meaningJP": "愚痴をこぼす、ぼやく",
+      "emphasis": [
+        "くどくど",
+        "口癖",
+        "愚痴をこぼす"
+      ],
+      "pos": "verb",
+      "ipa": "/məʊn/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "communication"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "He loves to _____ about the weather.",
+          "vi": "彼は天気の愚痴をこぼすのが好きだ。",
+          "glosses": {
+            "ja": "彼は | 天気の 愚痴を_こぼすのが | 好きだ。"
+          }
+        }
+      ],
+      "chars": 4,
+      "initial": "M",
+      "shareCode": "80T"
+    },
+    {
+      "id": "sadden-jcoll",
+      "word": "sadden",
+      "defVi": "Làm buồn lòng. Khiến lòng người chùng xuống, cảm thấy đau buồn.",
+      "leadVi": "Nghe tin thầy phụ trách câu lạc bộ sẽ chuyển công tác vào mùa xuân, cả phòng câu lạc bộ lặng ngắt.",
+      "anticipateVi": "Lòng thắt lại……",
+      "localized": {
+        "ja": {
+          "lead": "部活の 顧問が | 春に 転勤すると 聞き、 | 部室が 静まり返った。",
+          "def": "人の 心を 曇らせ、 | 深い 悲しみを | 感じさせる=こと。",
+          "guess": "胸が | きゅっと なる……"
+        }
+      },
+      "meaningJP": "悲しませる、心を痛ませる",
+      "emphasis": [
+        "曇らせ",
+        "静まり返った",
+        "悲しませる"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈsæd.ən/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "News like this will _____ everyone.",
+          "vi": "このような知らせは皆を悲しませるだろう。",
+          "glosses": {
+            "ja": "このような 知らせは | 皆を | 悲しませるだろう。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "S",
+      "shareCode": "TW2"
+    },
+    {
+      "id": "detached-jcoll",
+      "word": "detached",
+      "defVi": "Khách quan, điềm tĩnh. Không bị cảm xúc cuốn theo, lùi lại một bước để nhìn sự việc.",
+      "leadVi": "Bên cạnh các thành viên đang khóc vì thua trận, cô quản lý vẫn bình thản ghi bảng điểm.",
+      "anticipateVi": "Lạnh lùng quá không đấy?",
+      "localized": {
+        "ja": {
+          "lead": "負けて 泣く 部員の 横で、 | マネージャーは | 淡々と スコアを つけた。",
+          "def": "感情に 流されず、 | 一歩 距離を 置いて | 物事を 見る 様子。",
+          "guess": "クール すぎない？"
+        }
+      },
+      "meaningJP": "客観的な、超然とした",
+      "emphasis": [
+        "距離",
+        "淡々と",
+        "客観的な"
+      ],
+      "pos": "adj",
+      "ipa": "/dɪˈtætʃt/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "character",
+        "work"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "As a nurse, I try to stay _____.",
+          "vi": "看護師として、客観的な態度を保つようにしている。",
+          "glosses": {
+            "ja": "看護師として、 | 客観的な 態度を | 保つように して=いる。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "D",
+      "shareCode": "CTW"
+    },
+    {
+      "id": "nostalgia-jcoll",
+      "word": "nostalgia",
+      "defVi": "Nỗi hoài niệm. Cảm giác vừa ấm áp vừa man mác buồn khi nhớ về những ngày đã qua.",
+      "leadVi": "Mở cuốn album tốt nghiệp tiểu học ra, bức ảnh hội thao ngày ấy hiện ra.",
+      "anticipateVi": "Muốn quay lại thời đó quá!",
+      "localized": {
+        "ja": {
+          "lead": "小学校の 卒業アルバムを | 開くと、 運動会の | 写真が 出て=きた。",
+          "def": "過ぎ去った 日々を | 慕わしく 思う、 | 甘く 切ない 気持ち。",
+          "guess": "あの ころに | 戻りたい！"
+        }
+      },
+      "meaningJP": "郷愁、懐かしさ",
+      "emphasis": [
+        "慕わしく",
+        "卒業アルバム",
+        "郷愁"
+      ],
+      "pos": "noun",
+      "ipa": "/nɒsˈtæl.dʒə/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "time"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Old photos fill me with _____.",
+          "vi": "古い写真を見ると、郷愁に駆られる。",
+          "glosses": {
+            "ja": "古い 写真を 見ると、 | 郷愁に 駆られる。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "N",
+      "shareCode": "KPB"
+    },
+    {
+      "id": "reassurance-jcoll",
+      "word": "reassurance",
+      "defVi": "Sự trấn an. Lời nói giúp người đang lo lắng bình tĩnh lại, thấy nhẹ lòng.",
+      "leadVi": "Trước buổi phỏng vấn tuyển sinh, thầy chủ nhiệm vỗ nhẹ vai và cười: “Không sao đâu.”",
+      "anticipateVi": "Chỉ một câu thôi mà nhẹ cả lòng!",
+      "localized": {
+        "ja": {
+          "lead": "推薦入試の 面接 前、 | 担任が 肩を | ぽんと たたき、 | 「平気だよ」と 笑った。",
+          "def": "不安を 和らげ、 | 相手の 心を | 落ち着かせる 言葉や 態度。",
+          "guess": "その 一言で | 救われる！"
+        }
+      },
+      "meaningJP": "安心させる言葉、安心感",
+      "emphasis": [
+        "和らげ",
+        "ぽんと",
+        "安心させる"
+      ],
+      "pos": "noun",
+      "ipa": "/ˌriː.əˈʃʊə.rənts/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "communication",
+        "health"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Patients often need _____ before surgery.",
+          "vi": "手術前の患者には、安心させる言葉が必要なことが多い。",
+          "glosses": {
+            "ja": "手術 前の 患者には、 | 安心させる 言葉が | 必要な=ことが 多い。"
+          }
+        }
+      ],
+      "chars": 11,
+      "initial": "R",
+      "shareCode": "VJJ"
+    },
+    {
+      "id": "empathy-jcoll",
+      "word": "empathy",
+      "defVi": "Sự thấu cảm. Khả năng đặt mình vào vị trí người khác và cùng cảm nhận được cảm xúc của họ.",
+      "leadVi": "Với đứa em khóa dưới vừa thành dự bị, cô nói: “Năm ngoái chị cũng y như vậy đó.”",
+      "anticipateVi": "Bạn có hiểu nỗi đau của người khác không?",
+      "localized": {
+        "ja": {
+          "lead": "補欠に なった 後輩に、 | 「去年の 私も | 同じだったよ」と | 声を かけた。",
+          "def": "他者の 立場に 身を 置き、 | その 痛みや 喜びを | 感じ取る 力。",
+          "guess": "人の 痛み、 | 分かる？"
+        }
+      },
+      "meaningJP": "共感",
+      "emphasis": [
+        "立場",
+        "補欠",
+        "共感"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈem.pə.θi/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "character",
+        "society"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Good doctors show _____ for their patients.",
+          "vi": "優れた医師は患者に共感を示すものだ。",
+          "glosses": {
+            "ja": "優れた 医師は | 患者に 共感を | 示す=ものだ。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "E",
+      "shareCode": "TNT"
+    },
+    {
+      "id": "thrill-jcoll",
+      "word": "thrill",
+      "defVi": "Làm phấn khích. Khiến người khác vui sướng đến mức tim đập rộn ràng.",
+      "leadVi": "Ở buổi live của thần tượng, khoảnh khắc đèn vụt tắt, cả hội trường hò hét.",
+      "anticipateVi": "Rần rần cả người rồi!",
+      "localized": {
+        "ja": {
+          "lead": "推しの ライブで | 照明が 落ちた 瞬間、 | 会場中が 叫んだ。",
+          "def": "鼓動が 速まるほど、 | 人の 心を | 強く 高ぶらせる=こと。",
+          "guess": "ゾクゾク | して=きた！"
+        }
+      },
+      "meaningJP": "興奮させる、夢中にさせる",
+      "emphasis": [
+        "高ぶらせる",
+        "照明",
+        "夢中に"
+      ],
+      "pos": "verb",
+      "ipa": "/θrɪl/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Fireworks always _____ the children.",
+          "vi": "花火はいつも子どもたちを夢中にさせる。",
+          "glosses": {
+            "ja": "花火は いつも | 子どもたちを | 夢中に させる。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "T",
+      "shareCode": "PN2"
+    },
+    {
+      "id": "disillusioned-jcoll",
+      "word": "disillusioned",
+      "defVi": "Vỡ mộng. Thất vọng khi biết bộ mặt thật của điều mình từng tin là tốt đẹp.",
+      "leadVi": "Vào được câu lạc bộ nhạc nhẹ mình hằng mơ ước, ai ngờ toàn tán gẫu chứ chẳng mấy khi luyện tập.",
+      "anticipateVi": "Đâu phải thế này chứ……",
+      "localized": {
+        "ja": {
+          "lead": "憧れの 軽音部は、 | 練習より | 雑談ばかりだった。",
+          "def": "抱いて=いた 理想が | 現実に 裏切られ、 | 失望した 様子。",
+          "guess": "こんな=はずじゃ | なかった……"
+        }
+      },
+      "meaningJP": "幻滅した、失望した",
+      "emphasis": [
+        "裏切られ",
+        "雑談",
+        "幻滅して"
+      ],
+      "pos": "adj",
+      "ipa": "/ˌdɪs.ɪˈluː.ʒənd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "work"
+      ],
+      "exams": [
+        "ielts",
+        "gre"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She's _____ with the music business.",
+          "vi": "彼女は音楽業界に幻滅している。",
+          "glosses": {
+            "ja": "彼女は | 音楽業界に | 幻滅して=いる。"
+          }
+        }
+      ],
+      "chars": 13,
+      "initial": "D",
+      "shareCode": "DBD"
+    },
+    {
+      "id": "traumatic-jcoll",
+      "word": "traumatic",
+      "defVi": "Gây sang chấn. Để lại vết thương lâu dài trong lòng do một trải nghiệm đáng sợ.",
+      "leadVi": "Hồi nhỏ từng bị chó cắn, đến giờ nghe tiếng sủa là chân vẫn cứng đờ.",
+      "anticipateVi": "Chỉ nhớ lại thôi đã run……",
+      "localized": {
+        "ja": {
+          "lead": "子どもの ころ 犬に | かまれてから、 | 今も 鳴き声で | 足が すくむ。",
+          "def": "強い 恐怖や 衝撃で、 | 心に 深い 傷を | 長く 残す 様子。",
+          "guess": "思い出すだけで | 震える……"
+        }
+      },
+      "meaningJP": "心的外傷を与える",
+      "emphasis": [
+        "恐怖",
+        "鳴き声",
+        "傷"
+      ],
+      "pos": "adj",
+      "ipa": "/trɔːˈmæt.ɪk/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "health"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Losing his home was a _____ experience.",
+          "vi": "家を失ったことは、彼の心に深い傷を残す体験だった。",
+          "glosses": {
+            "ja": "家を 失った=ことは、 | 彼の 心に 深い 傷を | 残す 体験だった。"
+          }
+        }
+      ],
+      "chars": 9,
+      "initial": "T",
+      "shareCode": "HXD"
+    },
+    {
+      "id": "sympathize-jcoll",
+      "word": "sympathize",
+      "defVi": "Cảm thông. Hiểu nỗi lòng của người đang khổ sở và hướng lòng về họ.",
+      "leadVi": "Vừa nghe bạn kể chuyện bỏ câu lạc bộ, vừa gật đầu liên tục.",
+      "anticipateVi": "Cảm giác đó, mình hiểu mà……",
+      "localized": {
+        "ja": {
+          "lead": "部活を 辞めた 友だちの | 話を 聞きながら、 | 何度も うなずいた。",
+          "def": "他人の 苦しみや 悲しみを | 理解し、 | 心を 寄せる=こと。",
+          "guess": "その 気持ち、 | 分かるよ……"
+        }
+      },
+      "meaningJP": "同情する、共感する",
+      "emphasis": [
+        "寄せる",
+        "うなずいた",
+        "同情する"
+      ],
+      "pos": "verb",
+      "ipa": "/ˈsɪm.pə.θaɪz/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "communication"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "I really _____ with her situation.",
+          "vi": "彼女の境遇には心から同情する。",
+          "glosses": {
+            "ja": "彼女の 境遇には | 心から | 同情する。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "S",
+      "shareCode": "XYW"
+    },
+    {
+      "id": "weep-jcoll",
+      "word": "weep",
+      "defVi": "Khóc. Rơi nước mắt vì buồn bã hoặc xúc động.",
+      "leadVi": "Sau trận đấu giải nghệ, vừa đọc tấm thiệp ký tên của mọi người, vai cô vừa run lên.",
+      "anticipateVi": "Có mang khăn tay không đó?",
+      "localized": {
+        "ja": {
+          "lead": "引退試合の 後、 | 寄せ書きを 読みながら、 | 肩を 震わせた。",
+          "def": "悲しみや 感動の あまり、 | 涙を 流して | 泣く=こと。",
+          "guess": "ハンカチ、 | 持ってる？"
+        }
+      },
+      "meaningJP": "涙を流す、むせび泣く",
+      "emphasis": [
+        "涙",
+        "寄せ書き",
+        "むせび泣き"
+      ],
+      "pos": "verb",
+      "ipa": "/wiːp/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She covered her face and began to _____.",
+          "vi": "彼女は両手で顔を覆い、むせび泣き始めた。",
+          "glosses": {
+            "ja": "彼女は 両手で 顔を 覆い、 | むせび泣き始めた。"
+          }
+        }
+      ],
+      "chars": 4,
+      "initial": "W",
+      "shareCode": "9QJ"
+    },
+    {
+      "id": "wretched-jcoll",
+      "word": "wretched",
+      "defVi": "Khổ sở, thảm hại. Thân thể và tinh thần đều suy sụp, thấy bản thân thật đáng thương.",
+      "leadVi": "Ngày trước kỳ thi thì lên cơn sốt, lại quên ô, về nhà ướt như chuột lột.",
+      "anticipateVi": "Hôm nay tệ hết chỗ nói……",
+      "localized": {
+        "ja": {
+          "lead": "テストの 前日に 熱が 出て、 | 傘も 忘れ、 | ずぶぬれで 帰った。",
+          "def": "心身ともに ひどく 弱り、 | 我が身が 哀れに | 思える 様子。",
+          "guess": "今日、 | 最悪すぎ……"
+        }
+      },
+      "meaningJP": "惨めな、ひどくつらい",
+      "emphasis": [
+        "哀れ",
+        "ずぶぬれ",
+        "惨めな"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈretʃ.ɪd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "health"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "I felt _____ all day, so I went to bed early.",
+          "vi": "一日中惨めな気分で、早めに寝た。",
+          "glosses": {
+            "ja": "一日中 | 惨めな 気分で、 | 早めに 寝た。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "W",
+      "shareCode": "C9Z"
+    },
+    {
+      "id": "yearn-jcoll",
+      "word": "yearn",
+      "defVi": "Mong mỏi, khao khát. Từ tận đáy lòng mãnh liệt mong muốn điều mình chưa có được.",
+      "leadVi": "Giữa những giờ ôn thi, cứ lấy điện thoại ngắm đi ngắm lại ảnh ngôi trường mình mơ ước.",
+      "anticipateVi": "Liệu có ngày được đến đó không nhỉ?",
+      "localized": {
+        "ja": {
+          "lead": "受験勉強の 合間に、 | 志望校の 写真を | スマホで 何度も 眺めた。",
+          "def": "手の 届かない ものを、 | 痛いほど | 強く 求める=こと。",
+          "guess": "いつか | 行けるかな？"
+        }
+      },
+      "meaningJP": "切望する、憧れる",
+      "emphasis": [
+        "求める",
+        "志望校",
+        "切望して"
+      ],
+      "pos": "verb",
+      "ipa": "/jɜːn/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "They _____ for a quiet life in the countryside.",
+          "vi": "彼らは田舎での静かな暮らしを切望している。",
+          "glosses": {
+            "ja": "彼らは 田舎での | 静かな 暮らしを | 切望して=いる。"
+          }
+        }
+      ],
+      "chars": 5,
+      "initial": "Y",
+      "shareCode": "672"
+    },
+    {
+      "id": "cheerfulness-jcoll",
+      "word": "cheerfulness",
+      "defVi": "Sự vui tươi. Tính cách lúc nào cũng tươi cười, làm cả người xung quanh vui lây.",
+      "leadVi": "Dù là buổi tập sáng trời mưa, chỉ một tiếng “Chào buổi sáng!” của đội trưởng là bầu không khí bừng sáng hẳn.",
+      "anticipateVi": "Đúng là người như mặt trời!",
+      "localized": {
+        "ja": {
+          "lead": "雨の 朝練でも、 | 部長の 「おはよう！」で | 空気が ぱっと 変わる。",
+          "def": "常に 朗らかで、 | 周囲の 人まで | 和ませる 性格。",
+          "guess": "太陽みたいな | 人だね！"
+        }
+      },
+      "meaningJP": "快活さ、朗らかさ",
+      "emphasis": [
+        "和ませる",
+        "おはよう",
+        "朗らかさ"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈtʃɪə.fəl.nəs/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "character"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Her _____ made everyone feel better.",
+          "vi": "彼女の朗らかさに、誰もが元気づけられた。",
+          "glosses": {
+            "ja": "彼女の 朗らかさに、 | 誰もが | 元気づけられた。"
+          }
+        }
+      ],
+      "chars": 12,
+      "initial": "C",
+      "shareCode": "MC0"
+    },
+    {
+      "id": "expressive-jcoll",
+      "word": "expressive",
+      "defVi": "Giàu biểu cảm. Cảm xúc hiện rõ trên nét mặt, giọng nói và cử chỉ.",
+      "leadVi": "Trong buổi diễn của câu lạc bộ kịch, dù là cảnh không có lời thoại, chỉ bằng ánh mắt cô cũng làm khán giả bật khóc.",
+      "anticipateVi": "Đôi mắt đang nói chuyện kìa!",
+      "localized": {
+        "ja": {
+          "lead": "演劇部の 発表で、 | セリフの ない 場面でも | 目だけで 客席を 泣かせた。",
+          "def": "感情が | 表情や 声や 仕草に | 豊かに 表れる 様子。",
+          "guess": "目で | しゃべってる！"
+        }
+      },
+      "meaningJP": "表情豊かな、表現力のある",
+      "emphasis": [
+        "表れる",
+        "目だけ",
+        "表情豊かな"
+      ],
+      "pos": "adj",
+      "ipa": "/ɪkˈspres.ɪv/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "communication",
+        "character"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "She has very _____ eyes.",
+          "vi": "彼女はとても表情豊かな目をしている。",
+          "glosses": {
+            "ja": "彼女は | とても=表情豊かな | 目を して=いる。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "E",
+      "shareCode": "YG6"
+    },
+    {
+      "id": "weary-jcoll",
+      "word": "weary",
+      "defVi": "Mệt rã rời. Cả thân thể lẫn tinh thần đều mệt lả, không còn chút sức nào.",
+      "leadVi": "Ngày thứ ba của chuyến đi tham quan, trên xe buýt về sau khi đi bộ khắp nơi, cả bọn ngủ say như chết.",
+      "anticipateVi": "Không nhấc nổi một bước nữa……",
+      "localized": {
+        "ja": {
+          "lead": "修学旅行の 三日目、 | 歩き回った 帰りの バスで | 全員 爆睡した。",
+          "def": "心身ともに | すっかり 消耗し、 | 気力が 尽きた 様子。",
+          "guess": "もう | 一歩も 動けない……"
+        }
+      },
+      "meaningJP": "疲れ果てた、疲弊した",
+      "emphasis": [
+        "消耗し",
+        "バス",
+        "疲れ果てた"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈwɪə.ri/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "health"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "The _____ travellers finally reached the hotel.",
+          "vi": "疲れ果てた旅人たちが、ようやくホテルにたどり着いた。",
+          "glosses": {
+            "ja": "疲れ果てた 旅人たちが、 | ようやく | ホテルに たどり着いた。"
+          }
+        }
+      ],
+      "chars": 5,
+      "initial": "W",
+      "shareCode": "8EW"
+    },
+    {
+      "id": "fury-jcoll",
+      "word": "fury",
+      "defVi": "Cơn thịnh nộ. Cơn giận dữ dội bùng lên đến mức không kìm nén được.",
+      "leadVi": "Bị em trai ăn mất hộp pudding đang để dành, mặt người chị đỏ bừng.",
+      "anticipateVi": "Đầu bốc khói luôn rồi!",
+      "localized": {
+        "ja": {
+          "lead": "楽しみに して=いた プリンを | 弟に 食べられ、 | 姉の 顔が 真っ赤に なった。",
+          "def": "理性で 抑えきれないほど、 | 激しく 燃え上がる | 怒り。",
+          "guess": "頭から | 湯気が 出てる！"
+        }
+      },
+      "meaningJP": "激怒、憤り",
+      "emphasis": [
+        "燃え上がる",
+        "真っ赤",
+        "怒り"
+      ],
+      "pos": "noun",
+      "ipa": "/ˈfjʊə.ri/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "He could hardly control his _____.",
+          "vi": "彼は込み上げる怒りをほとんど抑えられなかった。",
+          "glosses": {
+            "ja": "彼は 込み上げる 怒りを | ほとんど | 抑えられなかった。"
+          }
+        }
+      ],
+      "chars": 4,
+      "initial": "F",
+      "shareCode": "QN5"
+    },
+    {
+      "id": "humility-jcoll",
+      "word": "humility",
+      "defVi": "Sự khiêm nhường. Thái độ không kiêu căng, không cho mình hơn người khác.",
+      "leadVi": "Dù vô địch giải đấu, cầu thủ chủ lực vẫn cúi đầu nói: “Là nhờ mọi người.”",
+      "anticipateVi": "Lúa chín thì cúi đầu……",
+      "localized": {
+        "ja": {
+          "lead": "大会で 優勝しても、 | エースは | 「みんなの おかげ」と | 頭を 下げた。",
+          "def": "おごらず、 | 自らを 低く 置き、 | 他者から 学ぶ 姿勢。",
+          "guess": "実るほど | 頭を 垂れる……"
+        }
+      },
+      "meaningJP": "謙虚さ、謙遜",
+      "emphasis": [
+        "おごらず",
+        "おかげ",
+        "謙虚さ"
+      ],
+      "pos": "noun",
+      "ipa": "/hjuːˈmɪl.ə.ti/",
+      "topic": "character",
+      "topics": [
+        "character",
+        "emotion"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Great leaders show _____.",
+          "vi": "優れたリーダーほど謙虚さを持っている。",
+          "glosses": {
+            "ja": "優れた リーダーほど | 謙虚さを | 持って=いる。"
+          }
+        }
+      ],
+      "chars": 8,
+      "initial": "H",
+      "shareCode": "PX1"
+    },
+    {
+      "id": "elated-jcoll",
+      "word": "elated",
+      "defVi": "Vui sướng tột độ. Vui đến mức muốn nhảy cẫng lên, lòng đầy phấn khởi.",
+      "leadVi": "Thấy số báo danh của mình trên màn hình công bố kết quả, ôm chầm lấy mẹ.",
+      "anticipateVi": "Không phải mơ chứ?",
+      "localized": {
+        "ja": {
+          "lead": "合格発表の 画面に | 自分の 番号を 見つけ、 | 母と 抱き合った。",
+          "def": "天にも 昇るほど | 喜びに 満ち、 | 舞い上がって=いる 様子。",
+          "guess": "夢じゃ | ないよね？"
+        }
+      },
+      "meaningJP": "大喜びの、有頂天の",
+      "emphasis": [
+        "舞い上がって",
+        "番号",
+        "有頂天"
+      ],
+      "pos": "adj",
+      "ipa": "/ɪˈleɪ.tɪd/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "exams": [
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "We were _____ by the news.",
+          "vi": "その知らせに、私たちは有頂天になった。",
+          "glosses": {
+            "ja": "その 知らせに、 | 私たちは | 有頂天に なった。"
+          }
+        }
+      ],
+      "chars": 6,
+      "initial": "E",
+      "shareCode": "6TC"
+    },
+    {
+      "id": "inferiority-jcoll",
+      "word": "inferiority",
+      "defVi": "Cảm giác tự ti. Thấy mình kém cỏi hơn người khác và mất tự tin.",
+      "leadVi": "Hai chị gái, một người đứng đầu khối, một người là át chủ bài câu lạc bộ. Cậu ngại nhất là những buổi họp mặt ngày Tết.",
+      "anticipateVi": "Dù sao mình cũng chẳng ra gì……",
+      "localized": {
+        "ja": {
+          "lead": "姉二人は 学年トップと | 部活の エース。 | 正月の 集まりが 苦手だ。",
+          "def": "他者と 比べて | 自分は 劣って=いると | 感じる 気持ち。",
+          "guess": "どうせ | 私なんか……"
+        }
+      },
+      "meaningJP": "劣等感",
+      "emphasis": [
+        "比べて",
+        "正月",
+        "劣等感"
+      ],
+      "pos": "noun",
+      "ipa": "/ɪnˌfɪə.riˈɒr.ə.ti/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "character"
+      ],
+      "exams": [
+        "ielts"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "He had a feeling of _____ next to his talented sisters.",
+          "vi": "才能あふれる姉たちの横で、彼は劣等感を抱いていた。",
+          "glosses": {
+            "ja": "才能 あふれる | 姉たちの 横で、 | 彼は 劣等感を | 抱いて=いた。"
+          }
+        }
+      ],
+      "chars": 11,
+      "initial": "I",
+      "shareCode": "TKQ"
+    },
+    {
+      "id": "fearful-jcoll",
+      "word": "fearful",
+      "defVi": "E sợ, sợ sệt. Lo lắng thấp thỏm vì cảm thấy điều xấu sắp xảy ra.",
+      "leadVi": "Trên đường tối từ lớp học thêm về, cứ ngoái lại nhìn phía sau mấy lần.",
+      "anticipateVi": "Có ai đang đi theo không vậy?",
+      "localized": {
+        "ja": {
+          "lead": "塾の 帰り、 | 暗い 道で | 何度も 後ろを 振り返った。",
+          "def": "悪い 結果を 予感し、 | びくびくと | おびえて=いる 様子。",
+          "guess": "誰か | ついて=きてる？"
+        }
+      },
+      "meaningJP": "恐れる、不安を抱く",
+      "emphasis": [
+        "びくびく",
+        "振り返った",
+        "恐れる"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈfɪə.fəl/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Many people are _____ of travelling alone at night.",
+          "vi": "夜の一人旅を恐れる人は少なくない。",
+          "glosses": {
+            "ja": "夜の 一人旅を | 恐れる 人は | 少なくない。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "F",
+      "shareCode": "8NA"
+    },
+    {
+      "id": "inhibition-jcoll",
+      "word": "inhibition",
+      "defVi": "Sự e dè. Cảm giác bận tâm ánh mắt người khác và sợ thất bại khiến điều mình muốn làm bị kìm lại.",
+      "leadVi": "Ở karaoke, được chuyền micro cho mà vẫn lắc đầu: “Thôi, mình không đâu.”",
+      "anticipateVi": "Cứ mạnh dạn hát luôn đi!",
+      "localized": {
+        "ja": {
+          "lead": "カラオケで マイクを | 回されたのに、 | 「私は いい」と | 首を 横に 振った。",
+          "def": "人目や 失敗を 恐れ、 | 自然な 言動に | 歯止めが かかる 心理。",
+          "guess": "思い切って | 歌っちゃえ！"
+        }
+      },
+      "meaningJP": "気後れ、心理的抑制",
+      "emphasis": [
+        "歯止め",
+        "マイク",
+        "気後れ"
+      ],
+      "pos": "noun",
+      "ipa": "/ˌɪn.hɪˈbɪʃ.ən/",
+      "topic": "emotion",
+      "topics": [
+        "emotion",
+        "character"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "Shy students struggle to overcome their _____.",
+          "vi": "内気な学生は気後れを克服するのに苦労する。",
+          "glosses": {
+            "ja": "内気な 学生は | 気後れを 克服するのに | 苦労する。"
+          }
+        }
+      ],
+      "chars": 10,
+      "initial": "I",
+      "shareCode": "EJ1"
+    },
+    {
+      "id": "frantic-jcoll",
+      "word": "frantic",
+      "defVi": "Cuống cuồng. Lo cuống lên, mất bình tĩnh và cuống quýt chạy khắp nơi.",
+      "leadVi": "Năm phút trước giờ ra khỏi nhà, không tìm thấy vé tháng, lật tung cả phòng.",
+      "anticipateVi": "Này, bình tĩnh đã!",
+      "localized": {
+        "ja": {
+          "lead": "家を 出る 五分前、 | 定期券が 見つからず、 | 部屋中を ひっくり返した。",
+          "def": "焦りの あまり | 冷静さを 失い、 | 取り乱して=いる 様子。",
+          "guess": "ちょっと、 | 落ち着いて！"
+        }
+      },
+      "meaningJP": "必死の、取り乱した",
+      "emphasis": [
+        "取り乱して",
+        "定期券",
+        "必死に"
+      ],
+      "pos": "adj",
+      "ipa": "/ˈfræn.tɪk/",
+      "topic": "emotion",
+      "topics": [
+        "emotion"
+      ],
+      "exams": [
+        "sat"
+      ],
+      "level": "JCOLL",
+      "usage": [
+        {
+          "en": "After a _____ search, we found the keys.",
+          "vi": "必死に探し回った末、ようやく鍵が見つかった。",
+          "glosses": {
+            "ja": "必死に 探し回った 末、 | ようやく | 鍵が 見つかった。"
+          }
+        }
+      ],
+      "chars": 7,
+      "initial": "F",
+      "shareCode": "MFP"
+    }
+  ]
+}

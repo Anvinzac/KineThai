@@ -3,21 +3,21 @@ import { useEffect, useMemo, useRef } from "react";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchVocabularyPage, VocabularyRequestError } from "../api/feed";
 import { VOCAB_MAX_PAGES } from "../lib/backfill";
-import type { FeedCursor, VocabularyFilters } from "../types";
+import type { FeedCursor, VocabularyFilters, TargetLocale } from "../types";
 import { markReportedOnce, reportVisitorEvent } from "@/lib/session-tracker";
 
-/** Load deterministic pages, retaining at most VOCAB_MAX_PAGES of them. @param seed Stable visit seed. @param filters Content filters. @returns Query and flattened cards. */
-export function useVocabularyFeed(seed: string, filters: VocabularyFilters) {
+/** Load deterministic pages, retaining at most VOCAB_MAX_PAGES of them. @param seed Stable visit seed. @param filters Content filters. @param locale Target locale override. @returns Query and flattened cards. */
+export function useVocabularyFeed(seed: string, filters: VocabularyFilters, locale?: TargetLocale) {
   const client = useQueryClient();
   const queryKey = useMemo(
-    () => ["vocabulary", seed, filters.topic, filters.level, filters.difficulty],
-    [seed, filters.topic, filters.level, filters.difficulty],
+    () => ["vocabulary", seed, filters.topic, filters.level, filters.difficulty, locale],
+    [seed, filters.topic, filters.level, filters.difficulty, locale],
   );
   const query = useInfiniteQuery({
     queryKey,
     initialPageParam: { position: 0 } as FeedCursor,
     queryFn: ({ pageParam, signal }) =>
-      fetchVocabularyPage({ seed, filters, cursor: pageParam, signal }),
+      fetchVocabularyPage({ seed, filters, cursor: pageParam, signal }, locale),
     getNextPageParam: (last) =>
       last.nextPosition === null
         ? undefined

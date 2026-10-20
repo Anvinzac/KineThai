@@ -7,7 +7,7 @@ import { canWalkFurther, getWalkedPositions } from "../lib/backfill";
 import { formatCountdown, isWordAllowed, nextAvailableAt, type ViewHistory } from "../lib/history";
 import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
-import type { FeedPage, Presentation, VocabularyFilters } from "../types";
+import type { FeedPage, Presentation, TargetLocale, VocabularyFilters } from "../types";
 import { VocabularyCard } from "./VocabularyCard";
 
 // Admin-only, and only on demand: readers never download the export studio.
@@ -35,6 +35,7 @@ const FEED_END_ID = "feed-end";
 export function VocabularyStream({
   seed,
   filters,
+  locale,
   presentation,
   reducedMotion,
   suspended,
@@ -52,6 +53,8 @@ export function VocabularyStream({
 }: {
   seed: string;
   filters: VocabularyFilters;
+  /** Visited host's deck locale; keeps fallback paging on the same deck as the page. */
+  locale?: TargetLocale;
   presentation: Presentation;
   reducedMotion: boolean;
   suspended: boolean;
@@ -71,7 +74,7 @@ export function VocabularyStream({
   /** Toggle autoplay from the card's center tap zone; flips presentation.autoplay. */
   onToggleAutoplay?: () => void;
 }) {
-  const query = useVocabularyFeed(seed, filters);
+  const query = useVocabularyFeed(seed, filters, locale);
   // Empty states, status line and feed landmark read in the active UI locale.
   const ui = useLocale();
   // Tick so day-window expiries re-evaluate without a reload.

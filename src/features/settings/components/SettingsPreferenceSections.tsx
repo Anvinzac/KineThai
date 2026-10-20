@@ -9,6 +9,7 @@ import { useNavigate } from "@tanstack/react-router";
 import {
   AtSign,
   Bell,
+  BookOpen,
   Download,
   Edit3,
   EyeOff,
@@ -30,6 +31,8 @@ import {
 import type { Dispatch, ReactElement, SetStateAction } from "react";
 import { toast } from "sonner";
 import type { Preferences } from "../lib/preferences";
+import { japaneseTrackForLevel } from "@/features/vocabulary/lib/difficulty";
+import { writeDifficultyChoice } from "@/features/vocabulary/lib/difficulty-choice";
 import { ControlRow, PreferenceRow, Row, Section, SegmentedControl } from "./SettingsControls";
 
 type SettingsPreferenceSectionsProps = {
@@ -150,6 +153,46 @@ export function SettingsPreferenceSections({
           value="dark"
           onClick={() => toast("dark mode active")}
         />
+        <ControlRow icon={<Globe2 />} label="Target language">
+          <SegmentedControl
+            value={prefs.targetLanguage}
+            onChange={(targetLanguage) =>
+              setPrefs((p) => ({
+                ...p,
+                targetLanguage: targetLanguage as Preferences["targetLanguage"],
+              }))
+            }
+            options={[
+              { value: "", label: "default" },
+              { value: "en", label: "English" },
+              { value: "zh", label: "Chinese" },
+              { value: "ja", label: "Japanese" },
+              { value: "ko", label: "Korean" },
+            ]}
+          />
+        </ControlRow>
+        {prefs.targetLanguage === "ja" && (
+          <ControlRow icon={<BookOpen />} label="Japanese proficiency level">
+            <SegmentedControl
+              value={prefs.japaneseLevel}
+              onChange={(japaneseLevel) => {
+                const level = japaneseLevel as Preferences["japaneseLevel"];
+                setPrefs((p) => ({ ...p, japaneseLevel: level }));
+                // The feed falls back to this stored track when Settings says "all";
+                // clearing it here is what makes a switch back to all actually show
+                // every level instead of reopening the previous one.
+                writeDifficultyChoice(level ? (japaneseTrackForLevel(level)?.id ?? "") : "");
+              }}
+              options={[
+                { value: "", label: "all" },
+                { value: "JPRIM", label: "Primary" },
+                { value: "JSEC", label: "Secondary" },
+                { value: "JHIGH", label: "High School" },
+                { value: "JCOLL", label: "College" },
+              ]}
+            />
+          </ControlRow>
+        )}
       </Section>
 
       <Section title="privacy & support">

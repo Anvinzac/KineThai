@@ -1,5 +1,7 @@
-/** Public vocabulary transport/UI types; contains no catalog data. Exports: feed contracts. Depends on: schema types. */
+/** Public vocabulary transport/UI types; contains no catalog data. Exports: feed contracts. Depends on: schema types, target language. */
 import type { NarrativeStyle, VocabularyLevel, VocabularyWord } from "./lib/schema";
+
+export type { TargetLocale } from "./lib/target-language";
 
 export type VocabularyFilters = {
   topic: string;
