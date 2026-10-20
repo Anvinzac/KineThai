@@ -30,6 +30,8 @@ export type WordSequenceLinesProps = {
    * line is language-agnostic: segments of word tokens plus an em indent).
    */
   isVietnamese: boolean;
+  /** Gap drawn between two segments on a packed line; Japanese pages draw 文節 flush. */
+  segmentGapEm?: number;
   /** Multiplier on the inter-line advance, forwarded from WordSequenceText. */
   lineSpacingScale?: number;
   vietnameseLines: VietnameseLines;
@@ -102,6 +104,7 @@ function getEmphasisGroups(
  */
 export function WordSequenceLines({
   isVietnamese,
+  segmentGapEm = 0.24,
   lineSpacingScale = 1,
   vietnameseLines,
   words,
@@ -301,7 +304,7 @@ export function WordSequenceLines({
           style={{
             alignSelf: "stretch",
             boxSizing: "border-box",
-            columnGap: "0.24em",
+            columnGap: `${segmentGapEm}em`,
             rowGap: `${0.08 * lineSpacingScale}em`,
             marginTop: lineIndex === 0 ? 0 : `${0.06 * lineSpacingScale}em`,
             minWidth: 0,
@@ -330,7 +333,7 @@ export function WordSequenceLines({
                 data-kinetic-segment={segment.key}
                 className="inline-flex flex-nowrap items-baseline whitespace-nowrap"
                 style={{
-                  columnGap: "0.24em",
+                  columnGap: `${segmentGapEm}em`,
                   flex: "0 0 auto",
                   justifyContent: "flex-start",
                 }}

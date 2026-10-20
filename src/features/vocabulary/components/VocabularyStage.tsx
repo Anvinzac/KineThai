@@ -94,6 +94,7 @@ function StageText({
   | "fitAsUnit"
   | "dataEmphasis"
   | "boundPhrases"
+  | "phraseEdges"
   | "secondaryEmphasis"
   | "allowFrameEmphasis"
   | "emphasisPool"
@@ -240,6 +241,7 @@ export function VocabularyStage({
                 fitAsUnit={!!stage.reveal}
                 dataEmphasis={stage.dataEmphasis}
                 boundPhrases={stage.boundPhrases}
+                phraseEdges={stage.phraseEdges}
                 secondaryEmphasis={stage.secondaryEmphasis}
                 allowFrameEmphasis={allowFrameEmphasis}
                 emphasisPool={emphasisPool}

@@ -14,9 +14,11 @@ import { getRelativeLuminance } from "@/features/canvas/contrast/color-math";
 import {
   getHanLayoutMetrics,
   getHanTokens,
+  getJapaneseLayoutMetrics,
   getVietnameseLayoutMetrics,
   getWords,
   isLikelyChineseText,
+  isLikelyJapaneseText,
   isLikelyVietnameseText,
   type EmphasisVariant,
 } from "@/features/kinetic-text";
@@ -533,17 +535,22 @@ export function fitVocabularyTextSize(
   const words = getWords(text);
   const availableHeight = getVocabularyTextHeightBudget(width, height, reservedHeight);
   const availableWidth = Math.max(180, width * 0.84);
-  const vietnamese = isLikelyVietnameseText(text);
+  // Japanese first: its kanji-heavy clue text can read as Chinese to the glyph counter,
+  // but it packs per 文節 with no gaps and must not be split per character.
+  const japanese = isLikelyJapaneseText(text);
+  const vietnamese = !japanese && isLikelyVietnameseText(text);
   // A Han deck's usage sentence packs through the same staggered-line renderer as
   // Vietnamese, so its size must be solved against the same packed line count.
-  const han = !vietnamese && isLikelyChineseText(text);
+  const han = !japanese && !vietnamese && isLikelyChineseText(text);
   const tokens = han ? getHanTokens(text) : words;
   for (let size = baseSize; size >= 28; size -= 2) {
     let lines = 1;
-    if (vietnamese || han) {
-      lines = han
-        ? getHanLayoutMetrics(tokens, width, size, 1.24).lines.length
-        : getVietnameseLayoutMetrics(tokens, width, size, 1.24).lines.length;
+    if (japanese || vietnamese || han) {
+      lines = japanese
+        ? getJapaneseLayoutMetrics(tokens, width, size, 1.24).lines.length
+        : han
+          ? getHanLayoutMetrics(tokens, width, size, 1.24).lines.length
+          : getVietnameseLayoutMetrics(tokens, width, size, 1.24).lines.length;
     } else {
       let used = 0;
       for (const word of words) {

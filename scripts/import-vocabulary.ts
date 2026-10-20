@@ -22,7 +22,7 @@
  */
 import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, stat, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { normalizeDeck } from "../src/features/vocabulary/lib/schema.ts";
 
@@ -97,11 +97,12 @@ if (!source || argv.length !== 1 || (packAt !== -1 && !packName)) {
       flag: "wx",
     });
     await rename(temporary, output);
+    const shown = relative(process.cwd(), output);
     console.log(
       slug
-        ? staged
-          ? `Staged pack "${slug}": ${catalog.count} words; revision ${revision} → data/packs/incoming/${slug}.json. Embedded and validated, but NOT served — move it into data/packs/ and rebuild/restart to display.`
-          : `Compiled pack "${slug}": ${catalog.count} words; revision ${revision} → data/packs/${slug}.json. Restart dev / rebuild to serve.`
+        ? staged && !locale
+          ? `Staged pack "${slug}": ${catalog.count} words; revision ${revision} → ${shown}. Embedded and validated, but NOT served — move it into data/packs/ and rebuild/restart to display.`
+          : `Compiled pack "${slug}": ${catalog.count} words; revision ${revision} → ${shown}. Restart dev / rebuild to serve.`
         : `Imported ${catalog.count} distinct words; revision ${revision}. Rebuild/deploy to publish.`,
     );
   } catch (error) {

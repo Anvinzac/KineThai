@@ -1,11 +1,22 @@
-/** WordCrawler validation and normalized catalog contract. Exports: schemas/types, normalizeDeck. Depends on: zod. */
+/** WordCrawler validation and normalized catalog contract. Exports: schemas/types, normalizeDeck. Depends on: zod, ja-text. */
 import { z } from "zod";
+import { parseJapaneseMarkup, stripJapaneseMarks } from "./ja-text";
 import type { TargetLocale } from "./target-language";
 
 /** CEFR levels — used by the English (and ko/ja) vocabulary pages. */
 export const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 /** HSK 3.0 (2021) proficiency levels — the official Chinese word-frequency standard for the hoa domain. */
-export const HSK_LEVELS = ["HSK1", "HSK2", "HSK3", "HSK4", "HSK5", "HSK6", "HSK7", "HSK8", "HSK9"] as const;
+export const HSK_LEVELS = [
+  "HSK1",
+  "HSK2",
+  "HSK3",
+  "HSK4",
+  "HSK5",
+  "HSK6",
+  "HSK7",
+  "HSK8",
+  "HSK9",
+] as const;
 /** Master enum accepted by the word schema; covers both proficiency systems. */
 export const LEVELS = [...CEFR_LEVELS, ...HSK_LEVELS] as const;
 export const STYLE_IDS = ["detective", "speed", "confession", "minimal"] as const;
@@ -162,9 +173,119 @@ function normalizeEmphasisPhrases(phrases?: string[]): string[] | undefined {
   return normalized.length ? normalized : undefined;
 }
 
+/**
+ * Lift a flat Japanese deck into the schema. The new generator writes `defJa`,
+ * `leadJa`, `anticipateJa`, `usageJa` and `emphasisJa` with no Vietnamese base, while
+ * the app reads `localized.ja` and requires a base definition. The raw marked text goes
+ * on `localized.ja` (the reader parses `_`, `=` and `|` itself); the base fields get
+ * the display form, so a locale without an overlay and every non-kinetic surface still
+ * read Japanese with no marks.
+ *
+ * @param entry - one raw deck word
+ * @param index - position in the deck, for a deterministic fallback id
+ * @returns The entry with `localized.ja`, base fields, usage and emphasis filled
+ * @pure true
+ */
+function withFlatJapanese(entry: Record<string, unknown>, index: number): Record<string, unknown> {
+  const defJa = typeof entry.defJa === "string" ? entry.defJa.trim() : "";
+  if (!defJa) return entry;
+
+  const localized =
+    entry.localized && typeof entry.localized === "object"
+      ? { ...(entry.localized as Record<string, unknown>) }
+      : {};
+  const existing =
+    localized.ja && typeof localized.ja === "object"
+      ? { ...(localized.ja as Record<string, unknown>) }
+      : {};
+  // A nested overlay was authored deliberately; the flat alias must not overwrite it.
+  if (typeof existing.def === "string" && existing.def.trim()) return entry;
+
+  const leadJa = typeof entry.leadJa === "string" ? entry.leadJa.trim() : "";
+  const guessJa = typeof entry.anticipateJa === "string" ? entry.anticipateJa.trim() : "";
+  const usageJa = typeof entry.usageJa === "string" ? entry.usageJa.trim() : "";
+  const usageEn = typeof entry.usageEn === "string" ? entry.usageEn.trim() : "";
+  localized.ja = {
+    ...existing,
+    def: defJa,
+    ...(leadJa ? { lead: leadJa } : {}),
+    ...(guessJa ? { guess: guessJa } : {}),
+  };
+
+  let usage = Array.isArray(entry.usage) ? [...entry.usage] : [];
+  if (usage.length === 0 && usageEn) usage = [{ en: usageEn }];
+  if (usage.length > 0 && usageJa) {
+    const example =
+      usage[0] && typeof usage[0] === "object" ? { ...(usage[0] as Record<string, unknown>) } : {};
+    const glosses =
+      example.glosses && typeof example.glosses === "object"
+        ? { ...(example.glosses as Record<string, unknown>) }
+        : {};
+    usage[0] = {
+      ...example,
+      vi:
+        typeof example.vi === "string" && example.vi.trim()
+          ? example.vi
+          : stripJapaneseMarks(usageJa),
+      glosses: { ...glosses, ja: usageJa },
+    };
+  }
+
+  const emphasisJa = Array.isArray(entry.emphasisJa)
+    ? entry.emphasisJa
+        .filter((phrase): phrase is string => typeof phrase === "string" && phrase.trim() !== "")
+        // The page matches emphasis token by token; keep the 文節 boundaries.
+        .map((phrase) => parseJapaneseMarkup(phrase).text)
+    : [];
+
+  const headword = typeof entry.word === "string" ? entry.word : "";
+  const id =
+    typeof entry.id === "string" && entry.id.trim()
+      ? entry.id
+      : headword
+          .toLowerCase()
+          .replace(/[^a-z0-9_-]+/gu, "-")
+          .replace(/^-+|-+$/g, "") || `ja-${index}`;
+
+  return {
+    ...entry,
+    id,
+    defVi:
+      typeof entry.defVi === "string" && entry.defVi.trim()
+        ? entry.defVi
+        : stripJapaneseMarks(defJa),
+    leadVi:
+      typeof entry.leadVi === "string" && entry.leadVi.trim()
+        ? entry.leadVi
+        : stripJapaneseMarks(leadJa),
+    anticipateVi:
+      typeof entry.anticipateVi === "string" && entry.anticipateVi.trim()
+        ? entry.anticipateVi
+        : stripJapaneseMarks(guessJa),
+    localized,
+    usage,
+    emphasis: entry.emphasis ?? (emphasisJa.length ? emphasisJa : undefined),
+  };
+}
+
 /** Validate the complete deck before allowing any output. @param input Untrusted JSON. @returns Normalized content without a revision. */
 export function normalizeDeck(input: unknown): Omit<Catalog, "revision"> {
-  const parsed = deckSchema.safeParse(input);
+  // A reader-imported pack and a flat Japanese deck may be a bare array; both compile
+  // like the `{ words }` root the served packs use.
+  const root = Array.isArray(input) ? { words: input } : input;
+  const rawWords =
+    root && typeof root === "object" ? (root as { words?: unknown }).words : undefined;
+  const prepared = Array.isArray(rawWords)
+    ? {
+        ...(root as Record<string, unknown>),
+        words: rawWords.map((entry, index) =>
+          entry && typeof entry === "object" && !Array.isArray(entry)
+            ? withFlatJapanese(entry as Record<string, unknown>, index)
+            : entry,
+        ),
+      }
+    : root;
+  const parsed = deckSchema.safeParse(prepared);
   if (!parsed.success) {
     throw new Error(
       parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`).join("\n"),

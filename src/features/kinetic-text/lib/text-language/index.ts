@@ -44,6 +44,12 @@ export type {
 export { getHanTokens, isLikelyChineseText } from "./han-lines";
 
 export {
+  getJapaneseCharBudgetForLine,
+  getJapaneseLayoutMetrics,
+  isLikelyJapaneseText,
+} from "./japanese-text";
+
+export {
   expandEmphasisToBoundPhrases,
   getBoundPhraseEmphasisSeed,
   getBoundPhraseStartIndex,

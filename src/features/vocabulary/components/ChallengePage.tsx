@@ -57,6 +57,8 @@ export function ChallengePage(): React.ReactElement {
 
   const letters = word.word.replace(/[^\p{L}]/gu, "").length;
   const initial = word.word[0]?.toUpperCase() ?? "";
+  // Resolve before testing: a Japanese-led deck has a localized lead and no base one.
+  const clue = resolveClue(word, "lead", ui);
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -71,9 +73,9 @@ export function ChallengePage(): React.ReactElement {
         <p className="vocab-challenge-eyebrow">{t(ui, "challenge.eyebrow")}</p>
 
         {/* The clue, never the answer. */}
-        {word.leadVi && (
+        {clue && (
           <p className="vocab-challenge-clue" lang={ui}>
-            {resolveClue(word, "lead", ui)}
+            <MarkedText text={clue} />
           </p>
         )}
         <p className="vocab-challenge-hint">

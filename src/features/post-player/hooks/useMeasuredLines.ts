@@ -85,6 +85,7 @@ function settle(fontPx: number): number {
  * @param args.signature - changes whenever a segment's drawn size could change
  * @param args.phraseEdges - word indices at which a phrase begins; they change the solve,
  *   not the measurements, so they are not part of the signature
+ * @param args.segmentGapEm - the gap drawn between two segments; Japanese passes 0
  * @param args.lineSpacingScale - the caller's multiplier on the inter-line gap
  * @returns The solved lines and font size, or null while the estimate still stands
  */
@@ -94,6 +95,7 @@ export function useMeasuredLines({
   lines,
   signature,
   phraseEdges,
+  segmentGapEm = SEGMENT_GAP_EM,
   lineSpacingScale,
   wrapperRef,
   textRef,
@@ -103,6 +105,7 @@ export function useMeasuredLines({
   lines: WordLine[];
   signature: string;
   phraseEdges?: readonly number[];
+  segmentGapEm?: number;
   lineSpacingScale: number;
   wrapperRef: RefObject<HTMLDivElement | null>;
   textRef: RefObject<HTMLDivElement | null>;
@@ -196,7 +199,7 @@ export function useMeasuredLines({
         budgetLineEm,
         maxFontPx: maxSize,
         floorFontPx: MIN_FONT_SIZE,
-        gapEm: SEGMENT_GAP_EM,
+        gapEm: segmentGapEm,
         lineGapEm: LINE_GAP_EM * lineSpacingScale,
       },
       { phraseEdges },
@@ -224,6 +227,7 @@ export function useMeasuredLines({
     lines,
     signature,
     phraseEdges,
+    segmentGapEm,
     fontRevision,
     boxRevision,
     maxSize,

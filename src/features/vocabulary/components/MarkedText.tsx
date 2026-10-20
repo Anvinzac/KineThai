@@ -7,6 +7,8 @@
  * Depends on: React, ../lib/stages
  */
 import { Fragment } from "react";
+import { isLikelyJapaneseText } from "@/features/kinetic-text";
+import { stripJapaneseMarks } from "../lib/ja-text";
 import { splitEmphasisMarkers } from "../lib/stages";
 
 /**
@@ -14,11 +16,16 @@ import { splitEmphasisMarkers } from "../lib/stages";
  * At most ONE mark per sentence: the first highlighted phrase gets the underline;
  * any subsequent markers are rendered as plain text, so a sentence never has
  * duplicate highlights fighting for attention.
+ *
+ * Japanese prose is drawn the way its kinetic pages are: the spacing and `_`/`=`/`|`
+ * marks that exist only to tokenise are removed, so none of them reaches a reader.
  * @param props.text - Source field, possibly carrying /word/ markers
  * @returns Inline prose
  */
 export function MarkedText({ text }: { text: string }) {
   const parts = splitEmphasisMarkers(text);
+  const japanese = isLikelyJapaneseText(text);
+  const display = (value: string) => (japanese ? stripJapaneseMarks(value) : value);
   let highlighted = false;
   return (
     <>
@@ -28,10 +35,10 @@ export function MarkedText({ text }: { text: string }) {
         if (part.marked) highlighted = true;
         return shouldHighlight ? (
           <mark key={index} className="vocab-def-mark">
-            {part.text}
+            {display(part.text)}
           </mark>
         ) : (
-          <Fragment key={index}>{part.text}</Fragment>
+          <Fragment key={index}>{display(part.text)}</Fragment>
         );
       })}
     </>

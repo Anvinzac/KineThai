@@ -6,9 +6,9 @@ the marks. This document is about what to _do_ with them.
 
 **Status in one line:** `_` and `=` are honoured by the reader — a bonded group is never
 split. The phrase rule (§3) is implemented for lines and pages, and already applies to the
-reader's own equivalents of `|`: a word ending in `,` `.` or `;`. `|` is authored, validated
-and safely stripped, but its positions do not reach the layout yet (§4, Steps 1–2). That is
-the remaining job.
+reader's own equivalents of `|`: a word ending in `,` `.` or `;`. Japanese decks (§3b) are
+wired end to end, `|` included. Vietnamese `|` is authored, validated and safely stripped,
+but its positions do not reach the layout yet (§4, Steps 1–2). That is the remaining job.
 
 ---
 
@@ -158,6 +158,45 @@ that cannot be set any other way still gets set:
   portrait and landscape, it never had to;
 - any other break inside a phrase multiplies it by `0.98` (`INSIDE_PHRASE_FACTOR`), so a
   break on the edge itself wins whenever the sizes are close.
+
+## 3b. Japanese (` `, `_`, `=`, `|`)
+
+A kana-bearing field is Japanese (detection is by content in `isLikelyJapaneseText`, not by
+locale). Its marks mean:
+
+| Mark | Means                                             | Display        |
+| ---- | ------------------------------------------------- | -------------- |
+| ` `  | separates 文節 for tokenising only                | removed        |
+| `_`  | one lexical unit (idiom, one dictionary entry)    | removed, joined |
+| `=`  | a dependent 文節 bound to its host                | removed, joined |
+| `\|` | edge between chunks (the pause / reveal unit)     | removed        |
+
+The display rule is §3 with Japanese arithmetic: the reader renders 文節 **flush** (no
+inter-word gap), `_`/`=` units are **one token** and never split, and a line break may fall
+between any two 文節. `|` positions enter the measured layout as `phraseEdges`, so a break
+on the edge wins and a break one 文節 beside it is penalised exactly like the Vietnamese
+case. Pages are cut only **between whole chunks** (`paginateJapaneseChunks`); a short field
+stays one page.
+
+Everything lives in three places:
+
+- `src/features/kinetic-text/lib/text-language/japanese-text.ts` — detection and zero-gap
+  layout metrics (`gapUnits: 0`, `pairReach: false`, one-em glyphs, ten glyphs per line).
+- `src/features/vocabulary/lib/ja-text.ts` — `stripJapaneseMarks`, `parseJapaneseMarkup`,
+  `paginateJapaneseChunks`.
+- `src/features/vocabulary/lib/stages.ts` — parses the marks **before** `splitWordJoiners`
+  (localized fields are not encoded at catalog load), paginates per whole chunk, and puts
+  `phraseEdges` on each page. `WordSequenceText` threads them into `useMeasuredLines` with
+  `segmentGapEm: 0`; `WordSequenceLines` draws the lines flush.
+
+`MarkedText` and `ChallengePage` show the prose form (marks stripped), so a highlighted
+Japanese clue and the challenge page never reveal `_`, `=`, or `|`.
+
+Flat generated decks are accepted too: `normalizeDeck` lifts `defJa`, `leadJa`,
+`anticipateJa`, `usageJa` and `emphasisJa` into `localized.ja` (raw marks kept for the
+reader) and writes a mark-free display base (`defVi`, `leadVi`, `anticipateVi`,
+`usage[0].vi`). Compile one with `npm run vocab:import -- deck.json --locale ja --pack
+<name>`; the browser import panel accepts the same bare array.
 
 ## 4. Where the code goes
 
@@ -337,6 +376,12 @@ already asserts, for the punctuation rule:
 **Pages** — `scripts/check-text-pagination.ts` asserts that with `keepPhraseEdges` a long
 sentence will not open a page one word after a comma, that a break far enough from it is
 kept, and that default paging is unchanged.
+
+**Japanese** — `scripts/check-japanese-layout.ts` (`npm run check:japanese-layout`) asserts
+kana detection (and that Vietnamese, English and Chinese never trigger), mark stripping,
+`_`/`=` token grouping and `|` edges, whole-chunk pages with the anti-orphan merge, flush
+packing, the phrase-edge preference with zero gap, and an end-to-end `buildStages` page
+whose text carries no marks.
 
 **Edges and pages** — extend `scripts/check-word-joiners.ts`
 (`npm run check:word-joiners`):

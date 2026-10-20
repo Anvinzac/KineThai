@@ -158,10 +158,11 @@ export function getHanLayoutMetrics(
  * @param visualScaleGuard - allowance for enlarged emphasised words
  * @returns Fit scale the page should start its measurement loop at
  */
-function suggestPackedFitScale(
+export function suggestPackedFitScale(
   lines: WordLine[],
   getLineCapacity: (lineIndex: number) => number,
   visualScaleGuard: number,
+  gapUnits = 1,
 ): number {
   let suggestedFitScale = 1;
 
@@ -169,7 +170,7 @@ function suggestPackedFitScale(
     const line = lines[lineIndex];
     const visibleChars =
       line.segments.reduce((total, segment) => total + getSegmentVisibleLength(segment), 0) +
-      Math.max(0, line.segments.length - 1);
+      Math.max(0, line.segments.length - 1) * gapUnits;
     const capacity = getLineCapacity(lineIndex);
     const neededChars = visibleChars * Math.max(visualScaleGuard, 1);
     if (neededChars > capacity) {
@@ -193,6 +194,8 @@ export function getVietnameseWordLines(
   if (words.length === 0) return [];
 
   const segments = getVietnameseWordSegments(words, options?.phraseKeys);
+  const gapUnits = options?.gapUnits ?? 1;
+  const pairReach = options?.pairReach !== false;
   const lines: WordLine[] = [];
   let index = 0;
   let consecutiveSolo = 0;
@@ -202,7 +205,7 @@ export function getVietnameseWordLines(
       options?.getLineCapacity?.(lines.length) ?? getVietnameseLineCapacity(lines.length);
     // Once we've stacked the max run of single-word lines, the next line must
     // carry a pair so the column can't grow any thinner.
-    const forcePair = consecutiveSolo >= VIETNAMESE_MAX_CONSECUTIVE_SOLO_LINES;
+    const forcePair = pairReach && consecutiveSolo >= VIETNAMESE_MAX_CONSECUTIVE_SOLO_LINES;
     // Han pages pack one glyph per token, so a "solo line" (one segment = one Han
     // character) is the natural short-line shape. The Vietnamese pair-reach exists to
     // keep two-syllable compounds together; applying it to Han would balloon a 4-glyph
@@ -227,7 +230,7 @@ export function getVietnameseWordLines(
       const segment = segments[index];
       const segmentLength = getSegmentVisibleLength(segment);
       const segmentWords = segment.words.length;
-      const projected = lineLength + (lineSegments.length > 0 ? 1 : 0) + segmentLength;
+      const projected = lineLength + (lineSegments.length > 0 ? gapUnits : 0) + segmentLength;
 
       // The first segment always lands on the line, however wide it is.
       if (lineSegments.length === 0) {
@@ -276,7 +279,7 @@ export function getVietnameseWordLines(
       // when a pair is being forced by the consecutive-solo cap. Han lines skip
       // this rescue — a lone Han glyph is already a whole word, so a short Han line
       // is intentional and the pair-reach would only balloon the 4-glyph cap.
-      if (!lineIsHan && lineWords === 1) {
+      if (!lineIsHan && pairReach && lineWords === 1) {
         const reach =
           capacity + (forcePair ? VIETNAMESE_PAIR_FORCE_CHARS : VIETNAMESE_PAIR_RELAX_CHARS);
         if (forcePair || projected <= reach) {
@@ -305,7 +308,7 @@ function getVietnameseWordSegments(
 ): WordSegment[] {
   const segments: WordSegment[] = [];
 
-  for (let index = 0; index < words.length; ) {
+  for (let index = 0; index < words.length;) {
     // A bound phrase is one meaningful Vietnamese word (two syllables). It is
     // kept whole as a single, unbreakable segment — the line packer never
     // splits a segment, so a compound word can never straddle two lines. A phrase

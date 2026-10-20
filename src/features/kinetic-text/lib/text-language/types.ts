@@ -34,6 +34,17 @@ export type VietnameseLineLayoutOptions = {
   // Data-annotated phrase keys (diacritic-preserving) that must stay unbreakable
   // on a line, exactly like the curated bound phrases.
   phraseKeys?: readonly (readonly string[])[];
+  /**
+   * Space between two segments, in estimated character widths. Vietnamese (and Han)
+   * pages join tokens with one space; Japanese pages draw 文節 flush, so they pass 0.
+   */
+  gapUnits?: number;
+  /**
+   * Whether a line left holding one segment may reach past capacity to pull a partner
+   * up. True for Vietnamese, whose two-syllable words dislike thin columns; false for
+   * Japanese, where a line holding one whole 文節 is a natural short line.
+   */
+  pairReach?: boolean;
 };
 /**
  * @responsibility Packed lines plus a pre-shrink fit scale suggestion.

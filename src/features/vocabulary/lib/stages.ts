@@ -1,10 +1,15 @@
 /** Explicit clue stages and answer masking (never infer pages from line breaks). Exports: buildStages, completeUsage, splitEmphasisMarkers. Depends on: schema, word-joiner, hanzi script detection, kinetic-text emphasis types, locale + i18n + clues (KineThai overlay). */
-import type { EmphasisVariant } from "@/features/kinetic-text";
+import {
+  getTextPageWordLimit,
+  isLikelyJapaneseText,
+  type EmphasisVariant,
+} from "@/features/kinetic-text";
 import { answerPattern, type NarrativeStyle, type VocabularyWord } from "./schema";
 import { isHanAnswer } from "./hanzi";
 import { paginateText } from "@/features/post-player";
 import { resolveClue } from "./clues";
 import { hanLettersSentence, leadLabel, lettersSentence, stageLabel } from "./i18n";
+import { paginateJapaneseChunks, parseJapaneseMarkup } from "./ja-text";
 import { BASE_LOCALE, DEFAULT_LOCALE, type Locale } from "./locale";
 import { splitWordJoiners, stripWordJoiners } from "./word-joiner";
 
@@ -32,22 +37,48 @@ export type LearningStage = {
   boundPhrases?: string[];
   /** Second highlight drawn with its own effect, independent of `dataEmphasis`. */
   secondaryEmphasis?: { phrase: string; variant: EmphasisVariant };
+  /**
+   * Token indexes (into `text`) at which an authored Japanese chunk begins. The measured
+   * layout treats them as phrase edges: a line ends on one when it can, and never one
+   * 文節 beside one. Absent on unphrased pages.
+   */
+  phraseEdges?: number[];
 };
+
+/** A stage plus the not-yet-paginated Japanese chunks it was parsed from. */
+type BuiltStage = LearningStage & { japaneseChunks?: string[][] };
 
 /**
  * Parse /word/ emphasis markers and word joins from a text field.
  * Returns the clean text (markers stripped, joins written as plain spaces), the list of
- * marked phrases, and the joined words that must stay whole.
+ * marked phrases, and the joined words that must stay whole. A kana-bearing field is
+ * Japanese: its `_`/`=` are drawn flush (the joined unit becomes one token) and its `|`
+ * chunks are kept so pages can break only on a whole phrase.
  */
-function parseEmphasisMarkers(text: string): { clean: string; markers: string[]; bound: string[] } {
+function parseEmphasisMarkers(text: string): {
+  clean: string;
+  markers: string[];
+  bound: string[];
+  chunks?: string[][];
+} {
   const markers: string[] = [];
   const unmarked = text.replace(/\/([^/]+)\//g, (_, word) => {
-    // A highlight is matched token by token, so it is kept without its joins.
-    markers.push(stripWordJoiners(word.trim()));
+    markers.push(word.trim());
     return word.trim();
   });
+  if (isLikelyJapaneseText(unmarked)) {
+    const parsed = parseJapaneseMarkup(unmarked);
+    return {
+      clean: parsed.text,
+      // A highlight is matched token by token: keep the 文節 boundaries its display
+      // form drops, so a phrase spanning several 文節 still lines up with the page.
+      markers: markers.map((marker) => parseJapaneseMarkup(marker).text).filter(Boolean),
+      bound: [],
+      chunks: parsed.chunks,
+    };
+  }
   const { text: clean, bound } = splitWordJoiners(unmarked);
-  return { clean, markers, bound };
+  return { clean, markers: markers.map(stripWordJoiners), bound };
 }
 
 /**
@@ -92,11 +123,12 @@ export function buildStages(
     locale === BASE_LOCALE || resolveClue(word, "def", locale) !== word.defVi
       ? locale
       : BASE_LOCALE;
-  const stages: LearningStage[] = [];
-  if (word.leadVi) {
-    const { clean, markers, bound } = parseEmphasisMarkers(
-      resolveClue(word, "lead", locale) || word.leadVi,
-    );
+  const stages: BuiltStage[] = [];
+  // The active locale's overlay can carry a clue the base never had — a Japanese-led
+  // deck has no Vietnamese lead — so presence is decided after resolution.
+  const lead = resolveClue(word, "lead", locale) || word.leadVi;
+  if (lead) {
+    const { clean, markers, bound, chunks } = parseEmphasisMarkers(lead);
     stages.push({
       id: "lead",
       label: leadLabel(style, locale),
@@ -104,10 +136,11 @@ export function buildStages(
       lang: clueLang,
       dataEmphasis: markers.length ? markers : undefined,
       boundPhrases: bound.length ? bound : undefined,
+      japaneseChunks: chunks,
     });
   }
   {
-    const { clean, markers, bound } = parseEmphasisMarkers(
+    const { clean, markers, bound, chunks } = parseEmphasisMarkers(
       resolveClue(word, "def", locale) || word.defVi,
     );
     stages.push({
@@ -117,6 +150,7 @@ export function buildStages(
       lang: clueLang,
       dataEmphasis: markers.length ? markers : undefined,
       boundPhrases: bound.length ? bound : undefined,
+      japaneseChunks: chunks,
     });
   }
   const hanCount = (word.word.match(/\p{Script=Han}/gu) ?? []).length;
@@ -164,10 +198,9 @@ export function buildStages(
       boundPhrases: enBound.length ? enBound : undefined,
     });
   }
-  if (word.anticipateVi) {
-    const { clean, markers, bound } = parseEmphasisMarkers(
-      resolveClue(word, "guess", locale) || word.anticipateVi,
-    );
+  const guess = resolveClue(word, "guess", locale) || word.anticipateVi;
+  if (guess) {
+    const { clean, markers, bound, chunks } = parseEmphasisMarkers(guess);
     stages.push({
       id: "anticipation",
       label: stageLabel("anticipation", locale),
@@ -175,6 +208,7 @@ export function buildStages(
       lang: clueLang,
       dataEmphasis: markers.length ? markers : undefined,
       boundPhrases: bound.length ? bound : undefined,
+      japaneseChunks: chunks,
     });
   }
   stages.push({
@@ -185,11 +219,23 @@ export function buildStages(
     reveal: true,
   });
   return stages.flatMap((stage) => {
-    if (stage.reveal) return [stage];
+    const { japaneseChunks, ...base } = stage;
+    if (base.reveal) return [base];
+    if (japaneseChunks) {
+      // Japanese pages take whole authored chunks: a page break is never mid-phrase.
+      return paginateJapaneseChunks(japaneseChunks, getTextPageWordLimit(base.text)).map(
+        (page, index) => ({
+          ...base,
+          id: `${base.id}-${index}`,
+          text: mask(page.text),
+          phraseEdges: page.phraseEdges.length > 0 ? page.phraseEdges : undefined,
+        }),
+      );
+    }
     // Pages break like lines: never one word away from a comma, full stop or semicolon.
-    return paginateText(stage.text, { keepPhraseEdges: true }).map((text, index) => ({
-      ...stage,
-      id: `${stage.id}-${index}`,
+    return paginateText(base.text, { keepPhraseEdges: true }).map((text, index) => ({
+      ...base,
+      id: `${base.id}-${index}`,
       text,
     }));
   });

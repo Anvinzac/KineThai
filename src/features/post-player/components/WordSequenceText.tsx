@@ -22,12 +22,14 @@ import {
   getEmphasizedRunPhraseKeys,
   getHanLayoutMetrics,
   getHanTokens,
+  getJapaneseLayoutMetrics,
   getKineticTextLayoutMode,
   getLoopAnimation,
   getVietnameseLayoutMetrics,
   getWords,
   hasVisibleStickerAccent,
   isLikelyChineseText,
+  isLikelyJapaneseText,
   isLikelyVietnameseText,
   type EmphasisVariant,
 } from "@/features/kinetic-text";
@@ -114,6 +116,12 @@ export type WordSequenceTextProps = {
    * exactly as before. Han pages keep their own packing either way.
    */
   measuredLayout?: MeasuredLayoutBudget;
+  /**
+   * Token indexes at which an authored phrase begins, for a page whose own text no
+   * longer carries the mark (a Japanese `|` chunk). Merged into the layout's phrase
+   * rule: a line ends on an edge when it can and never one 文節 beside one.
+   */
+  phraseEdges?: readonly number[];
 };
 
 /**
@@ -138,6 +146,7 @@ export function WordSequenceText({
   lineSpacingScale = 1,
   dataEmphasis,
   boundPhrases,
+  phraseEdges,
   secondaryEmphasis,
   allowFrameEmphasis = true,
   emphasisPool,
@@ -148,16 +157,20 @@ export function WordSequenceText({
   // sentence is one whitespace token, and as one token it rendered as a single
   // shrunken line. Split per glyph, it earns the Vietnamese treatment exactly —
   // packed staggered lines, same font size band, same scene filled with words.
-  const isHan = !fitAsUnit && isLikelyChineseText(spec.text);
+  // A Japanese page is checked first: kanji-heavy clue text can look Chinese, but its
+  // kana say it must pack per 文節 with no inter-word gap and never per glyph.
+  const isJapanese = !fitAsUnit && isLikelyJapaneseText(spec.text);
+  const isHan = !isJapanese && !fitAsUnit && isLikelyChineseText(spec.text);
   const words = useMemo(
     () => (fitAsUnit ? [spec.text.trim()] : isHan ? getHanTokens(spec.text) : getWords(spec.text)),
     [fitAsUnit, isHan, spec.text],
   );
-  const isVietnamese = !isHan && words.length > 1 && isLikelyVietnameseText(spec.text);
-  // Vietnamese syllables and Han glyphs share every downstream decision that is not
-  // about glyph width: packed unbreakable lines, left anchor, tight leading, and the
-  // packed-page fit floor. `fitAsUnit` pages (solo reveals) always stay one line.
-  const isPackedLines = isVietnamese || isHan;
+  const isVietnamese =
+    !isJapanese && !isHan && words.length > 1 && isLikelyVietnameseText(spec.text);
+  // Vietnamese syllables, Han glyphs and Japanese 文節 share every downstream decision
+  // that is not about glyph width: packed unbreakable lines, left anchor, tight leading,
+  // and the packed-page fit floor. `fitAsUnit` pages (solo reveals) always stay one line.
+  const isPackedLines = isVietnamese || isHan || isJapanese;
   const emphasized = useMemo(
     () => getEmphasizedWordIndexes(words, dataEmphasis, boundPhrases),
     [words, dataEmphasis, boundPhrases],
@@ -198,11 +211,19 @@ export function WordSequenceText({
   const packedLayout = useMemo(
     () =>
       isPackedLines
-        ? isHan
-          ? getHanLayoutMetrics(words, canvasWidth, spec.size, visualScaleGuard, phraseKeys)
-          : getVietnameseLayoutMetrics(words, canvasWidth, spec.size, visualScaleGuard, phraseKeys)
+        ? isJapanese
+          ? getJapaneseLayoutMetrics(words, canvasWidth, spec.size, visualScaleGuard, phraseKeys)
+          : isHan
+            ? getHanLayoutMetrics(words, canvasWidth, spec.size, visualScaleGuard, phraseKeys)
+            : getVietnameseLayoutMetrics(
+                words,
+                canvasWidth,
+                spec.size,
+                visualScaleGuard,
+                phraseKeys,
+              )
         : { lines: [], suggestedFitScale: 1 },
-    [isPackedLines, isHan, words, canvasWidth, spec.size, visualScaleGuard, phraseKeys],
+    [isPackedLines, isJapanese, isHan, words, canvasWidth, spec.size, visualScaleGuard, phraseKeys],
   );
   const entranceStyle = getEntranceStyle(entranceSeed ?? spec.text, spec.rhythm, entrance);
   const layoutMode = getKineticTextLayoutMode(spec.text, isPackedLines, words.length, emphasized);
@@ -258,18 +279,22 @@ export function WordSequenceText({
       phraseKeys,
     ],
   );
-  // Where the page's own phrases meet: a comma, full stop or semicolon closes the phrase it
-  // ends. A break is welcome right after one, never one word away from it.
-  const phraseEdges = useMemo(
-    () => (isVietnamese ? getPunctuationPhraseEdges(words) : undefined),
-    [isVietnamese, words],
+  // Where the page's phrases meet. Vietnamese reads the edges off its own punctuation —
+  // a comma, full stop or semicolon closes the phrase it ends. Japanese carries them from
+  // the deck's `|` chunks, because those marks are display-only and cannot survive in
+  // `spec.text`. Either way a break is welcome right after an edge, never one word away.
+  const layoutPhraseEdges = useMemo(
+    () => (isJapanese ? phraseEdges : isVietnamese ? getPunctuationPhraseEdges(words) : undefined),
+    [isJapanese, isVietnamese, phraseEdges, words],
   );
   const measuredLines = useMeasuredLines({
     budget: measuredLayout,
-    enabled: isVietnamese && !measure,
+    enabled: (isVietnamese || isJapanese) && !measure,
     lines: packedLayout.lines,
     signature: measuredSignature,
-    phraseEdges,
+    phraseEdges: layoutPhraseEdges,
+    // Japanese 文節 are drawn flush; the gap belongs to spaced scripts only.
+    segmentGapEm: isJapanese ? 0 : undefined,
     lineSpacingScale,
     wrapperRef,
     textRef,
@@ -357,6 +382,7 @@ export function WordSequenceText({
         >
           <WordSequenceLines
             isVietnamese={isPackedLines}
+            segmentGapEm={isJapanese ? 0 : undefined}
             lineSpacingScale={lineSpacingScale}
             vietnameseLines={measuredLines?.lines ?? packedLayout.lines}
             words={words}
