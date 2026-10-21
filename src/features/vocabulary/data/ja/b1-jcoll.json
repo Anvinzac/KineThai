@@ -392,7 +392,7 @@
       "level": "JCOLL",
       "usage": [
         {
-          "en": "I _____ with you that the plan is too risky.",
+          "en": "I _____ with you that the plan is too dangerous.",
           "vi": "その計画は危険すぎるという点で、あなたに同意する。",
           "glosses": {
             "ja": "その 計画は | 危険すぎると いう 点で、 | あなたに 同意する。"
@@ -1626,10 +1626,10 @@
       "level": "JCOLL",
       "usage": [
         {
-          "en": "Sunscreen helps _____ your skin from the sun.",
-          "vi": "日焼け止めは日差しから肌を守るのに役立つ。",
+          "en": "This cream helps _____ your skin from the sun.",
+          "vi": "このクリームは日差しから肌を守るのに役立つ。",
           "glosses": {
-            "ja": "日焼け止めは | 日差しから 肌を | 守るのに 役立つ。"
+            "ja": "この クリームは | 日差しから 肌を | 守るのに 役立つ。"
           }
         }
       ],
@@ -1917,10 +1917,10 @@
       "level": "JCOLL",
       "usage": [
         {
-          "en": "Please don't leave your _____ unattended.",
-          "vi": "お手荷物を置いたまま離れないでください。",
+          "en": "Please keep your _____ with you.",
+          "vi": "お手荷物は常に手元に置いてください。",
           "glosses": {
-            "ja": "お手荷物を | 置いたまま | 離れないで=ください。"
+            "ja": "お手荷物は | 常に 手元に | 置いて=ください。"
           }
         }
       ],

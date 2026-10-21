@@ -392,7 +392,7 @@
       "level": "JHIGH",
       "usage": [
         {
-          "en": "I _____ with you that the plan is too risky.",
+          "en": "I _____ with you that the plan is too dangerous.",
           "vi": "その計画は危険すぎるという意見に賛成だよ。",
           "glosses": {
             "ja": "その 計画は | 危険すぎると いう 意見に | 賛成だよ。"
@@ -1626,10 +1626,10 @@
       "level": "JHIGH",
       "usage": [
         {
-          "en": "Sunscreen helps _____ your skin from the sun.",
-          "vi": "日焼け止めは日差しからはだを守るのに役立つ。",
+          "en": "This cream helps _____ your skin from the sun.",
+          "vi": "このクリームは日差しからはだを守るのに役立つ。",
           "glosses": {
-            "ja": "日焼け止めは | 日差しから はだを | 守るのに 役立つ。"
+            "ja": "この クリームは | 日差しから はだを | 守るのに 役立つ。"
           }
         }
       ],
@@ -1917,10 +1917,10 @@
       "level": "JHIGH",
       "usage": [
         {
-          "en": "Please don't leave your _____ unattended.",
-          "vi": "お荷物を置いたまま離れないでください。",
+          "en": "Please keep your _____ with you.",
+          "vi": "お荷物はいつも手元に置いてください。",
           "glosses": {
-            "ja": "お荷物を | 置いたまま | 離れないで=ください。"
+            "ja": "お荷物は | いつも 手元に | 置いて=ください。"
           }
         }
       ],
