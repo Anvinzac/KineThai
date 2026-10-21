@@ -24,7 +24,7 @@ import { fetchVocabularyPage } from "../api/feed";
 import { readDifficultyChoice, writeDifficultyChoice } from "../lib/difficulty-choice";
 import { readDialectChoice, writeDialectChoice } from "../lib/dialect-choice";
 import { readPreferences, writePreferences } from "@/features/settings/lib/preferences";
-import type { TargetLocale } from "../lib/target-language";
+import { DEFAULT_TARGET, type TargetLocale } from "../lib/target-language";
 import { CUSTOM_PACK_EVENT, clearCustomPack, readCustomPack } from "../lib/custom-pack";
 import { Link } from "@tanstack/react-router";
 import "../vocabulary.css";
@@ -46,12 +46,13 @@ const ALL_FILTERS: VocabularyFilters = { topic: "", level: "", difficulty: DIFFI
 export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   const [prefs] = useState(() => readPreferences());
   // Use targetLanguage from preferences if set, otherwise use the host-based locale.
-  const effectiveLocale: TargetLocale = (prefs.targetLanguage as TargetLocale) || locale || "en";
-  // Settings only exposes the Japanese proficiency for an explicit Japanese choice.
+  const effectiveLocale: TargetLocale =
+    (prefs.targetLanguage as TargetLocale) || locale || DEFAULT_TARGET;
+  // Settings only exposes the Japanese proficiency for a Japanese deck.
   // A non-empty level opens that track directly; "" keeps the usual stored-choice
-  // and onboarding flow (the Settings "all" option clears the stored track too).
+  // and default flow (the Settings "all" option clears the stored track too).
   const preferredJapaneseLevel =
-    prefs.targetLanguage === "ja" && japaneseTrackForLevel(prefs.japaneseLevel)
+    effectiveLocale === "ja" && japaneseTrackForLevel(prefs.japaneseLevel)
       ? prefs.japaneseLevel
       : "";
   const preferredDifficulty = preferredJapaneseLevel
@@ -83,7 +84,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   // choice. Multi-level tracks have no single proficiency, so they store "all".
   const rememberJapaneseLevel = useCallback(
     (level: VocabularyFilters["level"]) => {
-      if (prefs.targetLanguage !== "ja") return;
+      if (effectiveLocale !== "ja") return;
       const japaneseLevel =
         level === "JPRIM" || level === "JSEC" || level === "JHIGH" || level === "JCOLL"
           ? level
@@ -92,7 +93,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
       if (current.japaneseLevel === japaneseLevel) return;
       writePreferences({ ...current, japaneseLevel });
     },
-    [prefs.targetLanguage],
+    [effectiveLocale],
   );
   const [metadata, setMetadata] = useState<FeedPage>();
   // "pending" until the stored choice has been read (storage is not readable while the
@@ -137,6 +138,14 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     }
     const stored = readDifficultyChoice(effectiveLocale);
     if (stored === null) {
+      // Japanese is the app's default deck. A first-time reader should see the
+      // complete catalog immediately, not a level picker that hides words until
+      // they choose; the difficulty menu can still narrow the stream afterwards.
+      if (effectiveLocale === "ja") {
+        setFilters(ALL_FILTERS);
+        setStage("feed");
+        return;
+      }
       setStage("onboarding");
       return;
     }

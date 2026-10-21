@@ -10,7 +10,7 @@
  * share, so a deployed feed permutes words exactly as the server does.
  *
  * The deck follows the visited address exactly like the server: `catalogFor`
- * serves the answer language's deck (`en` on unknown hosts, which is what a
+ * serves the answer language's deck (`ja` on unknown hosts, which is what a
  * static host always is), so the static fallback can never disagree with SSR.
  *
  * Exports: MAX_POSITION, readVocabularyPage
@@ -21,7 +21,7 @@ import { catalogFor } from "./catalog-source";
 import type { Catalog, VocabularyLevel } from "./schema";
 import { LEVEL_SAMPLE_PRIORITY, difficultyLevels } from "./difficulty";
 import { randomGenerator } from "./random";
-import type { TargetLocale } from "./target-language";
+import { DEFAULT_TARGET, type TargetLocale } from "./target-language";
 import type { FeedPage, FeedRequest } from "../types";
 
 /** The feed permutes the same pool forever; `nextPosition` only stops here. */
@@ -203,7 +203,10 @@ function indexAt(size: number, seed: string, position: number): number {
  * @param locale Answer-language deck, resolved from the visited host by the caller
  * @returns Page plus catalog metadata
  */
-export function readVocabularyPage(input: FeedRequest, locale: TargetLocale = "en"): FeedPage {
+export function readVocabularyPage(
+  input: FeedRequest,
+  locale: TargetLocale = DEFAULT_TARGET,
+): FeedPage {
   const catalog = catalogFor(locale);
   const { seed, position, topic, level, difficulty, limit } = input;
   const pool = matchingPool(catalog, topic, level, difficulty);

@@ -12,7 +12,11 @@ import { NotFoundComponent } from "@/features/shell/components/NotFoundComponent
 import { RootApp, RootShell } from "@/features/shell/components/RootDocument";
 import appCss from "../styles.css?url";
 import { getSiteLocale } from "@/features/vocabulary/api/site-locale.functions";
-import { resolveTarget, siteTitle } from "@/features/vocabulary/lib/target-language";
+import {
+  DEFAULT_TARGET,
+  resolveTarget,
+  siteTitle,
+} from "@/features/vocabulary/lib/target-language";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   // The visited address picks the answer language (hoa.* → Chinese, etc.).
@@ -21,7 +25,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       typeof window === "undefined" ? await getSiteLocale() : resolveTarget(window.location.host),
   }),
   head: ({ loaderData }) => {
-    const title = siteTitle(loaderData?.locale ?? "en");
+    const title = siteTitle(loaderData?.locale ?? DEFAULT_TARGET);
     return {
       meta: [
         { charSet: "utf-8" },

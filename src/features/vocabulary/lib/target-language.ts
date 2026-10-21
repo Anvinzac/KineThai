@@ -1,13 +1,18 @@
 /**
  * Map the visited address to the answer language. Vietnamese UI never varies; only the
- * deck and the page title do. Unknown hosts (preview, localhost, IPs, anh.*) fall back to
- * English and never throw. Host is client-controlled: use it only to pick public content.
+ * deck and the page title do. Unknown hosts (preview, localhost, IPs, the root deploy)
+ * fall back to Japanese, the app's default deck, and never throw. Host is
+ * client-controlled: use it only to pick public content.
  *
- * Exports: TargetLocale, resolveTarget, siteTitle, siteBrand, sitePageHead
+ * Exports: DEFAULT_TARGET, TargetLocale, resolveTarget, siteTitle, siteBrand, sitePageHead
  */
 export type TargetLocale = "en" | "zh" | "ko" | "ja";
 
+/** The deck served when nothing on the address names another language. */
+export const DEFAULT_TARGET: TargetLocale = "ja";
+
 const SUBDOMAINS: Record<string, TargetLocale> = {
+  anh: "en",
   hoa: "zh",
   han: "ko",
   nhat: "ja",
@@ -18,10 +23,10 @@ const SUBDOMAINS: Record<string, TargetLocale> = {
 
 /** @param host Host header or location.host (may carry a port). @returns The deck locale. */
 export function resolveTarget(host: string | null | undefined): TargetLocale {
-  if (!host) return "en";
+  if (!host) return DEFAULT_TARGET;
   const name = host.trim().toLowerCase().replace(/:\d+$/, "");
   const first = name.split(".")[0] ?? "";
-  return SUBDOMAINS[first] ?? "en";
+  return SUBDOMAINS[first] ?? DEFAULT_TARGET;
 }
 
 const TITLES: Record<TargetLocale, string> = {
@@ -49,7 +54,7 @@ export function siteBrand(locale: TargetLocale): { lead: string; accent: string 
 
 /** Shared leaf metadata keeps browser and sharing titles aligned with the domain. */
 export function sitePageHead(
-  locale: TargetLocale = "en",
+  locale: TargetLocale = DEFAULT_TARGET,
   section = "",
   description = "言葉にちょっとした元気を",
 ) {

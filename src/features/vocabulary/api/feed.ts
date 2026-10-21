@@ -99,7 +99,7 @@ export async function fetchVocabularyPage(
       // Static host with no server route: read the page locally from the bundled
       // catalog. The deck follows the visited host exactly like the server
       // (`catalogFor(resolveTarget(host))`), so the fallback can never disagree
-      // with SSR — on a static host the host always resolves to English.
+      // with SSR — on a static host an unknown host resolves to Japanese.
       // If a locale override is provided (from user preference), use it; otherwise
       // fall back to host-based detection.
       const effectiveLocale = locale ?? resolveTarget(window.location.host);

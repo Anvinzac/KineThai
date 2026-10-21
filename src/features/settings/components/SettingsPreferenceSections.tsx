@@ -33,6 +33,7 @@ import { toast } from "sonner";
 import type { Preferences } from "../lib/preferences";
 import { japaneseTrackForLevel } from "@/features/vocabulary/lib/difficulty";
 import { writeDifficultyChoice } from "@/features/vocabulary/lib/difficulty-choice";
+import { DEFAULT_TARGET, resolveTarget } from "@/features/vocabulary/lib/target-language";
 import { ControlRow, PreferenceRow, Row, Section, SegmentedControl } from "./SettingsControls";
 
 type SettingsPreferenceSectionsProps = {
@@ -57,6 +58,12 @@ export function SettingsPreferenceSections({
   completion,
 }: SettingsPreferenceSectionsProps): ReactElement {
   const navigate = useNavigate();
+  // "default" follows the address, and unknown addresses are Japanese now. Resolve
+  // the same way the feed does so the proficiency control appears exactly when the
+  // deck it edits is the active one.
+  const activeTarget =
+    prefs.targetLanguage ||
+    (typeof window === "undefined" ? DEFAULT_TARGET : resolveTarget(window.location.host));
 
   return (
     <>
@@ -171,7 +178,7 @@ export function SettingsPreferenceSections({
             ]}
           />
         </ControlRow>
-        {prefs.targetLanguage === "ja" && (
+        {activeTarget === "ja" && (
           <ControlRow icon={<BookOpen />} label="Japanese proficiency level">
             <SegmentedControl
               value={prefs.japaneseLevel}

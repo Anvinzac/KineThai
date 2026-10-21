@@ -1,5 +1,9 @@
 # One deployment, many domains: target language from the Host header
 
+> **Updated 2026-10-21:** the app is Japanese-first. Unknown hosts (Pages, Vercel,
+> localhost, previews) now default to `ja`; `anh`/`hoa`/`han`/`nhat` still select their
+> explicit decks. This document is kept for the routing rationale and domain setup.
+
 **Status: implementation handoff, deliberately deferred to roughly January 2027.** The feed
 teaches English answers to Vietnamese readers. The plan is to keep the Vietnamese side
 exactly as it is and swap the ANSWER language per domain — `han.chayla.app` serves a Korean

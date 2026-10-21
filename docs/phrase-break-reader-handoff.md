@@ -211,8 +211,9 @@ track. The settings level picker and the difficulty picker edit the same choice:
 a school level selects its track and vice versa, so the two filters cannot contradict
 each other. The app Settings target language overrides the host for the feed (the
 preference is sent as the API's `locale` parameter), and its Japanese proficiency opens
-the matching track on the next feed load. Flat `defJa`/`leadJa` decks keep the
-single-pack path above.
+the matching track on the next feed load. Unknown hosts default to Japanese, so the
+root deployment streams the full JA deck without a `nhat` prefix; `anh`/`hoa`/`han`
+still name their own decks. Flat `defJa`/`leadJa` decks keep the single-pack path above.
 
 ## 4. Where the code goes
 

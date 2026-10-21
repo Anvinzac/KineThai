@@ -30,9 +30,15 @@ try {
   const { readVocabularyPage } = await server.ssrLoadModule(
     "/src/features/vocabulary/lib/feed-pager.ts",
   );
-  const { catalog } = await server.ssrLoadModule("/src/features/vocabulary/lib/catalog-source.ts");
+  const { catalogFor } = await server.ssrLoadModule(
+    "/src/features/vocabulary/lib/catalog-source.ts",
+  );
+  const japanese = catalogFor("ja");
+  const english = catalogFor("en");
 
-  console.log(`Catalog: ${catalog.count} words, revision ${catalog.revision}\n`);
+  console.log(
+    `Default (ja) catalog: ${japanese.count} level entries, revision ${japanese.revision}\n`,
+  );
 
   // 1) A first page returns real words (what a fresh visit sees on Pages).
   const first = readVocabularyPage({
@@ -52,8 +58,9 @@ try {
     "every entry has a word id",
     first.entries.every((e) => typeof e.word.id === "string" && e.word.id.length > 0),
   );
-  check("matching equals full pool", first.matching === catalog.count, `${first.matching}`);
-  check("revision is stable", first.revision === catalog.revision);
+  check("default deck is Japanese", first.revision === japanese.revision);
+  check("default pool exposes every headword", first.matching === first.total, `${first.matching}`);
+  check("default catalog has the full deck", first.total >= 200, `${first.total} headwords`);
 
   // 2) Deterministic: the same seed reproduces the exact same word order.
   const again = readVocabularyPage({
@@ -68,6 +75,7 @@ try {
     "same seed reproduces order",
     again.entries.every((e, i) => e.word.id === first.entries[i].word.id),
   );
+  check("revision is stable", again.revision === first.revision);
 
   // 3) A different seed shuffles differently (feed is not frozen).
   const other = readVocabularyPage({
@@ -115,6 +123,24 @@ try {
     "level filter narrows pool",
     filtered.matching > 0 && filtered.matching <= first.matching,
     `level=${first.levels[0]} → ${filtered.matching}`,
+  );
+
+  // 6) The host default changed, but an explicit locale must still win.
+  const englishPage = readVocabularyPage(
+    {
+      seed: "static-feed-test",
+      topic: "",
+      level: "",
+      difficulty: "",
+      position: 0,
+      limit: 12,
+    },
+    "en",
+  );
+  check(
+    "explicit English override still serves English",
+    englishPage.revision === english.revision && englishPage.matching === english.count,
+    `${englishPage.matching} words`,
   );
 
   console.log(`\n${failures === 0 ? "ALL CHECKS PASSED" : `${failures} CHECK(S) FAILED`}`);

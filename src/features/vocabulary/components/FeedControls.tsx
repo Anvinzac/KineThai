@@ -56,7 +56,7 @@ import {
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, localeLabel, type Locale } from "../lib/locale";
 import { setLocale, useLocale } from "../lib/useLocale";
 import { difficultyCopy, t } from "../lib/ui-copy";
-import { siteBrand, type TargetLocale } from "../lib/target-language";
+import { DEFAULT_TARGET, siteBrand, type TargetLocale } from "../lib/target-language";
 import { useAmbientSound } from "../hooks/useAmbientSound";
 import type {
   FeedPage,
@@ -511,7 +511,7 @@ function DifficultyDropdown({
 }) {
   const ui = uiLocale;
   const listId = useId();
-  const activeLocale = locale ?? "en";
+  const activeLocale = locale ?? DEFAULT_TARGET;
   const tracks = tracksFor(activeLocale);
   const options = useMemo(() => buildDifficultyOptions(activeLocale, ui), [activeLocale, ui]);
   const committed = useMemo(() => parseDifficulty(value, tracks), [value, tracks]);
@@ -577,7 +577,7 @@ function DifficultyDropdown({
   const presence = usePresence(open, POPUP_EXIT_MS);
   // The visible title is the host's brand, never a hardcoded default: the deck and
   // the document title already follow the visited address, and so must this one.
-  const brand = siteBrand(locale ?? "en");
+  const brand = siteBrand(locale ?? DEFAULT_TARGET);
 
   return (
     <div className="vocab-difficulty" data-no-gesture>
