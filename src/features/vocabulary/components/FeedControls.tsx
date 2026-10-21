@@ -26,21 +26,8 @@ import { COMMUNITY_AVAILABLE } from "@/lib/feature-flags";
 import { EcosystemMenu } from "@/features/ecosystem/components/EcosystemMenu";
 import { ECOSYSTEM_STORE_AVAILABLE } from "@/lib/feature-flags";
 import { stylePool, themePool } from "../lib/presets";
-import {
-  DIFFICULTY_ALL,
-  formatLevelBand,
-  countTrackWords,
-  japaneseLevelForDifficulty,
-  japaneseTrackForLevel,
-  tracksFor,
-} from "../lib/difficulty";
-import {
-  CEFR_LEVELS,
-  HSK_LEVELS,
-  JP_LEVELS,
-  type NarrativeStyle,
-  type VocabularyLevel,
-} from "../lib/schema";
+import { DIFFICULTY_ALL, formatLevelBand, countTrackWords, tracksFor } from "../lib/difficulty";
+import { CEFR_LEVELS, HSK_LEVELS, type NarrativeStyle, type VocabularyLevel } from "../lib/schema";
 import type { HistoryStats } from "../lib/history";
 import {
   douyinStyleLabel,
@@ -415,7 +402,7 @@ type DifficultyOption = {
  */
 function buildDifficultyOptions(locale: TargetLocale, uiLocale?: Locale): DifficultyOption[] {
   const tracks = tracksFor(locale);
-  const allLevels = locale === "zh" ? HSK_LEVELS : locale === "ja" ? JP_LEVELS : CEFR_LEVELS;
+  const allLevels = locale === "zh" ? HSK_LEVELS : CEFR_LEVELS;
   return [
     {
       id: DIFFICULTY_ALL,
@@ -888,10 +875,8 @@ export function FeedControls({
 
   /** The stream is only really playing while autoplay is on AND motion is allowed. */
   const playing = presentation.autoplay && !reducedMotion;
-  // The level picker and the difficulty picker are two views of the same Japanese
-  // proficiency. When the reader has picked exactly one school-level track, show that
-  // level here even before they touch the level picker.
-  const japaneseLevel = filters.level || japaneseLevelForDifficulty(filters.difficulty);
+  // The level picker edits only the level filter; the difficulty track is independent.
+  const japaneseLevel = filters.level;
   return (
     <header className="vocab-toolbar" ref={toolbar}>
       <div className="vocab-toolbar-row">
@@ -900,14 +885,11 @@ export function FeedControls({
         <div className="vocab-toolbar-left">
           <DifficultyDropdown
             value={filters.difficulty}
-            onChange={(difficulty) =>
-              // Keep the Japanese level picker in sync: one track means one level.
-              onFilters({ ...filters, difficulty, level: japaneseLevelForDifficulty(difficulty) })
-            }
+            onChange={(difficulty) => onFilters({ ...filters, difficulty })}
             open={difficultyOpen}
             onOpenChange={setDifficultyOpen}
             levelCounts={metadata?.levelCounts}
-            catalogLevels={metadata?.levels}
+            catalogLevels={metadata?.trackLevels}
             total={metadata?.topicTotal}
             locale={locale}
             uiLocale={ui}
@@ -1034,14 +1016,9 @@ export function FeedControls({
                     { id: "JCOLL", label: t(ui, "japanese.JCOLL") },
                   ]}
                   onChange={(level) => {
-                    // A direct level choice replaces the track instead of intersecting
-                    // with it: JPRIM under a JHIGH track used to admit no words at all.
+                    // A level choice edits only the level filter; difficulty stays put.
                     const next = level as VocabularyLevel | "";
-                    onFilters({
-                      ...filters,
-                      level: next,
-                      difficulty: japaneseTrackForLevel(next)?.id ?? DIFFICULTY_ALL,
-                    });
+                    onFilters({ ...filters, level: next });
                   }}
                 />
               )}

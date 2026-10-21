@@ -1,5 +1,5 @@
 /** Pure deterministic paging over any compiled catalog; shared by the server endpoint and browser-imported packs. Exports: MAX_POSITION, readCatalogPage. Depends on: schema, difficulty, random. */
-import type { Catalog, VocabularyLevel } from "./schema";
+import { wordTrackLevel, type Catalog, type VocabularyLevel, type VocabularyWord } from "./schema";
 import { LEVEL_SAMPLE_PRIORITY, difficultyLevels } from "./difficulty";
 import { randomGenerator } from "./random";
 import type { FeedPage, FeedRequest } from "../types";
@@ -26,22 +26,28 @@ function remember(cache: Map<string, Uint32Array>, key: string, value: Uint32Arr
   return value;
 }
 
+type LevelFilter = {
+  /** CEFR/HSK levels admitted by the chosen difficulty tracks, or null for any. */
+  band: Set<string> | null;
+  /** Exact reader level (Japanese school level), or null for any. */
+  exact: string | null;
+};
+
 /**
- * Resolve the level filters into one admitted set.
- * @param level Exact CEFR level, or "" for any
- * @param difficulty Difficulty track id, or "" for any
- * @returns The admitted levels, or null when no level filter applies
+ * Resolve the two independent level filters. Japanese words carry both an English CEFR
+ * level and a school reader level, so the title difficulty never intersects with the
+ * Settings school-level filter; for other decks both read the same `level` field.
+ * @param catalog Deck being paged (its track levels decide which tracks are servable)
+ * @param level Exact reader level, or "" for any
+ * @param difficulty Difficulty track id(s), or "" for any
+ * @returns The track band plus the exact reader level
  * @pure true
  */
-function allowedLevels(catalog: Catalog, level: string, difficulty: string): Set<string> | null {
-  // The catalog's own levels decide which tracks can be served at all — the same rule the
-  // picker greys rows by, so a track shown at 0 streams nothing even if asked for by URL.
-  const band = difficultyLevels(difficulty, catalog.levels);
-  if (!level) return band ? new Set<string>(band) : null;
-  if (!band) return new Set<string>([level]);
-  // Both given: intersect, so an exact level outside the chosen track's band
-  // admits nothing rather than silently ignoring one of the two filters.
-  return band.includes(level as VocabularyLevel) ? new Set<string>([level]) : new Set<string>();
+function allowedLevels(catalog: Catalog, level: string, difficulty: string): LevelFilter {
+  // The catalog's own track levels decide which tracks can be served at all — the same
+  // rule the picker greys rows by, so a track shown at 0 streams nothing by URL either.
+  const band = difficultyLevels(difficulty, catalog.trackLevels);
+  return { band: band ? new Set<string>(band) : null, exact: level || null };
 }
 
 function matchingPool(
@@ -54,7 +60,7 @@ function matchingPool(
   const key = `${catalog.revision}:${topic}:${level}:${difficulty}`;
   const existing = pools.get(key);
   if (existing) return remember(pools, key, existing, 64);
-  const allowed = allowedLevels(catalog, level, difficulty);
+  const filter = allowedLevels(catalog, level, difficulty);
   // A Japanese deck carries one card per reader level for the same English word. A
   // single-level track admits only one, but "all levels" (or several tracks) would
   // otherwise repeat the word on every card. Keep one card per headword, preferring the
@@ -64,9 +70,12 @@ function matchingPool(
     // A word carries several usage domains; the legacy single `topic` is the fallback
     // for a deck compiled before the axis became multi-valued.
     if (topic && !(word.topics?.includes(topic) ?? word.topic === topic)) return;
-    // A word with no CEFR level cannot belong to any band, so a filtered stream
-    // excludes it while an unfiltered one still offers it.
-    if (allowed && !(word.level && allowed.has(word.level))) return;
+    // A word with no track level cannot belong to any band, so a filtered stream
+    // excludes it while an unfiltered one still offers it. The exact reader level is a
+    // separate axis, which is what lets a CEFR track sit on top of a school level.
+    const trackLevel = wordTrackLevel(word);
+    if (filter.band && !(trackLevel && filter.band.has(trackLevel))) return;
+    if (filter.exact && word.level !== filter.exact) return;
     const head = word.word.toLowerCase();
     const previous = matches.get(head);
     if (
@@ -110,17 +119,28 @@ function levelTally(catalog: Catalog, topic: string) {
   const counts: Partial<Record<VocabularyLevel, number>> = {};
   const samples: FeedPage["levelSamples"] = {};
   const heads = new Set<string>();
-  // Index every matching word per level so the priority pass can look up by name.
-  const byLevel = new Map<VocabularyLevel, typeof catalog.words>();
+  // Index one card per headword per track level, so the picker's count is the number
+  // of distinct words the stream will serve, not the number of school variants.
+  const byLevel = new Map<VocabularyLevel, Map<string, VocabularyWord>>();
   for (const word of catalog.words) {
     if (topic && !(word.topics?.includes(topic) ?? word.topic === topic)) continue;
-    heads.add(word.word.toLowerCase());
-    if (!word.level) continue;
-    counts[word.level] = (counts[word.level] ?? 0) + 1;
-    if (!byLevel.has(word.level)) byLevel.set(word.level, []);
-    byLevel.get(word.level)!.push(word);
+    const head = word.word.toLowerCase();
+    heads.add(head);
+    const level = wordTrackLevel(word);
+    if (!level) continue;
+    let group = byLevel.get(level);
+    if (!group) {
+      group = new Map();
+      byLevel.set(level, group);
+    }
+    const previous = group.get(head);
+    if (!previous || (word.level === "JHIGH" && previous.level !== "JHIGH")) {
+      group.set(head, word);
+    }
   }
-  for (const [level, words] of byLevel) {
+  for (const [level, group] of byLevel) counts[level] = group.size;
+  for (const [level, group] of byLevel) {
+    const words = [...group.values()];
     const priority = LEVEL_SAMPLE_PRIORITY[level] ?? [];
     const picked: FeedPage["levelSamples"][VocabularyLevel] = [];
     const already = new Set<string>();
@@ -207,5 +227,6 @@ export function readCatalogPage(catalog: Catalog, input: FeedRequest): FeedPage 
     name: catalog.name,
     topics: catalog.topics,
     levels: catalog.levels,
+    trackLevels: catalog.trackLevels,
   };
 }

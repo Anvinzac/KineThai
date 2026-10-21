@@ -22,9 +22,14 @@ export const JP_LEVELS = ["JPRIM", "JSEC", "JHIGH", "JCOLL"] as const;
 /** Master enum accepted by the word schema; covers both proficiency systems. */
 export const LEVELS = [...CEFR_LEVELS, ...HSK_LEVELS, ...JP_LEVELS] as const;
 export type JapaneseLevel = (typeof JP_LEVELS)[number];
+export type CefrLevel = (typeof CEFR_LEVELS)[number];
 /** @param level Any word level. @returns True when it belongs to the Japanese school ladder. */
 export function isJapaneseLevel(level: string | undefined): level is JapaneseLevel {
   return !!level && (JP_LEVELS as readonly string[]).includes(level);
+}
+/** @param level Any word level. @returns True when it is one of the CEFR A1–C2 levels. */
+export function isCefrLevel(level: string | undefined): level is CefrLevel {
+  return !!level && (CEFR_LEVELS as readonly string[]).includes(level);
 }
 export const STYLE_IDS = ["detective", "speed", "confession", "minimal"] as const;
 const optionalText = (max: number) => z.string().trim().max(max).optional().default("");
@@ -115,6 +120,8 @@ const wordSchema = z.object({
   topics: z.array(taxonomySlug(60)).max(6).optional(),
   /** Exam and competition targets this word is prepared for. */
   exams: z.array(taxonomySlug(40)).max(8).optional(),
+  /** English CEFR level. Japanese decks keep `level` as the school reader level. */
+  cefr: z.enum(CEFR_LEVELS).optional(),
   level: z.enum(LEVELS).optional(),
   style: z.enum(STYLE_IDS).optional(),
   chars: z.number().int().nonnegative().optional(),
@@ -156,9 +163,52 @@ export type Catalog = {
   name: string;
   count: number;
   topics: string[];
+  /** Exact reader levels present (CEFR, HSK, or Japanese school levels). */
   levels: VocabularyLevel[];
+  /** Levels the difficulty tracks filter on: English CEFR when a word carries `cefr`. */
+  trackLevels: VocabularyLevel[];
   words: VocabularyWord[];
 };
+
+/**
+ * The level a difficulty track matches for one word. Japanese entries carry both an
+ * English CEFR level (`cefr`) and a school reader level (`level`); the title picker is
+ * always about the English word, so CEFR wins whenever it is present.
+ * @param word A catalog word
+ * @returns Its track level, or undefined when the word has none
+ * @pure true
+ */
+export function wordTrackLevel(word: VocabularyWord): VocabularyLevel | undefined {
+  return word.cefr ?? word.level;
+}
+
+/**
+ * Recompute both level lists for a catalog that may predate `trackLevels` (for example
+ * a custom pack already persisted in localStorage).
+ * @param catalog A compiled catalog
+ * @returns The same catalog when its derived levels already match
+ * @pure true
+ */
+export function withDerivedLevels(catalog: Catalog): Catalog {
+  const levels = LEVELS.filter((level) => catalog.words.some((word) => word.level === level));
+  const trackLevels = LEVELS.filter((level) =>
+    catalog.words.some((word) => wordTrackLevel(word) === level),
+  );
+  if (
+    arraysEqual(catalog.levels, levels) &&
+    catalog.trackLevels &&
+    arraysEqual(catalog.trackLevels, trackLevels)
+  ) {
+    return catalog;
+  }
+  return { ...catalog, levels, trackLevels };
+}
+
+function arraysEqual<T>(left: readonly T[] | undefined, right: readonly T[]): boolean {
+  return (
+    !!left && left.length === right.length && left.every((value, index) => value === right[index])
+  );
+}
 
 /** Match a target as a whole word, preserving Unicode boundaries. @param word English target. @returns Global regex. */
 export function answerPattern(word: string): RegExp {
@@ -337,9 +387,17 @@ function withJapaneseLevel(
     emphasis: _emphasis,
     ...rest
   } = entry;
+  // A 0B deck's root `level` is the English CEFR level; the split flat deck keeps it as
+  // `cefr` while `level` becomes the Japanese reader level.
+  const authoredCefr = isCefrLevel(typeof entry.cefr === "string" ? entry.cefr : undefined)
+    ? entry.cefr
+    : isCefrLevel(typeof entry.level === "string" ? entry.level : undefined)
+      ? entry.level
+      : undefined;
   return withFlatJapanese(
     {
       ...rest,
+      ...(authoredCefr ? { cefr: authoredCefr } : {}),
       id,
       level,
       meaningJP: fields.meaningJP,
@@ -495,6 +553,7 @@ export function normalizeDeck(input: unknown): Omit<Catalog, "revision"> {
     count: words.length,
     topics: [...new Set(words.flatMap((word) => word.topics))].sort(),
     levels: LEVELS.filter((level) => words.some((word) => word.level === level)),
+    trackLevels: LEVELS.filter((level) => words.some((word) => wordTrackLevel(word) === level)),
     words,
   };
 }
@@ -577,6 +636,7 @@ export function mergeCatalogs(...catalogs: Catalog[]): Catalog {
       ...new Set(words.flatMap((word) => (word.topics?.length ? word.topics : [word.topic]))),
     ].sort(),
     levels: LEVELS.filter((level) => words.some((word) => word.level === level)),
+    trackLevels: LEVELS.filter((level) => words.some((word) => wordTrackLevel(word) === level)),
     words,
   };
 }

@@ -31,8 +31,6 @@ import {
 import type { Dispatch, ReactElement, SetStateAction } from "react";
 import { toast } from "sonner";
 import type { Preferences } from "../lib/preferences";
-import { japaneseTrackForLevel } from "@/features/vocabulary/lib/difficulty";
-import { writeDifficultyChoice } from "@/features/vocabulary/lib/difficulty-choice";
 import { DEFAULT_TARGET, resolveTarget } from "@/features/vocabulary/lib/target-language";
 import { ControlRow, PreferenceRow, Row, Section, SegmentedControl } from "./SettingsControls";
 
@@ -182,14 +180,12 @@ export function SettingsPreferenceSections({
           <ControlRow icon={<BookOpen />} label="Japanese proficiency level">
             <SegmentedControl
               value={prefs.japaneseLevel}
-              onChange={(japaneseLevel) => {
-                const level = japaneseLevel as Preferences["japaneseLevel"];
-                setPrefs((p) => ({ ...p, japaneseLevel: level }));
-                // The feed falls back to this stored track when Settings says "all";
-                // clearing it here is what makes a switch back to all actually show
-                // every level instead of reopening the previous one.
-                writeDifficultyChoice(level ? (japaneseTrackForLevel(level)?.id ?? "") : "");
-              }}
+              onChange={(japaneseLevel) =>
+                setPrefs((p) => ({
+                  ...p,
+                  japaneseLevel: japaneseLevel as Preferences["japaneseLevel"],
+                }))
+              }
               options={[
                 { value: "", label: "all" },
                 { value: "JPRIM", label: "Primary" },

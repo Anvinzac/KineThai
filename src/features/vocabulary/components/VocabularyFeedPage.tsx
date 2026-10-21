@@ -5,11 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useScreenWakeLock } from "@/hooks/use-screen-wake-lock";
 import { useShellHeightVar } from "@/hooks/use-shell-height-var";
 import type { FeedPage, Presentation, VocabularyFilters } from "../types";
-import {
-  DIFFICULTY_ALL,
-  japaneseLevelForDifficulty,
-  japaneseTrackForLevel,
-} from "../lib/difficulty";
+import { DIFFICULTY_ALL } from "../lib/difficulty";
+import { isJapaneseLevel, type VocabularyLevel } from "../lib/schema";
 import { SHORT_VIEWPORT_MAX_H } from "../lib/landscape-geometry";
 import { useIsAdmin } from "@/features/admin/hooks/useIsAdmin";
 import { useFontsReady } from "../hooks/useFontsReady";
@@ -49,15 +46,9 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   const effectiveLocale: TargetLocale =
     (prefs.targetLanguage as TargetLocale) || locale || DEFAULT_TARGET;
   // Settings only exposes the Japanese proficiency for a Japanese deck.
-  // A non-empty level opens that track directly; "" keeps the usual stored-choice
-  // and default flow (the Settings "all" option clears the stored track too).
-  const preferredJapaneseLevel =
-    effectiveLocale === "ja" && japaneseTrackForLevel(prefs.japaneseLevel)
-      ? prefs.japaneseLevel
-      : "";
-  const preferredDifficulty = preferredJapaneseLevel
-    ? (japaneseTrackForLevel(preferredJapaneseLevel)?.id ?? "")
-    : "";
+  // A non-empty level seeds the level filter only; difficulty remains independent.
+  const preferredJapaneseLevel: VocabularyLevel | "" =
+    effectiveLocale === "ja" && isJapaneseLevel(prefs.japaneseLevel) ? prefs.japaneseLevel : "";
   const [seed, setSeed] = useState(newSeed);
   const [filters, setFilters] = useState<VocabularyFilters>(ALL_FILTERS);
   const [presentation, setPresentation] = useState<Presentation>(() => ({
@@ -80,15 +71,11 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     [presentation.dialect],
   );
   // Keep the Settings proficiency in step with a level chosen from the feed itself.
-  // Without this the next visit would re-apply the old Settings level over the new
-  // choice. Multi-level tracks have no single proficiency, so they store "all".
+  // Difficulty choices never write this preference.
   const rememberJapaneseLevel = useCallback(
     (level: VocabularyFilters["level"]) => {
       if (effectiveLocale !== "ja") return;
-      const japaneseLevel =
-        level === "JPRIM" || level === "JSEC" || level === "JHIGH" || level === "JCOLL"
-          ? level
-          : "";
+      const japaneseLevel = isJapaneseLevel(level) ? level : "";
       const current = readPreferences();
       if (current.japaneseLevel === japaneseLevel) return;
       writePreferences({ ...current, japaneseLevel });
@@ -125,18 +112,18 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
       setStage("feed");
       return;
     }
-    // An explicit Settings level outranks a leftover track from another visit.
+    const stored = readDifficultyChoice(effectiveLocale);
+    // The Settings level seeds only the level filter; the stored difficulty choice is
+    // applied alongside it, never replaced by it.
     if (preferredJapaneseLevel) {
       setFilters({
         ...ALL_FILTERS,
         level: preferredJapaneseLevel,
-        difficulty: preferredDifficulty,
+        difficulty: stored ?? DIFFICULTY_ALL,
       });
-      writeDifficultyChoice(preferredDifficulty);
       setStage("feed");
       return;
     }
-    const stored = readDifficultyChoice(effectiveLocale);
     if (stored === null) {
       // Japanese is the app's default deck. A first-time reader should see the
       // complete catalog immediately, not a level picker that hides words until
@@ -151,7 +138,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     }
     setFilters((current) => ({ ...current, difficulty: stored }));
     setStage("feed");
-  }, [effectiveLocale, preferredJapaneseLevel, preferredDifficulty]);
+  }, [effectiveLocale, preferredJapaneseLevel]);
   // The picker needs the catalog's level counts and sample words before any stream exists.
   // They ride on every feed page, so one small, unfiltered request supplies them.
   const { data: ladder } = useQuery({
@@ -169,16 +156,12 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     enabled: stage === "onboarding",
     staleTime: Infinity,
   });
-  const pickDifficulty = useCallback(
-    (difficulty: string) => {
-      writeDifficultyChoice(difficulty);
-      rememberJapaneseLevel(japaneseLevelForDifficulty(difficulty));
-      setFilters((current) => ({ ...current, difficulty }));
-      setSeed(newSeed());
-      setStage("feed");
-    },
-    [rememberJapaneseLevel],
-  );
+  const pickDifficulty = useCallback((difficulty: string) => {
+    writeDifficultyChoice(difficulty);
+    setFilters((current) => ({ ...current, difficulty }));
+    setSeed(newSeed());
+    setStage("feed");
+  }, []);
   // The saved drawer suspends the feed behind it rather than navigating away.
   const [savedOpen, setSavedOpen] = useState(false);
   // The landscape chrome measures itself against this, not against dvh, and the
@@ -255,9 +238,8 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
             value.difficulty === filters.difficulty
           )
             return;
-          // The level chosen here is the one the next visit opens on.
           if (value.difficulty !== filters.difficulty) writeDifficultyChoice(value.difficulty);
-          rememberJapaneseLevel(value.level || japaneseLevelForDifficulty(value.difficulty));
+          if (value.level !== filters.level) rememberJapaneseLevel(value.level);
           setFilters(value);
           setSeed(newSeed());
         }}

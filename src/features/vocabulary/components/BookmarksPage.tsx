@@ -28,6 +28,7 @@ import { useSavedWords } from "../hooks/useSavedWords";
 import { resolveClue } from "../lib/clues";
 import { posLabel, topicLabel } from "../lib/i18n";
 import { resolveTarget } from "../lib/target-language";
+import { isJapaneseLevel } from "../lib/schema";
 import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
 import type { Locale } from "../lib/locale";
@@ -40,6 +41,13 @@ import "../vocabulary.css";
 type TabKind = "bookmark" | "heart";
 
 const TABS: { kind: TabKind }[] = [{ kind: "bookmark" }, { kind: "heart" }];
+
+const JP_LEVEL_KEYS = {
+  JPRIM: "japanese.JPRIM",
+  JSEC: "japanese.JSEC",
+  JHIGH: "japanese.JHIGH",
+  JCOLL: "japanese.JCOLL",
+} as const;
 
 /**
  * The word carried by each chip in the empty vault, on the Chinese host only.
@@ -300,7 +308,13 @@ function SavedRow({
           </h3>
           {showDetail && (
             <div className="vocab-saved-badges">
-              {entry.word.level && <span className="vocab-saved-badge">{entry.word.level}</span>}
+              {entry.word.level && (
+                <span className="vocab-saved-badge">
+                  {isJapaneseLevel(entry.word.level)
+                    ? t(ui, JP_LEVEL_KEYS[entry.word.level])
+                    : entry.word.level}
+                </span>
+              )}
               {entry.word.pos && (
                 <span className="vocab-saved-badge" data-plain>
                   {posLabel(entry.word.pos, ui)}

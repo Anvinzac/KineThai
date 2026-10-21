@@ -42,6 +42,13 @@ const LITERAL_KEYS = new Set(["id", "topic", "topics", "exams", "level", "pos", 
 const GRID_ROW_LIMIT = 300;
 const CHIP_LIMIT = 8;
 
+const JP_LEVEL_LABELS: Record<string, string> = {
+  JPRIM: "Tiểu học",
+  JSEC: "THCS",
+  JHIGH: "THPT",
+  JCOLL: "Đại học",
+};
+
 type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 
 const isRecord = (v: Json): v is { [key: string]: Json } =>
@@ -49,11 +56,12 @@ const isRecord = (v: Json): v is { [key: string]: Json } =>
 const isScalar = (v: Json) => v === null || typeof v !== "object";
 
 function FieldLabel({ name }: { name: string }) {
+  const japaneseLevel = JP_LEVEL_LABELS[name];
   const label = FIELD_LABELS[name];
   return (
     <span className="vocab-json-key">
-      {label ?? name}
-      {label && <code>{name}</code>}
+      {japaneseLevel ?? label ?? name}
+      {label && !japaneseLevel && <code>{name}</code>}
     </span>
   );
 }
@@ -69,7 +77,8 @@ function Scalar({ value, field }: { value: Json; field?: string }) {
     return <span className="vocab-json-slot">{text.slice(1, -1)}</span>;
   if (field === "word")
     return <strong className="vocab-json-word">{encodeWordJoiners(text)}</strong>;
-  if (field === "level") return <span className="vocab-json-level">{text}</span>;
+  if (JP_LEVEL_LABELS[text] || field === "level")
+    return <span className="vocab-json-level">{JP_LEVEL_LABELS[text] ?? text}</span>;
   if (field === "ipa") return <code className="vocab-json-ipa">{text}</code>;
   if (field && LITERAL_KEYS.has(field)) return <span className="vocab-json-slug">{text}</span>;
   return <span className="vocab-json-str">{encodeWordJoiners(text)}</span>;

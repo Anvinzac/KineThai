@@ -14,7 +14,7 @@
 
 import type { Locale } from "./locale";
 import { BASE_LOCALE } from "./locale";
-import { DIFFICULTY_TRACKS, JP_TRACKS } from "./difficulty";
+import { DIFFICULTY_TRACKS } from "./difficulty";
 
 /** Vietnamese base — the source strings, verbatim. */
 const VI = {
@@ -755,7 +755,7 @@ export function t(locale: Locale, key: CopyKey, params?: Record<string, string |
 type TrackCopy = { label: string; hint: string };
 
 const DIFFICULTY_VI: Record<string, TrackCopy> = Object.fromEntries(
-  [...DIFFICULTY_TRACKS, ...JP_TRACKS].map((track) => [
+  DIFFICULTY_TRACKS.map((track) => [
     track.id,
     { label: track.label, hint: track.hint },
   ]),
@@ -785,11 +785,6 @@ const DIFFICULTY_JA: Record<string, TrackCopy> = {
   "viet-lach": { label: "文章", hint: "書くときに使う語" },
   "du-hoc": { label: "留学", hint: "アカデミック英語" },
   "van-chuong": { label: "文学", hint: "美しく希少な言葉" },
-  // Japanese school-level tracks
-  "jp-primary": { label: "小学校", hint: "小学校レベルの語彙" },
-  "jp-secondary": { label: "中学校", hint: "中学校レベルの語彙" },
-  "jp-highschool": { label: "高校", hint: "高校レベルの語彙" },
-  "jp-college": { label: "大学", hint: "大学レベルの語彙" },
 };
 
 /** Track label/hint copy per locale. */

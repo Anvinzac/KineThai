@@ -56,5 +56,13 @@ describe("Japanese deck", () => {
     expect(page.total).toBeGreaterThanOrEqual(200);
     expect(page.matching).toBe(page.total);
     expect(page.levels).toEqual(expect.arrayContaining(["JPRIM", "JSEC", "JHIGH", "JCOLL"]));
+    expect(page.trackLevels).toEqual(["A2", "B1", "B2", "C1", "C2"]);
+  });
+
+  it("filters by the English CEFR usage tracks, not the school reader level", () => {
+    const page = readVocabularyPage({ ...input, difficulty: "co-ban" }, "ja");
+    expect(page.matching).toBe(100);
+    expect(page.levelCounts).toMatchObject({ A2: 100, B1: 50, B2: 50, C1: 50, C2: 50 });
+    for (const entry of page.entries) expect(entry.word.cefr).toBe("A2");
   });
 });

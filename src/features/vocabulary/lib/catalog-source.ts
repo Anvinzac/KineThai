@@ -9,19 +9,42 @@
  * Every catalog passes through withWordJoiners on its way in, so deck text that joins
  * the syllables of one word with `_` reaches readers as unbreakable text (./word-joiner).
  *
- * Exports: catalog (English), catalogFor
+ * Exports: catalog (English), catalogFor, withPackCefr
  * Depends on: ../data/catalog.json, ../data/packs/*.json, ../data/<locale>/*.json, ./schema, ./word-joiner
  */
 import baseCatalog from "../data/catalog.json";
 import type { Catalog } from "./schema";
-import { mergeCatalogs } from "./schema";
+import { isCefrLevel, mergeCatalogs } from "./schema";
 import type { TargetLocale } from "./target-language";
 import { withWordJoiners } from "./word-joiner";
 
-function sorted(modules: Record<string, { default: Catalog }>): Catalog[] {
+/**
+ * Recover the English CEFR level from a Japanese pack's compiled filename. The 0B
+ * importer writes one pack per reader level (`a2-jprim`, `b1-jsec`, …); the CEFR group
+ * is in the stem, while every word's `level` is the school level.
+ * @param catalog A compiled pack
+ * @param path Module path ending in `<cefr>-j<level>.json`
+ * @returns The pack with `cefr` filled in where it was missing
+ * @pure true
+ */
+export function withPackCefr(catalog: Catalog, path: string): Catalog {
+  const match = /(?:^|\/)(a1|a2|b1|b2|c1|c2)-j(?:prim|sec|high|coll)\.json$/i.exec(path);
+  const cefr = match?.[1]?.toUpperCase();
+  if (!isCefrLevel(cefr)) return catalog;
+  const words = catalog.words.map((word) => (word.cefr ? word : { ...word, cefr }));
+  return { ...catalog, words };
+}
+
+function sorted(
+  modules: Record<string, { default: Catalog }>,
+  options: { inferCefrFromPath?: boolean } = {},
+): Catalog[] {
   return Object.keys(modules)
     .sort()
-    .map((path) => modules[path]!.default);
+    .map((path) => {
+      const catalog = modules[path]!.default;
+      return options.inferCefrFromPath ? withPackCefr(catalog, path) : catalog;
+    });
 }
 
 const enPacks = sorted(
@@ -35,6 +58,7 @@ const koPacks = sorted(
 );
 const jaPacks = sorted(
   import.meta.glob<{ default: Catalog }>("../data/ja/*.json", { eager: true }),
+  { inferCefrFromPath: true },
 );
 
 /** The English catalog: base `catalog.json` plus every compiled provider pack. */

@@ -17,7 +17,7 @@ export const DIFFICULTY_CHOICE_KEY = "kinetic.vocab.difficulty";
 /**
  * Read the stored choice.
  * @param locale Deck locale; when given, ids that belong to another language's tracks
- *   are dropped (an old CEFR pick must not empty a Japanese feed)
+ *   are dropped (an old Japanese school-level pick must not empty a CEFR feed)
  * @returns Comma-joined track ids ("" = every level), or null when nothing was ever chosen
  *   or storage is unavailable. Ids the app no longer knows are dropped rather than trusted.
  */

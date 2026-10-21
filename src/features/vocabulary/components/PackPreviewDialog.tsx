@@ -23,7 +23,8 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { ArrowDown, ArrowUp, ChevronsUpDown, FileJson, Play, Search } from "lucide-react";
 import { parseCustomPack, type CustomPack } from "../lib/custom-pack";
 import { withWordJoiners } from "../lib/word-joiner";
-import { LEVELS, type VocabularyWord } from "../lib/schema";
+import { LEVELS, isJapaneseLevel, type VocabularyWord } from "../lib/schema";
+import { t } from "../lib/ui-copy";
 import { FullscreenSheet } from "./FullscreenSheet";
 import { CodeView, JsonView } from "./JsonView";
 
@@ -35,6 +36,13 @@ const levelRank = (level?: string) => {
   const i = LEVELS.indexOf(level as (typeof LEVELS)[number]);
   return i < 0 ? LEVELS.length : i;
 };
+
+const JP_LEVEL_KEYS = {
+  JPRIM: "japanese.JPRIM",
+  JSEC: "japanese.JSEC",
+  JHIGH: "japanese.JHIGH",
+  JCOLL: "japanese.JCOLL",
+} as const;
 
 const COLUMNS: ColumnDef<Row>[] = [
   {
@@ -67,7 +75,11 @@ const COLUMNS: ColumnDef<Row>[] = [
     accessorFn: (w) => w.level ?? "",
     sortingFn: (a, b) => levelRank(a.original.level) - levelRank(b.original.level),
     cell: ({ row: { original: w } }) =>
-      w.level ? <span className="vocab-preview-level">{w.level}</span> : null,
+      w.level ? (
+        <span className="vocab-preview-level">
+          {isJapaneseLevel(w.level) ? t("vi", JP_LEVEL_KEYS[w.level]) : w.level}
+        </span>
+      ) : null,
   },
   {
     id: "def",

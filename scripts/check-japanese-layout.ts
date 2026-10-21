@@ -26,10 +26,7 @@ import {
 } from "../src/features/vocabulary/lib/schema";
 import type { VocabularyWord } from "../src/features/vocabulary/lib/schema";
 import { readCatalogPage } from "../src/features/vocabulary/lib/paging";
-import {
-  japaneseLevelForDifficulty,
-  japaneseTrackForLevel,
-} from "../src/features/vocabulary/lib/difficulty";
+import { CEFR_TRACKS, formatLevelBand, tracksFor } from "../src/features/vocabulary/lib/difficulty";
 
 // ── Detection: kana is the signal; Vietnamese, English and Chinese never trigger.
 assert.equal(isLikelyJapaneseText("目を とじるだけで、"), true);
@@ -235,6 +232,7 @@ const multiDeck = {
       topics: ["travel"],
       exams: ["toeic"],
       defaultLevel: "JHIGH",
+      cefr: "A2",
       levels: {
         JPRIM: {
           kanjiTier: 0,
@@ -288,6 +286,7 @@ const splitWords = split!.map(({ level, input }) => {
   const word = normalizeDeck(input).words[0]!;
   assert.equal(word.id, `airport-${level.toLowerCase()}`);
   assert.equal(word.level, level);
+  assert.equal(word.cefr, "A2");
   assert.equal(word.meaningJP, "空港");
   assert.ok(word.localized?.ja?.def);
   assert.equal(word.defVi, "Sân bay. Nơi máy bay cất cánh, đón và trả hành khách.");
@@ -314,18 +313,21 @@ const multiPage = readCatalogPage(multiCatalog, {
 assert.equal(multiPage.total, 1, "the catalog summary counts unique words");
 assert.equal(multiPage.matching, 1, "the feed shows one card per headword");
 assert.equal(multiPage.entries[0]!.word.level, "JHIGH", "the default level is preferred");
+assert.equal(multiPage.entries[0]!.word.cefr, "A2", "the English CEFR level survives the split");
+assert.deepEqual(multiCatalog.trackLevels, ["A2"]);
 assert.equal(splitWords.length, 4);
 console.log("OK — a 0B multi-level deck splits, merges and streams once per word");
 
-// ── Proficiency: one Japanese level and one track are two views of the same choice.
-assert.equal(japaneseTrackForLevel("JPRIM")?.id, "jp-primary");
-assert.equal(japaneseTrackForLevel("JCOLL")?.id, "jp-college");
-assert.equal(japaneseTrackForLevel(""), undefined);
-assert.equal(japaneseLevelForDifficulty("jp-primary"), "JPRIM");
-assert.equal(japaneseLevelForDifficulty("jp-highschool"), "JHIGH");
-assert.equal(japaneseLevelForDifficulty(""), "");
-assert.equal(japaneseLevelForDifficulty("jp-primary,jp-secondary"), "");
-assert.equal(japaneseLevelForDifficulty("vo-long"), "");
-console.log("OK — the Japanese level picker and difficulty track stay in step");
+// ── Japanese school ids are internal: no reader-facing band carries them.
+assert.equal(formatLevelBand(["JPRIM"]), "");
+assert.equal(formatLevelBand(["JPRIM", "JCOLL"]), "");
+assert.equal(formatLevelBand(["A1", "A2"]), "A1–A2");
+assert.equal(formatLevelBand(["JPRIM", "A1"]), "A1");
+assert.deepEqual(
+  tracksFor("ja").map((track) => track.id),
+  CEFR_TRACKS.map((track) => track.id),
+  "the title difficulty picker uses the English usage tracks for Japanese",
+);
+console.log("OK — Japanese level ids stay out of reader bands; CEFR drives the title picker");
 
 console.log("\nAll Japanese layout checks passed.");

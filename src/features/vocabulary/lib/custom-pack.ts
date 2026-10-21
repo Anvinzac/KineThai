@@ -6,7 +6,7 @@
  *   clearCustomPack, readCustomPage, CUSTOM_PACK_EVENT
  * Depends on: ./schema (normalizeDeck), ./word-joiner, ./paging
  */
-import { normalizeDeck, type Catalog } from "./schema";
+import { normalizeDeck, withDerivedLevels, type Catalog } from "./schema";
 import { withWordJoiners } from "./word-joiner";
 import { readCatalogPage } from "./paging";
 import type { FeedPage, FeedRequest } from "../types";
@@ -146,7 +146,7 @@ export function readCustomPack(): CustomPack | null {
   try {
     if (raw) {
       const stored = JSON.parse(raw) as CustomPack;
-      pack = { ...stored, catalog: withWordJoiners(stored.catalog) };
+      pack = { ...stored, catalog: withDerivedLevels(withWordJoiners(stored.catalog)) };
     }
   } catch {
     pack = null;

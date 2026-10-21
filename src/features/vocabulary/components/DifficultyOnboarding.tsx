@@ -93,7 +93,7 @@ export function DifficultyOnboarding({
   locale,
   onPick,
 }: {
-  metadata: Pick<FeedPage, "levelCounts" | "levels" | "levelSamples"> | undefined;
+  metadata: Pick<FeedPage, "levelCounts" | "trackLevels" | "levelSamples"> | undefined;
   /**
    * Deck locale. Resolves which track set to render: CEFR for en/ko/ja, HSK for
    * zh. Without this the picker would hardcode CEFR and every rung would show
@@ -108,7 +108,7 @@ export function DifficultyOnboarding({
   // no two rungs are illustrated by the same word.
   const taken = new Map<string, number>();
   const rungs = tracksFor(locale).map((track, index) => {
-    const available = metadata ? isTrackAvailable(track, metadata.levels) : false;
+    const available = metadata ? isTrackAvailable(track, metadata.trackLevels) : false;
     // Honour sampleLevel override so vỡ lòng can show an A1 word instead of the
     // A2 business term that happens to be first in the base catalog for that level.
     const ceiling = track.sampleLevel ?? trackCeiling(track);
@@ -124,7 +124,9 @@ export function DifficultyOnboarding({
       color: RUNG_COLORS[index % RUNG_COLORS.length]!,
       band: formatLevelBand(track.levels),
       available,
-      count: metadata ? countTrackWords([track.id], metadata.levelCounts, metadata.levels) : null,
+      count: metadata
+        ? countTrackWords([track.id], metadata.levelCounts, metadata.trackLevels)
+        : null,
       // The word comes from the track's hardest level: that is the level that sets it apart
       // from the rung below, so it is the honest picture of what choosing it adds.
       sample: pool.length ? pool[turn % pool.length] : undefined,
@@ -250,7 +252,7 @@ export function DifficultyOnboarding({
               <span className="vocab-onboard-name">
                 <span className="vocab-onboard-label">
                   <span aria-hidden="true">{rung.track.emoji}</span> {rung.label}
-                  <span className="vocab-onboard-band">{rung.band}</span>
+                  {rung.band && <span className="vocab-onboard-band">{rung.band}</span>}
                 </span>
                 <span className="vocab-onboard-count">
                   {rung.count === null ? (
@@ -292,7 +294,7 @@ export function DifficultyOnboarding({
           aria-valuemin={1}
           aria-valuemax={rungs.length}
           aria-valuenow={index + 1}
-          aria-valuetext={`${current.label}, ${current.band}`}
+          aria-valuetext={[current.label, current.band].filter(Boolean).join(", ")}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerEnd}

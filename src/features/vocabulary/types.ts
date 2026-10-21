@@ -6,7 +6,7 @@ export type { TargetLocale } from "./lib/target-language";
 export type VocabularyFilters = {
   topic: string;
   level: VocabularyLevel | "";
-  /** Difficulty track id, or "" for every level. Resolved to a CEFR band server-side. */
+  /** Difficulty track id, or "" for every level. Resolved to a CEFR (or HSK) band. */
   difficulty: string;
 };
 export type FeedRequest = VocabularyFilters & {
@@ -32,8 +32,11 @@ export type FeedPage = {
   matching: number;
   name: string;
   topics: string[];
+  /** Exact reader levels in the deck (CEFR, HSK, or Japanese school levels). */
   levels: VocabularyLevel[];
-  /** Words per CEFR level under the page's topic filter; sizes the difficulty picker. */
+  /** Levels the difficulty tracks filter on: English CEFR for Japanese decks. */
+  trackLevels: VocabularyLevel[];
+  /** Words per track level under the page's topic filter; sizes the difficulty picker. */
   levelCounts: Partial<Record<VocabularyLevel, number>>;
   /** A few representative words per level, for the onboarding picker's samples. */
   levelSamples: Partial<Record<VocabularyLevel, { word: string; defVi: string }[]>>;

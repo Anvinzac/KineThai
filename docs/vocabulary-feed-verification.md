@@ -127,7 +127,8 @@ Parameters:
 - `limit`: unsigned decimal integer, 1–24, default 12. Keep it fixed within a stream.
 - `revision`: optional on the first page, otherwise the returned 24-character lowercase hexadecimal revision.
 - `topic`: optional known topic slug; an unknown syntactically valid slug yields no matches.
-- `level`: optional supported CEFR level or empty.
+- `level`: optional exact reader level (CEFR, HSK, or `JPRIM`/`JSEC`/`JHIGH`/`JCOLL` for Japanese) or empty.
+- `difficulty`: optional difficulty-track id (or comma-joined ids). Japanese uses the English CEFR usage tracks; Chinese uses HSK tracks.
 - Unknown parameters and query strings longer than 512 characters are rejected.
 
 Success response: `entries` (each has `word`, `position`, `cycle`, `occurrenceId`), `seed`, `revision`, `position`, `previousPosition`, `nextPosition`, `total`, `matching`, `name`, `topics`, and `levels`. Errors are JSON with a stable `code` and readable `error`: 400 `INVALID_REQUEST`, 409 `CATALOG_CHANGED`, or 503 `UNAVAILABLE`. Responses use `Cache-Control: no-store` and `X-Content-Type-Options: nosniff`.

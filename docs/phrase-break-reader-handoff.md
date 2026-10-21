@@ -204,14 +204,16 @@ Multi-level (0B) decks are accepted too: each word may carry
 `levels: { JPRIM?, JSEC, JHIGH, JCOLL }` with per-level Japanese fields. Import the file
 once with a pack stem: `npm run vocab:import -- deck.json --locale ja --pack <stem>` writes
 one flat pack per level (`<stem>-jprim` … `<stem>-jcoll`, ids `<word>-<level>`) and shares
-the Vietnamese lines. `--level <CODE>` imports only one level. `mergeCatalogs` keys
-Japanese entries by headword **and** level, while the paged feed shows one card per
-headword (preferring `JHIGH`) and counts unique headwords; JPRIM is the `jp-primary`
-track. The settings level picker and the difficulty picker edit the same choice: picking
-a school level selects its track and vice versa, so the two filters cannot contradict
-each other. The app Settings target language overrides the host for the feed (the
-preference is sent as the API's `locale` parameter), and its Japanese proficiency opens
-the matching track on the next feed load. Unknown hosts default to Japanese, so the
+the Vietnamese lines. `--level <CODE>` imports only one level. The bundled
+`<cefr>-j<level>.json` packs recover the English CEFR level from the filename into
+`word.cefr`; `mergeCatalogs` keys Japanese entries by headword **and** reader level,
+while the paged feed shows one card per headword (preferring `JHIGH`) and counts unique
+headwords. The settings level picker and the difficulty picker are independent: the
+title difficulty picker always uses the English CEFR usage tracks, while the settings
+picker filters the Japanese school reader level. Japanese school codes are internal and
+never rendered; reader copy uses localized level names. The app Settings target language overrides the host for the feed (the
+preference is sent as the API's `locale` parameter), and its Japanese proficiency seeds
+the level filter on the next feed load. Unknown hosts default to Japanese, so the
 root deployment streams the full JA deck without a `nhat` prefix; `anh`/`hoa`/`han`
 still name their own decks. Flat `defJa`/`leadJa` decks keep the single-pack path above.
 

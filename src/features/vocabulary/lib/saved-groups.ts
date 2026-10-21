@@ -37,6 +37,14 @@ const BAND_KEY: Record<string, CopyKey> = {
   C2: "saved.band.C2",
 };
 
+/** Japanese school codes are internal ids; only their localized names reach a reader. */
+const JP_BAND_KEY: Record<string, CopyKey> = {
+  JPRIM: "japanese.JPRIM",
+  JSEC: "japanese.JSEC",
+  JHIGH: "japanese.JHIGH",
+  JCOLL: "japanese.JCOLL",
+};
+
 export type WordFolder = {
   id: string;
   /** "" when the group holds a single folder, so the group label is not repeated. */
@@ -155,7 +163,7 @@ function groupByLevel(words: SavedWord[], locale: Locale): WordGroup[] {
     .map(([level, list]) =>
       makeGroup(
         `level-${level}`,
-        level,
+        JP_BAND_KEY[level] ? t(locale, JP_BAND_KEY[level]!) : level,
         [...list].sort(byNewestSave),
         locale,
         BAND_KEY[level] ? t(locale, BAND_KEY[level]!) : undefined,

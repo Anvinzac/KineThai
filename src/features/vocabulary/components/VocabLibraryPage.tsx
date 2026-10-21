@@ -56,7 +56,9 @@ export function VocabLibraryPage() {
               {group.packs.map((pack) => (
                 <li className="vocab-library-pack" key={pack.id}>
                   <div className="vocab-pack-top">
-                    <span className="vocab-pack-band">{formatLevelBand(pack.levels)}</span>
+                    {formatLevelBand(pack.levels) && (
+                      <span className="vocab-pack-band">{formatLevelBand(pack.levels)}</span>
+                    )}
                     <span className="vocab-pack-soon">
                       <Sparkles size={12} aria-hidden="true" />
                       {t(ui, "library.soon")}
