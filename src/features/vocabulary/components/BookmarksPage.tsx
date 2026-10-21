@@ -35,6 +35,7 @@ import type { Locale } from "../lib/locale";
 import { groupSavedWords, type WordGroup } from "../lib/saved-groups";
 import type { SavedWord } from "../lib/saved-words";
 import { FilledUsage, MarkedText } from "./MarkedText";
+import { WordPronunciation } from "./WordPronunciation";
 import "../vocabulary.css";
 
 /** Which reaction defines the list on screen. */
@@ -332,11 +333,7 @@ function SavedRow({
 
         {showDetail && (
           <>
-            {entry.word.ipa && (
-              <p className="vocab-saved-ipa" lang="en">
-                {entry.word.ipa}
-              </p>
-            )}
+            <WordPronunciation word={entry.word} className="vocab-saved-pronunciation" />
             <p className="vocab-saved-def" lang={ui}>
               <MarkedText
                 text={

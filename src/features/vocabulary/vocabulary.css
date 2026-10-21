@@ -1782,9 +1782,57 @@
   color: var(--vocab-ink);
 }
 .vocab-pronunciation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 18px;
   font-size: 0.82em;
+  line-height: 1.2;
   color: var(--vocab-ink);
+}
+/* Two tactile chips instead of a quiet line: the IPA and the katakana reading are
+   different guides to the same word, so they get equal billing and the kana chip
+   carries the card's accent. */
+.vocab-pronunciation-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  padding: 0.22em 0.65em;
+  border: 1px solid color-mix(in srgb, var(--vocab-ink) 24%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--vocab-ink) 8%, transparent);
+  white-space: nowrap;
+}
+.vocab-pronunciation-chip[data-phonetic="kana"] {
+  border-color: color-mix(in srgb, var(--vocab-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--vocab-accent) 18%, transparent);
+}
+.vocab-pronunciation-label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.62em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  color: color-mix(in srgb, var(--vocab-ink) 55%, transparent);
+}
+.vocab-pronunciation-chip[data-phonetic="kana"] .vocab-pronunciation-label {
+  color: var(--vocab-accent);
+}
+.vocab-pronunciation-value {
+  font-weight: 600;
+}
+.vocab-pronunciation-chip[data-phonetic="kana"] .vocab-pronunciation-value {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.vocab-pronunciation-pos {
+  font-size: 0.9em;
+  font-style: italic;
+  color: color-mix(in srgb, var(--vocab-ink) 62%, transparent);
+}
+.vocab-pronunciation-pos::before {
+  content: "· ";
 }
 .vocab-example {
   margin-top: 18px;
@@ -2788,7 +2836,8 @@
   letter-spacing: 0.01em;
   text-transform: none;
 }
-.vocab-saved-ipa {
+.vocab-saved-pronunciation {
+  margin: 0;
   font-size: 13px;
   color: var(--shell-text-mute);
 }
@@ -6295,6 +6344,10 @@
 .vocab-preview-word code {
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
+.vocab-preview-word .vocab-preview-kana {
+  color: var(--mint);
+  font-weight: 650;
+}
 .vocab-preview-word em {
   font-style: italic;
 }
@@ -6475,6 +6528,11 @@
   color: var(--json-ipa);
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 12.5px;
+}
+.vocab-json-kana {
+  color: var(--mint);
+  font-size: 13px;
+  font-weight: 650;
 }
 .vocab-json-null {
   color: color-mix(in oklab, var(--foreground) 35%, transparent);
@@ -7115,10 +7173,10 @@
   letter-spacing: -0.02em;
   color: var(--vocab-accent);
 }
-.vocab-challenge-ipa {
-  margin: 2px 0 10px;
+.vocab-challenge-pronunciation {
+  justify-content: center;
+  margin: 4px 0 12px;
   font-size: 14px;
-  color: var(--shell-text-mute);
 }
 .vocab-challenge-def {
   margin: 0 0 16px;

@@ -107,6 +107,8 @@ const wordSchema = z.object({
   emphasis: z.array(emphasisPhrase).max(6).optional(),
   pos: optionalText(40),
   ipa: optionalText(120),
+  /** Katakana approximation of the English headword, shown beside the IPA. */
+  kana: optionalText(120),
   topic: z
     .string()
     .trim()

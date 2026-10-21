@@ -14,6 +14,7 @@ import { VOCAB_LINE_SPACING_SCALE } from "../lib/presets";
 import { FilledUsage, MarkedText } from "./MarkedText";
 import { RevealBurst } from "./RevealBurst";
 import { ShareChallengeButton } from "./ShareChallengeButton";
+import { WordPronunciation } from "./WordPronunciation";
 
 /** Horizontal travel of a clue page as it arrives and leaves, in px. */
 const PAGE_ENTER_OFFSET = 34;
@@ -271,11 +272,7 @@ export function VocabularyStage({
               `details` follows the scroller, because its one job is resetting
               scrollTop when the word changes. */}
           <div className="vocab-reveal-scroll" ref={details}>
-            {(word.ipa || word.pos) && (
-              <p className="vocab-pronunciation" lang="en">
-                {word.ipa} {word.pos && <span>· {word.pos}</span>}
-              </p>
-            )}
+            <WordPronunciation word={word} showPos />
             <p lang={locale}>
               <MarkedText
                 text={

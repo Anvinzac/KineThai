@@ -159,8 +159,13 @@
       "pos": "adj",
 
       // [AUTHOR] OPTIONAL. IPA pronunciation. ≤120 chars.
-      // SHOWN in the reveal details `.vocab-pronunciation` line, beside `pos`.
+      // SHOWN in the reveal details `.vocab-pronunciation` line, beside `kana` and `pos`.
       "ipa": "/rɪˈzɪl.i.ənt/",
+
+      // [AUTHOR] OPTIONAL. Katakana reading of the English headword. ≤120 chars.
+      // Japanese decks derive this from data/kana-readings.json when it is omitted.
+      // Illustrative only: `resilient` is not in the bundled map.
+      "kana": "レジリエント",
 
       // ══════════════════════════ TAXONOMY / FILTERING ══════════════════════════
       // [DERIVED-from-topic] Legacy single topic slug. Always restated as topics[0] so the two

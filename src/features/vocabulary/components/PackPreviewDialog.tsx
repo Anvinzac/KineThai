@@ -55,7 +55,7 @@ const COLUMNS: ColumnDef<Row>[] = [
   {
     id: "word",
     header: "Từ",
-    accessorFn: (w) => `${w.word} ${w.ipa ?? ""}`,
+    accessorFn: (w) => `${w.word} ${w.ipa ?? ""} ${w.kana ?? ""}`,
     sortingFn: (a, b) => a.original.word.localeCompare(b.original.word),
     cell: ({ row: { original: w } }) => (
       <div className="vocab-preview-word">
@@ -63,6 +63,11 @@ const COLUMNS: ColumnDef<Row>[] = [
         {(w.ipa || w.pos) && (
           <span>
             {w.ipa && <code>{w.ipa}</code>}
+            {w.kana && (
+              <span className="vocab-preview-kana" lang="ja">
+                {w.kana}
+              </span>
+            )}
             {w.pos && <em>{w.pos}</em>}
           </span>
         )}

@@ -9,10 +9,12 @@
  * Every catalog passes through withWordJoiners on its way in, so deck text that joins
  * the syllables of one word with `_` reaches readers as unbreakable text (./word-joiner).
  *
- * Exports: catalog (English), catalogFor, withPackCefr
- * Depends on: ../data/catalog.json, ../data/packs/*.json, ../data/<locale>/*.json, ./schema, ./word-joiner
+ * Exports: catalog (English), catalogFor, withPackCefr, withKanaReadings
+ * Depends on: ../data/catalog.json, ../data/kana-readings.json, ../data/packs/*.json,
+ *   ../data/<locale>/*.json, ./schema, ./word-joiner
  */
 import baseCatalog from "../data/catalog.json";
+import kanaReadings from "../data/kana-readings.json";
 import type { Catalog } from "./schema";
 import { isCefrLevel, mergeCatalogs } from "./schema";
 import type { TargetLocale } from "./target-language";
@@ -61,8 +63,32 @@ const jaPacks = sorted(
   { inferCefrFromPath: true },
 );
 
+/** Katakana readings keyed by lowercase English headword. */
+const KANA_READINGS = kanaReadings as Record<string, string>;
+
+/**
+ * Attach the katakana reading of each headword. The readings live in one map rather than
+ * in every level pack: the same English word appears in up to four school-level packs and
+ * the pronunciation is identical across them.
+ * @param catalog A catalog
+ * @returns The catalog with `kana` filled in where a reading exists
+ * @pure true
+ */
+export function withKanaReadings(catalog: Catalog): Catalog {
+  const words = catalog.words.map((word) => {
+    if (word.kana) return word;
+    const kana = KANA_READINGS[word.word.toLowerCase()];
+    return kana ? { ...word, kana } : word;
+  });
+  return words.some((word, index) => word !== catalog.words[index])
+    ? { ...catalog, words }
+    : catalog;
+}
+
 /** The English catalog: base `catalog.json` plus every compiled provider pack. */
-export const catalog: Catalog = withWordJoiners(mergeCatalogs(baseCatalog as Catalog, ...enPacks));
+export const catalog: Catalog = withKanaReadings(
+  withWordJoiners(mergeCatalogs(baseCatalog as Catalog, ...enPacks)),
+);
 
 const byLocale: Partial<Record<TargetLocale, Catalog>> = { en: catalog };
 const sources: Record<Exclude<TargetLocale, "en">, Catalog[]> = {
@@ -79,6 +105,7 @@ export function catalogFor(locale: TargetLocale): Catalog {
   const result = packs.length
     ? withWordJoiners(mergeCatalogs(packs[0]!, ...packs.slice(1)))
     : catalog;
-  byLocale[locale] = result;
-  return result;
+  const localized = withKanaReadings(result);
+  byLocale[locale] = localized;
+  return localized;
 }

@@ -19,6 +19,7 @@ import { resolveClue } from "../lib/clues";
 import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
 import { MarkedText } from "./MarkedText";
+import { WordPronunciation } from "./WordPronunciation";
 import "../vocabulary.css";
 
 /** Compare a guess the way a person means it: case and spacing do not count. */
@@ -87,11 +88,7 @@ export function ChallengePage(): React.ReactElement {
             <h1 className="vocab-challenge-word" lang="en">
               {word.word}
             </h1>
-            {word.ipa && (
-              <p className="vocab-challenge-ipa" lang="en">
-                {word.ipa}
-              </p>
-            )}
+            <WordPronunciation word={word} className="vocab-challenge-pronunciation" />
             <p className="vocab-challenge-def" lang={ui}>
               <MarkedText
                 text={ui === "ja" && word.meaningJP ? word.meaningJP : resolveClue(word, "def", ui)}

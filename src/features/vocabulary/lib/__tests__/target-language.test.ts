@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { resolveTarget, siteBrand, siteTitle } from "../target-language";
+import { catalogFor } from "../catalog-source";
 import { readVocabularyPage } from "../../api/catalog.server";
 
 describe("resolveTarget", () => {
@@ -64,5 +65,12 @@ describe("Japanese deck", () => {
     expect(page.matching).toBe(100);
     expect(page.levelCounts).toMatchObject({ A2: 100, B1: 50, B2: 50, C1: 50, C2: 50 });
     for (const entry of page.entries) expect(entry.word.cefr).toBe("A2");
+  });
+
+  it("gives every Japanese card a katakana reading", () => {
+    const words = catalogFor("ja").words;
+    expect(words).toHaveLength(1000);
+    for (const word of words) expect(word.kana).toMatch(/^[\u30a0-\u30ffー]+$/u);
+    expect(words.find((word) => word.word === "beach")?.kana).toBe("ビーチ");
   });
 });

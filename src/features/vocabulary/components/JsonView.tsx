@@ -21,6 +21,7 @@ const FIELD_LABELS: Record<string, string> = {
   level: "Cấp độ",
   pos: "Từ loại",
   ipa: "Phát âm",
+  kana: "Đọc katakana",
   defVi: "Nghĩa",
   leadVi: "Câu dẫn",
   anticipateVi: "Gợi ý",
@@ -38,7 +39,17 @@ const FIELD_LABELS: Record<string, string> = {
 };
 
 /** Slug-like fields keep their underscores; reader text shows joins as the reader sees them. */
-const LITERAL_KEYS = new Set(["id", "topic", "topics", "exams", "level", "pos", "ipa", "style"]);
+const LITERAL_KEYS = new Set([
+  "id",
+  "topic",
+  "topics",
+  "exams",
+  "level",
+  "pos",
+  "ipa",
+  "kana",
+  "style",
+]);
 const GRID_ROW_LIMIT = 300;
 const CHIP_LIMIT = 8;
 
@@ -80,6 +91,12 @@ function Scalar({ value, field }: { value: Json; field?: string }) {
   if (JP_LEVEL_LABELS[text] || field === "level")
     return <span className="vocab-json-level">{JP_LEVEL_LABELS[text] ?? text}</span>;
   if (field === "ipa") return <code className="vocab-json-ipa">{text}</code>;
+  if (field === "kana")
+    return (
+      <span className="vocab-json-kana" lang="ja">
+        {text}
+      </span>
+    );
   if (field && LITERAL_KEYS.has(field)) return <span className="vocab-json-slug">{text}</span>;
   return <span className="vocab-json-str">{encodeWordJoiners(text)}</span>;
 }
