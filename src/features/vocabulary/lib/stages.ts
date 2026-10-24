@@ -124,6 +124,9 @@ export function buildStages(
       ? locale
       : BASE_LOCALE;
   const stages: BuiltStage[] = [];
+  // Deck-level emphasis annotations (e.g. Japanese `emphasisJa`) supply stage highlights
+  // when the text field does not carry inline `/word/` markers of its own.
+  const deckEmphasis = word.emphasis?.length ? word.emphasis : undefined;
   // The active locale's overlay can carry a clue the base never had — a Japanese-led
   // deck has no Vietnamese lead — so presence is decided after resolution.
   const lead = resolveClue(word, "lead", locale) || word.leadVi;
@@ -134,7 +137,7 @@ export function buildStages(
       label: leadLabel(style, locale),
       text: mask(clean),
       lang: clueLang,
-      dataEmphasis: markers.length ? markers : undefined,
+      dataEmphasis: markers.length ? markers : deckEmphasis,
       boundPhrases: bound.length ? bound : undefined,
       japaneseChunks: chunks,
     });
@@ -148,7 +151,7 @@ export function buildStages(
       label: stageLabel("definition", locale),
       text: mask(clean),
       lang: clueLang,
-      dataEmphasis: markers.length ? markers : undefined,
+      dataEmphasis: markers.length ? markers : deckEmphasis,
       boundPhrases: bound.length ? bound : undefined,
       japaneseChunks: chunks,
     });

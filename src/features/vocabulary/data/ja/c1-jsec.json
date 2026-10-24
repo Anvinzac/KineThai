@@ -1,5 +1,5 @@
 {
-  "revision": "811ac567fd9c2be5a6676f29",
+  "revision": "3f8a0d15fd327ae054c52c66",
   "name": "WordCrawler vocabulary",
   "count": 50,
   "topics": [
@@ -22,28 +22,31 @@
   "levels": [
     "JSEC"
   ],
+  "trackLevels": [
+    "JSEC"
+  ],
   "words": [
     {
       "id": "abundant-jsec",
       "word": "abundant",
-      "defVi": "Dồi dào. Có nhiều hơn hẳn lượng cần dùng, đầy đủ thoải mái.",
+      "defVi": "Dồi dào. Nhiều đến mức dùng hết phần cần thiết mà vẫn còn dư.",
       "leadVi": "Trên bàn tiệc liên hoan, bánh kẹo và nước ngọt bày ra nhiều đến mức ăn không xuể.",
       "anticipateVi": "Nhiều cỡ nào vậy trời!?",
       "localized": {
         "ja": {
           "lead": "打ち上げの テーブルに、 | おかしや ジュースが | 食べきれないほど 並んだ。",
-          "def": "必要な 量より | ずっと 多く、 | たっぷり ある 様子。",
+          "def": "必要な 分を | 使っても | まだ 余るほど ある 様子。",
           "guess": "どんだけ | あるの！？"
         }
       },
       "meaningJP": "豊富な、たっぷりある",
       "emphasis": [
-        "たっぷり",
-        "食べきれないほど",
+        "まだ",
         "豊富な"
       ],
       "pos": "adj",
       "ipa": "/əˈbʌn.dənt/",
+      "kana": "アバンダント",
       "topic": "nature",
       "topics": [
         "nature",
@@ -70,24 +73,24 @@
     {
       "id": "accumulate-jsec",
       "word": "accumulate",
-      "defVi": "Tích tụ. Gom lại từng chút một, dần dần nhiều lên.",
-      "leadVi": "Trước kỳ thi, giấy bài tập được trả về cứ chồng thành núi trên bàn.",
-      "anticipateVi": "Góp gió thành bão…?",
+      "defVi": "Tích tụ. Gom lại từng chút một, lượng dần dần tăng lên.",
+      "leadVi": "Một tuần lười dọn dẹp, giấy tờ trên bàn lúc nào không hay đã chất thành núi.",
+      "anticipateVi": "Tích tiểu thành đại…?",
       "localized": {
         "ja": {
-          "lead": "テスト前、 | 返された プリントが | 机の 上で | どんどん 山に なる。",
-          "def": "少しずつ 集まって、 | だんだん | 多く なる=こと。",
+          "lead": "片づけを サボった 一週間。 | 机の 上の プリントが | いつの間にか 山に なった。",
+          "def": "少しずつ 集まって、 | だんだん 量が | 増えて=いく=こと。",
           "guess": "ちりも | 積もれば…？"
         }
       },
       "meaningJP": "たまる、積もる",
       "emphasis": [
         "少しずつ",
-        "プリント",
         "たまる"
       ],
       "pos": "verb",
       "ipa": "/əˈkjuː.mjə.leɪt/",
+      "kana": "アキューミュレイト",
       "topic": "money",
       "topics": [
         "money",
@@ -114,24 +117,24 @@
     {
       "id": "adversity-jsec",
       "word": "adversity",
-      "defVi": "Nghịch cảnh. Tình cảnh khổ sở khi những điều cay đắng cứ nối tiếp nhau.",
-      "leadVi": "Át chủ bài bị chấn thương phải nghỉ, cả đội chỉ còn năm người. Dù vậy vẫn không bỏ buổi tập sáng nào.",
+      "defVi": "Nghịch cảnh. Hoàn cảnh khó khăn khi chuyện khổ sở cứ dồn dập kéo đến.",
+      "leadVi": "Át chủ bài nghỉ vì chấn thương, câu lạc bộ chỉ còn năm người. Dù vậy vẫn không bỏ buổi tập sáng nào.",
       "anticipateVi": "Vẫn chưa bỏ cuộc đâu!",
       "localized": {
         "ja": {
-          "lead": "けがで エースが 休み、 | 部員は 五人だけ。 | それでも 朝練は 休まない。",
-          "def": "苦しい ことや | つらい ことが | 次々と 続く 状態。",
+          "lead": "エースは けがで 欠場、 | 部員は 五人だけ。 | それでも 朝練は 休まない。",
+          "def": "つらい ことが | 次々と 重なる、 | 苦しい 立場。",
           "guess": "まだ | あきらめない！"
         }
       },
       "meaningJP": "逆境、苦しい立場",
       "emphasis": [
         "次々と",
-        "朝練",
         "逆境"
       ],
       "pos": "noun",
       "ipa": "/ədˈvɜː.sə.ti/",
+      "kana": "アドヴァーサティ",
       "topic": "emotion",
       "topics": [
         "emotion",
@@ -145,9 +148,9 @@
       "usage": [
         {
           "en": "She showed great courage in the face of _____.",
-          "vi": "あの人は逆境の中でも強い勇気を見せた。",
+          "vi": "あの人は逆境の中でも大きな勇気を見せた。",
           "glosses": {
-            "ja": "あの 人は | 逆境の 中でも | 強い 勇気を 見せた。"
+            "ja": "あの 人は | 逆境の 中でも | 大きな 勇気を 見せた。"
           }
         }
       ],
@@ -158,24 +161,24 @@
     {
       "id": "aesthetic-jsec",
       "word": "aesthetic",
-      "defVi": "Thẩm mỹ. Liên quan đến vẻ đẹp bề ngoài và cảm nhận về cái đẹp.",
-      "leadVi": "Chỉ có vải trắng và ghế gỗ. Quán cà phê ở lễ hội trường đông nghịt người chụp ảnh.",
-      "anticipateVi": "Lên hình đẹp quá đi!",
+      "defVi": "Thẩm mỹ. Liên quan đến cái đẹp và vẻ ngoài, chứ không phải sự tiện dụng.",
+      "leadVi": "Chỉ có vải trắng và ghế gỗ. Quán cà phê lễ hội trường chật kín người chụp ảnh.",
+      "anticipateVi": "Lên hình đẹp xỉu!",
       "localized": {
         "ja": {
           "lead": "白い 布と 木の いすだけ。 | 文化祭の カフェは | 写真を とる 人で いっぱい。",
-          "def": "見た 目の 美しさや、 | それを 感じる 心に | 関わる 様子。",
+          "def": "使いやすさでは なく、 | 美しさや 見た目の よさに | 関わる 様子。",
           "guess": "めっちゃ | 映えてる！"
         }
       },
       "meaningJP": "美的な",
       "emphasis": [
-        "美しさ",
-        "布",
+        "なく",
         "美的な"
       ],
       "pos": "adj",
       "ipa": "/esˈθet.ɪk/",
+      "kana": "エスセッティック",
       "topic": "perception",
       "topics": [
         "perception",
@@ -202,24 +205,24 @@
     {
       "id": "allocate-jsec",
       "word": "allocate",
-      "defVi": "Phân bổ. Chia tiền bạc hay thời gian theo từng mục đích và quyết định phần cho mỗi việc.",
-      "leadVi": "Ngân sách lễ hội trường là ba vạn yên. “Mười nghìn cho đồ trang trí, hai mươi nghìn cho nguyên liệu nhé?”",
+      "defVi": "Phân bổ. Chia sẵn tiền bạc hay thời gian theo từng mục đích sử dụng.",
+      "leadVi": "Ngân sách lễ hội trường là ba vạn yên. “Trang trí một vạn, nguyên liệu hai vạn thì sao?”",
       "anticipateVi": "Chia thế nào đây?",
       "localized": {
         "ja": {
           "lead": "文化祭の 予算は 三万円。 | 「かざりに 一万、 | 材料に 二万で どう？」",
-          "def": "お金や 時間などを、 | 目的ごとに | 分けて 決める=こと。",
+          "def": "お金や 時間を、 | 使い道ごとに | 前もって 分けて=おく=こと。",
           "guess": "どう | 分けよう？"
         }
       },
       "meaningJP": "割り当てる、配分する",
       "emphasis": [
-        "目的ごと",
-        "かざり",
+        "使い道",
         "割り当てた"
       ],
       "pos": "verb",
       "ipa": "/ˈæl.ə.keɪt/",
+      "kana": "アロケイト",
       "topic": "money",
       "topics": [
         "money",
@@ -246,24 +249,24 @@
     {
       "id": "bias-jsec",
       "word": "bias",
-      "defVi": "Thiên vị, định kiến. Bị cách nhìn áp đặt chi phối nên không đánh giá sự việc công bằng.",
-      "leadVi": "Cùng mắc lỗi như nhau, nhưng người bị nhắc nhở lúc nào cũng chỉ có tớ.",
-      "anticipateVi": "Vậy chẳng phải là gian sao?",
+      "defVi": "Thiên kiến. Bị định kiến chi phối nên không nhìn nhận sự việc công bằng.",
+      "leadVi": "Cùng mắc một lỗi, vậy mà người bị nhắc lúc nào cũng chỉ có mình tôi.",
+      "anticipateVi": "Thế chẳng phải là bất công sao?",
       "localized": {
         "ja": {
           "lead": "同じ ミスを しても、 | 注意されるのは | いつも ぼくだけ。",
-          "def": "決めつけた 見方で、 | 物事を | 公平に 見られない=こと。",
+          "def": "思いこみに 引きずられて、 | 物事を 公平に | 見られない=こと。",
           "guess": "それって | ずるくない？"
         }
       },
-      "meaningJP": "偏見《へんけん》、えこひいき",
+      "meaningJP": "偏見《へんけん》、かたより",
       "emphasis": [
-        "決めつけた",
-        "注意される",
+        "思いこみ",
         "偏見"
       ],
       "pos": "noun",
       "ipa": "/ˈbaɪ.əs/",
+      "kana": "バイアス",
       "topic": "thinking",
       "topics": [
         "thinking",
@@ -290,24 +293,24 @@
     {
       "id": "ambiguous-jsec",
       "word": "ambiguous",
-      "defVi": "Mơ hồ, nước đôi. Có thể hiểu theo nhiều nghĩa, không rõ ràng.",
-      "leadVi": "Tin trả lời của bạn chỉ có đúng một câu “Được thôi”. Là đồng ý, hay là đang giận đây?",
-      "anticipateVi": "Nghĩa nào vậy trời!?",
+      "defVi": "Mơ hồ. Có thể hiểu theo nhiều nghĩa, không rõ ràng.",
+      "leadVi": "Hỏi “Về cùng nhau không?”, chỉ nhận được tin trả lời “Được thôi”. Là đồng ý hay bị từ chối đây…",
+      "anticipateVi": "Nghĩa nào đây!?",
       "localized": {
         "ja": {
-          "lead": "友だちの 返信は | 「いいよ」だけ。 | 賛成なのか、 | おこって=いるのか……。",
+          "lead": "「いっしょに 帰る？」に | 「いいよ」とだけ 返信。 | 行くのか、 | 断られたのか……。",
           "def": "いくつもの 意味に | とれて、 | はっきりしない 様子。",
           "guess": "どっちの | 意味！？"
         }
       },
       "meaningJP": "あいまいな",
       "emphasis": [
-        "はっきりしない",
-        "返信",
+        "だけ",
         "あいまいだった"
       ],
       "pos": "adj",
       "ipa": "/æmˈbɪɡ.ju.əs/",
+      "kana": "アンビギュアス",
       "topic": "communication",
       "topics": [
         "communication",
@@ -334,9 +337,9 @@
     {
       "id": "aspire-jsec",
       "word": "aspire",
-      "defVi": "Khao khát, hướng tới. Quyết tâm trong lòng một mục tiêu cao và nhắm tới nó.",
-      "leadVi": "Sau giờ học, ngày nào cũng ngồi ở thư viện giải đề thi các năm trước của khoa y.",
-      "anticipateVi": "Ước mơ phải thật lớn!",
+      "defVi": "Khao khát vươn tới. Đặt mục tiêu cao trong lòng và hướng tới nó.",
+      "leadVi": "Ở thư viện sau giờ học, ngày nào cũng giải đề thi cũ vào khoa y.",
+      "anticipateVi": "Ước mơ thì phải thật lớn!",
       "localized": {
         "ja": {
           "lead": "放課後の 図書室で、 | 医学部の 過去問を | 毎日 解いて=いる。",
@@ -344,14 +347,14 @@
           "guess": "夢は | でっかく！"
         }
       },
-      "meaningJP": "志す、目指す",
+      "meaningJP": "志す、熱望する",
       "emphasis": [
-        "目標",
-        "過去問",
+        "高い",
         "志している"
       ],
       "pos": "verb",
       "ipa": "/əˈspaɪər/",
+      "kana": "アスパイア",
       "topic": "character",
       "topics": [
         "character",
@@ -377,24 +380,24 @@
     {
       "id": "deficiency-jsec",
       "word": "deficiency",
-      "defVi": "Sự thiếu hụt. Tình trạng cơ thể không có đủ những chất cần thiết.",
-      "leadVi": "Đang tập thì choáng váng, bị cô giáo bảo: “Em thiếu sắt rồi đấy.”",
+      "defVi": "Sự thiếu hụt. Tình trạng thiếu phần cần thiết cho cơ thể hay sự vật.",
+      "leadVi": "Đang tập thì choáng váng, cô y tế bảo “Em thiếu sắt rồi”.",
       "anticipateVi": "Thiếu cái gì vậy?",
       "localized": {
         "ja": {
-          "lead": "練習中に くらっと して、 | 「鉄分が 足りないね」と | 先生に 言われた。",
-          "def": "体に 必要な ものが | 足りて=いない=こと。",
+          "lead": "練習中に くらっと して、 | 「鉄分が 足りないね」と | 保健の 先生に 言われた。",
+          "def": "体や 物事に | 必要な 分が | 足りて=いない 状態。",
           "guess": "何が | 足りないの？"
         }
       },
-      "meaningJP": "不足",
+      "meaningJP": "不足、足りないこと",
       "emphasis": [
         "必要な",
-        "くらっと",
-        "ビタミン不足"
+        "不足"
       ],
       "pos": "noun",
       "ipa": "/dɪˈfɪʃ.ən.si/",
+      "kana": "ディフィッシャンスィ",
       "topic": "health",
       "topics": [
         "health"
@@ -407,9 +410,9 @@
       "usage": [
         {
           "en": "Vitamin _____ can cause illness.",
-          "vi": "ビタミン不足は病気の原因になることがある。",
+          "vi": "ビタミンの不足は病気の原因になることがある。",
           "glosses": {
-            "ja": "ビタミン不足は | 病気の 原因に | なる=ことが ある。"
+            "ja": "ビタミンの 不足は | 病気の 原因に | なる=ことが ある。"
           }
         }
       ],
@@ -420,24 +423,24 @@
     {
       "id": "coherent-jsec",
       "word": "coherent",
-      "defVi": "Mạch lạc. Trình tự và lý lẽ của câu chuyện nối kết với nhau chặt chẽ.",
-      "leadVi": "Trong trận tranh biện, lập luận của đội trưởng câu lạc bộ đến cuối cùng chẳng hề dao động.",
+      "defVi": "Mạch lạc. Dòng ý và lý lẽ nối với nhau hợp lý, không gượng ép.",
+      "leadVi": "Trong trận tranh biện, lập luận của đội trưởng không hề lung lay đến phút cuối.",
       "anticipateVi": "Câu chuyện có ăn khớp không đấy?",
       "localized": {
         "ja": {
           "lead": "ディベートの 試合で、 | 部長の 主張は | 最後まで ぶれない。",
-          "def": "話の 順番や 理由が | きちんと | つながって=いる 様子。",
+          "def": "話の 流れや 理由が | 無理なく | つながって=いる 様子。",
           "guess": "話、 | つながってる？"
         }
       },
       "meaningJP": "筋の通った、まとまった",
       "emphasis": [
-        "つながって",
-        "ぶれない",
+        "無理なく",
         "筋の通った"
       ],
       "pos": "adj",
       "ipa": "/kəʊˈhɪə.rənt/",
+      "kana": "コウヒアラント",
       "topic": "thinking",
       "topics": [
         "thinking",
@@ -451,9 +454,9 @@
       "usage": [
         {
           "en": "Your essay needs a more _____ argument.",
-          "vi": "きみの作文にはもっと筋の通った主張が必要だ。",
+          "vi": "きみの小論文にはもっと筋の通った主張が必要だ。",
           "glosses": {
-            "ja": "きみの 作文には | もっと 筋の_通った | 主張が 必要だ。"
+            "ja": "きみの 小論文には | もっと 筋の_通った | 主張が 必要だ。"
           }
         }
       ],
@@ -464,24 +467,24 @@
     {
       "id": "coincide-jsec",
       "word": "coincide",
-      "defVi": "Trùng, trùng hợp. Hai việc trở lên xảy ra cùng một lúc.",
-      "leadVi": "Ngày thi cuối cùng lại trùng đúng ngày concert của thần tượng.",
+      "defVi": "Trùng hợp. Hai việc trở lên tình cờ xảy ra cùng lúc.",
+      "leadVi": "Ngày thi cuối cùng lại trùng đúng ngày concert của idol mình.",
       "anticipateVi": "Sao lại đúng ngày đó chứ!?",
       "localized": {
         "ja": {
           "lead": "テストの 最終日が、 | 推しの ライブと | まさかの 同じ 日。",
-          "def": "二つ以上の ことが | 同時に | 起こる=こと。",
+          "def": "二つ以上の ことが | たまたま | 同時に 起こる=こと。",
           "guess": "よりによって | その 日！？"
         }
       },
-      "meaningJP": "重なる、ぶつかる",
+      "meaningJP": "重なる、同時に起こる",
       "emphasis": [
-        "同時に",
-        "ライブ",
+        "たまたま",
         "重なる"
       ],
       "pos": "verb",
       "ipa": "/ˌkəʊ.ɪnˈsaɪd/",
+      "kana": "コウインサイド",
       "topic": "time",
       "topics": [
         "time"
@@ -494,9 +497,9 @@
       "usage": [
         {
           "en": "My birthday _____s with the festival.",
-          "vi": "わたしの誕生日はお祭りの日と重なる。",
+          "vi": "私の誕生日はお祭りの日と重なる。",
           "glosses": {
-            "ja": "わたしの 誕生日は | お祭りの 日と | 重なる。"
+            "ja": "私の 誕生日は | お祭りの 日と | 重なる。"
           }
         }
       ],
@@ -507,9 +510,9 @@
     {
       "id": "scrutiny-jsec",
       "word": "scrutiny",
-      "defVi": "Sự soi xét kỹ. Xem xét cẩn thận từng điểm nhỏ một.",
-      "leadVi": "Thầy giáo kiểm tra bản kế hoạch lễ hội trường từng dòng một bằng bút đỏ.",
-      "anticipateVi": "Bị soi đến mức nào đây?",
+      "defVi": "Sự soi xét kỹ lưỡng. Xem xét cẩn thận từng điểm nhỏ một.",
+      "leadVi": "Thầy cầm bút đỏ kiểm tra từng dòng bản kế hoạch lễ hội trường.",
+      "anticipateVi": "Bị soi tới mức nào đây?",
       "localized": {
         "ja": {
           "lead": "文化祭の 計画書を、 | 先生が 一行ずつ | 赤ペンで チェックする。",
@@ -517,14 +520,14 @@
           "guess": "どこまで | 見られてる？"
         }
       },
-      "meaningJP": "精査、厳しい目",
+      "meaningJP": "精査、きびしい目",
       "emphasis": [
-        "注意深く",
-        "赤ペン",
+        "細かい",
         "精査"
       ],
       "pos": "noun",
       "ipa": "/ˈskruː.tɪ.ni/",
+      "kana": "スクルーティニ",
       "topic": "attention",
       "topics": [
         "attention",
@@ -538,9 +541,9 @@
       "usage": [
         {
           "en": "The plan is under close _____.",
-          "vi": "その計画は今、厳しい精査を受けている。",
+          "vi": "その計画は今、きびしい精査を受けている。",
           "glosses": {
-            "ja": "その 計画は 今、 | 厳しい 精査を | 受けて=いる。"
+            "ja": "その 計画は 今、 | きびしい 精査を | 受けて=いる。"
           }
         }
       ],
@@ -552,7 +555,7 @@
       "id": "facilitate-jsec",
       "word": "facilitate",
       "defVi": "Tạo điều kiện thuận lợi. Hỗ trợ để mọi việc tiến triển suôn sẻ.",
-      "leadVi": "Lớp lập nhóm chat xong, việc chuẩn bị lễ hội trường tiến triển vèo vèo.",
+      "leadVi": "Có nhóm chat của lớp, việc chuẩn bị lễ hội trường tiến triển vèo vèo.",
       "anticipateVi": "Nhẹ nhàng hẳn luôn!",
       "localized": {
         "ja": {
@@ -561,14 +564,14 @@
           "guess": "めっちゃ | 楽に なった！"
         }
       },
-      "meaningJP": "容易にする、助ける",
+      "meaningJP": "スムーズにする、助ける",
       "emphasis": [
         "手助けする",
-        "一気に",
-        "容易に"
+        "スムーズにする"
       ],
       "pos": "verb",
       "ipa": "/fəˈsɪl.ɪ.teɪt/",
+      "kana": "ファスィリテイト",
       "topic": "work",
       "topics": [
         "work",
@@ -582,9 +585,9 @@
       "usage": [
         {
           "en": "The new software _____s communication.",
-          "vi": "新しいソフトがコミュニケーションを容易にする。",
+          "vi": "新しいソフトがコミュニケーションをスムーズにする。",
           "glosses": {
-            "ja": "新しい ソフトが | コミュニケーションを | 容易に する。"
+            "ja": "新しい ソフトが | コミュニケーションを | スムーズに する。"
           }
         }
       ],
@@ -595,24 +598,24 @@
     {
       "id": "articulate-jsec",
       "word": "articulate",
-      "defVi": "Ăn nói lưu loát. Có thể diễn đạt suy nghĩ thành lời rõ ràng, dễ hiểu.",
-      "leadVi": "Trong bài diễn thuyết của hội học sinh, chẳng cần nhìn giấy mà cả trường đều chăm chú lắng nghe.",
-      "anticipateVi": "Nói hay quá rồi đó?",
+      "defVi": "Ăn nói lưu loát. Có thể diễn đạt suy nghĩ của mình thành lời rõ ràng, mạch lạc.",
+      "leadVi": "Trong bài diễn văn hội học sinh, nói mà không cần nhìn giấy, cả trường lắng nghe say sưa.",
+      "anticipateVi": "Nói hay quá vậy trời?",
       "localized": {
         "ja": {
           "lead": "生徒会の 演説で、 | メモも 見ずに 話し、 | 全校が 聞き入った。",
-          "def": "考えを、 | わかりやすく はっきりと | 言葉に できる 様子。",
+          "def": "自分の 考えを、 | わかりやすく はっきりと | 言葉に できる 様子。",
           "guess": "話、 | うますぎない？"
         }
       },
-      "meaningJP": "弁が立つ、表現力のある",
+      "meaningJP": "弁が立つ、話がうまい",
       "emphasis": [
-        "はっきりと",
-        "聞き入った",
+        "はっきり",
         "弁が立つ"
       ],
       "pos": "adj",
       "ipa": "/ɑːˈtɪk.jə.lət/",
+      "kana": "アーティキュラト",
       "topic": "communication",
       "topics": [
         "communication"
@@ -638,24 +641,24 @@
     {
       "id": "hypothesis-jsec",
       "word": "hypothesis",
-      "defVi": "Giả thuyết. Ý tưởng tạm đặt ra trước khi kiểm chứng đúng hay sai.",
-      "leadVi": "“Cà chua được nghe nhạc có ngọt hơn không?” Đề tài nghiên cứu tự do bắt đầu.",
+      "defVi": "Giả thuyết. Ý tưởng dùng để giải thích, nhưng chưa được xác định là đúng.",
+      "leadVi": "“Cà chua được nghe nhạc sẽ ngọt hơn?” Thế là dự án nghiên cứu tự do bắt đầu.",
       "anticipateVi": "Nếu đúng như vậy thì sao?",
       "localized": {
         "ja": {
           "lead": "「音楽を 聞かせた トマトは | あまく なる？」 | 自由研究が | 始まった。",
-          "def": "正しいか どうか | 確かめる 前に、 | 仮に 立てる 考え。",
+          "def": "まだ 正しいと | 決まって=いない、 | 説明の=ための 考え。",
           "guess": "もし | そうだったら？"
         }
       },
       "meaningJP": "仮説",
       "emphasis": [
-        "仮に",
-        "トマト",
+        "まだ",
         "仮説"
       ],
       "pos": "noun",
       "ipa": "/haɪˈpɒθ.ə.sɪs/",
+      "kana": "ハイポサスィス",
       "topic": "study",
       "topics": [
         "study",
@@ -682,9 +685,9 @@
     {
       "id": "complacent-jsec",
       "word": "complacent",
-      "defVi": "Chủ quan, tự mãn. Hài lòng vì mọi thứ đang suôn sẻ nên lơ là.",
-      "leadVi": "Dẫn hai điểm, “Thắng chắc rồi.” Năm phút cuối thì bị gỡ hòa.",
-      "anticipateVi": "Đã kết thúc đâu!",
+      "defVi": "Tự mãn. Hài lòng vì mọi việc đang suôn sẻ nên lơi lỏng cảnh giác.",
+      "leadVi": "Dẫn trước hai bàn, “Thắng chắc rồi”. Năm phút cuối thì bị gỡ hòa.",
+      "anticipateVi": "Vẫn chưa kết thúc đâu!",
       "localized": {
         "ja": {
           "lead": "二点 リードで | 「もう 勝ちだな」。 | 最後の 五分で | 追いつかれた。",
@@ -695,11 +698,11 @@
       "meaningJP": "油断した、気がゆるんだ",
       "emphasis": [
         "満足して",
-        "勝ちだな",
         "油断している"
       ],
       "pos": "adj",
       "ipa": "/kəmˈpleɪ.sənt/",
+      "kana": "コンプレイサント",
       "topic": "character",
       "topics": [
         "character"
@@ -712,9 +715,9 @@
       "usage": [
         {
           "en": "We can't afford to be _____.",
-          "vi": "ぼくたちに油断しているひまはない。",
+          "vi": "私たちは油断している場合じゃない。",
           "glosses": {
-            "ja": "ぼくたちに | 油断して=いる | ひまは ない。"
+            "ja": "私たちは | 油断して=いる | 場合じゃ ない。"
           }
         }
       ],
@@ -725,24 +728,24 @@
     {
       "id": "deteriorate-jsec",
       "word": "deteriorate",
-      "defVi": "Xấu đi. Tình trạng ngày càng tệ hơn so với trước.",
-      "leadVi": "Vết nứt trên chiếc điện thoại bị đánh rơi, ngày qua ngày cứ lan rộng dần.",
+      "defVi": "Xấu đi. Tình trạng vốn đang tốt dần trở nên tệ hơn theo thời gian.",
+      "leadVi": "Vết nứt trên chiếc điện thoại bị rơi, ngày qua ngày cứ loang rộng dần.",
       "anticipateVi": "Phải sửa sớm thôi!",
       "localized": {
         "ja": {
           "lead": "落とした スマホの ひび。 | 日に 日に | 少しずつ 広がって=いく。",
-          "def": "状態が | 前より | どんどん 悪く なる=こと。",
+          "def": "よかった 状態が、 | 時間と ともに | 悪く なって=いく=こと。",
           "guess": "早く | 直さなきゃ！"
         }
       },
       "meaningJP": "悪化する、悪くなる",
       "emphasis": [
-        "どんどん",
-        "ひび",
+        "よかった",
         "悪化した"
       ],
       "pos": "verb",
       "ipa": "/dɪˈtɪə.ri.ə.reɪt/",
+      "kana": "ディティアリオレイト",
       "topic": "health",
       "topics": [
         "health",
@@ -769,24 +772,24 @@
     {
       "id": "nuance-jsec",
       "word": "nuance",
-      "defVi": "Sắc thái. Sự khác biệt rất nhỏ về cảm giác ẩn trong lời nói hay nét mặt.",
-      "leadVi": "“Cảm ơn.” và “Cảm ơn nha!”, cùng một nghĩa mà cảm giác lại khác nhau.",
+      "defVi": "Sắc thái. Sự khác biệt rất nhỏ về nghĩa hay cảm giác ẩn trong lời nói, nét mặt.",
+      "leadVi": "“Cảm ơn.” và “Cảm ơn nha!”, cùng một nghĩa mà cảm giác lại khác.",
       "anticipateVi": "Chẳng phải giống nhau sao?",
       "localized": {
         "ja": {
           "lead": "「ありがとう。」と | 「ありがと！」、 | 同じ 意味なのに | 感じが ちがう。",
-          "def": "言葉や 表情に ふくまれる、 | ごく 小さな | 感じの ちがい。",
+          "def": "言葉や 表情に ふくまれる、 | ほんの わずかな | 意味や 感じの ちがい。",
           "guess": "同じ じゃ | ないの？"
         }
       },
-      "meaningJP": "ニュアンス",
+      "meaningJP": "ニュアンス、小さなちがい",
       "emphasis": [
-        "小さな",
-        "感じ",
+        "わずかな",
         "ニュアンス"
       ],
       "pos": "noun",
       "ipa": "/ˈnjuː.ɑːns/",
+      "kana": "ニューアーンス",
       "topic": "communication",
       "topics": [
         "communication",
@@ -800,9 +803,9 @@
       "usage": [
         {
           "en": "Translators must understand every _____.",
-          "vi": "訳す人はすべてのニュアンスを理解しなければならない。",
+          "vi": "ほんやくをする人はすべてのニュアンスを理解しなければならない。",
           "glosses": {
-            "ja": "訳す 人は | すべての ニュアンスを | 理解しなければ ならない。"
+            "ja": "ほんやくを する 人は | すべての ニュアンスを | 理解しなければ ならない。"
           }
         }
       ],
@@ -813,24 +816,24 @@
     {
       "id": "dispel-jsec",
       "word": "dispel",
-      "defVi": "Xua tan. Làm tan biến hoàn toàn nỗi lo hay sự nghi ngờ.",
-      "leadVi": "Đang bứt rứt vì mãi không thấy trả lời, thì tin nhắn đến: “Xin lỗi, tớ ngủ quên mất!”",
+      "defVi": "Xua tan. Làm tiêu tan hoàn toàn nỗi lo hay mối nghi ngờ.",
+      "leadVi": "Đang bứt rứt vì không thấy trả lời thì: “Xin lỗi, nãy ngủ quên!”",
       "anticipateVi": "Hết bứt rứt chưa?",
       "localized": {
         "ja": {
           "lead": "返信が なくて | もやもやして=いたら、 | 「ごめん、ねてた！」",
-          "def": "心配や 疑いを、 | すっかり | なくす=こと。",
+          "def": "心配や うたがいを、 | すっかり | 消して=しまう=こと。",
           "guess": "もやもや、 | 晴れた？"
         }
       },
-      "meaningJP": "消し去る、取りのぞく",
+      "meaningJP": "消し去る、ふきとばす",
       "emphasis": [
         "すっかり",
-        "もやもや",
         "消し去った"
       ],
       "pos": "verb",
       "ipa": "/dɪˈspel/",
+      "kana": "ディスペル",
       "topic": "thinking",
       "topics": [
         "thinking",
@@ -844,9 +847,9 @@
       "usage": [
         {
           "en": "The report _____led fears about the economy.",
-          "vi": "その報告は景気への不安を消し去った。",
+          "vi": "その報告は経済への不安を消し去った。",
           "glosses": {
-            "ja": "その 報告は | 景気への 不安を | 消し去った。"
+            "ja": "その 報告は | 経済への 不安を | 消し去った。"
           }
         }
       ],
@@ -857,9 +860,9 @@
     {
       "id": "innovative-jsec",
       "word": "innovative",
-      "defVi": "Đổi mới, sáng tạo. Áp dụng ý tưởng hay cách làm mới chưa từng có.",
-      "leadVi": "Ở gian hàng lễ hội trường, cả lớp làm ra hệ thống đặt món bằng điện thoại.",
-      "anticipateVi": "Ý tưởng đó chưa ai nghĩ ra!",
+      "defVi": "Đổi mới, sáng tạo. Áp dụng những ý tưởng và cách làm mới chưa từng có.",
+      "leadVi": "Ở gian hàng lễ hội trường, tạo ra hệ thống đặt món bằng điện thoại.",
+      "anticipateVi": "Ý tưởng đó ai mà nghĩ ra nổi!",
       "localized": {
         "ja": {
           "lead": "文化祭の 屋台で、 | スマホから 注文できる | 仕組みを 作った。",
@@ -869,12 +872,12 @@
       },
       "meaningJP": "革新的な",
       "emphasis": [
-        "取り入れる",
-        "スマホ",
+        "ない",
         "革新的な"
       ],
       "pos": "adj",
       "ipa": "/ˈɪn.ə.və.tɪv/",
+      "kana": "イノヴァティヴ",
       "topic": "technology",
       "topics": [
         "technology",
@@ -901,9 +904,9 @@
     {
       "id": "meticulous-jsec",
       "word": "meticulous",
-      "defVi": "Tỉ mỉ. Để ý đến cả những chỗ nhỏ nhặt và làm thật cẩn thận.",
-      "leadVi": "Vở ghi trước kỳ thi dùng ba màu bút, không lệch một dòng nào.",
-      "anticipateVi": "Đúng là thợ thủ công luôn!",
+      "defVi": "Tỉ mỉ. Để ý đến từng chi tiết nhỏ và làm thật cẩn thận.",
+      "leadVi": "Vở ghi trước kỳ thi dùng bút ba màu, không lệch một dòng nào.",
+      "anticipateVi": "Đúng là nghệ nhân luôn!",
       "localized": {
         "ja": {
           "lead": "テスト前の ノートは、 | 色ペン 三色で | 一行も ずれない。",
@@ -911,14 +914,14 @@
           "guess": "もはや | 職人じゃん！"
         }
       },
-      "meaningJP": "綿密な、きちょうめんな",
+      "meaningJP": "綿密な、ていねいな",
       "emphasis": [
-        "気を配って",
-        "ずれない",
+        "細かい",
         "綿密な"
       ],
       "pos": "adj",
       "ipa": "/məˈtɪk.jə.ləs/",
+      "kana": "マティキュラス",
       "topic": "character",
       "topics": [
         "character",
@@ -945,24 +948,24 @@
     {
       "id": "mitigate-jsec",
       "word": "mitigate",
-      "defVi": "Giảm nhẹ. Làm cho nỗi khổ hay thiệt hại nhẹ đi dù chỉ một chút.",
-      "leadVi": "Tập câu lạc bộ giữa mùa hè, quấn khăn lạnh quanh cổ để chống chọi.",
+      "defVi": "Giảm nhẹ. Làm cho nỗi khổ hay thiệt hại nhẹ đi, dù chỉ một chút.",
+      "leadVi": "Hoạt động câu lạc bộ giữa mùa hè, quấn khăn lạnh quanh cổ để cầm cự.",
       "anticipateVi": "Đỡ hơn chút nào không?",
       "localized": {
         "ja": {
           "lead": "真夏の 部活、 | 首に 冷えた タオルを | 巻いて しのぐ。",
-          "def": "つらさや 害を、 | 少しでも | 軽く する=こと。",
+          "def": "つらさや ひがいを、 | 少しでも | 軽く する=こと。",
           "guess": "少しは | マシに なる？"
         }
       },
-      "meaningJP": "和らげる、軽減する",
+      "meaningJP": "和らげる、軽くする",
       "emphasis": [
-        "つらさ",
-        "タオル",
+        "しのぐ",
         "和らげる"
       ],
       "pos": "verb",
       "ipa": "/ˈmɪt.ɪ.ɡeɪt/",
+      "kana": "ミッティゲイト",
       "topic": "nature",
       "topics": [
         "nature",
@@ -976,9 +979,9 @@
       "usage": [
         {
           "en": "Trees help _____ flooding.",
-          "vi": "木には大雨の害を和らげる働きがある。",
+          "vi": "木は水害を和らげるのに役立つ。",
           "glosses": {
-            "ja": "木には | 大雨の 害を | 和らげる 働きが ある。"
+            "ja": "木は | 水害を | 和らげるのに 役立つ。"
           }
         }
       ],
@@ -989,9 +992,9 @@
     {
       "id": "unprecedented-jsec",
       "word": "unprecedented",
-      "defVi": "Chưa từng có. Chưa từng xảy ra lấy một lần cho đến nay.",
-      "leadVi": "Bản tin đêm bão. Dòng chữ “lần đầu tiên trong lịch sử quan trắc” được phát đi phát lại.",
-      "anticipateVi": "Chuyện này lần đầu luôn hả?",
+      "defVi": "Chưa từng có. Chưa bao giờ xảy ra dù chỉ một lần.",
+      "leadVi": "Bản tin đêm bão, dòng chữ “Lần đầu tiên trong lịch sử quan trắc” cứ chạy liên tục.",
+      "anticipateVi": "Chuyện này là lần đầu luôn hả?",
       "localized": {
         "ja": {
           "lead": "台風の 夜の ニュース。 | 「観測史上 初」が | 何度も 流れる。",
@@ -999,14 +1002,14 @@
           "guess": "こんなの | 初めてじゃない？"
         }
       },
-      "meaningJP": "前例のない、空前の",
+      "meaningJP": "前例のない、初めての",
       "emphasis": [
-        "一度も",
-        "観測史上",
+        "一度",
         "前例のない"
       ],
       "pos": "adj",
       "ipa": "/ʌnˈpres.ɪ.den.tɪd/",
+      "kana": "アンプレスィデンティド",
       "topic": "society",
       "topics": [
         "society",
@@ -1033,8 +1036,8 @@
     {
       "id": "discrepancy-jsec",
       "word": "discrepancy",
-      "defVi": "Sự sai lệch. Những thứ lẽ ra phải giống nhau lại không khớp, bị lệch đi.",
-      "leadVi": "Tổng hóa đơn là năm vạn yên. Thế mà trong két chỉ còn bốn vạn tám nghìn.",
+      "defVi": "Sự chênh lệch. Những thứ lẽ ra phải khớp nhau lại không khớp, bị lệch đi.",
+      "leadVi": "Tổng hóa đơn là năm vạn yên. Nhưng trong két chỉ có bốn vạn tám nghìn.",
       "anticipateVi": "Hai nghìn yên đi đâu rồi?",
       "localized": {
         "ja": {
@@ -1045,12 +1048,12 @@
       },
       "meaningJP": "くいちがい、ずれ",
       "emphasis": [
-        "ずれて",
-        "レシート",
+        "しか",
         "くいちがい"
       ],
       "pos": "noun",
       "ipa": "/dɪˈskrep.ən.si/",
+      "kana": "ディスクレッパンスィ",
       "topic": "work",
       "topics": [
         "work",
@@ -1077,24 +1080,24 @@
     {
       "id": "depict-jsec",
       "word": "depict",
-      "defVi": "Miêu tả, khắc họa. Thể hiện dáng vẻ của người hay cảnh vật bằng tranh vẽ hoặc văn chương.",
-      "leadVi": "Giờ mỹ thuật, dùng màu vẽ chép lại khu phố mua sắm nhìn thấy từ cửa sổ.",
+      "defVi": "Miêu tả, khắc họa. Thể hiện sinh động những gì nhìn thấy bằng tranh hoặc lời văn.",
+      "leadVi": "Giờ mỹ thuật, dùng màu vẽ ghi lại khu phố mua sắm nhìn thấy từ cửa sổ.",
       "anticipateVi": "Sẽ thành bức tranh thế nào nhỉ?",
       "localized": {
         "ja": {
           "lead": "美術の 時間、 | 窓から 見える 商店街を | 絵の具で 写しとる。",
-          "def": "人や 景色の 様子を、 | 絵や 文章で | 表す=こと。",
+          "def": "見た ものの 様子を、 | 絵や 言葉で | 生き生きと 表す=こと。",
           "guess": "どんな | 絵に なる？"
         }
       },
       "meaningJP": "えがく、表す",
       "emphasis": [
-        "文章",
-        "絵の具",
+        "生き生きと",
         "えがいている"
       ],
       "pos": "verb",
       "ipa": "/dɪˈpɪkt/",
+      "kana": "ディピクト",
       "topic": "study",
       "topics": [
         "study",
@@ -1121,24 +1124,24 @@
     {
       "id": "intricate-jsec",
       "word": "intricate",
-      "defVi": "Phức tạp, tinh xảo. Có nhiều chi tiết nhỏ kết hợp với nhau, được làm rất công phu.",
-      "leadVi": "Bức tranh cắt giấy của câu lạc bộ mỹ thuật ở lễ hội văn hóa có những đường nét mảnh chồng lên nhau nhiều lớp.",
-      "anticipateVi": "Cái này làm bằng tay à?",
+      "defVi": "Phức tạp, tinh xảo. Nhiều chi tiết nhỏ đan cài vào nhau, được làm rất công phu.",
+      "leadVi": "Bức cắt giấy của câu lạc bộ mỹ thuật có những đường nét mảnh như sợi tóc chồng lên nhau nhiều lớp.",
+      "anticipateVi": "Cái này làm tay thật hả?",
       "localized": {
         "ja": {
-          "lead": "文化祭の | 美術部の 切り絵は、 | 細い 線が | 何重にも 重なって=いた。",
-          "def": "細かい 部分が | いくつも 組み合わさった、 | 手の_こんだ 様子。",
-          "guess": "これ、 | 手作りなの？"
+          "lead": "美術部の 切り絵は、 | かみの毛ほどの 細い 線が | 何重にも 重なって=いた。",
+          "def": "細かい 部分が | いくつも 組み合わさって、 | 手の_こんだ 様子。",
+          "guess": "これ、 | 手作りって マジ？"
         }
       },
       "meaningJP": "入り組んだ、複雑な",
       "emphasis": [
-        "組み合わさった",
-        "切り絵",
-        "複雑だ"
+        "何重",
+        "複雑な"
       ],
       "pos": "adj",
       "ipa": "/ˈɪn.trɪ.kət/",
+      "kana": "イントリカト",
       "topic": "perception",
       "topics": [
         "perception"
@@ -1151,9 +1154,9 @@
       "usage": [
         {
           "en": "The carpet has an _____ pattern.",
-          "vi": "このじゅうたんの模様はとても複雑だ。",
+          "vi": "そのじゅうたんには複雑な模様がある。",
           "glosses": {
-            "ja": "この じゅうたんの 模様は | とても=複雑だ。"
+            "ja": "その じゅうたんには | 複雑な 模様が ある。"
           }
         }
       ],
@@ -1164,24 +1167,24 @@
     {
       "id": "provoke-jsec",
       "word": "provoke",
-      "defVi": "Gây ra, khiêu khích. Dùng lời nói hay hành động khiến người khác nảy sinh cảm xúc mạnh.",
-      "leadVi": "Giờ ra chơi, cứ trêu chọc mãi thì sắc mặt cậu bạn bỗng thay đổi.",
-      "anticipateVi": "Cố tình làm vậy đúng không?",
+      "defVi": "Khiêu khích, gây ra. Dùng lời nói hay hành động khiến người khác phản ứng mạnh.",
+      "leadVi": "Cứ trêu mãi “Kiểu gì cậu cũng thua thôi”, thế là sắc mặt cậu bạn thay đổi.",
+      "anticipateVi": "Thế là đổ thêm dầu vào lửa còn gì!",
       "localized": {
         "ja": {
-          "lead": "休み時間に しつこく | からかい続けたら、 | 友だちの 顔色が | さっと 変わった。",
-          "def": "言葉や 行動で、 | 相手に 強い 気持ちを | 起こさせる=こと。",
-          "guess": "わざと | やってるでしょ？"
+          "lead": "「どうせ 負けるじゃん」と | しつこく からかったら、 | 友だちの 顔色が 変わった。",
+          "def": "言葉や 行動で、 | 相手に 強い 反応を | 起こさせる=こと。",
+          "guess": "それ、 | 火に 油じゃん！"
         }
       },
       "meaningJP": "引き起こす、おこらせる",
       "emphasis": [
-        "起こさせる",
-        "顔色",
+        "しつこく",
         "引き起こした"
       ],
       "pos": "verb",
       "ipa": "/prəˈvəʊk/",
+      "kana": "プロヴォウク",
       "topic": "emotion",
       "topics": [
         "emotion",
@@ -1208,24 +1211,24 @@
     {
       "id": "intuitive-jsec",
       "word": "intuitive",
-      "defVi": "Trực quan, dễ dùng. Không cần đọc hướng dẫn mà vẫn hiểu ngay bằng cảm giác.",
-      "leadVi": "Lần đầu dùng điện thoại thông minh mà bà vẫn gửi ảnh đến không chút lúng túng.",
-      "anticipateVi": "Cứ thế là tự hiểu luôn hả?",
+      "defVi": "Trực quan, dễ dùng. Không cần đọc hướng dẫn mà vẫn hiểu ngay cách dùng bằng cảm giác.",
+      "leadVi": "Bà mới bắt đầu dùng điện thoại thông minh, vậy mà ngay ngày đầu đã gửi sticker không chút lúng túng.",
+      "anticipateVi": "Chưa kịp nghĩ, ngón tay đã tự bấm!",
       "localized": {
         "ja": {
-          "lead": "おばあちゃんが | 初めての スマホで、 | 迷わず 写真を | 送って=きた。",
-          "def": "説明を 読まなくても、 | 感覚で すぐに | 分かる 様子。",
-          "guess": "なんとなく | 分かっちゃう？"
+          "lead": "スマホを 始めた | おばあちゃんが、 | 初日から 迷わず | スタンプを 送って=きた。",
+          "def": "説明を 読まなくても、 | 使い方が 感覚で | すぐ 分かる 様子。",
+          "guess": "考える 前に | 指が 動く！"
         }
       },
       "meaningJP": "直感的な、分かりやすい",
       "emphasis": [
-        "感覚",
         "迷わず",
         "直感的だ"
       ],
       "pos": "adj",
       "ipa": "/ɪnˈtjuː.ɪ.tɪv/",
+      "kana": "インテューイティヴ",
       "topic": "thinking",
       "topics": [
         "thinking",
@@ -1251,24 +1254,24 @@
     {
       "id": "thrive-jsec",
       "word": "thrive",
-      "defVi": "Phát triển mạnh. Sinh vật hay sự vật lớn lên khỏe mạnh ở môi trường phù hợp.",
+      "defVi": "Phát triển mạnh. Sinh vật hay sự vật lớn lên khỏe mạnh ở nơi phù hợp.",
       "leadVi": "Trong kỳ nghỉ hè, cây cà chua bi ở phòng thí nghiệm đã vươn cao gần chạm trần.",
-      "anticipateVi": "Kỳ nghỉ hè đã có chuyện gì vậy?",
+      "anticipateVi": "Ơ, thành rừng rậm rồi à?!",
       "localized": {
         "ja": {
           "lead": "理科室の ミニトマトが、 | 夏休みの 間に | 天井近くまで のびた。",
-          "def": "合った 場所で、 | 生き物や 物事が | 元気に 大きく 育つ=こと。",
-          "guess": "夏休みの 間に | 何が あった？"
+          "def": "合った 場所で、 | 生き物や 物事が | 元気に 大きく なる=こと。",
+          "guess": "え、 | ジャングルなの？！"
         }
       },
       "meaningJP": "よく育つ、栄える",
       "emphasis": [
-        "元気に",
-        "ミニトマト",
-        "育つ"
+        "合った",
+        "よく育つ"
       ],
       "pos": "verb",
       "ipa": "/θraɪv/",
+      "kana": "スライヴ",
       "topic": "nature",
       "topics": [
         "nature",
@@ -1282,9 +1285,9 @@
       "usage": [
         {
           "en": "These plants _____ in warm weather.",
-          "vi": "この植物は暖かい気候でよく育つ。",
+          "vi": "これらの植物は暖かい気候でよく育つ。",
           "glosses": {
-            "ja": "この 植物は | 暖かい 気候で | よく 育つ。"
+            "ja": "これらの 植物は | 暖かい 気候で | よく 育つ。"
           }
         }
       ],
@@ -1295,24 +1298,24 @@
     {
       "id": "prevalent-jsec",
       "word": "prevalent",
-      "defVi": "Phổ biến, lan rộng. Thường thấy ở khắp nơi trong một vùng hay một thời kỳ nào đó.",
+      "defVi": "Phổ biến, thường gặp. Thường thấy ở khắp nơi trong một vùng hay một thời kỳ nào đó.",
       "leadVi": "Mùa cúm, một nửa số chỗ ngồi trong lớp bỏ trống.",
-      "anticipateVi": "Ai cũng bị lây hết à?",
+      "anticipateVi": "Tỷ lệ đeo khẩu trang cao kinh khủng nhỉ?",
       "localized": {
         "ja": {
           "lead": "インフルエンザの 季節、 | 教室の 席が | 半分 空いて=いた。",
-          "def": "ある 場所や 時代に、 | あちこちで よく | 見られる 様子。",
-          "guess": "みんな | かかってるの？"
+          "def": "ある 地域や 時代に、 | あちこちで | よく 見られる 様子。",
+          "guess": "マスク率、 | ヤバくない？"
         }
       },
       "meaningJP": "広く見られる、流行する",
       "emphasis": [
-        "あちこち",
-        "インフルエンザ",
-        "流行している"
+        "半分",
+        "広く見られる"
       ],
       "pos": "adj",
       "ipa": "/ˈprev.əl.ənt/",
+      "kana": "プレヴァラント",
       "topic": "health",
       "topics": [
         "health",
@@ -1326,9 +1329,9 @@
       "usage": [
         {
           "en": "This disease is _____ in tropical areas.",
-          "vi": "この病気は暑い地域で広く流行している。",
+          "vi": "この病気は熱帯の地域で広く見られる。",
           "glosses": {
-            "ja": "この 病気は | 暑い 地域で | 広く 流行して=いる。"
+            "ja": "この 病気は | 熱帯の 地域で | 広く 見られる。"
           }
         }
       ],
@@ -1339,24 +1342,24 @@
     {
       "id": "wary-jsec",
       "word": "wary",
-      "defVi": "Dè chừng, cảnh giác. Cảm thấy có gì đó nguy hiểm nên không lơi lỏng mà luôn đề phòng.",
-      "leadVi": "Nhận được tin nhắn từ người lạ: “Lần tới gặp nhau không?”. Mình đã không trả lời.",
-      "anticipateVi": "Cái này có đáng ngờ không?",
+      "defVi": "Cảnh giác, dè chừng. Không vội tin người hay tình huống mà luôn đề phòng.",
+      "leadVi": "Người lạ nhắn đến “Gặp nhau đi”. Mình không trả lời mà xoá luôn.",
+      "anticipateVi": "Người đó bằng tuổi mình thật à?",
       "localized": {
         "ja": {
-          "lead": "知らない 人から | 「今度 会わない？」と | 来た メッセージ。 | 返事は しなかった。",
-          "def": "何か 危ないと 感じて、 | 気を ゆるめずに | 用心する 様子。",
-          "guess": "これ、 | あやしくない？"
+          "lead": "知らない 人から | 「会おうよ」と 届いた。 | 返事は せずに 消した。",
+          "def": "相手の ことを | すぐには 信じず、 | 用心する 様子。",
+          "guess": "その 人、 | 本当に 同い年？"
         }
       },
       "meaningJP": "用心深い、気をつける",
       "emphasis": [
-        "危ない",
-        "返事",
+        "信じず",
         "用心しよう"
       ],
       "pos": "adj",
       "ipa": "/ˈweə.ri/",
+      "kana": "ウェアリ",
       "topic": "character",
       "topics": [
         "character",
@@ -1382,24 +1385,24 @@
     {
       "id": "disparity-jsec",
       "word": "disparity",
-      "defVi": "Sự chênh lệch. Giữa các nhóm có sự khác biệt lớn về mức sung túc hay điều kiện.",
-      "leadVi": "Tiền tiêu vặt cho chuyến đi tham quan, có bạn mang năm vạn yên, có bạn chỉ có một nghìn yên.",
-      "anticipateVi": "Khác nhau đến thế cơ à?",
+      "defVi": "Sự chênh lệch. Giữa người với người hay vùng này với vùng khác có khác biệt lớn về mức sung túc và điều kiện.",
+      "leadVi": "Tiền tiêu vặt đi tham quan, có bạn mang năm vạn yên, có bạn chỉ có một nghìn yên.",
+      "anticipateVi": "Chênh nhau kinh khủng vậy à?",
       "localized": {
         "ja": {
           "lead": "修学旅行の おこづかい、 | 五万円の 子も いれば | 千円の 子も いた。",
-          "def": "グループの 間で、 | 豊かさや 条件が | 大きく ちがう=こと。",
-          "guess": "そんなに | ちがうの？"
+          "def": "人や 地域の 間で、 | 豊かさや 条件が | 大きく ちがう=こと。",
+          "guess": "その 差、 | ヤバすぎない？"
         }
       },
       "meaningJP": "格差、大きな差",
       "emphasis": [
-        "豊かさ",
-        "五万円",
+        "千円",
         "格差"
       ],
       "pos": "noun",
       "ipa": "/dɪˈspær.ə.ti/",
+      "kana": "ディスパラティ",
       "topic": "society",
       "topics": [
         "society",
@@ -1413,9 +1416,9 @@
       "usage": [
         {
           "en": "There is a growing _____ between rich and poor.",
-          "vi": "お金持ちと貧しい人の格差が広がっている。",
+          "vi": "お金持ちと貧しい人の格差がますます広がっている。",
           "glosses": {
-            "ja": "お金持ちと 貧しい 人の | 格差が | 広がって=いる。"
+            "ja": "お金持ちと 貧しい 人の | 格差が | ますます 広がって=いる。"
           }
         }
       ],
@@ -1426,24 +1429,24 @@
     {
       "id": "foster-jsec",
       "word": "foster",
-      "defVi": "Nuôi dưỡng, vun đắp. Kiên nhẫn hỗ trợ để năng lực hay tình cảm tốt đẹp lớn lên.",
+      "defVi": "Nuôi dưỡng, vun đắp. Kiên nhẫn hỗ trợ để năng lực hay tình cảm phát triển tốt.",
       "leadVi": "Lần nào cũng được thầy cô dạy mỹ thuật khen, mình dần thích vẽ tranh.",
-      "anticipateVi": "Hóa ra niềm yêu thích sinh ra như thế!",
+      "anticipateVi": "Hóa ra niềm yêu thích lớn lên như thế!",
       "localized": {
         "ja": {
           "lead": "美術の 先生に | 毎回 ほめられて、 | 絵を かくのが | 好きに なった。",
-          "def": "よい 力や 気持ちが | 大きく なるように、 | 時間を かけて 支える=こと。",
-          "guess": "好きって、 | こうして 生まれるんだ！"
+          "def": "力や 気持ちが | よく 育つように、 | 時間を かけて 支える=こと。",
+          "guess": "好きって、 | こうして 育つんだ！"
         }
       },
       "meaningJP": "育てる、育む",
       "emphasis": [
-        "支える",
-        "ほめられて",
+        "毎回",
         "育てるべきだ"
       ],
       "pos": "verb",
       "ipa": "/ˈfɒs.tər/",
+      "kana": "フォスター",
       "topic": "society",
       "topics": [
         "society",
@@ -1457,9 +1460,9 @@
       "usage": [
         {
           "en": "Schools should _____ creativity.",
-          "vi": "学校は生徒の創造力を育てるべきだ。",
+          "vi": "学校は子どもの創造力を育てるべきだ。",
           "glosses": {
-            "ja": "学校は | 生徒の 創造力を | 育てるべきだ。"
+            "ja": "学校は | 子どもの 創造力を | 育てるべきだ。"
           }
         }
       ],
@@ -1470,24 +1473,24 @@
     {
       "id": "reconcile-jsec",
       "word": "reconcile",
-      "defVi": "Làm lành, hòa giải. Thôi cãi nhau, tranh chấp và quay lại mối quan hệ tốt như trước.",
-      "leadVi": "Hai người không nói chuyện với nhau suốt ba năm, đến lễ tốt nghiệp lại đứng cạnh nhau chụp ảnh.",
-      "anticipateVi": "Cuối cùng cũng như xưa rồi à?",
+      "defVi": "Làm lành, hòa giải. Thôi cãi vã, tranh chấp và quay lại mối quan hệ tốt đẹp như trước.",
+      "leadVi": "Hai người suốt ba năm không nói với nhau câu nào, đến lễ tốt nghiệp lại đứng cạnh nhau chụp ảnh.",
+      "anticipateVi": "Băng tan rồi hả?!",
       "localized": {
         "ja": {
           "lead": "三年間 | 口を_きかなかった 二人が、 | 卒業式で | 並んで 写真を とった。",
           "def": "けんかや 争いを やめて、 | もとの よい 関係に | もどる=こと。",
-          "guess": "やっと | 元通り？"
+          "guess": "雪どけ、 | きた？！"
         }
       },
       "meaningJP": "仲直りする、和解する",
       "emphasis": [
-        "関係",
-        "並んで",
+        "口をきかなかった",
         "仲直りした"
       ],
       "pos": "verb",
       "ipa": "/ˈrek.ən.saɪl/",
+      "kana": "レッコンサイル",
       "topic": "society",
       "topics": [
         "society",
@@ -1501,9 +1504,9 @@
       "usage": [
         {
           "en": "They _____d after years of conflict.",
-          "vi": "二人は何年ものけんかの末に仲直りした。",
+          "vi": "二人は何年もの争いの末に仲直りした。",
           "glosses": {
-            "ja": "二人は | 何年もの けんかの 末に | 仲直りした。"
+            "ja": "二人は | 何年もの 争いの 末に | 仲直りした。"
           }
         }
       ],
@@ -1514,24 +1517,24 @@
     {
       "id": "obsolete-jsec",
       "word": "obsolete",
-      "defVi": "Lỗi thời. Đã có thứ mới hơn nên không còn được dùng nữa.",
-      "leadVi": "Từ ngăn kéo bàn của bố lòi ra một chiếc điện thoại cũ với những nút bấm to.",
-      "anticipateVi": "Cái này dùng kiểu gì vậy?",
+      "defVi": "Lỗi thời. Đã có thứ mới hơn ra đời nên không còn được dùng nữa.",
+      "leadVi": "Tìm thấy một cuộn băng cát-xét trong phòng ông. “Cái này dùng để làm gì vậy?”",
+      "anticipateVi": "Nút phát ở đâu nhỉ?",
       "localized": {
         "ja": {
-          "lead": "父の 机の 引き出しから、 | ボタンの 大きい | 古い ケータイが 出て=きた。",
+          "lead": "おじいちゃんの 部屋で | 見つけた カセットテープ。 | 「これ、 何に 使うの？」",
           "def": "新しい ものが 出て、 | もう 使われなく | なった 様子。",
-          "guess": "これ、 | どうやって 使うの？"
+          "guess": "再生ボタン、 | どこ？"
         }
       },
       "meaningJP": "時代遅《じだいおく》れ",
       "emphasis": [
         "使われなく",
-        "ケータイ",
         "時代遅れだ"
       ],
       "pos": "adj",
       "ipa": "/ˈɒb.səl.iːt/",
+      "kana": "オブソリート",
       "topic": "technology",
       "topics": [
         "technology"
@@ -1557,24 +1560,24 @@
     {
       "id": "perceive-jsec",
       "word": "perceive",
-      "defVi": "Nhìn nhận, cảm nhận. Cảm nhận và tiếp nhận sự việc theo cách của riêng mình.",
-      "leadVi": "Cùng một ngày mưa, có bạn bảo “tệ nhất”, có bạn lại vui vì thấy “thật cảm xúc”.",
-      "anticipateVi": "Mỗi người nhìn một kiểu à?",
+      "defVi": "Nhìn nhận, cảm nhận. Cảm nhận và đón nhận sự việc hay con người theo cách của riêng mình.",
+      "leadVi": "Đám học sinh mới của câu lạc bộ cứ nghĩ đàn anh ít nói kia “đáng sợ”.",
+      "anticipateVi": "Ấn tượng đầu tiên có đúng không?",
       "localized": {
         "ja": {
-          "lead": "同じ 雨の 日でも、 | 「最悪」と 言う 子と、 | 「エモい」と 喜ぶ 子。",
-          "def": "物事を | 自分なりに 感じ取って、 | 受け止める=こと。",
-          "guess": "見え方って | 人それぞれ？"
+          "lead": "部活の 新入生たちは、 | 無口な 先ぱいを | 「こわい」と 思って=いた。",
+          "def": "物事や 人を | 自分なりに 感じ取り、 | 受け止める=こと。",
+          "guess": "第一印象、 | 当たってる？"
         }
       },
       "meaningJP": "感じ取る、見なす",
       "emphasis": [
-        "受け止める",
-        "同じ",
+        "自分なり",
         "見なしている"
       ],
       "pos": "verb",
       "ipa": "/pəˈsiːv/",
+      "kana": "パスィーヴ",
       "topic": "perception",
       "topics": [
         "perception",
@@ -1601,24 +1604,24 @@
     {
       "id": "vulnerable-jsec",
       "word": "vulnerable",
-      "defVi": "Dễ bị tổn thương. Cơ thể hay tâm hồn dễ bị tổn thương, ít được bảo vệ.",
-      "leadVi": "Trước kỳ thi, thức khuya liên tục nên chỉ hơi lạnh một chút là bị sốt.",
-      "anticipateVi": "Cơ thể có ổn không đó?",
+      "defVi": "Dễ tổn thương, yếu ớt. Cơ thể hay tâm hồn yếu trước tác động bên ngoài, dễ bị tổn thương.",
+      "leadVi": "Sáng mùa đông, ông chỉ ra ngoài một chút mà đã ho không dứt.",
+      "anticipateVi": "Mặc ấm vào nhé!",
       "localized": {
         "ja": {
-          "lead": "テスト前に | 夜ふかしが 続き、 | 少し 冷えただけで | 熱を 出した。",
-          "def": "体や 心が | 傷つきやすく、 | 守りが うすい 様子。",
-          "guess": "体、 | だいじょうぶ？"
+          "lead": "冬の 朝、 | おじいちゃんは | 少し 外に 出ただけで | せきが 止まらなく なった。",
+          "def": "体や 心が | 外からの 害に 弱く、 | 傷つきやすい 様子。",
+          "guess": "あったかく | して ね！"
         }
       },
       "meaningJP": "弱い、傷つきやすい",
       "emphasis": [
-        "守り",
-        "夜ふかし",
+        "だけ",
         "弱い"
       ],
       "pos": "adj",
       "ipa": "/ˈvʌl.nər.ə.bəl/",
+      "kana": "ヴァルナラブル",
       "topic": "health",
       "topics": [
         "health",
@@ -1645,24 +1648,24 @@
     {
       "id": "incentive-jsec",
       "word": "incentive",
-      "defVi": "Động lực, sự khuyến khích. Phần thưởng được chuẩn bị để người ta muốn cố gắng làm điều gì đó.",
-      "leadVi": "“Được tám mươi điểm thì mua điện thoại mới nhé.” Từ hôm đó, tối nào mình cũng ngồi vào bàn học.",
-      "anticipateVi": "Thế thì phải nghiêm túc thôi!",
+      "defVi": "Động lực, sự khuyến khích. Phần thưởng hay cơ chế khiến người ta muốn bắt tay vào làm.",
+      "leadVi": "“Được tám mươi điểm thì mua điện thoại mới cho nhé.” Từ hôm đó, tối nào mình cũng ngồi vào bàn học.",
+      "anticipateVi": "Thế thì phải làm thật thôi!",
       "localized": {
         "ja": {
           "lead": "「八十点 取れたら | 新しい スマホね」。 | その 日から | 毎晩 机に 向かった。",
-          "def": "何かを がんばる | 気持ちに させる=ために | 用意される ごほうび。",
-          "guess": "それなら | 本気 出す！"
+          "def": "人に 「やろう」と | 思わせる=ための | ごほうびや 仕組み。",
+          "guess": "ガチで | やるしか ない！"
         }
       },
       "meaningJP": "動機づけ、ごほうび",
       "emphasis": [
-        "ごほうび",
-        "八十点",
+        "取れたら",
         "動機づけ"
       ],
       "pos": "noun",
       "ipa": "/ɪnˈsen.tɪv/",
+      "kana": "インセンティヴ",
       "topic": "work",
       "topics": [
         "work",
@@ -1689,9 +1692,9 @@
     {
       "id": "integrity-jsec",
       "word": "integrity",
-      "defVi": "Sự chính trực. Tấm lòng không nói dối và luôn giữ đúng điều mình cho là đúng.",
-      "leadVi": "Phòng học sau giờ tan trường không có ai, mình mang tờ một nghìn yên rơi dưới sàn lên phòng giáo viên.",
-      "anticipateVi": "Dù chẳng ai nhìn thấy sao?",
+      "defVi": "Sự chính trực. Tấm lòng không nói dối, luôn kiên định giữ điều mình cho là đúng.",
+      "leadVi": "Sau giờ học, lớp không còn ai, mình mang tờ một nghìn yên rơi trong lớp lên phòng giáo viên.",
+      "anticipateVi": "Chẳng ai nhìn thấy mà vẫn làm vậy sao?",
       "localized": {
         "ja": {
           "lead": "だれも いない 放課後、 | 教室に 落ちて=いた 千円を | 職員室に 届けた。",
@@ -1701,12 +1704,12 @@
       },
       "meaningJP": "誠実さ、正直さ",
       "emphasis": [
-        "正しい",
-        "職員室",
+        "いない",
         "誠実な"
       ],
       "pos": "noun",
       "ipa": "/ɪnˈteɡ.rə.ti/",
+      "kana": "インテグラティ",
       "topic": "character",
       "topics": [
         "character"
@@ -1732,24 +1735,24 @@
     {
       "id": "assert-jsec",
       "word": "assert",
-      "defVi": "Khẳng định. Nói rõ ràng và mạnh mẽ suy nghĩ hay lập trường của mình.",
-      "leadVi": "Trong buổi sinh hoạt lớp, giữa lúc mọi người im lặng, một bạn đứng dậy: “Tớ phản đối.”",
-      "anticipateVi": "Nói chắc nịch luôn à?",
+      "defVi": "Khẳng định, quả quyết. Nói ra suy nghĩ hay lập trường của mình một cách rõ ràng, mạnh mẽ, không do dự.",
+      "leadVi": "Hôm bị nghi là lấy đồ thất lạc, bạn ấy nhìn thẳng vào mắt thầy và nói: “Không phải mình.”",
+      "anticipateVi": "Ánh mắt nghiêm túc thật!",
       "localized": {
         "ja": {
-          "lead": "学級会で、 | みんなが だまる 中、 | 「ぼくは 反対です」と | 立ち上がった。",
-          "def": "自分の 考えや 立場を、 | はっきりと | 強く 言う=こと。",
-          "guess": "言い切っちゃう？"
+          "lead": "落とし物を 取ったと | 疑われた 日、 | 「わたしじゃ ない」と | 先生の 目を 見て 言った。",
+          "def": "自分の 考えや 立場を、 | 迷わず はっきりと | 強く 言う=こと。",
+          "guess": "目が | マジだ！"
         }
       },
       "meaningJP": "主張する、断言する",
       "emphasis": [
-        "はっきりと",
-        "立ち上がった",
+        "迷わず",
         "主張した"
       ],
       "pos": "verb",
       "ipa": "/əˈsɜːt/",
+      "kana": "アサート",
       "topic": "communication",
       "topics": [
         "communication"
@@ -1777,22 +1780,22 @@
       "word": "comprehensive",
       "defVi": "Toàn diện. Bao quát rộng toàn bộ mà không bỏ sót phần quan trọng nào.",
       "leadVi": "Cuốn vở ôn thi của anh trai tóm tắt sách giáo khoa từ đầu đến cuối.",
-      "anticipateVi": "Ghi hết cả rồi còn gì!",
+      "anticipateVi": "Chỉ một cuốn này là đủ hết rồi còn gì!",
       "localized": {
         "ja": {
           "lead": "兄の 受験ノートは、 | 教科書の すみから すみまで | まとめて=あった。",
           "def": "大事な ところを | 一つも のがさず、 | 全体を 広く あつかう 様子。",
-          "guess": "全部 | 書いて=あるじゃん！"
+          "guess": "これ 一冊で | 全部 いけるじゃん！"
         }
       },
       "meaningJP": "全面的な、全体的な",
       "emphasis": [
-        "全体",
-        "受験ノート",
+        "のがさず",
         "全面的に"
       ],
       "pos": "adj",
       "ipa": "/ˌkɒm.prɪˈhen.sɪv/",
+      "kana": "コンプリヘンスィヴ",
       "topic": "study",
       "topics": [
         "study",
@@ -1820,7 +1823,7 @@
       "id": "fluctuate-jsec",
       "word": "fluctuate",
       "defVi": "Dao động, lên xuống. Con số hay số lượng cứ lặp đi lặp lại việc tăng rồi giảm.",
-      "leadVi": "Giá vé xem thần tượng hôm qua là tám nghìn yên, hôm nay đã là mười lăm nghìn yên!",
+      "leadVi": "Giá vé xem thần tượng hôm qua là tám nghìn yên, hôm nay đã thành mười lăm nghìn yên!",
       "anticipateVi": "Ơ, mỗi ngày một giá à?",
       "localized": {
         "ja": {
@@ -1832,11 +1835,11 @@
       "meaningJP": "変動する、上下する",
       "emphasis": [
         "くり返す",
-        "チケット代",
         "上下する"
       ],
       "pos": "verb",
       "ipa": "/ˈflʌk.tʃu.eɪt/",
+      "kana": "フラクチュエイト",
       "topic": "money",
       "topics": [
         "money",
@@ -1865,22 +1868,22 @@
       "word": "subtle",
       "defVi": "Tinh tế, khó nhận ra. Rất nhỏ, nếu không để ý kỹ thì không nhận ra.",
       "leadVi": "Bánh pudding mới của cửa hàng tiện lợi ngọt dịu hơn loại cũ một chút.",
-      "anticipateVi": "Bạn nhận ra sự khác biệt đó không?",
+      "anticipateVi": "Ơ, khác nhau ở đâu vậy?",
       "localized": {
         "ja": {
           "lead": "コンビニの 新作プリンは、 | 前のより | ほんのり あまさ ひかえめ。",
           "def": "とても 小さく、 | よく 注意しないと | 気づかない 様子。",
-          "guess": "その 差、 | 分かる？"
+          "guess": "え、 | どこが ちがうの？"
         }
       },
       "meaningJP": "わずかな、かすかな",
       "emphasis": [
         "気づかない",
-        "ほんのり",
         "わずかな"
       ],
       "pos": "adj",
       "ipa": "/ˈsʌt.əl/",
+      "kana": "サトル",
       "topic": "perception",
       "topics": [
         "perception"
@@ -1907,7 +1910,7 @@
       "id": "alleviate-jsec",
       "word": "alleviate",
       "defVi": "Làm dịu, giảm nhẹ. Làm cho cơn đau, sự khổ sở hay nỗi phiền muộn nhẹ bớt đi.",
-      "leadVi": "Chườm đá lên mắt cá chân bị trẹo khi tập câu lạc bộ, cơn đau nhức dịu ngay.",
+      "leadVi": "Chườm đá lên mắt cá chân bị trẹo khi tập câu lạc bộ, cơn đau nhức dịu đi ngay.",
       "anticipateVi": "Đỡ hơn chút nào chưa?",
       "localized": {
         "ja": {
@@ -1916,14 +1919,14 @@
           "guess": "ちょっと | 楽に なった？"
         }
       },
-      "meaningJP": "和らげる、軽減する",
+      "meaningJP": "和らげる、軽くする",
       "emphasis": [
-        "軽く",
-        "ズキズキ",
+        "すっと",
         "和らぐ"
       ],
       "pos": "verb",
       "ipa": "/əˈliː.vi.eɪt/",
+      "kana": "アリーヴィエイト",
       "topic": "health",
       "topics": [
         "health"
@@ -1949,7 +1952,7 @@
     {
       "id": "compelling-jsec",
       "word": "compelling",
-      "defVi": "Thuyết phục, cuốn hút. Lôi cuốn lòng người mạnh mẽ đến mức ai cũng bất giác tâm phục.",
+      "defVi": "Thuyết phục, cuốn hút. Lôi cuốn lòng người mạnh mẽ đến mức bất giác phải gật gù đồng ý.",
       "leadVi": "Họp chọn tiết mục cho lễ hội văn hóa. Nghe lớp trưởng nói xong, tất cả đều giơ tay.",
       "anticipateVi": "Thế thì không cãi lại được rồi!",
       "localized": {
@@ -1961,12 +1964,12 @@
       },
       "meaningJP": "説得力のある",
       "emphasis": [
-        "引きつける",
-        "全員",
-        "説得力"
+        "思わず",
+        "説得力のある"
       ],
       "pos": "adj",
       "ipa": "/kəmˈpel.ɪŋ/",
+      "kana": "コンペリング",
       "topic": "thinking",
       "topics": [
         "thinking",
@@ -2005,12 +2008,12 @@
       },
       "meaningJP": "体現する、形に表す",
       "emphasis": [
-        "姿",
-        "背中",
+        "負けて",
         "体現している"
       ],
       "pos": "verb",
       "ipa": "/ɪmˈbɒd.i/",
+      "kana": "インボディ",
       "topic": "thinking",
       "topics": [
         "thinking",
@@ -2039,22 +2042,22 @@
       "word": "diligent",
       "defVi": "Chăm chỉ, cần cù. Không lười biếng, ngày nào cũng kiên trì nỗ lực.",
       "leadVi": "Mỗi ngày trước buổi tập sáng, bạn ấy học thuộc mười từ tiếng Anh.",
-      "anticipateVi": "Ngày nào cũng làm đều vậy à?",
+      "anticipateVi": "Hôm nay là ngày thứ mấy rồi?",
       "localized": {
         "ja": {
           "lead": "朝練の 前に、 | 毎日 英単語を | 十個ずつ 覚えて=いる。",
           "def": "なまけずに、 | 毎日 こつこつと | 努力を 続ける 様子。",
-          "guess": "毎日 | 続けてるの？"
+          "guess": "それ、 | 今日で 何日目？"
         }
       },
       "meaningJP": "勤勉な、熱心な",
       "emphasis": [
-        "努力",
-        "朝練",
+        "こつこつと",
         "勤勉な"
       ],
       "pos": "adj",
       "ipa": "/ˈdɪl.ɪ.dʒənt/",
+      "kana": "ディリジャント",
       "topic": "character",
       "topics": [
         "character",
@@ -2082,23 +2085,23 @@
       "id": "hinder-jsec",
       "word": "hinder",
       "defVi": "Cản trở. Gây trở ngại khiến sự việc không tiến triển suôn sẻ.",
-      "leadVi": "Hôm trước lễ hội văn hóa, mưa lớn khiến việc chuẩn bị ngoài trời chẳng tiến triển gì.",
+      "leadVi": "Hôm trước lễ hội văn hóa, mưa lớn khiến việc chuẩn bị ngoài trời chẳng tiến triển chút nào.",
       "anticipateVi": "Mưa ơi, biết điều chút đi!",
       "localized": {
         "ja": {
           "lead": "文化祭の 前日、 | 大雨で | 外の 準備が | まったく 進まなかった。",
-          "def": "物事が うまく | 進まないように、 | じゃまを する=こと。",
+          "def": "物事が | うまく 進まないよう | じゃまを する=こと。",
           "guess": "雨、 | 空気 読んで！"
         }
       },
       "meaningJP": "じゃまする、さまたげる",
       "emphasis": [
-        "進まない",
-        "大雨",
+        "進まなかった",
         "さまたげた"
       ],
       "pos": "verb",
       "ipa": "/ˈhɪn.dər/",
+      "kana": "ヒンダー",
       "topic": "general",
       "topics": [
         "general"
@@ -2124,24 +2127,24 @@
     {
       "id": "profound-jsec",
       "word": "profound",
-      "defVi": "Sâu sắc. Mạnh mẽ và lớn lao đến mức đọng lại lâu trong lòng và suy nghĩ.",
-      "leadVi": "Đi tình nguyện ở vùng bị thiên tai. Trên chuyến xe buýt trở về, ai cũng im lặng suốt.",
-      "anticipateVi": "Điều gì đọng lại trong lòng?",
+      "defVi": "Sâu sắc. Mạnh mẽ và lớn lao đến mức đọng lại rất lâu trong lòng và suy nghĩ.",
+      "leadVi": "Đêm đọc xong, gấp sách lại rồi mà mình vẫn ngồi lặng hồi lâu không cử động được.",
+      "anticipateVi": "Điều gì đã chạm đến lòng bạn?",
       "localized": {
         "ja": {
-          "lead": "災害の あった 町で | ボランティアを した 帰り、 | バスは ずっと 静かだった。",
-          "def": "心や 考えに | 長く 残るほど、 | 強く 大きい 様子。",
-          "guess": "何が 心に | 残った？"
+          "lead": "読み終えた 夜、 | 本を 閉じても | しばらく 動けなかった。",
+          "def": "心や 考え方に | 長く 残るほど、 | 強く 大きい 様子。",
+          "guess": "何が 心に | ささった？"
         }
       },
       "meaningJP": "深い、大きな",
       "emphasis": [
-        "残る",
-        "ボランティア",
+        "動けなかった",
         "深く"
       ],
       "pos": "adj",
       "ipa": "/prəˈfaʊnd/",
+      "kana": "プロファウンド",
       "topic": "thinking",
       "topics": [
         "thinking",
@@ -2168,7 +2171,7 @@
     {
       "id": "discern-jsec",
       "word": "discern",
-      "defVi": "Nhận ra, phân biệt. Nhìn kỹ những thứ không rõ ràng để phân biệt cho đúng.",
+      "defVi": "Nhận ra, phân biệt. Nhìn kỹ những điều không rõ ràng để phân biệt cho đúng.",
       "leadVi": "Tin nhắn “Không sao đâu” bạn gửi tới. Không biết có thật là không sao không, mình đọc đi đọc lại mấy lần.",
       "anticipateVi": "Câu “không sao” đó là thật à?",
       "localized": {
@@ -2180,12 +2183,12 @@
       },
       "meaningJP": "見分ける、読み取る",
       "emphasis": [
-        "正しく",
-        "読み返した",
+        "何度も",
         "読み取る"
       ],
       "pos": "verb",
       "ipa": "/dɪˈsɜːn/",
+      "kana": "ディサーン",
       "topic": "perception",
       "topics": [
         "perception",

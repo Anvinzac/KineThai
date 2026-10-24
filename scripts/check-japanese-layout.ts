@@ -4,14 +4,20 @@
  * Run: npx tsx scripts/check-japanese-layout.ts
  */
 import assert from "node:assert/strict";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
+  getDataEmphasisWordSpans,
   getJapaneseLayoutMetrics,
+  getJapaneseMoraTokens,
   getWords,
   isLikelyJapaneseText,
   solveMeasuredLines,
   type MeasuredLineBounds,
   type MeasuredSegment,
 } from "../src/features/kinetic-text";
+import { getEmphasizedWordIndexes } from "../src/features/post-player/lib/feed-emphasis";
 import {
   paginateJapaneseChunks,
   parseJapaneseMarkup,
@@ -35,6 +41,19 @@ assert.equal(isLikelyJapaneseText("Chất lỏng trong suốt"), false);
 assert.equal(isLikelyJapaneseText("a quiet morning"), false);
 assert.equal(isLikelyJapaneseText("他很诚实。"), false);
 console.log("OK — kana marks a Japanese page");
+
+// ── Mora split: the feed player reveals a 文節 one glyph at a time (getJapaneseMoraTokens).
+// Layout still packs whole 文節; this finer split only drives the entrance cascade.
+assert.deepEqual(getJapaneseMoraTokens("ひこうきが"), ["ひ", "こ", "う", "き", "が"]);
+// Spaces between 文節 drop; a kanji splits per glyph exactly like a kana.
+assert.deepEqual(getJapaneseMoraTokens("ひこうきが 空へ"), ["ひ", "こ", "う", "き", "が", "空", "へ"]);
+// A closing mark glues to the glyph before it — it never stands alone or opens a unit.
+assert.deepEqual(getJapaneseMoraTokens("とび立ち、"), ["と", "び", "立", "ち、"]);
+// A masked answer blank (and any Latin run) stays whole.
+assert.deepEqual(getJapaneseMoraTokens("見た_____"), ["見", "た", "_____"]);
+// The units always reconstruct the visible text.
+assert.equal(getJapaneseMoraTokens("頭の中で").join(""), "頭の中で");
+console.log("OK — a Japanese 文節 splits into per-mora entrance units");
 
 // ── Display: spaces, `_`, `=` and `|` never reach a reader.
 const marked = "まだ 見た=ことの ない ものを | 頭の 中で | 思いうかべる=こと。";
@@ -206,6 +225,22 @@ assert.deepEqual(flatWord!.emphasis, ["飛び立ち", "荷物検査"]);
 const flatStages = buildStages(flatWord!, "detective", "ja");
 const flatDefinition = flatStages.find((stage) => stage.id.startsWith("definition"));
 assert.deepEqual(flatDefinition?.phraseEdges, [2, 4]);
+assert.deepEqual(flatDefinition?.dataEmphasis, ["飛び立ち", "荷物検査"]);
+assert.deepEqual(
+  [...getEmphasizedWordIndexes(getWords(flatDefinition!.text), flatDefinition!.dataEmphasis)],
+  [1],
+  "Japanese kanji-bearing emphasisJa matches its 文節 token instead of splitting per glyph",
+);
+// Stem annotations match the 文節 carrying an attached particle or conjugation suffix.
+assert.deepEqual(getDataEmphasisWordSpans(["飛行機が", "離着陸し、", "乗客が"], ["離着陸"]), [
+  { start: 1, length: 1 },
+]);
+assert.deepEqual(getDataEmphasisWordSpans(["電車で", "目当ての", "場所に"], ["目当て"]), [
+  { start: 1, length: 1 },
+]);
+assert.deepEqual(getDataEmphasisWordSpans(["自分の", "手さえ", "見えない"], ["さえ"]), [
+  { start: 1, length: 1 },
+]);
 assert.ok(!/[_=|]/.test(flatDefinition!.text), "flat deck marks leaked into the page");
 assert.ok(
   flatStages.some((stage) => stage.id.startsWith("lead")),
@@ -329,5 +364,40 @@ assert.deepEqual(
   "the title difficulty picker uses the English usage tracks for Japanese",
 );
 console.log("OK — Japanese level ids stay out of reader bands; CEFR drives the title picker");
+
+// ── Shipped data/ja/*.json packs: every word-level highlights its authored emphasisJa[0].
+const jaDir = fileURLToPath(new URL("../src/features/vocabulary/data/ja", import.meta.url));
+const jaFiles = readdirSync(jaDir)
+  .filter((name) => name.endsWith(".json"))
+  .sort();
+let shippedWords = 0;
+for (const file of jaFiles) {
+  const pack = JSON.parse(readFileSync(join(jaDir, file), "utf8")) as {
+    words: VocabularyWord[];
+  };
+  for (const entry of pack.words) {
+    shippedWords += 1;
+    assert.ok(entry.emphasis && entry.emphasis.length >= 2, `${entry.id}: missing emphasis`);
+    const targetKey = entry.emphasis[0]!
+      .replace(/《[^》]*》/g, "")
+      .replace(/[^\p{L}\p{N}]+/gu, "");
+    const cluePages = buildStages(entry, "detective", "ja").filter(
+      (stage) => stage.id.startsWith("lead") || stage.id.startsWith("definition"),
+    );
+    const matched = cluePages.some((stage) => {
+      const pageWords = getWords(stage.text);
+      const indexes = getEmphasizedWordIndexes(pageWords, stage.dataEmphasis, stage.boundPhrases);
+      return [...indexes].some((idx) => {
+        const wordKey = pageWords[idx]!
+          .replace(/《[^》]*》/g, "")
+          .replace(/[^\p{L}\p{N}]+/gu, "");
+        return wordKey.includes(targetKey) || targetKey.includes(wordKey);
+      });
+    });
+    assert.ok(matched, `${entry.id}: emphasis "${entry.emphasis[0]}" did not highlight on any clue page`);
+  }
+}
+assert.equal(shippedWords, 1000, "all 1,000 Japanese word-level entries are verified");
+console.log(`OK — all ${shippedWords} shipped Japanese entries highlight their authored emphasisJa`);
 
 console.log("\nAll Japanese layout checks passed.");

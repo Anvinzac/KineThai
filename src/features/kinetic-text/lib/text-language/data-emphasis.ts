@@ -5,23 +5,32 @@
  * Depends on: text-language/vietnamese-phrases (compound token keys)
  */
 
+import { isLikelyJapaneseText } from "./japanese-text";
 import { getCompoundTokenKey } from "./vietnamese-phrases";
 
 const HAN = /\p{Script=Han}/u;
+const FURIGANA = /《[^》]*》/gu;
+
+function getJapaneseTokenKey(token: string): string {
+  return getCompoundTokenKey(token.replace(FURIGANA, ""));
+}
 
 /**
  * Split a data emphasis phrase into comparison keys.
  * @param phrase - raw annotation phrase
+ * @param perGlyphHan - whether Han tokens should expand into one key per glyph (true for Chinese, false for Japanese 文節)
  * @returns NFC comparison keys per token, or null when the phrase cannot match safely
  */
-function getEmphasisPhraseKeys(phrase: string): string[] | null {
-  const tokens = phrase.trim().split(/\s+/).filter(Boolean);
+function getEmphasisPhraseKeys(phrase: string, perGlyphHan = true): string[] | null {
+  const cleaned = perGlyphHan ? phrase : phrase.replace(FURIGANA, "");
+  const tokens = cleaned.trim().split(/\s+/).filter(Boolean);
   if (!tokens.length) return null;
   // A Han annotation is written as one glued word ("诚实"), but a Han page tokenizes
   // per character — expand those tokens to one key per glyph so the phrase matches
-  // the same units the packer and the renderer see.
+  // the same units the packer and the renderer see. Japanese pages tokenize per 文節,
+  // so a Japanese annotation ("飛び立ち", "目当て") stays one token key per 文節.
   const keys = tokens.flatMap((token) =>
-    HAN.test(token)
+    perGlyphHan && HAN.test(token) && !isLikelyJapaneseText(cleaned)
       ? // Glued punctuation ("诚实，") simply drops out; the glyphs keep the phrase whole.
         Array.from(token)
           .map(getCompoundTokenKey)
@@ -74,17 +83,49 @@ export function getDataEmphasisWordSpans(
   const spans: Array<{ start: number; length: number }> = [];
   if (!dataEmphasis?.length || words.length === 0) return spans;
 
+  const isJapanese = isLikelyJapaneseText(words.join(" "));
   const phrases = dataEmphasis
-    .map((phrase) => getEmphasisPhraseKeys(phrase))
+    .map((phrase) => getEmphasisPhraseKeys(phrase, !isJapanese))
     .filter((keys): keys is string[] => keys !== null);
   if (!phrases.length) return spans;
 
-  const wordKeys = words.map(getCompoundTokenKey);
+  const wordKeys = words.map(isJapanese ? getJapaneseTokenKey : getCompoundTokenKey);
 
   for (const phraseKeys of phrases) {
+    let matchedPhrase = false;
     for (let start = 0; start + phraseKeys.length <= wordKeys.length; start += 1) {
       if (phraseKeys.every((key, offset) => wordKeys[start + offset] === key)) {
         spans.push({ start, length: phraseKeys.length });
+        matchedPhrase = true;
+      }
+    }
+    // Japanese pages tokenize per 文節 ("離着陸し、", "目当ての", "手さえ"), while deck
+    // `emphasisJa` annotations author the lexical stem ("離着陸", "目当て", "さえ").
+    // When an annotation does not equal a whole 文節 token, match the 文節 (or shortest
+    // consecutive 文節 run) that contains it.
+    if (!matchedPhrase && isJapanese) {
+      const joinedKey = phraseKeys.join("");
+      if (!joinedKey) continue;
+      for (let index = 0; index < wordKeys.length; index += 1) {
+        if (wordKeys[index]!.includes(joinedKey)) {
+          spans.push({ start: index, length: 1 });
+          matchedPhrase = true;
+        }
+      }
+      if (!matchedPhrase) {
+        for (let start = 0; start < wordKeys.length; start += 1) {
+          let acc = "";
+          for (let length = 1; start + length <= wordKeys.length && length <= 4; length += 1) {
+            acc += wordKeys[start + length - 1];
+            if (acc.includes(joinedKey)) {
+              const withoutFirst = wordKeys.slice(start + 1, start + length).join("");
+              if (!withoutFirst.includes(joinedKey)) {
+                spans.push({ start, length });
+              }
+              break;
+            }
+          }
+        }
       }
     }
   }

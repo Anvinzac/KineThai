@@ -20,6 +20,7 @@ export {
   getHanTokens,
   getJapaneseCharBudgetForLine,
   getJapaneseLayoutMetrics,
+  getJapaneseMoraTokens,
   getSpecialPoeticWordIndexes,
   getTextPageWordLimit,
   getVietnameseCanvasInnerWidth,

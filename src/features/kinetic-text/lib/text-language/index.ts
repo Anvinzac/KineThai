@@ -46,6 +46,7 @@ export { getHanTokens, isLikelyChineseText } from "./han-lines";
 export {
   getJapaneseCharBudgetForLine,
   getJapaneseLayoutMetrics,
+  getJapaneseMoraTokens,
   isLikelyJapaneseText,
 } from "./japanese-text";
 

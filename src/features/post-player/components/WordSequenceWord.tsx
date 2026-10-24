@@ -6,14 +6,17 @@
  */
 
 import { motion } from "framer-motion";
-import type { CSSProperties, ReactElement } from "react";
+import { useMemo, type CSSProperties, type ReactElement } from "react";
 import { getCanvasEmphasisWordColor, type CanvasSpec } from "@/features/canvas";
 import {
   getAuraColor,
   getBoundPhraseStartIndex,
   getEmphasisInnerAnimation,
   getEmphasisTextShadow,
+  getJapaneseMoraTokens,
   getWordAnchorKey,
+  isLikelyJapaneseText,
+  restrictOutlineToJapanese,
   type EmphasisVariant,
 } from "@/features/kinetic-text";
 import { resolveWordEmphasisVariant } from "../lib/emphasis-variant";
@@ -23,8 +26,14 @@ import {
   getEntranceTransition,
   type ResolvedEntranceStyle,
 } from "../lib/entrances";
-import { EMPHASIS_FONT_SCALE, getWordDelay, tempoConfig } from "../lib/playback-timing";
+import {
+  EMPHASIS_FONT_SCALE,
+  getMoraDelay,
+  getWordDelay,
+  tempoConfig,
+} from "../lib/playback-timing";
 import { usePausableEntrance } from "../hooks/usePausableEntrance";
+import { JapaneseMoraSpan } from "./JapaneseMoraSpan";
 
 export type WordSequenceWordProps = {
   word: string;
@@ -120,22 +129,24 @@ export function WordSequenceWord({
   // Inside a run the group's effect is handed down rather than re-hashed from this
   // syllable: a syllable seeds from the curated phrase list, so a compound missing from
   // it would give each of its halves a different effect.
-  const displayVariant =
+  const displayVariant = restrictOutlineToJapanese(
+    word,
     (hasGlyph ? sharedVariant : undefined) ??
-    resolveWordEmphasisVariant({
-      word,
-      index,
-      words,
-      text: spec.text,
-      emphasized,
-      phraseKeys,
-      secondaryEmphasized,
-      secondaryVariant,
-      emphasisColor,
-      inRun: skipFrame,
-      allowFrame,
-      pool,
-    });
+      resolveWordEmphasisVariant({
+        word,
+        index,
+        words,
+        text: spec.text,
+        emphasized,
+        phraseKeys,
+        secondaryEmphasized,
+        secondaryVariant,
+        emphasisColor,
+        inRun: skipFrame,
+        allowFrame,
+        pool,
+      }),
+  );
   const important = displayVariant !== null;
   const primary = important && emphasized.has(index);
   // A secondary mark is caller-forced and never drives the spotlight layout, so
@@ -160,9 +171,30 @@ export function WordSequenceWord({
     : (important ? tempo.wordDuration * 1.22 : tempo.wordDuration) *
       rhythmDurationMultiplier *
       timeScale;
+  // A Japanese page reveals mora by mora instead of one whole 文節 at a time, including
+  // when the page is a single 文節. Layout, pagination and emphasis all stay per-文節;
+  // only the entrance is split, into one JapaneseMoraSpan per glyph, paced on a single
+  // cascade across the whole page. A syllable inside a shared run inherits the run's
+  // group fade (skipFrame) instead of animating twice.
+  const isJapanesePage = isLikelyJapaneseText(spec.text);
+  const moraUnits = isJapanesePage ? getJapaneseMoraTokens(word) : null;
+  const splitMora = !!moraUnits && moraUnits.length > 1 && !skipFrame;
+  // Global mora index of this 文節's first mora, so the cascade is continuous page-wide.
+  const moraBase = useMemo(() => {
+    if (!isJapanesePage) return 0;
+    let total = 0;
+    for (let i = 0; i < index; i += 1) total += getJapaneseMoraTokens(words[i] ?? "").length;
+    return total;
+  }, [isJapanesePage, index, words]);
+  // The emphasis effect fires once the whole 文節 has landed: after the word entrance, or
+  // after the LAST mora when the page reveals syllable by syllable.
+  const effectAnchorDelay =
+    splitMora && moraUnits
+      ? getMoraDelay(moraBase + moraUnits.length - 1, spec.tempo, spec.rhythm) * timeScale
+      : entranceDelay;
   const emphasisStyle = important
     ? ({
-        "--kinetic-emphasis-delay": `${entranceDelay + entranceDuration + 0.18}s`,
+        "--kinetic-emphasis-delay": `${effectAnchorDelay + entranceDuration + 0.18}s`,
         ...(displayVariant === "halo" || displayVariant === "glow"
           ? { "--kinetic-aura-color": getAuraColor(textColor) }
           : {}),
@@ -179,8 +211,9 @@ export function WordSequenceWord({
     ? { delay: entranceDelay, duration: entranceDuration, ease: [0.22, 1, 0.36, 1] as const }
     : getEntranceTransition(entranceStyle, entranceDelay, entranceDuration, timeScale);
   // The entrance pauses with the page (an overlay covering the feed) instead of playing
-  // on unseen underneath it. Static renders and run syllables keep inheriting the parent.
-  const ownsEntrance = !staticRender && !skipFrame;
+  // on unseen underneath it. Static renders and run syllables keep inheriting the parent,
+  // and a mora-split 文節 delegates the entrance to its JapaneseMoraSpan children.
+  const ownsEntrance = !staticRender && !skipFrame && !splitMora;
   const entranceControls = usePausableEntrance("show", entranceTransition, ownsEntrance);
   return (
     <motion.span
@@ -274,7 +307,21 @@ export function WordSequenceWord({
               : undefined,
           }}
         >
-          {blank ? (
+          {splitMora && moraUnits ? (
+            moraUnits.map((unit, moraIndex) => (
+              <JapaneseMoraSpan
+                key={`${index}-${moraIndex}-${unit}`}
+                unit={unit}
+                entranceStyle={entranceStyle}
+                important={important}
+                wordIndex={index}
+                delay={getMoraDelay(moraBase + moraIndex, spec.tempo, spec.rhythm) * timeScale}
+                duration={entranceDuration}
+                timeScale={timeScale}
+                staticRender={staticRender}
+              />
+            ))
+          ) : blank ? (
             <>
               <span data-kinetic-blank="">{blank[1]}</span>
               {blank[2]}

@@ -1,7 +1,7 @@
 /**
  * Pure helpers for emphasis.
  *
- * Exports: EMPHASIS_VARIANTS, NON_LUMINOUS_EMPHASIS_VARIANTS, EmphasisVariant, getEmphasisVariant, getRunEmphasisStyle, isDimEmphasisColor, getEmphasisTextShadow, getEmphasisInnerAnimation, getAuraColor, isWhiteLikeColor
+ * Exports: EMPHASIS_VARIANTS, NON_LUMINOUS_EMPHASIS_VARIANTS, EmphasisVariant, getEmphasisVariant, getRunEmphasisStyle, isJapaneseWord, restrictOutlineToJapanese, isDimEmphasisColor, getEmphasisTextShadow, getEmphasisInnerAnimation, getAuraColor, isWhiteLikeColor
  * Depends on: ./stable-hash
  */
 
@@ -69,6 +69,45 @@ export function getEmphasisVariant(
   // A pool authored entirely out of auras still has to draw something on a dim color.
   const final = allowed.length > 0 ? allowed : nonLuminous;
   return final[getStableNumber(`${text}|${emphasisSeed}|${anchorIndex}`) % final.length];
+}
+
+/**
+ * Japanese script for effect selection: kana (hiragana, full/half-width katakana and the
+ * prolonged-sound ー) or a Han glyph (kanji). Kept local so this module stays a leaf with
+ * no import back into the text-language barrel.
+ */
+const JAPANESE_SCRIPT = /[\u3040-\u30ff\uff66-\uff9f]|\p{Script=Han}/u;
+
+/**
+ * True when a token carries at least one Japanese character.
+ * @param word - the token to inspect
+ * @returns true for anything written in kana or kanji
+ * @pure true
+ */
+export function isJapaneseWord(word: string): boolean {
+  return JAPANESE_SCRIPT.test(word);
+}
+
+/**
+ * Restrict the outline-then-fill effect to Japanese characters.
+ *
+ * `outline` strokes each glyph hollow with `-webkit-text-stroke`, then floods it with ink
+ * (`.kinetic-emph-outline`). That reads as one clean shape only when the glyph's outline is
+ * a closed contour — which kana and kanji are. An alphabet letter or a digit such as "4" is
+ * assembled from overlapping composed strokes, so showing it hollow exposes those detached
+ * segments instead of an emphasised word. Fall every non-Japanese token back to `color`,
+ * which carries the identical recolouring and separation shadow without the hollow stroke.
+ * @param word - the token the effect would be drawn on
+ * @param variant - the effect already selected for this word
+ * @returns `variant`, or `color` when it is `outline` on a non-Japanese token
+ * @pure true
+ */
+export function restrictOutlineToJapanese(
+  word: string,
+  variant: EmphasisVariant | null,
+): EmphasisVariant | null {
+  if (variant !== "outline") return variant;
+  return isJapaneseWord(word) ? variant : "color";
 }
 
 /**

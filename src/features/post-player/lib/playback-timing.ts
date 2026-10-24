@@ -1,15 +1,17 @@
 /**
  * Feed-player tempo, page duration, and text sizing helpers (not KineticText preview tempo).
  *
- * Exports: tempoConfig, TEXT_SAFE_*, fit constants, getPageDuration, getWordDelay, getUniformPageTextSize, isSoloTextPage
- * Depends on: features/canvas Tempo/Rhythm, features/kinetic-text getWords/getHanTokens/script detection
+ * Exports: tempoConfig, TEXT_SAFE_*, fit constants, getPageDuration, getWordDelay, getMoraDelay, getUniformPageTextSize, isSoloTextPage
+ * Depends on: features/canvas Tempo/Rhythm, features/kinetic-text getWords/getHanTokens/getJapaneseMoraTokens/script detection
  */
 
 import type { Rhythm, Tempo } from "@/features/canvas";
 import {
   getHanTokens,
+  getJapaneseMoraTokens,
   getWords,
   isLikelyChineseText,
+  isLikelyJapaneseText,
   isLikelyVietnameseText,
 } from "@/features/kinetic-text";
 
@@ -156,7 +158,21 @@ export function getPageDuration(text: string, tempo: Tempo, rhythm: Rhythm): num
   const wordCount = getPageWordCount(text);
   const base = Math.max(3200, Math.min(5200, 1900 + wordCount * 430));
   const rhythmMultiplier = rhythm === "poetic" ? 1.18 : 1;
-  return base * tempoConfig[tempo].pageMultiplier * rhythmMultiplier;
+  const duration = base * tempoConfig[tempo].pageMultiplier * rhythmMultiplier;
+  // A Japanese page reveals mora-by-mora, a finer cascade than its 文節 count implies.
+  // Time the page from that cascade plus a short read-hold, not from the generic word
+  // count: a short 3-文節 page would otherwise sit motionless for most of its dwell
+  // after the last mora had already landed.
+  if (isLikelyJapaneseText(text)) {
+    const moraCount = getJapaneseMoraTokens(text).length;
+    return (
+      (getMoraDelay(moraCount, tempo, rhythm) + tempoConfig[tempo].wordDuration) *
+        tempoConfig[tempo].pageMultiplier *
+        1000 +
+      800
+    );
+  }
+  return duration;
 }
 
 /**
@@ -188,6 +204,32 @@ export function getWordDelay(index: number, tempo: Tempo, rhythm: Rhythm): numbe
   if (rhythm === "smooth") return index * base * 0.58;
   if (rhythm === "burst") return Math.min(index * base * 0.42, 0.38);
   return index * base;
+}
+
+// Per-mora entrance stagger for Japanese pages (see getMoraDelay). About half the
+// matching wordDelay above: a mora is a shorter beat than a Vietnamese syllable, and a
+// Japanese page carries far more of them, so the cascade still fits inside the page dwell.
+const MORA_STAGGER: Record<Tempo, number> = {
+  slow: 0.13,
+  steady: 0.09,
+  snappy: 0.05,
+};
+
+// Feed mora delays — one continuous cascade across a Japanese page, indexed by the mora's
+// position over the WHOLE page (not its 文節), so the sentence streams in syllable by syllable.
+/**
+ * Compute moradelay.
+ * @param moraIndex - zero-based mora position across the whole page
+ * @param tempo - tempo argument
+ * @param rhythm - rhythm argument
+ * @returns Seconds before this mora starts its entrance
+ */
+export function getMoraDelay(moraIndex: number, tempo: Tempo, rhythm: Rhythm): number {
+  const base = MORA_STAGGER[tempo];
+  if (rhythm === "poetic") return moraIndex * base * 1.45;
+  if (rhythm === "smooth") return moraIndex * base * 0.58;
+  if (rhythm === "burst") return Math.min(moraIndex * base * 0.42, 0.38);
+  return moraIndex * base;
 }
 
 /**

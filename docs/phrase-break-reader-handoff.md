@@ -178,6 +178,14 @@ on the edge wins and a break one 文節 beside it is penalised exactly like the 
 case. Pages are cut only **between whole chunks** (`paginateJapaneseChunks`); a short field
 stays one page.
 
+Animation is finer than layout. The feed player reveals each 文節 **mora by mora** — `WordSequenceWord`
+splits it with kinetic-text `getJapaneseMoraTokens` into per-glyph `JapaneseMoraSpan` children,
+paced on one continuous page-wide cascade by playback-timing `getMoraDelay` (a mora step is about
+half the Vietnamese `wordDelay`, and `getPageDuration` grows the dwell so the last mora lands before
+the page turns). A 文節 therefore never pops in as a single block. Line breaking, `phraseEdges`,
+chunk pagination and emphasis all stay **per-文節**; only the entrance is split, so a solo reveal and
+a syllable inside a shared emphasis run keep their whole-token entrance.
+
 Everything lives in three places:
 
 - `src/features/kinetic-text/lib/text-language/japanese-text.ts` — detection and zero-gap

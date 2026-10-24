@@ -14,7 +14,7 @@
     "check:gradients": "node scripts/check-canvas-gradients.ts",
     "check:ambient": "node scripts/check-ambient-single-stream.ts",
     "check:ambient-zh": "node scripts/check-ambient-zh-pool.ts",
-    "check:palettes": "node scripts/check-palette-contrast.ts",
+    "check:palettes": "npx tsx scripts/check-palette-contrast.ts",
     "check:saved-groups": "npx tsx scripts/check-saved-groups.ts",
     "check:emphasis-runs": "npx tsx scripts/check-emphasis-runs.ts",
     "check:entrance-rest": "npx tsx scripts/check-entrance-rest.ts",

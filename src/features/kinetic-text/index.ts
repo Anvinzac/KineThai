@@ -22,6 +22,7 @@ export {
   getHanTokens,
   getJapaneseCharBudgetForLine,
   getJapaneseLayoutMetrics,
+  getJapaneseMoraTokens,
   getSpecialPoeticWordIndexes,
   getTextPageWordLimit,
   getVietnameseCanvasInnerWidth,
@@ -71,6 +72,8 @@ export {
   getEmphasisVariant,
   getRunEmphasisStyle,
   isDimEmphasisColor,
+  isJapaneseWord,
   isWhiteLikeColor,
+  restrictOutlineToJapanese,
 } from "./lib/emphasis";
 export type { EmphasisVariant } from "./lib/emphasis";

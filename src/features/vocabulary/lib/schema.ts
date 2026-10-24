@@ -311,6 +311,10 @@ function withFlatJapanese(entry: Record<string, unknown>, index: number): Record
     : [];
 
   const headword = typeof entry.word === "string" ? entry.word : "";
+  const kana =
+    (typeof entry.kana === "string" && entry.kana.trim()) ||
+    (typeof entry.kanaReading === "string" && entry.kanaReading.trim()) ||
+    "";
   const id =
     typeof entry.id === "string" && entry.id.trim()
       ? entry.id
@@ -337,6 +341,7 @@ function withFlatJapanese(entry: Record<string, unknown>, index: number): Record
     localized,
     usage,
     ...(meaningJP ? { meaningJP } : {}),
+    ...(kana ? { kana } : {}),
     emphasis: entry.emphasis ?? (emphasisJa.length ? emphasisJa : undefined),
   };
 }

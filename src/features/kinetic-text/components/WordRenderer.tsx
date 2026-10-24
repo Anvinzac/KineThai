@@ -14,6 +14,7 @@ import {
   getEmphasisTextShadow,
   getEmphasisVariant,
   isDimEmphasisColor,
+  restrictOutlineToJapanese,
   type EmphasisVariant,
 } from "../lib/emphasis";
 import { getBoundPhraseEmphasisSeed, getBoundPhraseStartIndex } from "../lib/text-language";
@@ -91,8 +92,13 @@ export function AnimatedWord({
   // A shared multi-syllable run must not render as a big boxed container: when a
   // syllable sits inside a group (skipFrame) and the seeded effect is the box-drawing
   // `frame`, downgrade it to a continuous underline so the phrase reads as highlighted
-  // text instead. A lone `frame` word (skipFrame false) keeps its box.
-  const displayVariant = skipFrame && emphasisVariant === "frame" ? "underline" : emphasisVariant;
+  // text instead. A lone `frame` word (skipFrame false) keeps its box. The hollow
+  // `outline` draw is kept for Japanese glyphs only — an alphabet or digit is a composed
+  // shape whose hollow outline reads as detached segments, so it falls back to `color`.
+  const displayVariant = restrictOutlineToJapanese(
+    word,
+    skipFrame && emphasisVariant === "frame" ? "underline" : emphasisVariant,
+  );
   const wordColor = important
     ? getCanvasEmphasisWordColor(displayVariant, textColor, emphasisColor)
     : textColor;

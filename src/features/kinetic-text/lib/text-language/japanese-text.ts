@@ -6,7 +6,7 @@
  * gap at all and a line may break between any two 文節. Glyphs themselves cost a full
  * em, unlike the ~0.58em average of Vietnamese letters.
  *
- * Exports: isLikelyJapaneseText, getJapaneseCharBudgetForLine, getJapaneseLayoutMetrics
+ * Exports: isLikelyJapaneseText, getJapaneseMoraTokens, getJapaneseCharBudgetForLine, getJapaneseLayoutMetrics
  * Depends on: ./page-metrics
  */
 
@@ -20,6 +20,17 @@ import type { VietnameseLayoutMetrics } from "./types";
 
 /** Hiragana or katakana. Kanji alone is ambiguous (Chinese has no kana), so it never triggers. */
 const KANA = /[\u3040-\u30ff\uff66-\uff9f]/u;
+/** One CJK glyph — kanji, hiragana or katakana — is one mora unit for the entrance split. */
+const JP_GLYPH = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
+/**
+ * Mora tokenizer alternation, in priority order: one kana/kanji glyph (every glyph is
+ * its own unit), a run of letters/digits/underscores (a Latin word or a masked
+ * "_____" blank stays whole), or a run of punctuation (glued to a neighbour below).
+ */
+const JP_TOKEN_RUNS =
+  /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]|[\p{L}\p{N}_]+|[^\p{L}\p{N}_\s]+/gu;
+/** Opening quotes/brackets introduce what follows, so they glue to the NEXT unit. */
+const JP_OPENING_PUNCTUATION = /^[‘“〝（［｛〈《「『【〔]/u;
 /** A CJK glyph is about one em wide; the Latin average is 0.58em. */
 const JAPANESE_AVG_CHAR_WIDTH_EM = 1;
 const JAPANESE_LINE_SIDE_PAD_EM = 0.12;
@@ -40,6 +51,38 @@ const JAPANESE_MAX_CHARS_PER_LINE = 10;
  */
 export function isLikelyJapaneseText(text: string): boolean {
   return KANA.test(text);
+}
+
+/**
+ * Split Japanese text into per-mora animation units: one kana or kanji glyph each, with
+ * a Latin/digit/underscore run (a masked "_____" blank) kept whole. Punctuation never
+ * stands alone and never opens a unit — a closing mark ("、" "。") joins the glyph before
+ * it, an opening mark ("「" "『") the glyph after. Line layout still packs whole 文節; this
+ * finer split only drives the feed player's mora-by-mora entrance (WordSequenceWord).
+ * @param text - a whole Japanese page (文節 separated by spaces) or a single 文節
+ * @returns Ordered mora units whose visible characters reconstruct the text
+ * @pure true
+ */
+export function getJapaneseMoraTokens(text: string): string[] {
+  const tokens: string[] = [];
+  let pendingPrefix = "";
+
+  for (const run of text.match(JP_TOKEN_RUNS) ?? []) {
+    if (JP_GLYPH.test(run) || /[\p{L}\p{N}_]/u.test(run)) {
+      tokens.push(pendingPrefix + run);
+      pendingPrefix = "";
+      continue;
+    }
+    if (JP_OPENING_PUNCTUATION.test(run)) {
+      pendingPrefix += run;
+      continue;
+    }
+    if (tokens.length > 0) tokens[tokens.length - 1] += run;
+    else pendingPrefix += run;
+  }
+
+  if (pendingPrefix) tokens.push(pendingPrefix);
+  return tokens;
 }
 
 /**
