@@ -1,6 +1,7 @@
 /** Public vocabulary page orchestration. Exports: VocabularyFeedPage. Depends on: controls, stream, reduced-motion preference, font readiness, track rotation. */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import { useStreak } from "../hooks/useStreak";
 import { useQuery } from "@tanstack/react-query";
 import { useScreenWakeLock } from "@/hooks/use-screen-wake-lock";
 import { useShellHeightVar } from "@/hooks/use-shell-height-var";
@@ -12,12 +13,15 @@ import { useIsAdmin } from "@/features/admin/hooks/useIsAdmin";
 import { useFontsReady } from "../hooks/useFontsReady";
 import { useTrackRotation } from "../hooks/useTrackRotation";
 import { useViewHistory } from "../hooks/useViewHistory";
+import { useLevelProgress } from "../hooks/useLevelProgress";
 import { getActiveVocabWording } from "@/features/admin/api/wording.functions";
 import { FeedControls } from "./FeedControls";
 import { VocabularyStream } from "./VocabularyStream";
 import { SavedDrawer } from "./SavedDrawer";
+import { StreakCelebration } from "./StreakCelebration";
+import { wordBadgeBlurb, wordBadgeTitle, wordTier } from "../lib/word-badges";
 import { DifficultyOnboarding } from "./DifficultyOnboarding";
-import { fetchVocabularyPage } from "../api/feed";
+import { levelLadderFor } from "../lib/level-ladder";
 import { readDifficultyChoice, writeDifficultyChoice } from "../lib/difficulty-choice";
 import { readDialectChoice, writeDialectChoice } from "../lib/dialect-choice";
 import { readPreferences, writePreferences } from "@/features/settings/lib/preferences";
@@ -139,23 +143,6 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     setFilters((current) => ({ ...current, difficulty: stored }));
     setStage("feed");
   }, [effectiveLocale, preferredJapaneseLevel]);
-  // The picker needs the catalog's level counts and sample words before any stream exists.
-  // They ride on every feed page, so one small, unfiltered request supplies them.
-  const { data: ladder } = useQuery({
-    queryKey: ["vocab-level-ladder", effectiveLocale],
-    queryFn: ({ signal }) =>
-      fetchVocabularyPage(
-        {
-          seed: "level-ladder",
-          filters: ALL_FILTERS,
-          cursor: { position: 0 },
-          signal,
-        },
-        effectiveLocale,
-      ),
-    enabled: stage === "onboarding",
-    staleTime: Infinity,
-  });
   const pickDifficulty = useCallback((difficulty: string) => {
     writeDifficultyChoice(difficulty);
     setFilters((current) => ({ ...current, difficulty }));
@@ -179,7 +166,11 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
   }, []);
   const closeExport = useCallback(() => setExportOpen(false), []);
   const viewHistory = useViewHistory();
+  // How far into each level the reader has got: lasts beyond the week the history keeps.
+  const levelProgress = useLevelProgress(effectiveLocale);
   const reducedMotion = !!useReducedMotion();
+  // On-device only, like the saved words beside it: no account, no table, nothing leaves.
+  const streak = useStreak();
   // No rotate-to-portrait gate here: the feed has its own landscape layout (two-column
   // answer page, compact chrome, measured shell height). The post-player surfaces, which
   // only letterbox, keep theirs. Keep the screen lit while the feed is open.
@@ -196,12 +187,16 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     queryFn: getActiveVocabWording,
     staleTime: 60_000, // Cache for 1 minute
   });
+  const recordLevel = levelProgress.record;
+  const wordCelebration = levelProgress.celebrating;
   const handleRecordView = useCallback(
-    (wordId: string) => {
+    (wordId: string, level?: VocabularyLevel) => {
       recordView(wordId);
+      // An imported pack's words are not the catalog's, so they do not fill its levels.
+      if (level && !packName) recordLevel(level, wordId);
       music.wordStarted();
     },
-    [recordView, music],
+    [recordView, recordLevel, packName, music],
   );
   const shuffle = () => {
     setSeed(newSeed());
@@ -212,7 +207,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
       <main className="vocabulary-shell" ref={shell}>
         {stage === "onboarding" && (
           <DifficultyOnboarding
-            metadata={ladder}
+            metadata={levelLadderFor(effectiveLocale)}
             locale={effectiveLocale}
             onPick={pickDifficulty}
           />
@@ -224,6 +219,7 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
     <main className="vocabulary-shell" ref={shell}>
       <FeedControls
         metadata={metadata}
+        levelProgress={levelProgress.seen}
         filters={filters}
         locale={effectiveLocale}
         presentation={presentation}
@@ -262,6 +258,34 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
         </div>
       )}
       <SavedDrawer open={savedOpen} onOpenChange={setSavedOpen} />
+      {/* Beside the drawer rather than inside the card: the word is finished at the moment
+          the stream starts scrolling to the next one, so a card-level badge would ride out
+          of frame half-played. Keyed on the milestone so each one replays from its start.
+          It covers the screen, so it suspends the stream below like any other overlay. */}
+      {streak.celebrating !== null ? (
+        <StreakCelebration
+          key={streak.celebrating}
+          days={streak.celebrating}
+          reducedMotion={reducedMotion}
+          onDone={streak.dismiss}
+        />
+      ) : (
+        // A word milestone waits its turn behind a streak one rather than stacking on it.
+        wordCelebration && (
+          <StreakCelebration
+            key={`${wordCelebration.scope}:${wordCelebration.words}`}
+            days={wordCelebration.words}
+            reducedMotion={reducedMotion}
+            onDone={levelProgress.dismiss}
+            badge={{
+              tier: wordTier(wordCelebration),
+              unit: "từ",
+              title: wordBadgeTitle(wordCelebration, effectiveLocale),
+              blurb: wordBadgeBlurb(wordCelebration, effectiveLocale),
+            }}
+          />
+        )
+      )}
       <VocabularyStream
         key={`${packName ?? ""}:${seed}:${filters.topic}:${filters.level}:${filters.difficulty}`}
         seed={seed}
@@ -269,12 +293,20 @@ export function VocabularyFeedPage({ locale }: { locale?: TargetLocale }) {
         locale={effectiveLocale}
         presentation={presentation}
         reducedMotion={reducedMotion}
-        suspended={optionsOpen || savedOpen || !fontsReady || exportOpen}
+        suspended={
+          optionsOpen ||
+          savedOpen ||
+          !fontsReady ||
+          exportOpen ||
+          streak.celebrating !== null ||
+          wordCelebration !== null
+        }
         exportOpen={isAdmin && exportOpen}
         onCloseExport={closeExport}
         history={viewHistory.history}
         onRecordView={handleRecordView}
         onWordEnding={music.wordEnding}
+        onWordFinished={streak.finish}
         onClearHistory={viewHistory.clear}
         onMetadata={setMetadata}
         onRestart={shuffle}

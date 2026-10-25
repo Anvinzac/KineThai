@@ -1,5 +1,13 @@
 /* Vocabulary-only layout. Virtual rows keep viewport-sized snap targets and bounded coordinates. */
-.vocabulary-shell {
+
+/* Anything that HOSTS a card declares these, not just the feed's shell. The card's chrome
+   is positioned from them - `bottom: var(--vocab-chrome-inset)` and friends - and a custom
+   property with no fallback that resolves to nothing makes the whole declaration invalid,
+   so the row does not shift, it loses its `bottom` entirely and falls to the top of the
+   frame. That is what the showcase looked like before it was added here: the button row
+   pinned to the top edge, the progress row with it, and nothing to say why. */
+.vocabulary-shell,
+.vocab-showcase-stage {
   /* Shell-level defaults for chrome that floats above the cards (toolbar, options
      panel, empty state). Each card overrides all four from its own validated
      palette, so a role is never undefined wherever it is consumed. */
@@ -7,6 +15,10 @@
   --vocab-accent: var(--mint);
   --vocab-accent-alt: var(--citrus);
   --vocab-button-ink: #14101f;
+
+  /* The share tab's seat in the meaning panel's bottom-right corner. Its height is
+     also what the panel reserves above itself, so the two cannot disagree. */
+  --vocab-share-h: 40px;
 
   /* Bottom chrome, as one stack measured from the card's bottom edge: the clearance under
      the button row, the row's own height, the gap up to the page-progress row, and that
@@ -83,9 +95,17 @@
   --vocab-corner: 44px;
   position: fixed;
   z-index: 50;
-  top: max(12px, env(safe-area-inset-top));
-  left: max(16px, env(safe-area-inset-left));
-  right: max(16px, env(safe-area-inset-right));
+  /* The top offset is a variable so a recorder can push the bar clear of a platform's own
+     overlay (TikTok's search row, a Reels header) without that inset reaching readers.
+     Default unchanged, so nothing moves for anyone who does not set it. The bottom chrome
+     already had its knob: --vocab-chrome-inset on the shell, which the progress row, the
+     button row and the meaning panel's cap all derive from. */
+  /* One definition of how far down the bar sits; the scrim below reads the same value
+     to work out how far back UP it has to reach. */
+  --vocab-chrome-top-offset: max(var(--vocab-chrome-head, 12px), env(safe-area-inset-top));
+  top: var(--vocab-chrome-top-offset);
+  left: calc(max(16px, env(safe-area-inset-left)) + var(--vocab-chrome-side, 0px));
+  right: calc(max(16px, env(safe-area-inset-right)) + var(--vocab-chrome-side, 0px));
   color: var(--chrome-ink);
   transition: color var(--dur-move) var(--ease-out);
 }
@@ -96,7 +116,18 @@
   content: "";
   position: absolute;
   z-index: -1;
-  inset: -14px -18px -26px;
+  /* The scrim is pinned to the TOP EDGE and grows downward, rather than travelling with
+     the bar. It is positioned against the toolbar, so reaching the edge means coming back
+     up by exactly however far the bar was pushed down — plus 2px, so antialiasing at the
+     boundary cannot leave a hairline of card showing. Pushing the bar further down
+     therefore makes the scrim taller instead of detaching it, and the gradient still
+     fades out below the controls because the bottom inset is unchanged.
+
+     The sides work the same way. --vocab-chrome-side moves the BAR inward, away from a
+     platform's crop; the scrim has to travel back out by the same amount or it stops
+     being a top-edge gradient and becomes a dark box floating in the middle. */
+  inset: calc(-1 * var(--vocab-chrome-top-offset, 14px) - 2px)
+    calc(-18px - var(--vocab-chrome-side, 0px)) -26px;
   /* Square on top, rounded only on the bottom two corners: the scrim sits flush against
      the top edge of the viewport, so rounded top corners would let the card background
      leak through the gaps. The bottom edge still fades over the content, so it keeps its
@@ -107,9 +138,21 @@
 }
 .vocab-toolbar-row {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  /* Four tracks, in source order: the app grid, the title, the transport controls, the
+     gear. The app grid needs a track of its own rather than sharing the title's — the
+     panel it opens is positioned against its trigger's box, so the trigger has to be a
+     box the grid sized, not one floating inside another flex row. */
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
-  gap: 12px;
+  /* Read by the title column to hang the difficulty line under the app pill: the pill
+     height (×3/2) is its width, and --vocab-eco-gap is the space between it and the
+     title — tighter than the row gap, so the two read as one line. */
+  --vocab-row-gap: 12px;
+  --vocab-eco-gap: 8px;
+  --eco-trigger-h: 28px;
+  /* A quarter of the gear's inner padding: (button 44 − glyph 19) / 4. See below. */
+  --vocab-controls-nudge: 6.25px;
+  gap: var(--vocab-row-gap);
 }
 /* Side columns are content-sized (auto) and only the middle track stretches (1fr), so
    `justify-self: center` on the controls centres them within the LEFTOVER space between
@@ -124,9 +167,22 @@
 .vocab-toolbar-left {
   justify-self: start;
   min-width: 0;
+  /* Pulled in from the row gap to --vocab-eco-gap: the pill sits in the title's line,
+     so it reads as the line's leading mark rather than as a separate control. */
+  margin-left: calc(var(--vocab-eco-gap) - var(--vocab-row-gap));
+  /* How far this column starts right of the app pill: its width plus that gap. The
+     difficulty line and its popup step back by exactly this, so they sit beneath the
+     pill + title line, flush with the pill's left edge. */
+  --vocab-brand-indent: calc(var(--eco-trigger-h) * 3 / 2 + var(--vocab-eco-gap));
 }
 .vocab-player-controls {
   justify-self: center;
+  /* The middle track centres the group between the title's box and the gear's, but the
+     eye measures to what is drawn: the title's ink runs to its box edge, while the gear's
+     glyph sits half the button's padding inside it. Centred box-to-box, the gap on the
+     right read wider than the one on the left. Shifting by half that inset (a quarter of
+     the padding) evens the two visible gaps. */
+  translate: var(--vocab-controls-nudge) 0;
 }
 /* The song's name, run once on the SAME line as the difficulty sub-text. A news ticker,
    not a marquee: the text makes a single left-crawl (iteration-count 1, held off-screen
@@ -254,7 +310,7 @@
 .vocab-brand small {
   position: absolute;
   top: calc(100% + 6px);
-  left: 0;
+  left: calc(-1 * var(--vocab-brand-indent, 0px));
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -271,10 +327,15 @@
 .vocab-difficulty-current {
   white-space: nowrap;
 }
-/* The trigger reports the whole selection, so the leading difficulty emoji gets a hair
-   of separation from the label it denotes. */
+/* The sub-text hangs under the pill + title line as two columns of the same grid: the
+   emoji takes a slot exactly as wide as the app pill and centres in it, so it sits
+   squarely under the pill, and the gap after it is the pill-to-title gap, so the label
+   starts on the title's own left edge. */
 .vocab-difficulty-current-emoji {
-  margin-right: 7px;
+  display: inline-block;
+  width: calc(var(--eco-trigger-h) * 3 / 2);
+  margin-right: var(--vocab-eco-gap);
+  text-align: center;
 }
 .vocab-brand:hover small {
   color: var(--chrome-ink);
@@ -387,6 +448,153 @@
    anywhere down the edge, not just on the handle itself. `touch-action: pan-y`
    hands vertical scrolling back to the browser while claiming horizontal
    movement, which is what keeps the pull smooth on a phone. */
+/* Chrome that belongs to a reader, not to a recording.
+   The saved-words drawer handle is a control: it invites a tap that a video cannot take,
+   and it rides the right edge where a platform's crop and its own action rail already sit.
+   The selector lives HERE rather than in the recorder so it travels with the element it
+   names - a rule spelled out in the recorder goes stale the moment this class is renamed,
+   and does so silently, because a selector that matches nothing throws no error. The
+   recorder only sets the flag. */
+.vocab-recording .vocab-saved-dock {
+  display: none;
+}
+/* A milestone is the reader's, not the clip's. It is a sibling of the dock rather than a
+   child of the card, so the blanket showcase rules that clear the card's own children do
+   not reach it and this has to be said explicitly. check-streak asserts the rule exists —
+   a badge flashing into a published promo is only ever noticed after it is posted. */
+.vocab-recording .vocab-streak-flash {
+  display: none;
+}
+/* While recording, the bar's TOP-RIGHT is the safe area's top-right - not the canvas's.
+   --vocab-safe-top and --vocab-safe-right are the export preset's own margins (tiktok-clear
+   is 8.5% of the height and 15% of the width) resolved to pixels by the recorder, so the
+   corner the title sits in is the same corner Export Studio draws. Two numbers invented
+   here instead would be a third opinion about where the safe area is, and the first to go
+   stale when a platform moves its furniture.
+
+   The LEFT is deliberately not the preset's. That margin is 5%, which protects against
+   TikTok's own interface but not against the aspect-fill crop that eats ~12.5% of each
+   edge - following it would put the gear back under the crop. Two different hazards, two
+   different numbers; only the right edge happens to be covered by both. */
+/* The recorded top bar's own geometry, in one place because two things depend on it: the
+   bar sits at --vocab-rec-top, and the TEXT CANVAS starts below --vocab-rec-top-h, the
+   bar's height. Written as a pair so the canvas cannot be left overlapping the bar when
+   either moves - the band's height is what the fit pipeline measures, so shrinking it from
+   the top resizes the text rather than sliding it under the chrome. */
+.vocab-recording {
+  --vocab-rec-nudge: 20px;
+  --vocab-rec-top: calc(var(--vocab-safe-top, 61px) + var(--vocab-rec-nudge));
+  /* The bar is two lines: the wordmark and the difficulty row under it. */
+  --vocab-rec-top-h: 56px;
+  --vocab-rec-top-gap: 14px;
+  --vocab-rec-bottom-gap: 16px;
+}
+/* The bottom row: shorter, and lifted towards the progress row above it. The clearance
+   underneath carries the lift (--inset's second value, 64) and the gap gives back exactly
+   what the lift and the shorter row take, so the PROGRESS row does not move at all:
+   64 + 36 + 28 is the same 128 as the reader's 44 + 44 + 40. The row ends up 12px higher,
+   8px shorter, and 28px under the progress row instead of 40. */
+.vocab-recording .vocabulary-shell {
+  --vocab-chrome-bar: 36px;
+  --vocab-chrome-gap: 28px;
+}
+.vocab-recording .vocab-toolbar {
+  top: var(--vocab-rec-top);
+  left: var(--vocab-chrome-side, 0px);
+  right: var(--vocab-chrome-side, 0px);
+}
+/* The scrim is positioned against the BAR, so reaching an edge means coming back by exactly
+   how far the bar sits from it: the negated margin, never a constant. It read
+   `-18px - margin` while the bar sat at `16 + margin + 20`, and those cannot cancel at any
+   margin - at 25 the gradient stopped 18px short of both edges and read as a dark box
+   floating in the middle of the frame rather than as a top edge. Vertically the same rule
+   already applied, which is why the top looked right while the sides did not. */
+.vocab-recording .vocab-toolbar::before {
+  inset: calc(-1 * var(--vocab-rec-top, 61px) - 2px)
+    calc(-1 * var(--vocab-chrome-side, 0px)) -26px;
+}
+/* Recorded top bar: the title moves to the RIGHT corner.
+   The row is `auto 1fr auto` and its three children are auto-placed in source order, so
+   reordering is enough to re-column them - no second markup. The gear keeps order 0 and
+   takes the left `auto`, the controls take the stretchy middle, and the title lands in the
+   right `auto` with justify-self: end. Nothing here applies to a reader. */
+.vocab-recording .vocab-player-controls {
+  order: 2;
+}
+.vocab-recording .vocab-toolbar-left {
+  order: 3;
+  justify-self: end;
+  /* The row centres its items, and the title block is shorter than the row the gear sets,
+     so centring left it sitting 8px below the corner it is supposed to be anchored to.
+     Top-aligned here means the title's own top edge IS the safe area's top edge. */
+  align-self: start;
+  /* The app pill is not beside the title here, so its lines hang from the title itself. */
+  --vocab-brand-indent: 0px;
+}
+/* With no pill above it, the emoji is just a lead mark with a hair of separation. */
+.vocab-recording .vocab-difficulty-current-emoji {
+  width: auto;
+  margin-right: 7px;
+}
+/* The gear sits on the left in this layout, so the nudge toward it would point the wrong
+   way, and so would the phone tier's docking against it; the recorded frame keeps the
+   box-centred group at every width. */
+.vocab-recording .vocab-player-controls {
+  justify-self: center;
+  translate: none;
+}
+/* The title's own lines follow it to that corner; left-ragged text hung off the right
+   edge reads as a mistake rather than as a corner mark. */
+.vocab-recording .vocab-toolbar-left,
+.vocab-recording .vocab-toolbar-left * {
+  text-align: right;
+}
+/* Opt-in, off by default: the transport controls are controls, so a clip does not need
+   them - but they also say "this is a real app", so whether they earn their place in the
+   frame is a judgement to make by looking, not one to bake in. --controls hide. */
+.vocab-hide-controls .vocab-player-controls {
+  display: none;
+}
+/* Held back in the recording. They are controls: a viewer cannot press them, so at full
+   strength they compete with the word for attention while promising something the video
+   cannot do. Dimmed rather than hidden, because the bar still has to read as a real app.
+   Both are the bar's corner controls: the gear on the right, the app pill on the left. */
+.vocab-recording .vocab-player-controls,
+.vocab-recording .vocab-corner-button,
+.vocab-recording .eco-trigger {
+  opacity: 0.4;
+}
+/* ONE margin for the recorded frame.
+   The reader's chrome is anchored at three different depths - the toolbar at 16px, the
+   progress and button rows at 24px, the text band flush - which is right for a phone and
+   wrong for a frame that gets cropped, because each element then crosses the crop line at
+   a different moment. "Make the inset smaller" had no single meaning: it cut whichever
+   element happened to be shallowest, and four rounds of tuning never converged.
+   Here every edge-anchored thing in the recorded frame resolves to --vocab-chrome-side and
+   nothing adds a base to it, so one number moves the whole scene and either all of it
+   clears a crop or none of it does. Scoped to a recording: the reader's three depths are
+   deliberate and stay. */
+.vocab-recording .vocab-stage-band {
+  left: var(--vocab-chrome-side, 0px);
+  right: var(--vocab-chrome-side, 0px);
+}
+/* Clear of the bar, and specific enough to beat the reveal rules that also set `top` on
+   the band (`.vocab-card:not([data-export]) .vocab-stage-band[data-reveal]`), which would
+   otherwise put the answer page back under the chrome. */
+.vocab-recording .vocab-card .vocab-stage-band,
+.vocab-recording .vocab-card .vocab-stage-band[data-reveal] {
+  top: calc(var(--vocab-rec-top) + var(--vocab-rec-top-h) + var(--vocab-rec-top-gap));
+  /* BOTH ends, or the canvas is only half resized. Setting the top alone moved the band's
+     centre down with it - the text sits at a percentage of the band - and pushed the last
+     line straight through the progress row. --vocab-chrome-top is the shell's existing
+     measure of where the bottom chrome begins, so this follows the row automatically
+     rather than repeating its arithmetic. */
+  bottom: calc(var(--vocab-chrome-top) + var(--vocab-rec-bottom-gap));
+}
+.vocab-recording :is(.vocab-progress, .vocab-action-bar) {
+  width: min(440px, calc(100% - 2 * var(--vocab-chrome-side, 0px)));
+}
+
 .vocab-saved-dock {
   position: fixed;
   /* Under the toolbar (50), so the ecosystem fan's scrim covers the handle. */
@@ -395,7 +603,8 @@
      right hand — and well clear of the optical middle, where it sat across the
      word itself. */
   top: 62%;
-  right: env(safe-area-inset-right, 0px);
+  /* Rides the right edge, so it is the first thing a side crop eats. */
+  right: calc(env(safe-area-inset-right, 0px) + var(--vocab-chrome-side, 0px));
   display: grid;
   place-items: center end;
   /* 1.5× the tab's own width plus its old breathing room, so the wider handle never
@@ -754,6 +963,13 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
 }
+/* The topic and answer-style pickers are temporarily out of the sheet, which leaves the
+   theme picker as the grid's only child; it takes the whole row rather than sitting in a
+   half-width column with dead space beside it. Keyed on the child count, not on a flag,
+   so putting the other two back needs no change here. */
+.vocab-select-grid:has(> :only-child) {
+  grid-template-columns: minmax(0, 1fr);
+}
 .vocab-select-grid label {
   display: flex;
   flex-direction: column;
@@ -805,6 +1021,53 @@
   font-weight: 600;
   color: var(--shell-text-soft);
   align-self: start;
+}
+/* The picker's own heading: its label, and immediately beside it the tone shortcut. */
+.vocab-picker-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.vocab-tone-tabs {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--shell-line);
+  border-radius: 999px;
+  background: var(--shell-well);
+}
+.vocab-tone-tab {
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--shell-text-mute);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.3;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-quick) var(--ease-out),
+    color var(--dur-quick) var(--ease-out);
+}
+.vocab-tone-tab:hover:not(:disabled):not([data-on]) {
+  color: var(--shell-text);
+}
+.vocab-tone-tab[data-on] {
+  background: var(--vocab-accent);
+  color: var(--vocab-button-ink);
+}
+/* No theme of that tone in this pool — the stream would have nothing to wear. */
+.vocab-tone-tab:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.vocab-tone-tab:focus-visible {
+  outline: 2px solid var(--vocab-accent);
+  outline-offset: 1px;
 }
 .vocab-picker-trigger {
   display: flex;
@@ -975,6 +1238,30 @@
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.06em;
+  /* The chip is also its row's progress loader: the fill below runs underneath the level
+     name, clipped to the chip's own pill. */
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+/* The loader: the card's accent, filling from the left towards the next 100-word target
+   (--progress, set per row). Under the text (z-index -1 inside the isolated chip), and
+   softened so the name stays legible over a bright accent. */
+.vocab-difficulty-band::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: -1;
+  width: var(--progress, 0%);
+  background: color-mix(in srgb, var(--pop-accent, var(--vocab-accent)) 62%, transparent);
+  transition: width var(--dur-move) var(--ease-out);
+}
+/* A finished scope: the whole chip in the accent, with dark ink for contrast. */
+.vocab-difficulty-band[data-complete] {
+  color: var(--pop-accent-ink, #10140f);
+}
+.vocab-difficulty-band[data-complete]::before {
+  background: var(--pop-accent, var(--vocab-accent));
 }
 /* The "tất cả" row carries no band, but it still holds the chip's slot so its name
    lines up with the ten tracks below it — invisible spacer, not a missing column. */
@@ -994,7 +1281,8 @@
      brand box is only the title's height — the panel must drop far enough to clear the
      floating track label that now starts at +6px. */
   top: calc(100% + 25px);
-  left: 0;
+  /* Opens under the difficulty line it reports, so it shares that line's left edge. */
+  left: calc(-1 * var(--vocab-brand-indent, 0px));
   display: flex;
   flex-direction: column;
   width: min(330px, calc(100vw - 40px));
@@ -1085,6 +1373,10 @@
   align-items: center;
   gap: 2px 10px;
   min-height: 46px;
+  /* The list is a fixed-height column flexbox, which shrinks its items to min-height. A
+     row with a progress bar is taller than that, so without this the bar spilled over
+     the top of the next row. */
+  flex-shrink: 0;
   padding: 7px 12px;
   border-radius: 12px;
   cursor: pointer;
@@ -1542,6 +1834,41 @@
   flex-direction: column;
   gap: 10px;
 }
+.vocab-memory-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.vocab-memory-stats > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--shell-line);
+  border-radius: 12px;
+}
+.vocab-memory-stats dt {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--shell-text-mute);
+}
+.vocab-memory-stats dd {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--shell-text);
+  font-variant-numeric: tabular-nums;
+}
+.vocab-memory-stats > div[data-today] {
+  border-color: color-mix(in srgb, var(--vocab-accent) 45%, transparent);
+  background: color-mix(in srgb, var(--vocab-accent) 10%, transparent);
+}
+.vocab-memory-stats > div[data-today] dd {
+  color: var(--vocab-accent);
+}
 .vocab-memory-clear {
   align-self: flex-start;
   min-height: 44px;
@@ -1719,6 +2046,16 @@
   inset: 0;
   pointer-events: none;
 }
+/* The text's own side margins, and the reason this is a variable rather than a number:
+   a platform that scales the clip to fill a taller screen crops the SIDES, and the text
+   runs to within 2% of them (LINE_BOX_SHARE in useMeasuredLines). Narrowing the band is
+   what moves the text, not a padding - clientWidth includes padding, so the fit
+   pipeline would never see it. The band is the box the pipeline measures, a ResizeObserver
+   watches it, and the lines re-solve to the narrower width on their own. */
+.vocab-stage-band {
+  left: var(--vocab-chrome-side, 0px);
+  right: var(--vocab-chrome-side, 0px);
+}
 .vocab-reveal-details {
   position: absolute;
   /* Top-anchored below the stage and content-hugging (height:auto): the frosted
@@ -1765,13 +2102,19 @@
   font-size: clamp(16px, 1.9vw, 21px);
   line-height: 1.6;
   --vocab-reveal-pad-y: 14px;
-  /* The share badge's upper ~45% sits inside this box; the room for it is reserved
-     on .vocab-reveal-scroll below, NOT by this padding — two responsive tiers
-     re-declare the `padding` shorthand, so anything set here is wiped at exactly
-     the sizes where the panel hugs its content and the slack is needed most. */
-  --vocab-reveal-badge-room: 20px;
+  /* Keeps the last line of the definition out from under the share leaf seated in the
+     corner. The leaf stands on the padding box's bottom edge, so only the part of it
+     above this panel's own bottom padding has to be cleared — and that padding differs
+     per tier, which is why this is derived from the tier's variable instead of being a
+     fixed number. Kept off the `padding` shorthand for the same reason: two responsive
+     tiers re-declare it, which would wipe a value set here at exactly the sizes where
+     the panel hugs its content and the slack is needed most. */
+  --vocab-reveal-badge-room: calc(var(--vocab-share-h) - var(--vocab-reveal-pad-y) + 10px);
   padding: var(--vocab-reveal-pad-y) 18px;
-  border-radius: 20px;
+  /* Named, because the share leaf's corner is clipped to this same arc one border in.
+     A literal in both places would let the nest drift the moment one of them changed. */
+  --vocab-reveal-radius: 20px;
+  border-radius: var(--vocab-reveal-radius);
   border: 1px solid color-mix(in srgb, var(--vocab-ink) 14%, transparent);
   box-shadow: 0 18px 50px -18px #0007;
   /* The veil uses the palette's contrasting neutral, so it deepens behind light ink
@@ -1780,6 +2123,17 @@
   background: color-mix(in srgb, var(--vocab-button-ink) 42%, transparent);
   backdrop-filter: blur(16px);
   color: var(--vocab-ink);
+}
+/* The gloss that replaced the definition sentence. It is a word or two where a paragraph
+   used to be, so it is set to carry the panel rather than sit in it as body copy — this is
+   the thing the reader opened the card for. `balance` keeps a two-part gloss from leaving
+   one word alone on a second line. */
+.vocab-meaning {
+  font-size: 1.18em;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 .vocab-pronunciation {
   display: flex;
@@ -1851,7 +2205,7 @@
   bottom: var(--vocab-chrome-progress-bottom);
   left: 50%;
   transform: translateX(-50%);
-  width: min(440px, calc(100% - 48px));
+  width: min(440px, calc(100% - 48px - 2 * var(--vocab-chrome-side, 0px)));
   display: flex;
   gap: 5px;
 }
@@ -1898,7 +2252,7 @@
   /* Exactly the progress bar's box, which is the row's alignment anchor: the report
      button's left edge sits under the first progress segment and the bookmark's right
      edge under the last. */
-  width: min(440px, calc(100% - 48px));
+  width: min(440px, calc(100% - 48px - 2 * var(--vocab-chrome-side, 0px)));
   display: flex;
   align-items: center;
   gap: var(--action-gap);
@@ -2358,47 +2712,36 @@
   line-height: 1.5;
   color: var(--shell-text-mute);
 }
-/* Two tabs over one list each. Each tab is named after the reaction that puts a word in
-   it, so the count inside the tab is the size of that list, not of the reader's taps.
-   The row IS the switcher, drawn as a real tab strip: two rounded-rectangle tabs, each
-   carrying its own outline, separated by a small column gap. The open tab is marked by an
-   accent bar ALONG ITS TOP and loses its bottom edge so it fuses with the container box
-   below — the tab and the box read as one shape. The strip keeps the container's side insets
-   so no horizontal gap opens between those two surfaces. (The gap between the TABS is wanted;
-   only the tiny unoutlined segment it leaves in the container's TOP edge is bridged — see
-   .vocab-saved-tabs::after.) */
+/* Three tabs: the two word lists, each named after the reaction that puts a word in it (so
+   its count is the size of that list, not of the reader's taps), and the earned medals.
+   The row IS the switcher, drawn as a real tab strip: rounded-rectangle tabs, each carrying
+   its own outline, separated by a small gap. The open tab is marked by an accent bar ALONG
+   ITS TOP, is 2.5x as wide as a closed one, and loses its bottom edge so it fuses with the
+   container box below — the tab and the box read as one shape. Closed tabs are their icon
+   alone. The strip keeps the container's side insets so no horizontal gap opens between
+   those two surfaces; the gaps between TABS are bridged by .vocab-saved-tab-gap. */
 .vocab-saved-tabs {
   /* position:relative hosts the seam connector below as a positioned pseudo. An absolutely
      positioned ::after is out of flow, so it does NOT become a third grid item. */
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 8px;
+  display: flex;
   margin: 0 max(18px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left));
 }
-/* The container's TOP edge is drawn in three collinear parts, and if they are not exactly on
-   one row the outline reads broken. Under the OPEN tab it is deliberately absent (the tab
-   fuses into the box), under the CLOSED tab its own bottom border draws that edge, and only
-   the 8px GAP between the tabs is blank — this 1px hairline is that missing span. It is hung
-   on the STRIP's `bottom:0`, which is the exact row the tabs' bottom borders occupy. (The
-   first attempt hung it on the panelbox `top:0`, but a bottom border sits in the row ABOVE
-   its edge while the panelbox top is one row BELOW that — so that patch was visibly 1px low.)
-   Width is EXACTLY the 8px gap: centred on it, its two ends meet the facing rails edge-to-
-   edge and stop there — any wider and each tip rides 1px over the vertical border it is meant
-   to join. Same --shell-line, so the three pieces read as one continuous stroke. */
-.vocab-saved-tabs::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 8px;
-  height: 1px;
-  transform: translateX(-50%);
-  background: var(--shell-line);
+/* The gaps between tabs. Each is a spacer of its own rather than a flex `gap`, so its 1px
+   bottom edge can carry the container's top line across the gap: under the OPEN tab that
+   line is deliberately absent (the tab fuses into the box), under a CLOSED tab its own
+   bottom border draws it, and these fill the spans between. Stretched to the strip's height,
+   their bottom border sits on the same row as the tabs' bottom borders. */
+.vocab-saved-tab-gap {
+  flex: 0 0 8px;
+  border-bottom: 1px solid var(--shell-line);
 }
 .vocab-saved-tab-slot {
   position: relative;
   display: flex;
+  /* The open tab takes 2.5 shares and the closed ones one each, which is room for their
+     icon alone; the grow animates so the strip slides rather than snapping. */
+  flex: 1 1 0;
   min-width: 0;
   /* The outline lives on the slot (the whole segment: label + any fused density cell),
      so a tab with only a couple of words still fills the strip's full height instead of
@@ -2411,6 +2754,7 @@
   background: transparent;
   overflow: hidden;
   transition:
+    flex-grow 280ms var(--ease-out),
     border-color var(--dur-quick) var(--ease-out),
     background var(--dur-quick) var(--ease-out);
 }
@@ -2434,6 +2778,7 @@
      --shell-line in both states, so there is nothing to animate and no flash; the width still
      snaps, which is exactly the instant, seamless fusion we want. */
   border-bottom-width: 0;
+  flex-grow: 2.5;
   background: color-mix(in srgb, var(--shell-hover) 24%, transparent);
 }
 /* The highlighted bar, now on TOP of the open tab (it used to underline it). On the slot,
@@ -2452,10 +2797,10 @@
   flex: 1 1 auto;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 6px;
   min-width: 0;
   min-height: 42px;
-  padding: 4px 10px 5px;
+  padding: 4px 6px 5px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -2473,6 +2818,16 @@
   overflow: hidden;
   text-align: center;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* A closed tab is its icon alone. The label and count leave the layout but not the
+   accessibility tree, so the tab is still announced by name. */
+.vocab-saved-tab:not([data-on]) :is(.vocab-saved-tab-label, .vocab-saved-tab-count) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
   white-space: nowrap;
 }
 .vocab-saved-tab:hover {
@@ -2517,7 +2872,7 @@
   flex: 0 0 auto;
   width: 30px;
   height: 26px;
-  margin: 0 9px;
+  margin: 0 7px 0 0;
   padding: 0;
   border: 1px solid var(--shell-line-strong);
   border-radius: 9px;
@@ -2620,12 +2975,22 @@
   font-weight: 600;
   color: var(--shell-text-mute);
 }
+/* The day's word count: a quiet pill, its number in full ink and the unit muted. */
 .vocab-saved-group-count {
   margin-left: auto;
+  align-self: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--shell-hover) 70%, transparent);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--shell-text-mute);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.vocab-saved-group-count b {
+  font-weight: 800;
+  color: var(--shell-text);
 }
 .vocab-saved-folder {
   display: flex;
@@ -3675,16 +4040,6 @@
   padding: 10px 12px 6px;
   text-align: center;
 }
-/* The music toggle lives in the feed toolbar, which does not exist until a difficulty
-   is picked — so the ladder docks its own in the top-right corner: same persisted
-   preference and same per-host pool scope as the toolbar's, and a reader can start the
-   music before the first word instead of hunting for a control that is not there yet. */
-.vocab-onboard-ambient {
-  position: absolute;
-  top: max(14px, env(safe-area-inset-top));
-  right: max(14px, env(safe-area-inset-right));
-  z-index: 5;
-}
 .vocab-onboard-head h1 {
   margin: 4px 0 6px;
   font-size: clamp(22px, 6vw, 30px);
@@ -3972,7 +4327,12 @@
   top: calc((var(--rung-index) + 0.5) * 100% / var(--rung-count));
   width: 30px;
   height: 30px;
-  margin: -15px 0 0 -15px;
+  /* Centred on its own coordinates, not by a hand-computed half-size. `left`/`top` put
+     the knob's CORNER on the rung; this pulls it back by half of whatever the knob
+     actually measures. A negative margin has to be re-derived every time the size
+     changes, and the landscape rule carried -22.5px — half of 45 — against a knob that
+     is and always was 30px, so it sat 7.5px up and left of its dot. */
+  transform: translate(-50%, -50%);
   border: 3px solid #ffffff;
   border-radius: 50%;
   background: var(--rung);
@@ -4270,7 +4630,7 @@
   .vocab-onboard[data-landscape] .vocab-onboard-knob {
     left: calc((var(--rung-index) + 0.5) * 100% / var(--rung-count));
     top: 50%;
-    margin: -22.5px 0 0 -22.5px;
+    /* No margin override: the base rule's transform centres it at any size. */
     transition:
       left var(--dur-move) var(--ease-spring),
       background var(--dur-move) var(--ease-out),
@@ -4627,7 +4987,11 @@
 }
 /* The clear zone is shorter than a phone screen, so the meaning panel takes the
    compact rhythm and never shows a scrollbar in a video. */
+.vocab-card[data-export] .vocab-share-dock {
+  display: none;
+}
 .vocab-card[data-export] .vocab-reveal-details {
+  --vocab-reveal-badge-room: 0px;
   width: 94%;
   max-height: calc(50% - var(--export-stage-bottom-band));
   padding: 2.6cqi 3.6cqi;
@@ -5297,8 +5661,21 @@
    centred controls. Breakpoint is 430px (not 380px) because 390–430px covers the common
    modern phones (iPhone 12/13/14/Pro Max and most Androids) that got no help before. */
 @media (max-width: 430px) {
+  /* The app pill is a little over one title-line tall: 22px beside the 15px title. */
   .vocab-toolbar-row {
-    gap: 8px;
+    --vocab-row-gap: 8px;
+    --vocab-eco-gap: 6px;
+    --eco-trigger-h: 22px;
+    /* (34 − 17) / 4 */
+    --vocab-controls-nudge: 4.25px;
+  }
+  /* A phone has no room to spare between the title and the gear, so the transport group
+     docks against the gear instead of floating centred between them: it reads as one
+     cluster of controls on the right, and the space it frees goes to the title side.
+     The optical nudge has nothing to balance once the group sits at the end. */
+  .vocab-player-controls {
+    justify-self: end;
+    translate: none;
   }
   /* Budget at 390px (row = 358): centre = 3×34 + 2×6 = 114, two row gaps = 16, so each
      1fr column is (358 − 114 − 16) / 2 ≈ 114px. Left = title(15px ≈ 72) + gap(6) +
@@ -5369,7 +5746,11 @@
    100, so the inline title + gear still clears the centred controls. */
 @media (max-width: 360px) {
   .vocab-toolbar-row {
-    gap: 6px;
+    --vocab-row-gap: 6px;
+    --vocab-eco-gap: 5px;
+    --eco-trigger-h: 20px;
+    /* (30 − 16) / 4 */
+    --vocab-controls-nudge: 3.5px;
   }
   .vocab-brand {
     font-size: 14px;
@@ -7213,91 +7594,1985 @@
   scrollbar-width: thin;
 }
 
-/* ── Share-a-challenge button ────────────────────────────────────────────────
-   Sits in the meaning panel's bottom-right corner. Sticky rather than absolute:
-   the panel scrolls when a definition is long, and an absolutely positioned
-   child would scroll away with the text instead of staying in the corner. */
-/* A badge on the panel's bottom edge: mostly outside, so it reads as attached to
-   the panel rather than as another line of its content. Absolute against the
-   panel (which is itself positioned), and the panel's overflow is visible so the
-   overhanging half is not clipped. */
+/* ── Share-a-challenge button ──────────────────────────────
+   A tab set into the meaning panel's bottom-right corner. Two of its four corners are
+   drawn, both on the panel's own radius: the top-left one, and the bottom-right one —
+   which is literally the panel's arc rather than a radius of the tab's. The other two
+   are not corners at all, just where the tab runs off the panel's right and bottom
+   edges.
+
+   The dock is what buys that. It sits on the panel's inner corner and clips to the
+   panel's own arc, so the tab's right and bottom edges are shaped by the panel itself
+   rather than by radii guessed to match it — the face bleeds past both and never draws
+   them. What it does draw, the top edge and the rounded top-left, stays inside the
+   dock's padding, which is why the dock is padded wider and taller than the button. */
 .vocab-share-dock {
   position: absolute;
-  right: 16px;
+  /* An absolute child is offset from the panel's PADDING box, so zero on both of
+     these already means flush against the inner edge of the panel's border. */
+  right: 0;
   bottom: 0;
-  /* Just over half of the badge sits below the panel's edge. */
-  transform: translateY(58%);
-  pointer-events: none;
-}
-.vocab-share-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--vocab-accent);
-  color: var(--vocab-button-ink);
-  font-family: "Inter", sans-serif;
-  font-size: 12.5px;
-  font-weight: 750;
-  letter-spacing: -0.01em;
-  pointer-events: auto;
-  box-shadow:
-    0 6px 18px #0000005c,
-    inset 0 1px 0 #ffffff4d;
-  transition:
-    transform var(--dur-move) var(--ease-spring),
-    background var(--dur-quick) var(--ease-out);
-}
-/* One ring that breathes outward: enough to catch the eye on arrival without
-   competing with the answer word for attention. */
-.vocab-share-button::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 2px solid var(--vocab-accent);
-  animation: vocab-share-ring 2800ms var(--ease-out) infinite;
+  /* Room for the tab's shadow, which falls up and to the left — the two sides that
+     are not against the panel's border. Padding, so the button itself stays in the
+     corner. */
+  padding: 12px 0 0 9px;
+  /* The panel's arc, one border in from its outer one. */
+  border-bottom-right-radius: calc(var(--vocab-reveal-radius) - 1px);
+  overflow: hidden;
   pointer-events: none;
 }
 .vocab-share-button {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: var(--vocab-share-h);
+  padding: 0 15px;
+  border: 0;
+  background: none;
+  color: var(--vocab-button-ink);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.011em;
+  white-space: nowrap;
+  pointer-events: auto;
+  /* Pinned at the corner it is set into: pressing from the default centre origin
+     would lift the tab off the panel's edges and open a hairline gap along them. */
+  transform-origin: bottom right;
+  transition: transform var(--dur-move) var(--ease-spring);
 }
-.vocab-share-button:hover {
-  transform: translateY(-1px);
+
+/* The tab's face. Bled past the dock on the two edges the panel is to crop, and
+   square there for the same reason — nothing of those corners can ever show, and the
+   one place a curve does meet the panel's corner it is the panel's arc that draws it,
+   exactly rather than approximately. */
+.vocab-share-face-bg {
+  position: absolute;
+  inset: 0 -2px -2px 0;
+  /* The same arc the dock crops the opposite corner to, so the tab's two drawn
+     corners are the panel's own radius and read as a pair. */
+  border-radius: calc(var(--vocab-reveal-radius) - 1px) 0 0 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--vocab-accent) 86%, #fff),
+    var(--vocab-accent) 58%,
+    color-mix(in srgb, var(--vocab-accent) 88%, #000)
+  );
+  /* The outer shadow only falls up and to the left: the other two edges are against
+     the panel's own border, where there is nothing to cast onto. */
+  box-shadow:
+    -2px -3px 11px -5px #00000066,
+    inset 0 1.5px 0 #ffffff8a,
+    inset 0 -7px 10px -9px #0000004d,
+    inset 0 0 0 1px #ffffff2b;
+  transition:
+    background var(--dur-quick) var(--ease-out),
+    filter var(--dur-quick) var(--ease-out);
+}
+.vocab-share-face {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.vocab-share-face svg {
+  display: block;
+  flex: none;
+}
+.vocab-share-button:hover .vocab-share-face-bg {
+  filter: brightness(1.06);
 }
 .vocab-share-button:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
   transition-duration: var(--dur-press);
 }
+/* The ring is drawn INSIDE the face: an outline would be cut off by the dock's clip
+   on the two edges that sit against the panel's border. */
 .vocab-share-button:focus-visible {
-  outline: 2px solid var(--shell-text);
-  outline-offset: 3px;
+  outline: none;
 }
-/* Confirmed: the ring stops, because the call to action has been answered. */
-.vocab-share-button[data-done] {
-  background: var(--mint);
+.vocab-share-button:focus-visible .vocab-share-face-bg {
+  box-shadow:
+    -2px -3px 11px -5px #00000066,
+    inset 0 0 0 2px var(--vocab-button-ink);
 }
-.vocab-share-button[data-done]::after {
+/* Confirmed: the same accent, settled a step toward the ink, so a dark card and a
+   light card both shift without introducing a second hue. */
+.vocab-share-button[data-done] .vocab-share-face-bg {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--vocab-accent) 74%, var(--vocab-button-ink)),
+    color-mix(in srgb, var(--vocab-accent) 82%, var(--vocab-button-ink)) 58%,
+    color-mix(in srgb, var(--vocab-accent) 70%, var(--vocab-button-ink))
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  .vocab-share-button {
+    transition: none;
+  }
+}
+
+/* ── Export frame route ──────────────────────────────────────────────────────
+   The page a recorder loads: the stage at the preset's exact aspect, centred on a
+   flat backdrop, and nothing else. No chrome at all — anything painted here would
+   be painted into the clip. The stage reuses .vocab-export-stage, so the card is
+   laid out exactly as Export Studio lays it out. */
+.vocab-export-frame {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  margin: 0;
+  background: #05010e;
+  color: var(--shell-text, #f4f1ff);
+  font-family: "Inter", sans-serif;
+}
+/* Fill whichever axis runs out first, so the frame is as large as the window allows and a
+   recorder gets the most pixels this screen can give it.
+   BOTH axes are given a definite length on purpose. `.vocab-card` is `height: 100%`, and a
+   percentage against a height that is only implied by an aspect-ratio does not resolve —
+   the card then falls back to its content height (144px inside a 1920px stage) and lays
+   itself out for a box that is not the frame: small text, chrome crammed into a corner.
+   The studio's own rule derives height from --export-panel, which only exists beside its
+   side panel, so this route states both itself. */
+.vocab-export-frame .vocab-export-stage {
+  width: min(100vw, calc(100dvh / var(--export-ratio)));
+  height: min(100dvh, calc(100vw * var(--export-ratio)));
+}
+.vocab-export-frame[data-missing] {
+  padding: 24px;
+  text-align: center;
+}
+
+/* ── Recorded outro ──────────────────────────────────────────────────────────────────────
+   The end card: the page blurs away, a browser address bar types anh.chayla.app, Enter is
+   pressed, and the frame opens onto an empty page. On a platform that loops a clip, that
+   empty page is what the next pass starts from, so the first word's text appears to be
+   loading into the page the viewer just watched being opened.
+
+   One timeline, driven entirely by CSS. The recorder injects the markup, waits
+   --outro-dur, and stops; nothing here depends on a JS clock staying in step with a
+   screencast, which is the sort of thing that drifts under a throttled tab. Percentages
+   below are of the whole duration, with the millisecond each one lands on in a comment so
+   the scene can be re-timed by changing one number.
+
+   This is recording-only chrome: it is injected, never part of a reader's page. */
+:root {
+  --outro-dur: 4600ms;
+}
+.vocab-outro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font-family: "Inter", sans-serif;
+}
+/* The page itself, blurred out and dimmed, then handed over to the empty page. */
+.vocab-outro-veil {
+  position: absolute;
+  inset: 0;
+  animation: vocab-outro-veil var(--outro-dur) linear forwards;
+}
+@keyframes vocab-outro-veil {
+  0% {
+    backdrop-filter: blur(0px);
+    background: #0000;
+  }
+  15% {  /* 700ms - fully blurred, holds while the address is typed */
+    backdrop-filter: blur(24px);
+    background: #00000073;
+  }
+  61% {  /* 2800ms - Enter has landed; the empty page starts covering this */
+    backdrop-filter: blur(24px);
+    background: #00000073;
+  }
+  78%,
+  100% {  /* 3600ms - clear again: what is left is the app's own page, emptied */
+    backdrop-filter: blur(0px);
+    background: #0000;
+  }
+}
+/* The empty page the address bar opens is the app's own page with everything taken off
+   it - not a slab painted over the top. Painting one meant picking a colour, and the only
+   honest colour was near-black, which made the loop cut from a near-black end card to a
+   bright gradient opening. Fading the CONTENT instead leaves the card's own backdrop, so
+   the last frame and the first frame are the same gradient and the loop closes on itself.
+
+   :has() is safe here because the selector only matches while the recorder's injected
+   scene is in the document; a reader's page never contains it. */
+/* Everything the card paints EXCEPT its gradient, plus the chrome that lives outside it.
+   Written as "all of it, except the backdrop" rather than as a list of parts: the list was
+   tried first and kept missing things - the spelling coda, the emoji strip, the resume
+   button that appears the moment playback is paused - each one found only by rendering the
+   clip and looking at what was still on screen. A rule that names what to KEEP cannot be
+   out of date when a new part is added. */
+body:has(.vocab-outro) .vocab-card > *:not(.vocab-backdrop),
+body:has(.vocab-outro) .vocab-toolbar,
+body:has(.vocab-outro) .vocab-saved-dock,
+body:has(.vocab-outro) .vocab-resume {
+  animation: vocab-outro-clear var(--outro-dur, 4600ms) ease-out forwards;
+}
+@keyframes vocab-outro-clear {
+  0%,
+  61% {  /* 2800ms - holds until Enter has landed */
+    opacity: 1;
+  }
+  78%,
+  100% {  /* 3600ms */
+    opacity: 0;
+  }
+}
+/* The omnibox. Light pill on a dark blur, which is what makes it read as a browser
+   rather than as another one of the app's own controls. */
+.vocab-outro-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: #f6f7fbec;
+  box-shadow:
+    0 18px 50px #00000059,
+    0 2px 0 #ffffff6b inset;
+  animation: vocab-outro-bar var(--outro-dur) ease-out forwards;
+}
+@keyframes vocab-outro-bar {
+  0%,
+  8% {  /* 350ms */
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+  }
+  17%,
+  52% {  /* 800ms -> 2400ms */
+    opacity: 1;
+    transform: none;
+    box-shadow:
+      0 18px 50px #00000059,
+      0 2px 0 #ffffff6b inset;
+  }
+  58% {  /* 2650ms - Enter: the bar takes the keystroke rather than a key graphic drawn
+            over it, which would be one more thing to explain to a viewer */
+    opacity: 1;
+    transform: scale(0.985);
+    box-shadow:
+      0 0 0 6px #7bdcb555,
+      0 18px 50px #00000059;
+  }
+  61% {  /* 2800ms */
+    opacity: 1;
+    transform: none;
+  }
+  74%,
+  100% {  /* 3400ms */
+    opacity: 0;
+    transform: scale(1.02);
+  }
+}
+/* A padlock, drawn rather than a glyph so no icon font has to be loaded for one frame. */
+.vocab-outro-lock {
+  width: 11px;
+  height: 9px;
+  border-radius: 2px;
+  background: #3c4150;
+  position: relative;
+  flex: none;
+}
+.vocab-outro-lock::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 7px;
+  height: 6px;
+  translate: -50% 1px;
+  border: 1.6px solid #3c4150;
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+/* Monospace so `ch` is an exact character and the steps() lands one letter at a time. */
+.vocab-outro-url {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 19px;
+  letter-spacing: 0.01em;
+  color: #15171f;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  animation: vocab-outro-type var(--outro-dur) forwards;
+}
+@keyframes vocab-outro-type {
+  0%,
+  18% {  /* 850ms - the pause before a typist starts */
+    width: 0;
+    /* Governs the interval that STARTS here: 14 characters, one step each. */
+    animation-timing-function: steps(14, end);
+  }
+  51% {  /* 2350ms - 14ch alone leaves out the letter-spacing and clipped the last letter */
+    width: calc(14ch + 14 * 0.01em);
+  }
+  /* The rounding slack comes in only once typing is over: spread across the steps, it
+     showed a sliver of each letter before that letter was typed. */
+  52%,
+  100% {
+    width: calc(14ch + 14 * 0.01em + 2px);
+  }
+}
+.vocab-outro-caret {
+  width: 2px;
+  height: 22px;
+  background: #15171f;
+  flex: none;
+  animation: vocab-outro-caret var(--outro-dur) steps(1, end) forwards;
+}
+@keyframes vocab-outro-caret {
+  0%, 6%, 12%, 18%, 24%, 30%, 36%, 42%, 48% { opacity: 1; }
+  3%, 9%, 15%, 21%, 27%, 33%, 39%, 45% { opacity: 0; }
+  52%, 100% { opacity: 0; }  /* 2400ms - gone once Enter is pressed */
+}
+
+/* End-card variants (data-outro), picked per take like the intro's. Each keeps the bar
+   keyframe's beats - in by 17%, Enter at 58%, gone by 74% - and the shared typing and
+   caret timelines, so only the skin and the way the bar arrives change. "light" is the base
+   rules unchanged. */
+.vocab-outro[data-outro="dark"] .vocab-outro-bar {
+  background: #15171fee;
+  box-shadow:
+    0 18px 50px #00000080,
+    0 0 0 1px #ffffff26 inset;
+  animation-name: vocab-outro-bar-dark;
+}
+.vocab-outro[data-outro="dark"] .vocab-outro-url {
+  color: #f2f4fa;
+}
+.vocab-outro[data-outro="dark"] .vocab-outro-caret {
+  background: #ffd166;
+}
+.vocab-outro[data-outro="dark"] .vocab-outro-lock {
+  background: #cfd3de;
+}
+.vocab-outro[data-outro="dark"] .vocab-outro-lock::before {
+  border-color: #cfd3de;
+}
+@keyframes vocab-outro-bar-dark {
+  0%,
+  8% {
+    opacity: 0;
+    transform: translateY(-36px);
+  }
+  14% {
+    opacity: 1;
+    transform: translateY(3px);
+  }
+  17%,
+  52% {
+    opacity: 1;
+    transform: none;
+    box-shadow:
+      0 18px 50px #00000080,
+      0 0 0 1px #ffffff26 inset;
+  }
+  58% {
+    opacity: 1;
+    transform: scale(0.985);
+    box-shadow:
+      0 0 0 6px #ffd16666,
+      0 18px 50px #00000080;
+  }
+  61% {
+    opacity: 1;
+    transform: none;
+  }
+  74%,
+  100% {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+}
+
+.vocab-outro[data-outro="glass"] .vocab-outro-bar {
+  background: #ffffff2b;
+  backdrop-filter: blur(16px) saturate(1.5);
+  box-shadow:
+    0 18px 50px #00000059,
+    inset 0 0 0 1.5px #ffffff80;
+  animation-name: vocab-outro-bar-glass;
+}
+.vocab-outro[data-outro="glass"] .vocab-outro-url {
+  color: #fff;
+  text-shadow: 0 1px 8px #00000066;
+}
+.vocab-outro[data-outro="glass"] .vocab-outro-caret {
+  background: #fff;
+}
+.vocab-outro[data-outro="glass"] .vocab-outro-lock {
+  background: #ffffffd0;
+}
+.vocab-outro[data-outro="glass"] .vocab-outro-lock::before {
+  border-color: #ffffffd0;
+}
+@keyframes vocab-outro-bar-glass {
+  0%,
+  8% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  13% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  17%,
+  52% {
+    opacity: 1;
+    transform: none;
+    box-shadow:
+      0 18px 50px #00000059,
+      inset 0 0 0 1.5px #ffffff80;
+  }
+  58% {
+    opacity: 1;
+    transform: scale(0.985);
+    box-shadow:
+      0 0 0 6px #ffffff55,
+      0 18px 50px #00000059,
+      inset 0 0 0 1.5px #ffffff;
+  }
+  61% {
+    opacity: 1;
+    transform: none;
+  }
+  74%,
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+.vocab-outro[data-outro="rise"] .vocab-outro-bar {
+  box-shadow:
+    0 18px 50px #00000059,
+    0 0 0 2px #7bdcb5;
+  animation-name: vocab-outro-bar-rise;
+}
+@keyframes vocab-outro-bar-rise {
+  0%,
+  8% {
+    opacity: 0;
+    transform: translateY(70px) scale(0.9);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+  17%,
+  52% {
+    opacity: 1;
+    transform: none;
+    box-shadow:
+      0 18px 50px #00000059,
+      0 0 0 2px #7bdcb5;
+  }
+  58% {
+    opacity: 1;
+    transform: scale(0.985);
+    box-shadow:
+      0 0 0 10px #ff6b8b55,
+      0 0 0 2px #ff6b8b,
+      0 18px 50px #00000059;
+  }
+  61% {
+    opacity: 1;
+    transform: none;
+  }
+  74%,
+  100% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+/* ── Recorded intro ──────────────────────────────────────────────────────────────────────
+   The opening, in three beats:
+
+     1. BADGE      a question springs in over the blurred card, throwing confetti, holds
+                   long enough to be read, then pops away.
+     2. ASSEMBLY   the blur lifts off the SAME card and its chrome slides into place, one
+                   piece after another, so the page is seen being built rather than cut to.
+     3. HANDOVER   only once everything has landed does the first clue begin to arrive.
+
+   Beat 3 is the reason the whole thing exists. A clip that opens on finished text asks a
+   viewer to read and orient at the same time; this gives them the question first, then the
+   page, then the answer starting to arrive.
+
+   One piece of the bottom row is NOT on this timeline and cannot be: the reveal button and
+   the reaction buttons mount with playback, not with the chrome around them. So the scene
+   ends close behind the assembly rather than waiting for it to settle - they arrive with
+   the first word, which is the only moment they can.
+
+   Every piece must also finish BEFORE --intro-dur. The scene is unmounted at that moment,
+   which takes these rules with it, and an animation still running is not eased out - it is
+   dropped, and its element snaps to where it was heading. The button row did exactly that:
+   it was still arriving at the cut and appeared to pop into place at the same instant the
+   first word showed up. The last delay plus its duration is 2120 against a 2150 scene.
+
+   The beats OVERLAP on purpose. Run strictly in sequence - badge out, then blur, then each
+   piece, then the text - the opening reads as a queue: the frame goes sharp and then holds
+   still while nothing happens. It had 530ms of literally no change in it, between the last
+   piece landing and playback starting, plus the entrance's own ramp after that. Now the
+   blur lifts while the badge is still leaving, the chrome arrives into it, and the first
+   clue starts before the last piece has finished settling. Nothing waits for the thing
+   before it to be completely done.
+
+   The stagger is done with animation-delay and `backwards` fill rather than by slicing one
+   long keyframe set into percentages. Each piece then states its own entrance and its own
+   moment in its own rule, the delays read as the running order, and re-timing one piece
+   does not mean recomputing every percentage in the file.
+
+   Recording-only: the recorder injects .vocab-intro, and none of this matches without it. */
+:root {
+  --intro-dur: 1980ms;
+  /* Overshoots slightly, so pieces land rather than glide to a stop. */
+  --intro-ease: cubic-bezier(0.17, 0.89, 0.28, 1.08);
+}
+.vocab-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font-family: "Inter", sans-serif;
+}
+
+/* ── Beat 1: the veil ─────────────────────────────────────────────────────────────────── */
+.vocab-intro-veil {
+  position: absolute;
+  inset: 0;
+  animation: vocab-intro-veil 420ms ease-out 1300ms both;
+  backdrop-filter: blur(22px);
+  background: #00000073;
+}
+@keyframes vocab-intro-veil {
+  from {
+    backdrop-filter: blur(22px);
+    background: #00000073;
+  }
+  to {
+    backdrop-filter: blur(0px);
+    background: #0000;
+  }
+}
+
+/* ── Beat 1: the badge ────────────────────────────────────────────────────────────────── */
+.vocab-intro-badge {
+  position: relative;
+  max-width: 76%;
+  padding: 24px 40px;
+  border-radius: 30px;
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: #10121a;
+  background: linear-gradient(180deg, #ffffff, #f2f4fb);
+  box-shadow:
+    0 30px 80px #00000070,
+    0 3px 0 #ffffff inset,
+    0 0 0 1px #ffffff40;
+  /* In, hold, out - one animation each, so the hold is simply the gap between them. */
+  animation:
+    vocab-intro-badge-in 620ms var(--intro-ease) 200ms backwards,
+    vocab-intro-badge-out 340ms cubic-bezier(0.5, -0.4, 0.75, 0.4) 1250ms forwards;
+  overflow: hidden;
+}
+@keyframes vocab-intro-badge-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.42) rotate(-7deg);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.1) rotate(2.5deg);
+  }
+  78% {
+    transform: scale(0.97) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes vocab-intro-badge-out {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  30% {
+    transform: scale(1.06) rotate(1.5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.72) rotate(-5deg);
+  }
+}
+/* A light sweeping across the face, once, just after it lands. Pure decoration, but it is
+   what stops a white card reading as a static graphic. */
+.vocab-intro-badge::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  bottom: -60%;
+  width: 45%;
+  left: -60%;
+  background: linear-gradient(100deg, #0000, #ffffffe0, #0000);
+  transform: skewX(-18deg);
+  animation: vocab-intro-shine 900ms ease-in-out 700ms backwards;
+  opacity: 0;
+}
+@keyframes vocab-intro-shine {
+  0% {
+    left: -60%;
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  100% {
+    left: 130%;
+    opacity: 0;
+  }
+}
+/* A ring that expands out of the badge as it lands, which reads as the impact. */
+.vocab-intro-ring {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 999px;
+  border: 3px solid #ffffff;
+  animation: vocab-intro-ring 720ms ease-out 330ms backwards;
+  opacity: 0;
+}
+@keyframes vocab-intro-ring {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.3);
+    border-width: 10px;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+    border-width: 1px;
+  }
+}
+
+/* ── Beat 1: confetti ─────────────────────────────────────────────────────────────────── */
+/* Thrown from behind the badge as it lands, then carried down and out. Each piece's
+   trajectory, tint, size and timing live in the nth-child rules below, so the markup is
+   eighteen identical spans and every value that shapes the burst is in this file. */
+.vocab-intro-confetti {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.vocab-intro-confetti i {
+  position: absolute;
+  width: var(--w, 12px);
+  height: var(--h, 16px);
+  background: var(--c, #ffd166);
+  border-radius: var(--r, 2px);
+  opacity: 0;
+  animation: vocab-intro-confetti var(--d, 1500ms) cubic-bezier(0.1, 0.65, 0.3, 1)
+    var(--t, 300ms) forwards;
+}
+@keyframes vocab-intro-confetti {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg) scale(0.3);
+  }
+  12% {
+    opacity: 1;
+  }
+  /* The throw: out to its furthest point, still rising. */
+  45% {
+    transform: translate(var(--x), var(--y)) rotate(var(--rot)) scale(1);
+  }
+  /* The fall: gravity takes it past that point and down out of frame. */
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--x) * 1.25), calc(var(--y) + 420px))
+      rotate(calc(var(--rot) * 2.2)) scale(0.85);
+  }
+}
+.vocab-intro-confetti i:nth-child(1)  { --x: -172px; --y: -96px;  --rot: 220deg; --c: #ff6b6b; --t: 300ms; --d: 1700ms; --w: 13px; --h: 18px; }
+.vocab-intro-confetti i:nth-child(2)  { --x:  168px; --y: -112px; --rot: -260deg; --c: #4ecdc4; --t: 320ms; --d: 1600ms; --w: 11px; --h: 11px; --r: 999px; }
+.vocab-intro-confetti i:nth-child(3)  { --x: -118px; --y: -176px; --rot: 190deg; --c: #ffd166; --t: 345ms; --d: 1800ms; --w: 15px; --h: 9px; }
+.vocab-intro-confetti i:nth-child(4)  { --x:  126px; --y: -186px; --rot: -200deg; --c: #a06bff; --t: 360ms; --d: 1650ms; --w: 10px; --h: 16px; }
+.vocab-intro-confetti i:nth-child(5)  { --x: -214px; --y:  -34px; --rot: 300deg; --c: #7bdcb5; --t: 310ms; --d: 1750ms; --w: 12px; --h: 12px; --r: 999px; }
+.vocab-intro-confetti i:nth-child(6)  { --x:  220px; --y:  -46px; --rot: -320deg; --c: #ff9f1c; --t: 335ms; --d: 1700ms; --w: 14px; --h: 8px; }
+.vocab-intro-confetti i:nth-child(7)  { --x:  -72px; --y: -208px; --rot: 160deg; --c: #4ecdc4; --t: 380ms; --d: 1850ms; --w: 9px; --h: 17px; }
+.vocab-intro-confetti i:nth-child(8)  { --x:   78px; --y: -214px; --rot: -150deg; --c: #ff6b6b; --t: 395ms; --d: 1800ms; --w: 13px; --h: 10px; }
+.vocab-intro-confetti i:nth-child(9)  { --x: -246px; --y: -128px; --rot: 240deg; --c: #ffd166; --t: 355ms; --d: 1900ms; --w: 10px; --h: 10px; --r: 999px; }
+.vocab-intro-confetti i:nth-child(10) { --x:  252px; --y: -136px; --rot: -230deg; --c: #a06bff; --t: 370ms; --d: 1880ms; --w: 12px; --h: 15px; }
+.vocab-intro-confetti i:nth-child(11) { --x: -148px; --y:   38px; --rot: 280deg; --c: #7bdcb5; --t: 325ms; --d: 1600ms; --w: 11px; --h: 14px; }
+.vocab-intro-confetti i:nth-child(12) { --x:  154px; --y:   44px; --rot: -290deg; --c: #ff9f1c; --t: 340ms; --d: 1620ms; --w: 13px; --h: 9px; }
+.vocab-intro-confetti i:nth-child(13) { --x:  -28px; --y: -232px; --rot: 210deg; --c: #ff6b6b; --t: 410ms; --d: 1950ms; --w: 10px; --h: 10px; --r: 999px; }
+.vocab-intro-confetti i:nth-child(14) { --x:   34px; --y: -238px; --rot: -180deg; --c: #4ecdc4; --t: 420ms; --d: 1900ms; --w: 14px; --h: 11px; }
+.vocab-intro-confetti i:nth-child(15) { --x: -196px; --y:  -158px; --rot: 330deg; --c: #ffd166; --t: 365ms; --d: 1820ms; --w: 9px; --h: 15px; }
+.vocab-intro-confetti i:nth-child(16) { --x:  202px; --y:  -166px; --rot: -340deg; --c: #a06bff; --t: 350ms; --d: 1860ms; --w: 12px; --h: 12px; }
+.vocab-intro-confetti i:nth-child(17) { --x: -102px; --y:   76px; --rot: 250deg; --c: #7bdcb5; --t: 330ms; --d: 1560ms; --w: 10px; --h: 13px; }
+.vocab-intro-confetti i:nth-child(18) { --x:  110px; --y:   82px; --rot: -270deg; --c: #ff9f1c; --t: 345ms; --d: 1580ms; --w: 13px; --h: 8px; }
+
+/* ── Beat 1: variants ─────────────────────────────────────────────────────────────────────
+   /showcase picks one per take (data-intro), so consecutive clips do not open the same way.
+   A variant swaps animation NAMES and the badge's skin only: delays and durations stay the
+   base rule's, so every variant is in by ~820ms and gone by ~1590ms and the handover above
+   never moves. "pop" is the base rules unchanged; the recorder's injected feed-mode intro
+   carries no data-intro and gets the same. */
+.vocab-intro[data-intro="drop"] .vocab-intro-badge {
+  color: #f6f7fb;
+  background: linear-gradient(180deg, #262a39, #14161f);
+  box-shadow:
+    0 30px 80px #000000a0,
+    0 0 0 2px #7bdcb5,
+    0 2px 0 #ffffff1f inset;
+  animation-name: vocab-intro-drop-in, vocab-intro-drop-out;
+}
+@keyframes vocab-intro-drop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-260%) scaleY(1.12) rotate(4deg);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0) scale(1.08, 0.86);
+  }
+  65% {
+    transform: translateY(-14%) scale(0.97, 1.04);
+  }
+  82% {
+    transform: translateY(0) scale(1.02, 0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vocab-intro-drop-out {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  25% {
+    transform: translateY(6%) scale(1.03, 0.94);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-160%) scale(0.9, 1.1);
+  }
+}
+/* The landing kicks up a flat ring of dust under the badge instead of a round shockwave. */
+.vocab-intro[data-intro="drop"] .vocab-intro-ring {
+  width: 380px;
+  height: 64px;
+  translate: 0 74px;
+  border-color: #ffffffb0;
+}
+.vocab-intro[data-intro="drop"] .vocab-intro-confetti i {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #7bdcb5;
+  box-shadow: 0 0 10px #7bdcb5;
+  animation-name: vocab-intro-sparkle;
+}
+
+.vocab-intro[data-intro="stamp"] .vocab-intro-badge {
+  color: #fff;
+  background: linear-gradient(135deg, #ff6b8b, #ff9f43);
+  border-radius: 18px;
+  box-shadow:
+    0 30px 80px #00000080,
+    0 3px 0 #ffffff55 inset;
+  animation-name: vocab-intro-stamp-in, vocab-intro-stamp-out;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1), ease-in;
+}
+@keyframes vocab-intro-stamp-in {
+  0% {
+    opacity: 0;
+    transform: scale(2.6) rotate(-10deg);
+    filter: blur(6px);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(0.94) rotate(-4deg);
+    filter: blur(0);
+  }
+  45% {
+    transform: scale(1.03) rotate(-4deg) translateX(-6px);
+  }
+  55% {
+    transform: scale(1) rotate(-4deg) translateX(5px);
+  }
+  65% {
+    transform: rotate(-4deg) translateX(-3px);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-4deg);
+    filter: blur(0);
+  }
+}
+@keyframes vocab-intro-stamp-out {
+  0% {
+    opacity: 1;
+    transform: rotate(-4deg);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(-4deg);
+    filter: blur(8px);
+  }
+}
+.vocab-intro[data-intro="stamp"] .vocab-intro-ring {
+  border-radius: 34px;
+  border-color: #ffd166;
+  rotate: -4deg;
+}
+.vocab-intro[data-intro="stamp"] .vocab-intro-confetti i {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #ffffffc0;
+  animation-name: vocab-intro-puff;
+}
+
+.vocab-intro[data-intro="slide"] .vocab-intro-badge {
+  color: #fff;
+  background: #ffffff26;
+  backdrop-filter: blur(14px) saturate(1.4);
+  text-shadow: 0 2px 12px #00000055;
+  box-shadow:
+    0 30px 80px #00000060,
+    inset 0 0 0 1.5px #ffffff70;
+  animation-name: vocab-intro-slide-in, vocab-intro-slide-out;
+}
+@keyframes vocab-intro-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-160%) skewX(-18deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(6%) skewX(8deg);
+  }
+  72% {
+    transform: translateX(-2%) skewX(-3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vocab-intro-slide-out {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  30% {
+    transform: translateX(-4%) skewX(4deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(170%) skewX(-20deg);
+  }
+}
+/* Speed lines trailing the whip instead of a burst; no shockwave for a sideways arrival. */
+.vocab-intro[data-intro="slide"] .vocab-intro-ring {
+  display: none;
+}
+.vocab-intro[data-intro="slide"] .vocab-intro-confetti i {
+  width: 72px;
+  height: 3px;
+  border-radius: 3px;
+  background: #ffffffb0;
+  animation-name: vocab-intro-streak;
+}
+
+.vocab-intro[data-intro="flip"] {
+  perspective: 900px;
+}
+.vocab-intro[data-intro="flip"] .vocab-intro-badge {
+  color: #0f1a16;
+  background: linear-gradient(180deg, #a6f2d3, #5fd3a6);
+  box-shadow:
+    0 30px 80px #00000070,
+    0 3px 0 #ffffff80 inset;
+  animation-name: vocab-intro-flip-in, vocab-intro-flip-out;
+}
+@keyframes vocab-intro-flip-in {
+  0% {
+    opacity: 0;
+    transform: rotateX(-100deg) scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: rotateX(18deg) scale(1.04);
+  }
+  75% {
+    transform: rotateX(-6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vocab-intro-flip-out {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: rotateX(95deg) scale(0.85);
+  }
+}
+.vocab-intro[data-intro="flip"] .vocab-intro-ring {
+  border-color: #7bdcb5;
+  box-shadow: 0 0 0 10px #7bdcb544;
+}
+.vocab-intro[data-intro="flip"] .vocab-intro-confetti i {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  animation-name: vocab-intro-sparkle;
+}
+
+/* Particle paths the variants share. Each reads the same per-piece --x/--y as the base
+   confetti, so the eighteen pieces keep their own spread whichever path they take. */
+@keyframes vocab-intro-sparkle {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 1;
+    transform: translate(calc(var(--x) * 0.9), calc(var(--y) * 0.6 + 40px)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--x) * 1.05), calc(var(--y) * 0.7 + 30px)) scale(0);
+  }
+}
+@keyframes vocab-intro-puff {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  15% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--x) * 0.7), calc(var(--y) * 0.35 + 60px)) scale(1.8);
+  }
+}
+@keyframes vocab-intro-streak {
+  0% {
+    opacity: 0;
+    transform: translate(-30px, calc(var(--y) * 0.55)) scaleX(0.2);
+  }
+  20% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-260px + var(--x) * 0.3), calc(var(--y) * 0.55)) scaleX(1.4);
+  }
+}
+
+/* ── Beat 2: the page assembles ───────────────────────────────────────────────────────── */
+/* Everything the card paints starts hidden, so the blurred background is the card itself
+   with nothing on it - the same card that is about to be built, not a stand-in. */
+body:has(.vocab-intro) .vocab-card > *:not(.vocab-backdrop),
+body:has(.vocab-intro) .vocab-toolbar,
+body:has(.vocab-intro) .vocab-saved-dock {
+  opacity: 0;
+}
+/* Then each piece arrives in its own right. An animation beats the blanket rule above only
+   while it is filling, so the fill mode has to be BOTH: `backwards` alone covers the delay
+   and then lets go on the last frame, dropping every piece back to the blanket rule's
+   opacity 0 the instant it had finished arriving. The veil did the same thing and snapped
+   back to full blur. */
+body:has(.vocab-intro) .vocab-toolbar {
+  animation: vocab-intro-drop 460ms var(--intro-ease) 1340ms both;
+}
+body:has(.vocab-intro) .vocab-progress {
+  animation: vocab-intro-rise-centred 460ms var(--intro-ease) 1380ms both;
+}
+body:has(.vocab-intro) .vocab-stage-label {
+  animation: vocab-intro-rise-centred 460ms var(--intro-ease) 1420ms both;
+}
+body:has(.vocab-intro) .vocab-action-bar {
+  animation: vocab-intro-rise-centred 460ms var(--intro-ease) 1460ms both;
+}
+body:has(.vocab-intro) .vocab-emoji-strip {
+  animation: vocab-intro-rise 460ms var(--intro-ease) 1500ms both;
+}
+@keyframes vocab-intro-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes vocab-intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* The centred chrome carries translateX(-50%) as its resting transform, so its entrance has
+   to restate it - animating plain translateY would drop the centring for the animation's
+   whole length and slide the row to the right of the frame. */
+@keyframes vocab-intro-rise-centred {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ── Beat 3: the text is held back ────────────────────────────────────────────────────── */
+/* The stage stays dark for the WHOLE intro, and the recorder replays page one at the end,
+   so the first clue genuinely begins after the page is built. Without this the entrance
+   has long since played behind the blur, and the clip opens on finished text pretending to
+   be about to arrive. The resume button is an artefact of pausing and never belongs. */
+body:has(.vocab-intro) .vocab-stage,
+body:has(.vocab-intro) .vocab-resume {
   animation: none;
   opacity: 0;
 }
-@keyframes vocab-share-ring {
-  0% {
-    opacity: 0.55;
-    transform: scale(1);
-  }
-  70%,
-  100% {
+
+/* ── Showcase ────────────────────────────────────────────────────────────────────────────
+   The promo surface: one card at the clip's exact frame, with the top bar drawn as
+   scenery. It carries .vocab-recording, so every recorded-frame rule above applies here
+   without a recorder having to inject anything.
+
+   The stage is sized the way the export frame's is — both axes given a definite length
+   rather than one axis and an aspect-ratio — because the card inside is height:100%, and a
+   percentage height against an `auto` parent resolves to nothing. That bug rendered a
+   144px card inside a 1920px stage and was invisible at small sizes. */
+.vocab-showcase {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #000;
+  overflow: hidden;
+}
+.vocab-showcase-stage {
+  --showcase-ratio: calc(1920 / 1080);
+  /* The recorded frame's geometry, owned by the surface that IS the frame rather than
+     injected into it from a script. Declaring --vocab-chrome-side HERE is safe in the way
+     declaring it on a descendant would not be: nothing on this element reads it, so every
+     piece of chrome inside still inherits one value. check-chrome-side allows this one
+     site and no other.
+
+     --vocab-safe-top is the tiktok-clear preset's 8.5% of a 1080x1920 frame, resolved at
+     the 405x720 viewport every recording uses. It is a length and not a percentage because
+     the toolbar's scrim negates it to find the top edge, and a percentage there would
+     resolve against the toolbar's own height instead of the frame's. */
+  --vocab-chrome-side: 25px;
+  --vocab-safe-top: 61px;
+  --vocab-chrome-inset: 69px;
+  --vocab-chrome-bar: 36px;
+  --vocab-chrome-gap: 28px;
+  position: relative;
+  width: min(100vw, calc(100dvh / var(--showcase-ratio)));
+  height: min(100dvh, calc(100vw * var(--showcase-ratio)));
+  overflow: hidden;
+  isolation: isolate;
+}
+/* A clip cannot be tapped, so the share tab is dead weight in the panel's corner. */
+.vocab-showcase .vocab-share-dock {
+  display: none;
+}
+.vocab-showcase .vocab-reveal-details {
+  --vocab-reveal-badge-room: 0px;
+}
+/* The scenery bar is absolute within the stage, not fixed to the viewport: the stage IS
+   the frame, and a fixed bar would hang off it whenever the window is a different shape. */
+.vocab-showcase .vocab-toolbar {
+  position: absolute;
+}
+/* Held off until the badge has gone. The assembly rules above animate it in from here. */
+.vocab-showcase .vocab-toolbar[data-hidden] {
+  opacity: 0;
+}
+/* The real toolbar's left column is a dropdown trigger that stacks its wordmark over its
+   difficulty line; this scenery has to stack the same way, or the bar reads as one long
+   run of text instead of a mark with a caption. Aligned to the end because the recorded
+   layout puts this column in the right corner. */
+.vocab-showcase .vocab-toolbar-left {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+.vocab-showcase-brand {
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--chrome-ink, #fff);
+  white-space: nowrap;
+}
+.vocab-showcase-brand span {
+  color: var(--vocab-accent, #7bdcb5);
+}
+.vocab-showcase-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--chrome-ink, #fff);
+  opacity: 0.92;
+  white-space: nowrap;
+}
+/* The scenery icons are spans, not buttons, so they need the shape the real ones get from
+   .vocab-icon-button's own rule plus the hover and focus states they will never have. */
+.vocab-showcase [data-showcase-chrome] .vocab-icon-button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  pointer-events: none;
+}
+
+/* ── Streak milestone ────────────────────────────────────────────────────────────────────
+   The celebration that lands when a run of days reaches a milestone, and the row of the
+   ones already earned inside the saved drawer. Nothing here renders before the first
+   milestone: the celebration mounts only on the moment it is earned, and the row returns
+   null while empty.
+
+   Decorative and CSS-driven, like .vocab-reveal-burst — no framer-motion. Every animated
+   layer's RESTING style is its final frame (or hidden, for confetti and sparks), because
+   the blanket reduced-motion rule strips every animation under the shell and the picture
+   must still be whole without them. The auto-close length comes in as --vocab-streak-dur
+   from the component that also owns the timer, so the countdown bar cannot drift.
+
+   Metals are tokens on [data-tier], shared by the celebration and the drawer chips, so a
+   20-day badge is the same silver in both. The ribbon takes the live card's lifted accent.
+
+   Stem is `vocab-streak-` because `.vocab-saved-badge(s)` is already the level/POS chips on
+   a saved row and `.vocab-intro-badge` is the showcase opening card. */
+[data-tier="bronze"] {
+  --m-hi: #ffe2c4;
+  --m-mid: #e0965a;
+  --m-lo: #a35a2a;
+  --m-deep: #5b2a10;
+  --m-disc-hi: #f2a76a;
+  --m-disc: #b86630;
+  --m-glow: #ff9d52;
+  --m-ink: #2a1206;
+}
+[data-tier="silver"] {
+  --m-hi: #ffffff;
+  --m-mid: #d6dee9;
+  --m-lo: #8b98ab;
+  --m-deep: #3e4757;
+  --m-disc-hi: #eef3f9;
+  --m-disc: #9eabbd;
+  --m-glow: #bfe4ff;
+  --m-ink: #1a2230;
+}
+[data-tier="gold"] {
+  --m-hi: #fff6c2;
+  --m-mid: #ffd447;
+  --m-lo: #d99400;
+  --m-deep: #6e4300;
+  --m-disc-hi: #ffe27a;
+  --m-disc: #e8a50c;
+  --m-glow: #ffd23d;
+  --m-ink: #2b1a00;
+}
+[data-tier="diamond"] {
+  --m-hi: #ffffff;
+  --m-mid: #b8f1ff;
+  --m-lo: #7c8cff;
+  --m-deep: #3a1f9e;
+  --m-disc-hi: #d4f7ff;
+  --m-disc: #7fb2ff;
+  --m-glow: #9fe2ff;
+  --m-ink: #12093a;
+}
+
+.vocab-streak-flash {
+  --stage: min(74vw, 300px, 46dvh);
+  --r-hi: color-mix(
+    in srgb,
+    var(--popup-accent, var(--vocab-accent)) 88%,
+    #fff
+  );
+  --r-lo: color-mix(
+    in srgb,
+    var(--popup-accent, var(--vocab-accent)) 70%,
+    #000
+  );
+  --r-shade: color-mix(
+    in srgb,
+    var(--popup-accent, var(--vocab-accent)) 45%,
+    #000
+  );
+  --medal-ribbon: var(--popup-accent, var(--vocab-accent));
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  /* Its own spotlight in either theme: the moment is staged on a dark, blurred feed. */
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      color-mix(in srgb, var(--m-glow) 34%, transparent) 0%,
+      color-mix(
+          in srgb,
+          var(--popup-accent, var(--vocab-accent)) 18%,
+          transparent
+        )
+        34%,
+      transparent 70%
+    ),
+    #07050fec;
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  outline: none;
+  animation: vocab-streak-fade-in 320ms ease-out both;
+}
+.vocab-streak-flash[data-leaving] {
+  pointer-events: none;
+  animation: vocab-streak-leave 420ms ease-in forwards;
+}
+
+.vocab-streak-flash-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2.6dvh, 22px);
+  padding: 24px 16px calc(24px + env(safe-area-inset-bottom));
+  text-align: center;
+}
+.vocab-streak-flash-stage {
+  position: relative;
+  width: var(--stage);
+  height: var(--stage);
+}
+
+/* Slow-turning rays behind the medal. */
+.vocab-streak-flash-rays {
+  position: absolute;
+  inset: -42%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    color-mix(in srgb, var(--m-glow) 55%, transparent) 0deg 5deg,
+    transparent 5deg 15deg
+  );
+  -webkit-mask: radial-gradient(circle, #000 14%, transparent 64%);
+  mask: radial-gradient(circle, #000 14%, transparent 64%);
+  opacity: 0.55;
+  animation:
+    vocab-streak-rays-in 900ms cubic-bezier(0.2, 0.9, 0.3, 1) 80ms both,
+    vocab-streak-spin 28s linear infinite;
+}
+.vocab-streak-flash-glow {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--m-glow) 70%, transparent),
+    transparent 68%
+  );
+  filter: blur(18px);
+  animation: vocab-streak-pulse 2.6s ease-in-out 600ms infinite;
+}
+
+/* The landing: a shockwave ring and sparks thrown outward. Hidden at rest. */
+.vocab-streak-flash-shock {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 3px solid var(--m-hi);
+  box-shadow:
+    0 0 24px var(--m-glow),
+    inset 0 0 18px var(--m-glow);
+  opacity: 0;
+  animation: vocab-streak-shock 900ms cubic-bezier(0.1, 0.7, 0.3, 1) 360ms both;
+}
+.vocab-streak-flash-shock[data-late] {
+  border-width: 2px;
+  animation-delay: 520ms;
+  animation-duration: 1100ms;
+}
+.vocab-streak-flash-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%;
+  background: var(--confetti, var(--m-hi));
+  box-shadow: 0 0 10px var(--confetti, var(--m-glow));
+  opacity: 0;
+  animation: vocab-streak-spark 820ms cubic-bezier(0.15, 0.8, 0.3, 1) 380ms both;
+}
+.vocab-streak-flash-twinkle {
+  position: absolute;
+  translate: -50% -50%;
+  color: var(--m-hi);
+  filter: drop-shadow(0 0 6px var(--m-glow));
+  opacity: 0;
+  animation: vocab-streak-twinkle 2.2s ease-in-out var(--d) infinite;
+}
+.vocab-streak-flash-twinkle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* The medal: a gentle float on the outer wrapper, the drop-in on the medal itself, so the
+   two transforms never fight over the same element. Centred with `translate`, which is a
+   separate property from the `transform` the drop animates. */
+.vocab-streak-flash-float {
+  position: absolute;
+  inset: 0;
+  animation: vocab-streak-float 3.8s ease-in-out 1.2s infinite;
+}
+.vocab-streak-flash-medal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 72%;
+  translate: -50% -46%;
+  filter: drop-shadow(0 18px 28px #0009)
+    drop-shadow(0 0 22px color-mix(in srgb, var(--m-glow) 50%, transparent));
+  animation: vocab-streak-drop 820ms cubic-bezier(0.2, 1.4, 0.35, 1) 60ms both;
+}
+.vocab-streak-flash-medal .vocab-medal-ribbon {
+  transform-origin: 100px 140px;
+  animation: vocab-streak-ribbon 700ms cubic-bezier(0.2, 1.3, 0.4, 1) 420ms both;
+}
+/* On the big medal only: a specular band sweeps the coin now and then, and diamond's
+   iridescent wash turns. In the drawer both hold still — a grid of sweeping coins is noise. */
+.vocab-streak-flash-medal .vocab-medal-shine::before {
+  animation: vocab-streak-sheen 3.4s ease-in-out 1.1s infinite;
+}
+.vocab-streak-flash-medal[data-tier="diamond"] .vocab-medal-shine::after {
+  animation: vocab-streak-spin 7s linear infinite;
+}
+
+/* The copy under the medal. */
+.vocab-streak-flash-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 340px;
+  animation: vocab-streak-rise 600ms cubic-bezier(0.2, 0.9, 0.3, 1) 620ms both;
+}
+.vocab-streak-flash-tier {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--m-hi) 60%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--m-mid) 34%, transparent),
+    color-mix(in srgb, var(--m-lo) 22%, transparent)
+  );
+  color: var(--m-hi);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--m-glow) 35%, transparent);
+}
+.vocab-streak-flash-title {
+  margin: 0;
+  text-wrap: balance;
+  font-size: clamp(24px, 7vw, 32px);
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  background: linear-gradient(180deg, #fff 30%, var(--m-hi) 60%, var(--m-mid));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(
+    0 2px 12px color-mix(in srgb, var(--m-glow) 45%, transparent)
+  );
+}
+.vocab-streak-flash-caption {
+  margin: 0;
+  text-wrap: balance;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #ffffffd9;
+}
+.vocab-streak-flash-go {
+  position: relative;
+  margin-top: 8px;
+  min-width: 180px;
+  padding: 13px 28px 15px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    var(--m-hi),
+    var(--m-mid) 55%,
+    var(--m-lo)
+  );
+  color: var(--m-ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow:
+    0 10px 28px color-mix(in srgb, var(--m-glow) 40%, transparent),
+    inset 0 1px 0 #ffffffb0,
+    inset 0 -2px 0 color-mix(in srgb, var(--m-deep) 45%, transparent);
+  transition: transform 140ms ease;
+}
+.vocab-streak-flash-go:active {
+  transform: scale(0.96);
+}
+.vocab-streak-flash-go:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+/* The auto-close countdown, drained along the button's bottom edge. */
+.vocab-streak-flash-timer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: color-mix(in srgb, var(--m-deep) 55%, transparent);
+  transform-origin: left center;
+  animation: vocab-streak-drain var(--vocab-streak-dur, 7000ms) linear both;
+}
+
+/* Confetti over everything. Hidden at rest, so reduced motion simply has none. */
+.vocab-streak-flash-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.vocab-streak-flash-confetti i {
+  position: absolute;
+  top: -4%;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--confetti);
+  opacity: 0;
+  animation: vocab-streak-fall var(--t) cubic-bezier(0.35, 0.1, 0.65, 0.9)
+    var(--d) infinite;
+}
+.vocab-streak-flash-confetti i[data-shape="square"] {
+  width: 10px;
+  height: 10px;
+}
+.vocab-streak-flash-confetti i[data-shape="dot"] {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.vocab-streak-flash [data-hue="0"] {
+  --confetti: var(--m-glow);
+}
+.vocab-streak-flash [data-hue="1"] {
+  --confetti: var(--popup-accent, var(--vocab-accent));
+}
+.vocab-streak-flash [data-hue="2"] {
+  --confetti: #ff5d8f;
+}
+.vocab-streak-flash [data-hue="3"] {
+  --confetti: #4dabff;
+}
+.vocab-streak-flash [data-hue="4"] {
+  --confetti: #3ddc97;
+}
+.vocab-streak-flash [data-hue="5"] {
+  --confetti: #b47cff;
+}
+
+@keyframes vocab-streak-fade-in {
+  from {
     opacity: 0;
-    transform: scale(1.35);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .vocab-share-button::after {
-    animation: none;
+@keyframes vocab-streak-leave {
+  to {
     opacity: 0;
+    transform: scale(1.04);
+    filter: blur(4px);
   }
+}
+@keyframes vocab-streak-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes vocab-streak-rays-in {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+@keyframes vocab-streak-pulse {
+  50% {
+    opacity: 0.6;
+    transform: scale(1.08);
+  }
+}
+@keyframes vocab-streak-shock {
+  0% {
+    opacity: 0.95;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+@keyframes vocab-streak-spark {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--a)) translateY(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a))
+      translateY(calc(var(--stage) * var(--dist) * -1)) scale(0.3);
+  }
+}
+@keyframes vocab-streak-twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1) rotate(45deg);
+  }
+  70% {
+    opacity: 0.2;
+    transform: scale(0.5) rotate(70deg);
+  }
+}
+@keyframes vocab-streak-float {
+  50% {
+    transform: translateY(-7px) rotate(-1.2deg);
+  }
+}
+@keyframes vocab-streak-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-38%) scale(0.35) rotate(-28deg);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(2%) scale(1.12) rotate(6deg);
+  }
+  78% {
+    transform: translateY(0) scale(0.97) rotate(-2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vocab-streak-ribbon {
+  from {
+    opacity: 0;
+    transform: scaleY(0.2);
+  }
+}
+@keyframes vocab-streak-sheen {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+  }
+  45%,
+  100% {
+    transform: translateX(420%) skewX(-12deg);
+  }
+}
+@keyframes vocab-streak-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+@keyframes vocab-streak-drain {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+@keyframes vocab-streak-fall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate3d(1, 0.4, 0.2, 0deg);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--sway), 110dvh, 0)
+      rotate3d(1, 0.4, 0.2, var(--spin));
+  }
+}
+
+/* Short landscape: medal and copy side by side so neither is squeezed. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .vocab-streak-flash {
+    --stage: min(64dvh, 260px);
+  }
+  .vocab-streak-flash-body {
+    flex-direction: row;
+    gap: 36px;
+    text-align: left;
+  }
+  .vocab-streak-flash-copy {
+    align-items: flex-start;
+  }
+  .vocab-streak-flash-title {
+    font-size: clamp(22px, 4vw, 28px);
+  }
+}
+
+/* ── The medal (StreakMedal) ──
+   One coin for every size. It is a size container, so the face is set in cqw and the
+   caller only gives it a width. The face circle is r=65 at (100,96) in a 200x224 box,
+   and the coin r=80: the overlays below are those circles as percentages. */
+.vocab-medal {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 200 / 224;
+}
+.vocab-medal-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.vocab-medal-shine {
+  position: absolute;
+  left: 10%;
+  top: 7.14%;
+  width: 80%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.vocab-medal-shine::before {
+  content: "";
+  position: absolute;
+  inset: -20% auto -20% -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, #ffffffb0 50%, transparent);
+  transform: translateX(-120%) skewX(-12deg);
+  mix-blend-mode: overlay;
+}
+/* Diamond catches the light: an iridescent wash over its own icy metal, rather than
+   hue-rotating the whole coin (which turned it rose gold). */
+.vocab-medal[data-tier="diamond"] .vocab-medal-shine::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background: conic-gradient(
+    from 30deg,
+    #ff9ce655,
+    #9cf3ff55,
+    #b6a1ff55,
+    #a8ffcf55,
+    #ffe9a055,
+    #ff9ce655
+  );
+  mix-blend-mode: overlay;
+}
+.vocab-medal-face {
+  position: absolute;
+  left: 17.5%;
+  top: 13.84%;
+  width: 65%;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--m-ink);
+  font-family: "Inter", sans-serif;
+  text-shadow: 0 1px 0 color-mix(in srgb, var(--m-hi) 65%, transparent);
+}
+.vocab-medal-face strong {
+  font-size: 27cqw;
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+}
+.vocab-medal-face[data-digits="3"] strong {
+  font-size: 20cqw;
+}
+.vocab-medal-face span {
+  margin-top: 1.5cqw;
+  font-size: 5.6cqw;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.68;
+}
+
+/* ── The milestones tab in the saved drawer ──
+   A grid of earned medals, newest first. Static: no gesture, no animation — the drawer
+   already owns three gestures and the celebration was the moment for movement. */
+.vocab-medal-shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 16px 8px;
+  padding: 18px 12px 28px;
+  margin: 0;
+  list-style: none;
+}
+.vocab-medal-group + .vocab-medal-group {
+  border-top: 1px solid var(--shell-line, #ffffff1a);
+}
+.vocab-medal-group-title {
+  margin: 0;
+  padding: 16px 16px 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--shell-text-mute);
+}
+/* A word badge's scope ("🐣 vỡ lòng") is a name, not a metal: keep its own case. */
+.vocab-medal-tile-tier[data-scope] {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.vocab-medal-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  /* A button, so every medal can open its criteria: stripped back to the tile. */
+  margin: 0;
+  padding: 6px 2px;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: background var(--dur-quick) var(--ease-out);
+}
+.vocab-medal-tile:hover {
+  background: var(--shell-hover, #ffffff0f);
+}
+.vocab-medal-tile:active .vocab-medal {
+  transform: scale(0.94);
+}
+/* Not earned yet: the same medal, drained of colour and set back, so the shelf shows what
+   to aim for without passing it off as won. */
+.vocab-medal-tile[data-locked] .vocab-medal,
+.vocab-medal-locked {
+  filter: grayscale(1);
+  opacity: 0.38;
+}
+.vocab-medal-tile[data-locked] .vocab-medal-tile-days {
+  color: var(--shell-text-mute);
+}
+
+/* The criteria behind one badge. A native modal <dialog>, so it renders in the top layer
+   above the saved drawer; it still inherits the shell's tokens from where it sits. */
+.vocab-badge-dialog {
+  width: min(340px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  border: 1px solid var(--shell-line-strong, #ffffff33);
+  border-radius: 24px;
+  background: var(--shell-surface, #15102a);
+  color: var(--shell-text, #f4f1ff);
+  box-shadow: 0 24px 60px #000a;
+}
+.vocab-badge-dialog::backdrop {
+  background: #05010ea8;
+  backdrop-filter: blur(4px);
+}
+.vocab-badge-dialog[open] {
+  animation: vocab-badge-dialog-in var(--dur-move, 220ms) var(--ease-spring, ease-out) both;
+}
+@keyframes vocab-badge-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+}
+.vocab-badge-dialog-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 26px 22px 20px;
+  text-align: center;
+}
+.vocab-badge-dialog-body .vocab-medal {
+  width: 96px;
+  margin-bottom: 4px;
+}
+.vocab-badge-dialog-tier {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--shell-text-mute);
+}
+.vocab-badge-dialog h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.vocab-badge-dialog p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--shell-text-soft, #d8d4ea);
+}
+.vocab-badge-dialog-status {
+  margin-top: 4px !important;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--shell-text) 10%, transparent);
+  font-size: 12px !important;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--shell-text) !important;
+}
+.vocab-badge-dialog-status[data-earned] {
+  background: color-mix(in srgb, var(--vocab-accent, #6ee7a0) 22%, transparent);
+}
+.vocab-badge-dialog form {
+  align-self: stretch;
+  margin-top: 10px;
+}
+.vocab-badge-dialog-close {
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--shell-text, #f4f1ff);
+  color: var(--shell-on-text, #15102a);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.vocab-medal-tile .vocab-medal {
+  width: 64px;
+  filter: drop-shadow(0 6px 10px color-mix(in srgb, #000 30%, transparent))
+    drop-shadow(0 0 10px color-mix(in srgb, var(--m-glow) 22%, transparent));
+}
+.vocab-medal-tile .vocab-medal-face span {
+  display: none;
+}
+.vocab-medal-tile-days {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--shell-text);
+}
+.vocab-medal-tile-tier {
+  margin-top: -4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--shell-text-mute);
+}
+.vocab-medal-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  /* Only a heading and a line now: the grey goals below are the picture. */
+  padding: 28px 24px 4px;
+  text-align: center;
+}
+.vocab-medal-empty .vocab-medal-face span {
+  display: none;
+}
+.vocab-medal-empty .vocab-medal {
+  width: 92px;
+  opacity: 0.32;
+  filter: grayscale(1);
+}
+.vocab-medal-empty h2 {
+  margin: 6px 0 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--shell-text);
+}
+.vocab-medal-empty p {
+  margin: 0;
+  max-width: 260px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--shell-text-mute);
+  text-wrap: balance;
 }

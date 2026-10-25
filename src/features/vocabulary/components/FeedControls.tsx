@@ -24,9 +24,16 @@ import {
 } from "lucide-react";
 import { COMMUNITY_AVAILABLE } from "@/lib/feature-flags";
 import { EcosystemMenu } from "@/features/ecosystem/components/EcosystemMenu";
-import { ECOSYSTEM_STORE_AVAILABLE } from "@/lib/feature-flags";
 import { stylePool, themePool } from "../lib/presets";
-import { DIFFICULTY_ALL, formatLevelBand, countTrackWords, tracksFor } from "../lib/difficulty";
+import {
+  DIFFICULTY_ALL,
+  formatLevelBand,
+  countTrackWords,
+  difficultyLevels,
+  tracksFor,
+} from "../lib/difficulty";
+import { scopeProgress, tierProgress, type LevelProgress } from "../lib/level-progress";
+import { levelLadderFor } from "../lib/level-ladder";
 import { CEFR_LEVELS, HSK_LEVELS, type NarrativeStyle, type VocabularyLevel } from "../lib/schema";
 import type { HistoryStats } from "../lib/history";
 import {
@@ -260,6 +267,10 @@ function OptionPicker({
   );
 }
 
+const TONE_TABS = ["all", "light", "dark"] as const;
+
+type ToneTab = (typeof TONE_TABS)[number];
+
 function ThemePicker({
   value,
   onChange,
@@ -273,6 +284,7 @@ function ThemePicker({
   /** UI locale for the palette names (KineThai overlay; defaults to Vietnamese). */
   uiLocale?: Locale;
 }) {
+  const ui = uiLocale ?? DEFAULT_LOCALE;
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -287,6 +299,24 @@ function ThemePicker({
     return new Set(ids.length && !ids.includes("mix") ? ids : allIds);
   }, [value, allIds]);
   const isAll = selected.size === allIds.length;
+  const lightIds = useMemo(
+    () => pool.filter((theme) => theme.tone === "light").map((theme) => theme.id),
+    [pool],
+  );
+  const darkIds = useMemo(
+    () => pool.filter((theme) => theme.tone === "dark").map((theme) => theme.id),
+    [pool],
+  );
+  // Derived, never stored: the tab reads the selection rather than keeping a second copy
+  // of it, so unticking one row by hand drops the tab back to no active state instead of
+  // leaving it claiming a filter that is no longer what is selected.
+  const tone: ToneTab | null = isAll
+    ? "all"
+    : lightIds.length === selected.size && lightIds.every((id) => selected.has(id))
+      ? "light"
+      : darkIds.length === selected.size && darkIds.every((id) => selected.has(id))
+        ? "dark"
+        : null;
   // Pool order keeps the chips and the joined value stable across toggles.
   const pickedThemes = useMemo(
     () => pool.filter((theme) => selected.has(theme.id)),
@@ -316,8 +346,16 @@ function ThemePicker({
     onChange(next.size === allIds.length ? "mix" : allIds.filter((id2) => next.has(id2)).join(","));
   }
 
+  function pickTone(next: ToneTab) {
+    const ids = next === "all" ? allIds : next === "light" ? lightIds : darkIds;
+    // The stream must always have something to wear, same rule toggle() keeps. A pool
+    // with no theme of that tone leaves the tab disabled, so this is belt and braces.
+    if (!ids.length) return;
+    onChange(ids.length === allIds.length ? "mix" : ids.join(","));
+  }
+
   const summary = isAll
-    ? t(uiLocale ?? DEFAULT_LOCALE, "theme.mix")
+    ? t(ui, "theme.mix")
     : pickedThemes.length === 1
       ? themeLabel(pickedThemes[0].id, pickedThemes[0].label, uiLocale)
       : `${pickedThemes.length}/${allIds.length}`;
@@ -330,9 +368,34 @@ function ThemePicker({
         if (event.key === "Escape") setOpen(false);
       }}
     >
-      <span className="vocab-picker-label" id={labelId}>
-        {t(uiLocale ?? DEFAULT_LOCALE, "theme.label")}
-      </span>
+      <div className="vocab-picker-head">
+        <span className="vocab-picker-label" id={labelId}>
+          {t(ui, "theme.label")}
+        </span>
+        <div
+          className="vocab-tone-tabs"
+          role="group"
+          aria-label={t(ui, "theme.tone.aria")}
+        >
+          {TONE_TABS.map((tab) => {
+            const empty =
+              tab === "light" ? !lightIds.length : tab === "dark" && !darkIds.length;
+            return (
+              <button
+                key={tab}
+                type="button"
+                className="vocab-tone-tab"
+                data-on={tone === tab || undefined}
+                aria-pressed={tone === tab}
+                disabled={empty}
+                onClick={() => pickTone(tab)}
+              >
+                {t(ui, `theme.tone.${tab}`)}
+              </button>
+            );
+          })}
+        </div>
+      </div>
       <button
         type="button"
         className="vocab-picker-trigger"
@@ -480,11 +543,14 @@ function DifficultyDropdown({
   total,
   locale,
   uiLocale,
+  levelProgress,
 }: {
   value: string;
   onChange: (next: string) => void;
   open: boolean;
   onOpenChange: (next: boolean) => void;
+  /** Distinct words seen per level, kept on this device; fills each row's bar. */
+  levelProgress?: LevelProgress;
   /** Words per CEFR level from the feed; undefined until the first page has loaded. */
   levelCounts?: FeedPage["levelCounts"];
   /** Levels the catalog has any word for: decides which tracks are on offer at all. */
@@ -532,6 +598,24 @@ function DifficultyDropdown({
     if (!levelCounts || !catalogLevels) return undefined;
     if (id !== DIFFICULTY_ALL) return countTrackWords([id], levelCounts, catalogLevels);
     return draft.size > 0 ? countTrackWords(draft, levelCounts, catalogLevels) : total;
+  };
+  // A row's chip fills with the reader's progress through the row's levels: its own
+  // track's, or for "tất cả" the union picked so far (every level once nothing is picked).
+  // Sized from the bundled catalog counts rather than the topic-filtered ones above, so a
+  // chip — and the badge it leads to — means the same thing whatever topic is on. It fills
+  // towards the next target, 100 words apart, and starts over towards the one after.
+  const ladder = useMemo(() => levelLadderFor(activeLocale), [activeLocale]);
+  const progressOf = (id: string) => {
+    if (!levelProgress) return null;
+    const levels =
+      id === DIFFICULTY_ALL
+        ? draft.size > 0
+          ? difficultyLevels([...draft].join(","), ladder.levels)
+          : ladder.levels
+        : difficultyLevels(id, ladder.levels);
+    if (!levels?.length) return null;
+    const { seen, total } = scopeProgress(levels, levelProgress, ladder.levelCounts);
+    return total > 0 ? { seen, total, ...tierProgress(seen, total) } : null;
   };
   const pickRow = (id: string) => {
     // Shared by tap and keyboard: an empty track cannot be chosen by either.
@@ -651,6 +735,7 @@ function DifficultyDropdown({
               const isSelected =
                 option.id === DIFFICULTY_ALL ? draft.size === 0 : draft.has(option.id);
               const count = countFor(option.id);
+              const progress = progressOf(option.id);
               // A track the catalog cannot serve yet (its defining level has no words) shows
               // 0 and is greyed: it stays on the ladder as a promise, but cannot be picked.
               const unavailable = count === 0 && option.id !== DIFFICULTY_ALL;
@@ -681,8 +766,21 @@ function DifficultyDropdown({
                       className="vocab-difficulty-band"
                       data-empty={option.band ? undefined : true}
                       aria-hidden={option.band ? undefined : true}
+                      data-complete={(progress && progress.seen >= progress.total) || undefined}
+                      style={
+                        progress
+                          ? ({ "--progress": `${progress.ratio * 100}%` } as React.CSSProperties)
+                          : undefined
+                      }
                     >
                       {option.band}
+                      {progress && (
+                        <span className="sr-only">
+                          {progress.seen >= progress.total
+                            ? `, đã xem trọn ${progress.total} từ`
+                            : `, đã xem ${progress.seen}/${progress.target} từ`}
+                        </span>
+                      )}
                     </span>
                     {option.label}
                   </span>
@@ -721,6 +819,7 @@ function DifficultyDropdown({
 /** Control word selection separately from appearance. @param props Settings and callbacks. @returns Public header and options panel. */
 export function FeedControls({
   metadata,
+  levelProgress,
   filters,
   presentation,
   onFilters,
@@ -734,6 +833,8 @@ export function FeedControls({
   locale,
 }: {
   metadata?: FeedPage;
+  /** Distinct words seen per level on this device, for the difficulty picker's bars. */
+  levelProgress?: LevelProgress;
   filters: VocabularyFilters;
   presentation: Presentation;
   onFilters: (value: VocabularyFilters) => void;
@@ -832,14 +933,15 @@ export function FeedControls({
     },
     [presentation, onPresentation],
   );
-  // The options sheet is notched around whichever control owns the top-right
-  // corner, so it needs that control's real width — .vocab-icon-button is 44px
-  // but shrinks to 34 and then 30 at narrower widths, and a hard-coded half
-  // would leave the cut-out off the button on every small screen.
+  // The options sheet is notched around the gear in the top-right corner, so it
+  // needs that control's real width — .vocab-icon-button is 44px but shrinks to
+  // 34 and then 30 at narrower widths, and a hard-coded half would leave the
+  // cut-out off the button on every small screen. Only the gear: the app pill
+  // comes first in the DOM, so a selector that also matched it measured the pill.
   useEffect(() => {
     const host = toolbar.current;
     if (!host) return;
-    const corner = host.querySelector<HTMLElement>(".vocab-corner-button, .eco-trigger");
+    const corner = host.querySelector<HTMLElement>(".vocab-corner-button");
     const controls = host.querySelector<HTMLElement>(".vocab-player-controls");
     const tagline = host.querySelector<HTMLElement>(".vocab-brand small");
     if (!corner) return;
@@ -880,8 +982,12 @@ export function FeedControls({
   return (
     <header className="vocab-toolbar" ref={toolbar}>
       <div className="vocab-toolbar-row">
-        {/* Left: just the title, which is the difficulty trigger. Settings moved
-            to the top-right corner — see the right column. */}
+        {/* Far left: the app family. Rendered unconditionally — ECOSYSTEM_STORE_AVAILABLE
+            gates only the STORE TILE inside the panel, not the panel itself; with the
+            store gated the grid is just the sibling apps over a "more coming" footer. */}
+        <EcosystemMenu open={ecoOpen} onOpenChange={toggleEco} reducedMotion={reducedMotion} />
+        {/* Then the title, which is the difficulty trigger. Settings holds the top-right
+            corner — see the right column. */}
         <div className="vocab-toolbar-left">
           <DifficultyDropdown
             value={filters.difficulty}
@@ -889,10 +995,11 @@ export function FeedControls({
             open={difficultyOpen}
             onOpenChange={setDifficultyOpen}
             levelCounts={metadata?.levelCounts}
-            catalogLevels={metadata?.trackLevels}
+            catalogLevels={metadata?.trackLevels ?? metadata?.levels}
             total={metadata?.topicTotal}
             locale={locale}
             uiLocale={ui}
+            levelProgress={levelProgress}
           />
         </div>
         {/* Centre: the three transport controls as bare icons split by two hairlines,
@@ -941,31 +1048,22 @@ export function FeedControls({
             </button>
           )}
         </div>
-        {/* Right: the corner control. While the sibling apps are unannounced the
-            app panel is gone entirely and Settings takes the corner; when the
-            store ships, the corner goes back to the app panel and Settings
-            becomes a tile inside it. Either way the sheet pops from HERE. */}
-        {ECOSYSTEM_STORE_AVAILABLE ? (
-          <EcosystemMenu
-            open={ecoOpen}
-            onOpenChange={toggleEco}
-            reducedMotion={reducedMotion}
-            onOpenSettings={() => onOpen(true)}
-          />
-        ) : (
-          <button
-            className="vocab-icon-button vocab-corner-button"
-            type="button"
-            ref={toggleButton}
-            onClick={() => (open ? close() : onOpen(true))}
-            aria-expanded={open}
-            aria-controls={panelId}
-            aria-label={open ? t(ui, "options.close") : t(ui, "options.open")}
-            data-active={open || undefined}
-          >
-            {open ? <X size={19} /> : <Settings size={19} />}
-          </button>
-        )}
+        {/* Right: Settings, now permanently. The two used to trade this corner — the app
+            panel took it when the store shipped and Settings stepped back into the panel
+            as a tile — but the panel has moved to the far left, so neither has to give way
+            and the sheet still pops from HERE. */}
+        <button
+          className="vocab-icon-button vocab-corner-button"
+          type="button"
+          ref={toggleButton}
+          onClick={() => (open ? close() : onOpen(true))}
+          aria-expanded={open}
+          aria-controls={panelId}
+          aria-label={open ? t(ui, "options.close") : t(ui, "options.open")}
+          data-active={open || undefined}
+        >
+          {open ? <X size={19} /> : <Settings size={19} />}
+        </button>
       </div>
       {/* Now-playing: the shuffle control changes only the background track, so the song's
           name runs ONCE beneath the controls like a news ticker — never looping, fading out
@@ -1096,13 +1194,23 @@ export function FeedControls({
           )}
           <div className="vocab-memory" aria-label={t(ui, "memory.aria")}>
             <span className="vocab-group-label">{t(ui, "memory.label")}</span>
-            <p className="vocab-options-summary">
-              {t(ui, "memory.stats", {
-                today: historyStats.distinctToday,
-                three: historyStats.distinct3d,
-                week: historyStats.distinct7d,
-              })}
-            </p>
+            {/* Distinct words seen, per window. Three plain cells: the number leads, the
+                window names it, and today is the one that carries the accent. */}
+            <dl className="vocab-memory-stats">
+              <div data-today>
+                <dt>{t(ui, "memory.cell.today")}</dt>
+                <dd>{historyStats.distinctToday}</dd>
+              </div>
+              <div>
+                <dt>{t(ui, "memory.cell.three")}</dt>
+                <dd>{historyStats.distinct3d}</dd>
+              </div>
+              <div>
+                <dt>{t(ui, "memory.cell.week")}</dt>
+                <dd>{historyStats.distinct7d}</dd>
+              </div>
+            </dl>
+            <p className="vocab-options-summary">{t(ui, "memory.rules")}</p>
             <button type="button" className="vocab-memory-clear" onClick={onClearHistory}>
               {t(ui, "memory.forget")}
             </button>

@@ -20,7 +20,6 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
-import { Volume2, VolumeX } from "lucide-react";
 import {
   DIFFICULTY_ALL,
   countTrackWords,
@@ -29,12 +28,13 @@ import {
   trackCeiling,
   tracksFor,
 } from "../lib/difficulty";
-import { useAmbientSound } from "../hooks/useAmbientSound";
+import { getAmbientPlayer } from "../lib/ambient";
+import { getAmbientOwnership } from "../lib/ambientOwnership";
 import type { TargetLocale } from "../lib/target-language";
 import { difficultyCopy, t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
 import type { Locale } from "../lib/locale";
-import type { FeedPage } from "../types";
+import type { LevelLadder } from "../lib/level-ladder";
 
 /** BCP-47 tag for digit grouping in the active UI locale. */
 function countTag(locale: Locale): string | undefined {
@@ -84,7 +84,7 @@ function nearestAvailable(target: number, available: readonly boolean[]): number
 
 /**
  * Full-screen level picker shown before the very first word.
- * @param props.metadata Counts, populated levels and sample words; undefined while loading
+ * @param props.metadata Counts, populated levels and sample words, bundled per locale
  * @param props.onPick Called with the chosen track id, or "" for every level
  * @returns The picker
  */
@@ -93,7 +93,7 @@ export function DifficultyOnboarding({
   locale,
   onPick,
 }: {
-  metadata: Pick<FeedPage, "levelCounts" | "trackLevels" | "levelSamples"> | undefined;
+  metadata: LevelLadder;
   /**
    * Deck locale. Resolves which track set to render: CEFR for en/ko/ja, HSK for
    * zh. Without this the picker would hardcode CEFR and every rung would show
@@ -108,11 +108,11 @@ export function DifficultyOnboarding({
   // no two rungs are illustrated by the same word.
   const taken = new Map<string, number>();
   const rungs = tracksFor(locale).map((track, index) => {
-    const available = metadata ? isTrackAvailable(track, metadata.trackLevels) : false;
+    const available = isTrackAvailable(track, metadata.levels);
     // Honour sampleLevel override so vỡ lòng can show an A1 word instead of the
     // A2 business term that happens to be first in the base catalog for that level.
     const ceiling = track.sampleLevel ?? trackCeiling(track);
-    const pool = (available && metadata?.levelSamples[ceiling]) || [];
+    const pool = (available && metadata.levelSamples[ceiling]) || [];
     const turn = taken.get(ceiling) ?? 0;
     if (pool.length) taken.set(ceiling, turn + 1);
     // Level names follow the UI locale (Japanese by default); ids still key
@@ -124,26 +124,26 @@ export function DifficultyOnboarding({
       color: RUNG_COLORS[index % RUNG_COLORS.length]!,
       band: formatLevelBand(track.levels),
       available,
-      count: metadata
-        ? countTrackWords([track.id], metadata.levelCounts, metadata.trackLevels)
-        : null,
+      count: countTrackWords([track.id], metadata.levelCounts, metadata.levels),
       // The word comes from the track's hardest level: that is the level that sets it apart
       // from the rung below, so it is the honest picture of what choosing it adds.
       sample: pool.length ? pool[turn % pool.length] : undefined,
     };
   });
-  const availability = rungs.map((rung) => rung.available && (rung.count ?? 0) > 0);
+  const availability = rungs.map((rung) => rung.available && rung.count > 0);
   const [picked, setPicked] = useState(0);
-  // Until the counts arrive nothing is available; once they do, rest on the nearest rung
-  // that is (normally the first).
+  // Rest on the nearest rung that is available (normally the first).
   const resolved = nearestAvailable(picked, availability);
   const index = resolved < 0 ? 0 : resolved;
   const current = rungs[index]!;
   const ladder = useRef<HTMLOListElement>(null);
-  // The toolbar that carries the music toggle only exists once a difficulty is picked,
-  // so the ladder docks its own: same persisted preference and the same per-host pool
-  // scope, so the Chinese host plays the traditional pool even before the first word.
-  const ambient = useAmbientSound(locale === "zh" ? "zh" : "default");
+  // No background music while a level is being picked: the ladder is a one-time choice,
+  // not a listening session. Whatever is still sounding is silenced here; the toggle itself
+  // is left as it is, so music the reader turned on resumes with the first word.
+  useEffect(() => {
+    getAmbientPlayer().stop();
+    getAmbientOwnership().release();
+  }, []);
 
   // Landscape detection: drives both pointer-axis mapping in JS and a data-landscape
   // attribute that CSS uses to switch the gauge to a horizontal layout with alternating
@@ -225,17 +225,6 @@ export function DifficultyOnboarding({
         <p>{t(ui, "onboard.hint")}</p>
       </header>
 
-      <button
-        type="button"
-        className="vocab-icon-button vocab-onboard-ambient"
-        onClick={ambient.toggle}
-        aria-label={ambient.enabled ? t(ui, "player.mute") : t(ui, "player.unmute")}
-        aria-pressed={ambient.enabled}
-        data-active={ambient.enabled || undefined}
-      >
-        {ambient.enabled ? <Volume2 size={19} fill="currentColor" /> : <VolumeX size={19} />}
-      </button>
-
       <div className="vocab-onboard-gauge">
         <ol className="vocab-onboard-ladder" ref={ladder}>
           {rungs.map((rung, at) => (
@@ -255,14 +244,8 @@ export function DifficultyOnboarding({
                   {rung.band && <span className="vocab-onboard-band">{rung.band}</span>}
                 </span>
                 <span className="vocab-onboard-count">
-                  {rung.count === null ? (
-                    "–"
-                  ) : (
-                    <>
-                      {rung.count.toLocaleString(countTag(ui))}
-                      <small>{t(ui, "onboard.wordsUnit")}</small>
-                    </>
-                  )}
+                  {rung.count.toLocaleString(countTag(ui))}
+                  <small>{t(ui, "onboard.wordsUnit")}</small>
                 </span>
               </span>
               <span className="vocab-onboard-tick" aria-hidden="true" />
@@ -275,9 +258,7 @@ export function DifficultyOnboarding({
                     <span className="vocab-onboard-curiosity">{t(ui, "onboard.curiosity")}</span>
                   </>
                 ) : (
-                  <span className="vocab-onboard-soon">
-                    {metadata ? t(ui, "onboard.soon") : ""}
-                  </span>
+                  <span className="vocab-onboard-soon">{t(ui, "onboard.soon")}</span>
                 )}
               </span>
             </li>

@@ -6,6 +6,22 @@ import { VOCAB_MAX_PAGES } from "../lib/backfill";
 import type { FeedCursor, VocabularyFilters, TargetLocale } from "../types";
 import { markReportedOnce, reportVisitorEvent } from "@/lib/session-tracker";
 
+/** Errors a retry cannot fix: the stream itself has to be restarted or the request changed. */
+const TERMINAL_CODES = ["CATALOG_CHANGED", "STREAM_EXPIRED", "INVALID_REQUEST", "FORBIDDEN"];
+/** Transient failures are retried this many times, backing off 1, 2, 4 then 8 s. */
+const MAX_RETRIES = 4;
+
+function isTerminal(error: unknown): boolean {
+  return error instanceof VocabularyRequestError && TERMINAL_CODES.includes(error.code);
+}
+
+/** The server's own word on when to ask again, when it refused for rate. */
+function rateLimitWait(error: unknown): number | null {
+  return error instanceof VocabularyRequestError && error.code === "RATE_LIMITED"
+    ? (error.retryAfterMs ?? 60_000)
+    : null;
+}
+
 /** Load deterministic pages, retaining at most VOCAB_MAX_PAGES of them. @param seed Stable visit seed. @param filters Content filters. @param locale Target locale override. @returns Query and flattened cards. */
 export function useVocabularyFeed(seed: string, filters: VocabularyFilters, locale?: TargetLocale) {
   const client = useQueryClient();
@@ -29,13 +45,21 @@ export function useVocabularyFeed(seed: string, filters: VocabularyFilters, loca
     maxPages: VOCAB_MAX_PAGES,
     staleTime: Infinity,
     gcTime: 0,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    // A first page that failed for a passing reason — a server restart, a deploy swap, a
+    // phone dropping signal — backs off for ~15 s, and returning to the tab or regaining
+    // the network asks again at once. None of this touches a stream that has loaded: with
+    // staleTime Infinity a query holding pages is never stale, so focus and reconnect
+    // refetch only a stream that has nothing to show yet.
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    // A rate refusal is not retried on a guess: asking again inside the window is refused
+    // again. The stream waits exactly as long as the server's Retry-After says instead.
+    refetchInterval: (current) =>
+      current.state.status === "error" && current.state.data === undefined
+        ? (rateLimitWait(current.state.error) ?? false)
+        : false,
     retry: (attempt, error) =>
-      !(
-        error instanceof VocabularyRequestError &&
-        ["CATALOG_CHANGED", "INVALID_REQUEST"].includes(error.code)
-      ) && attempt < 2,
+      !isTerminal(error) && rateLimitWait(error) === null && attempt < MAX_RETRIES,
   });
   useEffect(
     () => () => {
@@ -79,5 +103,20 @@ export function useVocabularyFeed(seed: string, filters: VocabularyFilters, loca
   );
   const catalogChanged =
     query.error instanceof VocabularyRequestError && query.error.code === "CATALOG_CHANGED";
-  return { ...query, entries, metadata: query.data?.pages[0], catalogChanged };
+  // A stream left open past its cursor's lifetime; the fix is the same fresh restart.
+  const streamExpired =
+    query.error instanceof VocabularyRequestError && query.error.code === "STREAM_EXPIRED";
+  const needsRestart = catalogChanged || streamExpired;
+  // When a refused stream will ask again by itself, so the panel can say so.
+  const wait = rateLimitWait(query.error);
+  const retryAt = wait === null ? null : query.errorUpdatedAt + wait;
+  return {
+    ...query,
+    entries,
+    metadata: query.data?.pages[0],
+    catalogChanged,
+    streamExpired,
+    needsRestart,
+    retryAt,
+  };
 }

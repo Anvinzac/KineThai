@@ -16,6 +16,7 @@
     "check:ambient-zh": "node scripts/check-ambient-zh-pool.ts",
     "check:palettes": "npx tsx scripts/check-palette-contrast.ts",
     "check:saved-groups": "npx tsx scripts/check-saved-groups.ts",
+    "check:streak": "npx tsx scripts/check-streak.ts",
     "check:emphasis-runs": "npx tsx scripts/check-emphasis-runs.ts",
     "check:entrance-rest": "npx tsx scripts/check-entrance-rest.ts",
     "format": "prettier --write .",

@@ -8,6 +8,7 @@ import { formatCountdown, isWordAllowed, nextAvailableAt, type ViewHistory } fro
 import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
 import type { FeedPage, Presentation, TargetLocale, VocabularyFilters } from "../types";
+import { wordTrackLevel, type VocabularyLevel } from "../lib/schema";
 import { VocabularyCard } from "./VocabularyCard";
 
 // Admin-only, and only on demand: readers never download the export studio.
@@ -42,6 +43,7 @@ export function VocabularyStream({
   history,
   onRecordView,
   onWordEnding,
+  onWordFinished,
   exportOpen = false,
   onCloseExport,
   onClearHistory,
@@ -59,9 +61,12 @@ export function VocabularyStream({
   reducedMotion: boolean;
   suspended: boolean;
   history: ViewHistory;
-  onRecordView: (wordId: string) => void;
+  /** A word was read: its id, and its level when it has one (for level progress). */
+  onRecordView: (wordId: string, level?: VocabularyLevel) => void;
   /** The on-screen word reached its final page; ms left before the stream moves on. */
   onWordEnding?: (remainingMs: number) => void;
+  /** A word was finished; the feed records it against the reader's daily streak. */
+  onWordFinished?: (wordId: string) => void;
   /** Show the video-export studio for the on-screen word (the caller gates this to admins). */
   exportOpen?: boolean;
   onCloseExport?: () => void;
@@ -163,15 +168,16 @@ export function VocabularyStream({
   const activeEntry = visibleEntries[activeIndex];
   const activeOccurrenceId = activeEntry?.occurrenceId;
   const activeWordId = activeEntry?.word.id;
+  const activeWordLevel = activeEntry ? wordTrackLevel(activeEntry.word) : undefined;
   useEffect(() => {
     if (!activeOccurrenceId || !activeWordId || suspended) return;
     if (recorded.current.has(activeOccurrenceId)) return;
     const timer = setTimeout(() => {
       recorded.current.add(activeOccurrenceId);
-      onRecordView(activeWordId);
+      onRecordView(activeWordId, activeWordLevel);
     }, VIEW_DWELL_MS);
     return () => clearTimeout(timer);
-  }, [activeOccurrenceId, activeWordId, suspended, onRecordView]);
+  }, [activeOccurrenceId, activeWordId, activeWordLevel, suspended, onRecordView]);
 
   // The export studio needs a word. Opened with none on screen (empty stream, every
   // word blocked) it would render nothing while still holding the feed suspended, so
@@ -335,13 +341,13 @@ export function VocabularyStream({
                       }`
                     : t(ui, "stream.tagline")}
             </p>
-            {initialError && (
+            {initialError && !query.retryAt && (
               <button
                 type="button"
                 className="vocab-light-button"
-                onClick={query.catalogChanged ? onRestart : retry}
+                onClick={query.needsRestart ? onRestart : retry}
               >
-                {query.catalogChanged ? t(ui, "stream.restart") : t(ui, "stream.retry")}
+                {query.needsRestart ? t(ui, "stream.restart") : t(ui, "stream.retry")}
               </button>
             )}
             {empty && (
@@ -406,6 +412,7 @@ export function VocabularyStream({
                   canAdvance={activeIndex < rows.length - 1}
                   onAdvance={() => advanceFrom(entry.occurrenceId)}
                   onWordEnding={onWordEnding}
+                  onWordFinished={onWordFinished}
                   revealButtonLabel={revealButtonLabel}
                   onToggleAutoplay={onToggleAutoplay}
                 />
@@ -424,7 +431,7 @@ export function VocabularyStream({
           {(query.error || query.isPaused) && (
             <div className="vocab-stream-status" role="status">
               <span>
-                {query.catalogChanged
+                {query.needsRestart
                   ? t(ui, "stream.newCatalog")
                   : query.isPaused
                     ? t(ui, "stream.offline")
@@ -432,10 +439,10 @@ export function VocabularyStream({
               </span>
               <button
                 type="button"
-                onClick={query.catalogChanged ? onRestart : retry}
+                onClick={query.needsRestart ? onRestart : retry}
                 disabled={query.isFetching}
               >
-                {query.catalogChanged ? t(ui, "stream.restart") : t(ui, "stream.retry")}
+                {query.needsRestart ? t(ui, "stream.restart") : t(ui, "stream.retry")}
               </button>
             </div>
           )}

@@ -17,7 +17,7 @@ export const Route = createFileRoute("/feed/library")({
     sitePageHead(
       loaderData?.locale,
       "語彙ライブラリ",
-      "分野・目的・レベル別の専門パック。日々のランダム配信を補完します。",
+      "自分の語彙パックをアップロードします。",
     ),
   component: VocabLibraryPage,
 });

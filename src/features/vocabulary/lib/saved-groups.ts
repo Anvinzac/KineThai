@@ -14,6 +14,7 @@
  * Depends on: ./schema (LEVELS), ./saved-words (type only), ./ui-copy, ./locale
  */
 
+import { DAY_MS, startOfDay } from "./day";
 import { LEVELS } from "./schema";
 import type { SavedWord } from "./saved-words";
 import { t, type CopyKey } from "./ui-copy";
@@ -60,14 +61,6 @@ export type WordGroup = {
   count: number;
   folders: WordFolder[];
 };
-
-const DAY_MS = 24 * 60 * 60 * 1000;
-
-function startOfDay(ts: number): number {
-  const day = new Date(ts);
-  day.setHours(0, 0, 0, 0);
-  return day.getTime();
-}
 
 /**
  * Calendar-day label: the three relative words a reader thinks in, then a plain

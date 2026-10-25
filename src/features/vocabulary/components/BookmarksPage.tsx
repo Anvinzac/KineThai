@@ -12,9 +12,24 @@
  * Depends on: router Link, lucide icons, useSavedWords, saved-groups, i18n labels, vocabulary.css
  */
 
-import { Link } from "@tanstack/react-router";
-import { ArrowLeft, Bookmark, ChevronDown, Heart, Undo2, X } from "lucide-react";
+import { useStreakBadges } from "../hooks/useStreakBadges";
+import { useWordBadges, type EarnedWordBadge } from "../hooks/useWordBadges";
+import { progressScopes, scopeLabel, wordTier } from "../lib/word-badges";
 import {
+  badgeGoalCriteria,
+  badgeGoalProgress,
+  nextBadgeGoals,
+  type BadgeGoal,
+} from "../lib/badge-goals";
+import { readProgress } from "../lib/level-progress";
+import { currentStreak, readStreak } from "../lib/streak";
+import { DEFAULT_TARGET, resolveTarget, type TargetLocale } from "../lib/target-language";
+import { STREAK_TIER_LABEL, streakTier } from "../lib/streak-tiers";
+import { StreakMedal } from "./StreakMedal";
+import { Link } from "@tanstack/react-router";
+import { ArrowLeft, Bookmark, ChevronDown, Heart, Medal, Undo2, X } from "lucide-react";
+import {
+  Fragment,
   useEffect,
   useId,
   useMemo,
@@ -27,7 +42,6 @@ import {
 import { useSavedWords } from "../hooks/useSavedWords";
 import { resolveClue } from "../lib/clues";
 import { posLabel, topicLabel } from "../lib/i18n";
-import { resolveTarget } from "../lib/target-language";
 import { isJapaneseLevel } from "../lib/schema";
 import { t } from "../lib/ui-copy";
 import { useLocale } from "../lib/useLocale";
@@ -39,9 +53,17 @@ import { WordPronunciation } from "./WordPronunciation";
 import "../vocabulary.css";
 
 /** Which reaction defines the list on screen. */
-type TabKind = "bookmark" | "heart";
+/** The two word lists; the milestones tab sits beside them but holds no words. */
+type WordTabKind = "bookmark" | "heart";
+type TabKind = WordTabKind | "medal";
 
-const TABS: { kind: TabKind }[] = [{ kind: "bookmark" }, { kind: "heart" }];
+const WORD_TABS: { kind: WordTabKind }[] = [{ kind: "bookmark" }, { kind: "heart" }];
+const TABS: { kind: TabKind }[] = [...WORD_TABS, { kind: "medal" }];
+const TAB_ICON: Record<TabKind, typeof Bookmark> = {
+  bookmark: Bookmark,
+  heart: Heart,
+  medal: Medal,
+};
 
 const JP_LEVEL_KEYS = {
   JPRIM: "japanese.JPRIM",
@@ -55,7 +77,7 @@ const JP_LEVEL_KEYS = {
  * Keep them to two characters: the chip is a 34×22 block, and a longer word
  * shrinks the glyph past the point where it reads as a word at all.
  */
-const CHIP_WORDS: Record<TabKind, string> = {
+const CHIP_WORDS: Record<WordTabKind, string> = {
   bookmark: "收藏",
   heart: "喜爱",
 };
@@ -72,7 +94,7 @@ const CHIP_WORDS: Record<TabKind, string> = {
  * @param kind - Which key this bubble points at
  * @param ui - Active locale for the tooltip's chatty line
  */
-function VaultTip({ kind, ui }: { kind: TabKind; ui: Locale }): React.ReactElement {
+function VaultTip({ kind, ui }: { kind: WordTabKind; ui: Locale }): React.ReactElement {
   return (
     <span className="vocab-vault-tip" data-tip={kind}>
       <span className="vocab-vault-tip-shape" />
@@ -377,7 +399,7 @@ function SavedFolders({
             <span>{group.label}</span>
             {group.hint && <span className="vocab-saved-group-hint">{group.hint}</span>}
             <span className="vocab-saved-group-count">
-              {t(ui, "saved.count", { count: group.count })}
+              <b>{group.count}</b> {t(ui, "onboard.wordsUnit")}
             </span>
           </h2>
           {group.folders.length === 1 ? (
@@ -399,7 +421,7 @@ function SavedFolders({
                 <summary className="vocab-saved-folder-summary">
                   <span>{folder.label}</span>
                   <span className="vocab-saved-group-count">
-                    {t(ui, "saved.count", { count: folder.words.length })}
+                    <b>{folder.words.length}</b> {t(ui, "onboard.wordsUnit")}
                   </span>
                 </summary>
                 <ul className="vocab-saved-list">
@@ -424,6 +446,258 @@ function SavedFolders({
 }
 
 /**
+ * The criteria behind one badge, earned or not: what it asks, where the reader stands on
+ * it, and its metal. A native <dialog> opened modal, so it sits in the top layer above
+ * the saved drawer, and Escape and focus come from the browser; a tap on the backdrop
+ * closes it too.
+ */
+function BadgeDialog({
+  goal,
+  earned,
+  locale,
+  onClose,
+}: {
+  goal: BadgeGoal;
+  earned: boolean;
+  locale: TargetLocale;
+  onClose: () => void;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+  useEffect(() => {
+    const node = dialog.current;
+    if (node && !node.open) node.showModal();
+  }, []);
+  const tier =
+    goal.kind === "streak"
+      ? streakTier(goal.days)
+      : wordTier({ words: goal.words, complete: goal.complete });
+  const title =
+    goal.kind === "streak"
+      ? `Chuỗi ${goal.days} ngày`
+      : `${goal.complete ? "Trọn bộ" : `${goal.words} từ`} · ${scopeLabel(goal.scope, locale)}`;
+  return (
+    <dialog
+      ref={dialog}
+      className="vocab-badge-dialog"
+      aria-labelledby={titleId}
+      onClose={onClose}
+      onClick={(event) => {
+        // The dialog box fills its own padding, so a click on the element itself is a
+        // click on the backdrop around it.
+        if (event.target === event.currentTarget) event.currentTarget.close();
+      }}
+    >
+      <div className="vocab-badge-dialog-body">
+        <StreakMedal
+          days={goal.kind === "streak" ? goal.days : goal.words}
+          tier={tier}
+          unit={goal.kind === "streak" ? "ngày" : "từ"}
+          className={earned ? undefined : "vocab-medal-locked"}
+        />
+        <span className="vocab-badge-dialog-tier">{STREAK_TIER_LABEL[tier]}</span>
+        <h2 id={titleId}>{title}</h2>
+        <p>{badgeGoalCriteria(goal, locale)}</p>
+        <p className="vocab-badge-dialog-status" data-earned={earned || undefined}>
+          {earned ? "Đã đạt" : badgeGoalProgress(goal)}
+        </p>
+        <form method="dialog">
+          <button type="submit" className="vocab-badge-dialog-close">
+            Đã hiểu
+          </button>
+        </form>
+      </div>
+    </dialog>
+  );
+}
+
+/** One medal on the shelf, as a button that opens its criteria. */
+function MedalTile({
+  goal,
+  earned,
+  caption,
+  note,
+  onOpen,
+}: {
+  goal: BadgeGoal;
+  earned: boolean;
+  caption: string;
+  note: string;
+  onOpen: (goal: BadgeGoal, earned: boolean) => void;
+}) {
+  const isStreak = goal.kind === "streak";
+  return (
+    <li>
+      <button
+        type="button"
+        className="vocab-medal-tile"
+        data-locked={earned ? undefined : true}
+        onClick={() => onOpen(goal, earned)}
+        aria-label={`${caption}, ${note}${earned ? "" : " — chưa đạt"}. Xem điều kiện`}
+      >
+        <StreakMedal
+          days={isStreak ? goal.days : goal.words}
+          tier={
+            isStreak
+              ? streakTier(goal.days)
+              : wordTier({ words: goal.words, complete: goal.complete })
+          }
+          unit={isStreak ? "ngày" : "từ"}
+        />
+        <span className="vocab-medal-tile-days">{caption}</span>
+        {/* Uppercase only for a metal ("ĐỒNG"); a name — a scope, or "Chuỗi ngày" on a
+            goal — keeps its own case. */}
+        <span className="vocab-medal-tile-tier" data-scope={isStreak && earned ? undefined : true}>
+          {note}
+        </span>
+      </button>
+    </li>
+  );
+}
+
+/**
+ * The milestones tab: every medal this device has earned, newest first — word milestones
+ * (every 100 words overall and per level) above the streak's days — then the five
+ * closest ones not earned yet, in grey, so the shelf always shows what to aim for. Every
+ * medal opens its criteria on tap.
+ */
+function MedalShelf({
+  badges,
+  wordBadges,
+  locale,
+  ui,
+}: {
+  badges: number[];
+  wordBadges: EarnedWordBadge[];
+  locale: TargetLocale;
+  ui: Locale;
+}) {
+  const [open, setOpen] = useState<{ goal: BadgeGoal; earned: boolean } | null>(null);
+  const { scopes, levelCounts } = useMemo(() => progressScopes(locale), [locale]);
+  // A word badge is diamond when it finished its scope, so each scope's size is needed.
+  const totals = useMemo(
+    () =>
+      new Map(
+        scopes.map((scope) => [
+          scope.id,
+          scope.levels.reduce((sum, level) => sum + (levelCounts[level] ?? 0), 0),
+        ]),
+      ),
+    [scopes, levelCounts],
+  );
+  // Read fresh on every change to the earned lists: those are what move the next goals.
+  const progress = useMemo(() => {
+    const store = readProgress();
+    const streak = readStreak();
+    return { seen: store.seen, streakNow: currentStreak(streak) };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [badges, wordBadges]);
+  const goals = useMemo(
+    () =>
+      nextBadgeGoals({
+        streakEarned: badges,
+        streakNow: progress.streakNow,
+        wordEarned: new Set(wordBadges.map((badge) => badge.key)),
+        scopes,
+        seen: progress.seen,
+        levelCounts,
+      }),
+    [badges, wordBadges, progress, scopes, levelCounts],
+  );
+  const wordGoal = (badge: EarnedWordBadge): BadgeGoal => ({
+    kind: "words",
+    scope: badge.scope,
+    words: badge.words,
+    complete: badge.words === totals.get(badge.scope),
+    seen: badge.words,
+  });
+  const nothingYet = !badges.length && !wordBadges.length;
+  return (
+    <>
+      {nothingYet && (
+        <div className="vocab-medal-empty">
+          <h2>{t(ui, "saved.empty.medal.title")}</h2>
+          <p>Chạm vào một huy hiệu bên dưới để xem cách mở khóa.</p>
+        </div>
+      )}
+      {wordBadges.length > 0 && (
+        <section className="vocab-medal-group" aria-label="Mốc số từ đã học">
+          <h3 className="vocab-medal-group-title">Từ đã học</h3>
+          <ul className="vocab-medal-shelf">
+            {[...wordBadges].reverse().map((badge) => {
+              const goal = wordGoal(badge);
+              return (
+                <MedalTile
+                  key={badge.key}
+                  goal={goal}
+                  earned
+                  caption={goal.kind === "words" && goal.complete ? "Trọn bộ" : `${badge.words} từ`}
+                  note={scopeLabel(badge.scope, locale)}
+                  onOpen={(g, e) => setOpen({ goal: g, earned: e })}
+                />
+              );
+            })}
+          </ul>
+        </section>
+      )}
+      {badges.length > 0 && (
+        <section className="vocab-medal-group" aria-label={t(ui, "saved.medal.shelfAria")}>
+          {wordBadges.length > 0 && <h3 className="vocab-medal-group-title">Chuỗi ngày</h3>}
+          <ul className="vocab-medal-shelf">
+            {[...badges].reverse().map((days) => (
+              <MedalTile
+                key={days}
+                goal={{ kind: "streak", days, current: days }}
+                earned
+                caption={t(ui, "saved.medal.days", { days })}
+                note={STREAK_TIER_LABEL[streakTier(days)].replace("Huy hiệu ", "")}
+                onOpen={(g, e) => setOpen({ goal: g, earned: e })}
+              />
+            ))}
+          </ul>
+        </section>
+      )}
+      {goals.length > 0 && (
+        <section className="vocab-medal-group" aria-label="Huy hiệu sắp đạt">
+          <h3 className="vocab-medal-group-title">Sắp đạt</h3>
+          <ul className="vocab-medal-shelf">
+            {goals.map((goal) =>
+              goal.kind === "streak" ? (
+                <MedalTile
+                  key={`streak:${goal.days}`}
+                  goal={goal}
+                  earned={false}
+                  caption={`${goal.days} ngày`}
+                  note="Chuỗi ngày"
+                  onOpen={(g, e) => setOpen({ goal: g, earned: e })}
+                />
+              ) : (
+                <MedalTile
+                  key={`${goal.scope}:${goal.words}`}
+                  goal={goal}
+                  earned={false}
+                  caption={goal.complete ? "Trọn bộ" : `${goal.words} từ`}
+                  note={scopeLabel(goal.scope, locale)}
+                  onOpen={(g, e) => setOpen({ goal: g, earned: e })}
+                />
+              ),
+            )}
+          </ul>
+        </section>
+      )}
+      {open && (
+        <BadgeDialog
+          goal={open.goal}
+          earned={open.earned}
+          locale={locale}
+          onClose={() => setOpen(null)}
+        />
+      )}
+    </>
+  );
+}
+
+/**
  * Show this device's saved words as folders, with a swipe/hold gesture to un-save.
  * @param onClose Present when the list is embedded in the feed's saved drawer
  *   rather than standing as its own route: the shell drops to a plain div (a
@@ -440,19 +714,26 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
   const [undo, setUndo] = useState<{
     word: string;
     id: string;
-    kind: TabKind;
+    kind: WordTabKind;
     /** The day the row was filed under, so undo can put it back in the same group. */
     at?: number;
   } | null>(null);
   const groupId = useId();
   // The visited address decides the deck: only the Chinese host labels the vault's
   // falling chips with a Han word; every other host keeps them bare blocks.
-  const isZhHost = useMemo(
-    () => typeof window !== "undefined" && resolveTarget(window.location.host) === "zh",
+  const locale = useMemo<TargetLocale>(
+    () => (typeof window === "undefined" ? DEFAULT_TARGET : resolveTarget(window.location.host)),
     [],
   );
+  const isZhHost = locale === "zh";
 
-  const counts: Record<TabKind, number> = { bookmark: saved.length, heart: favorites.length };
+  const badges = useStreakBadges();
+  const wordBadges = useWordBadges();
+  const counts: Record<TabKind, number> = {
+    bookmark: saved.length,
+    heart: favorites.length,
+    medal: badges.length + wordBadges.length,
+  };
 
   useEffect(() => {
     if (!undo) return;
@@ -472,7 +753,7 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
     setTab(TABS[(at + step + TABS.length) % TABS.length].kind);
   }
 
-  function handleRemove(entry: SavedWord, kind: TabKind) {
+  function handleRemove(entry: SavedWord, kind: WordTabKind) {
     setUndo({ word: entry.word.word, id: entry.word.id, kind, at: entry.savedAt });
     remove(entry.word.id, kind);
   }
@@ -511,60 +792,79 @@ export function BookmarksPage({ onClose }: { onClose?: () => void } = {}) {
         aria-label={t(ui, "saved.list.aria")}
         onKeyDown={onTabKeyDown}
       >
-        {TABS.map((item) => {
+        {TABS.map((item, index) => {
           // The density control belongs to the list that is open, so it rides on the active
           // tab itself rather than standing in a switch row of its own. It is withheld until
           // there is something to expand.
-          const fused = tab === item.kind && counts[item.kind] > 0;
+          const fused = tab === item.kind && item.kind !== "medal" && counts[item.kind] > 0;
           const expandLabel = compact ? t(ui, "saved.expand") : t(ui, "saved.collapse");
+          const Icon = TAB_ICON[item.kind];
+          const tabLabel = t(ui, `saved.tab.${item.kind}`);
           return (
-            // One slot per half of the strip. The slot, not the tab, carries the active
-            // underline, so the indicator spans the whole segment — fused control included.
-            <div
-              className="vocab-saved-tab-slot"
-              role="presentation"
-              key={item.kind}
-              data-on={tab === item.kind || undefined}
-            >
-              <button
-                type="button"
-                role="tab"
-                id={`${groupId}-tab-${item.kind}`}
-                aria-selected={tab === item.kind}
-                aria-controls={`${groupId}-panel-${item.kind}`}
-                tabIndex={tab === item.kind ? 0 : -1}
-                className="vocab-saved-tab"
+            // One slot per tab. The slot, not the tab, carries the active bar, so the
+            // indicator spans the whole segment — fused control included. The open slot
+            // takes 2.5 shares of the strip and the closed ones shrink to their icon.
+            <Fragment key={item.kind}>
+              {/* The gap between two slots is a spacer of its own, so its 1px bottom edge
+                  continues the container's top line wherever the gap happens to fall. */}
+              {index > 0 && <span className="vocab-saved-tab-gap" aria-hidden="true" />}
+              <div
+                className="vocab-saved-tab-slot"
+                role="presentation"
                 data-on={tab === item.kind || undefined}
-                onClick={() => setTab(item.kind)}
               >
-                {item.kind === "bookmark" ? <Bookmark size={15} /> : <Heart size={15} />}
-                <span className="vocab-saved-tab-label">{t(ui, `saved.tab.${item.kind}`)}</span>
-                <span className="vocab-saved-tab-count">{counts[item.kind]}</span>
-              </button>
-              {fused && (
                 <button
                   type="button"
-                  className="vocab-saved-density"
-                  aria-pressed={!compact}
-                  aria-label={expandLabel}
-                  title={expandLabel}
-                  onClick={() => setCompact((value) => !value)}
+                  role="tab"
+                  id={`${groupId}-tab-${item.kind}`}
+                  aria-selected={tab === item.kind}
+                  aria-controls={`${groupId}-panel-${item.kind}`}
+                  tabIndex={tab === item.kind ? 0 : -1}
+                  className="vocab-saved-tab"
+                  data-on={tab === item.kind || undefined}
+                  onClick={() => setTab(item.kind)}
+                  title={tab === item.kind ? undefined : tabLabel}
                 >
-                  {/* Peek-a-boo reads as tappable where a chevron didn't: the meanings are
-                      tucked behind two palms (faint = there is something to uncover), and a
-                      tap parts them into a wide-eyed stare (solid = the list is open). Color
-                      emoji, never a mono glyph. */}
-                  <span className="vocab-saved-density-emoji" aria-hidden="true">
-                    {compact ? "🫣" : "😳"}
-                  </span>
+                  <Icon size={15} />
+                  {/* Closed tabs show only the icon; the label stays in the accessibility tree. */}
+                  <span className="vocab-saved-tab-label">{tabLabel}</span>
+                  <span className="vocab-saved-tab-count">{counts[item.kind]}</span>
                 </button>
-              )}
-            </div>
+                {fused && (
+                  <button
+                    type="button"
+                    className="vocab-saved-density"
+                    aria-pressed={!compact}
+                    aria-label={expandLabel}
+                    title={expandLabel}
+                    onClick={() => setCompact((value) => !value)}
+                  >
+                    {/* Peek-a-boo reads as tappable where a chevron didn't: the meanings are
+                        tucked behind two palms (faint = there is something to uncover), and a
+                        tap parts them into a wide-eyed stare (solid = the list is open). Color
+                        emoji, never a mono glyph. */}
+                    <span className="vocab-saved-density-emoji" aria-hidden="true">
+                      {compact ? "🫣" : "😳"}
+                    </span>
+                  </button>
+                )}
+              </div>
+            </Fragment>
           );
         })}
       </div>
 
-      {TABS.map((item) => {
+      <div
+        id={`${groupId}-panel-medal`}
+        role="tabpanel"
+        aria-labelledby={`${groupId}-tab-medal`}
+        className="vocab-saved-panelbox"
+        hidden={tab !== "medal" || undefined}
+      >
+        <MedalShelf badges={badges} wordBadges={wordBadges} locale={locale} ui={ui} />
+      </div>
+
+      {WORD_TABS.map((item) => {
         // Filed by day, always. Grouping by level was a second switch for something the
         // reader never changed, so the list keeps the one order that matches how it was
         // collected. Each tab owns its container: list and empty scene alike live inside

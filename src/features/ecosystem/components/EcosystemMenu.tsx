@@ -1,6 +1,6 @@
 /**
- * The Chay Lá app family as a rounded panel that unfolds from the top-right
- * corner button and notches around it.
+ * The Chay Lá app family as a rounded panel that unfolds from the pill in
+ * front of the page title and notches around it.
  *
  * A grid rather than the earlier ring: an arc only seats four or five tiles
  * before the labels collide, and the family is meant to reach ten.
@@ -13,12 +13,13 @@
  */
 
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { LayoutGrid, Settings, Store, X } from "lucide-react";
+import { Store, X } from "lucide-react";
 import { ECOSYSTEM_STORE_AVAILABLE } from "@/lib/feature-flags";
 import { usePresence } from "@/hooks/use-presence";
 import { ECOSYSTEM_APPS, type EcosystemApp } from "../data/apps";
+import { resolveTarget } from "@/features/vocabulary/lib/target-language";
 import { t } from "@/features/vocabulary/lib/ui-copy";
 import { useLocale } from "@/features/vocabulary/lib/useLocale";
 import "../ecosystem.css";
@@ -39,14 +40,26 @@ const ROW_LEAD_MS = 170;
 /** Folding back is quicker than unfolding, and needs no lead. */
 const ROW_STEP_OUT_MS = 55;
 
+/**
+ * Six squares, three by two: the app family's mark, drawn to the trigger pill's
+ * own 3:2 proportions rather than lucide's square 2x2 grid. Filled, because at
+ * the pill's size an outlined square is mostly stroke.
+ */
+function AppsGlyph(): React.ReactElement {
+  return (
+    <svg className="eco-trigger-glyph" viewBox="0 0 24 16" fill="currentColor" aria-hidden="true">
+      {[0, 9, 18].flatMap((x) =>
+        [0, 9].map((y) => <rect key={`${x}-${y}`} x={x} y={y} width="6" height="6" rx="1.5" />),
+      )}
+    </svg>
+  );
+}
+
 type EcosystemMenuProps = {
   open: boolean;
   onOpenChange: (next: boolean) => void;
   /** Skip the unfold stagger when the reader asked for less motion. */
   reducedMotion: boolean;
-  /** Opens the feed options sheet, which the last tile falls back to while the
-   *  store is gated. */
-  onOpenSettings: () => void;
 };
 
 /**
@@ -79,12 +92,16 @@ function AppTile({
   onNavigate: () => void;
 }): React.ReactElement {
   const body = (
-    <>
-      <span className="eco-tile-glyph" aria-hidden="true">
+    /* The clip layer: the flag fills the whole cell and the name rides on top of
+       it in a blurred band, so the artwork has to be cropped square somewhere
+       that is not the tile itself — the tile's focus ring draws outside its
+       border and an overflow:hidden there would crop it. */
+    <span className="eco-tile-clip">
+      <span className="eco-tile-glyph" data-flag aria-hidden="true">
         {app.glyph}
       </span>
       <span className="eco-tile-name">{app.name}</span>
-    </>
+    </span>
   );
 
   return (
@@ -126,31 +143,42 @@ export function EcosystemMenu({
   open,
   onOpenChange,
   reducedMotion,
-  onOpenSettings,
 }: EcosystemMenuProps): React.ReactElement {
   const presence = usePresence(open, ECOSYSTEM_EXIT_MS);
   // Fan chrome follows the UI locale; sibling-app catalog data stays as authored.
   const ui = useLocale();
+  // Everything except the host the reader is already on. Which host that is varies now
+  // that each language is its own address, so it is resolved rather than assumed. Unknown
+  // hosts (localhost, a preview build, an IP) resolve to Japanese, which is also what the
+  // feed itself serves there, so the drawer agrees with the deck beside it.
+  const apps = useMemo(() => {
+    const here = typeof window === "undefined" ? "" : resolveTarget(window.location.host);
+    return ECOSYSTEM_APPS.filter((app) => app.locale !== here);
+  }, []);
   const anchor = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const firstItem = useRef<HTMLLIElement>(null);
-  // The store counts as a tile, so it shares the last row with whatever apps
-  // land beside it.
-  const total = ECOSYSTEM_APPS.length + 1;
+  // The store tile — when the flag lets it show — is still a tile and shares the
+  // last row with whatever apps land beside it. The footer is not: it sits under
+  // the grid, outside the cascade.
+  const total = apps.length + (ECOSYSTEM_STORE_AVAILABLE ? 1 : 0);
   const rowCount = Math.ceil(total / COLUMNS);
   // The grid may only become scrollable once the panel has stopped moving — a
   // scrollbar appearing mid-animation is the artefact this guards against.
   const [settled, setSettled] = useState(false);
 
-  // The trigger is not a fixed 44px — vocabulary.css shrinks .vocab-icon-button
-  // to 34 and then 30 at narrower widths. The notch and the growth origin are
-  // derived from its measured size, because hard-coding half of 44 left the
-  // cut-out several pixels off the button on every small screen.
+  // The trigger is not a fixed size — vocabulary.css shrinks the pill with the
+  // title at narrower widths. The notch and the growth origin are derived from
+  // its measured box, because hard-coding the full-size half left the cut-out
+  // several pixels off the button on every small screen.
   useEffect(() => {
     const button = trigger.current;
     const host = anchor.current;
     if (!button || !host) return;
-    const sync = () => host.style.setProperty("--eco-btn", `${button.offsetWidth}px`);
+    const sync = () => {
+      host.style.setProperty("--eco-btn", `${button.offsetWidth}px`);
+      host.style.setProperty("--eco-btn-h", `${button.offsetHeight}px`);
+    };
     sync();
     const observer = new ResizeObserver(sync);
     observer.observe(button);
@@ -201,7 +229,7 @@ export function EcosystemMenu({
         data-active={open || undefined}
         onClick={() => onOpenChange(!open)}
       >
-        {open ? <X size={19} /> : <LayoutGrid size={19} />}
+        {open ? <X size={19} /> : <AppsGlyph />}
       </button>
 
       {presence.mounted && (
@@ -223,13 +251,13 @@ export function EcosystemMenu({
             data-still={reducedMotion || undefined}
             inert={presence.closing || undefined}
           >
-            {/* Kept clear of the top-right corner, which the notch eats into. */}
+            {/* Kept clear of the top-left corner, which the notch eats into. */}
             <div className="eco-panel-head">
               <p className="eco-panel-title">{t(ui, "eco.title")}</p>
               <p className="eco-panel-sub">{t(ui, "eco.sub")}</p>
             </div>
             <ul className="eco-panel-grid" role="menu" aria-label={t(ui, "eco.title")}>
-              {ECOSYSTEM_APPS.map((app, index) => (
+              {apps.map((app, index) => (
                 <AppTile
                   key={app.id}
                   app={app}
@@ -240,14 +268,16 @@ export function EcosystemMenu({
                   onNavigate={close}
                 />
               ))}
-              {/* The last tile is ours rather than a door out to a sibling app,
-                  so it is marked out from the rest. While the store is gated it
-                  carries the feed's own settings instead. */}
-              <li
-                className="eco-tile-slot"
-                style={tileStyle(total - 1, rowCount, presence.closing, "#6d28d9", "#3b1178")}
-              >
-                {ECOSYSTEM_STORE_AVAILABLE ? (
+              {/* The store tile is ours rather than a door out to a sibling app,
+                  so it is marked out from the rest — but only while the flag lets
+                  it show. The old Settings fallback tile is gone: the options
+                  sheet has its own permanent corner button on the toolbar, and a
+                  second door to it inside this panel was one door too many. */}
+              {ECOSYSTEM_STORE_AVAILABLE && (
+                <li
+                  className="eco-tile-slot"
+                  style={tileStyle(total - 1, rowCount, presence.closing, "#6d28d9", "#3b1178")}
+                >
                   <Link
                     className="eco-tile eco-tile-util"
                     to="/store"
@@ -256,31 +286,20 @@ export function EcosystemMenu({
                     aria-label={t(ui, "eco.storeAria")}
                     onClick={close}
                   >
-                    <span className="eco-tile-glyph" aria-hidden="true">
-                      <Store size={19} />
+                    <span className="eco-tile-clip">
+                      <span className="eco-tile-glyph" aria-hidden="true">
+                        <Store size={19} />
+                      </span>
+                      <span className="eco-tile-name">{t(ui, "eco.storeName")}</span>
                     </span>
-                    <span className="eco-tile-name">{t(ui, "eco.storeName")}</span>
                   </Link>
-                ) : (
-                  <button
-                    type="button"
-                    className="eco-tile eco-tile-util"
-                    role="menuitem"
-                    title={t(ui, "eco.settingsTitle")}
-                    aria-label={t(ui, "eco.settingsAria")}
-                    onClick={() => {
-                      close();
-                      onOpenSettings();
-                    }}
-                  >
-                    <span className="eco-tile-glyph" aria-hidden="true">
-                      <Settings size={19} />
-                    </span>
-                    <span className="eco-tile-name">{t(ui, "eco.settingsName")}</span>
-                  </button>
-                )}
-              </li>
+                </li>
+              )}
             </ul>
+            {/* Under a divider rather than as a tile: the family is not done
+                growing, and a row that ends in dead space reads as broken
+                instead of as unannounced. */}
+            <p className="eco-panel-foot">{t(ui, "eco.footer")}</p>
           </div>
         </>
       )}

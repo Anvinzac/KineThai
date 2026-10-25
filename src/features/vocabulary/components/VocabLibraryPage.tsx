@@ -10,6 +10,7 @@
 
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Library as LibraryIcon, Sparkles } from "lucide-react";
+import { LIBRARY_PACKS_AVAILABLE } from "@/lib/feature-flags";
 import { libraryGroups } from "../lib/library";
 import { formatLevelBand } from "../lib/difficulty";
 import { t } from "../lib/ui-copy";
@@ -17,12 +18,12 @@ import { useLocale } from "../lib/useLocale";
 import { ImportPackPanel } from "./ImportPackPanel";
 import "../vocabulary.css";
 
-/** Show the curated pack shelves. @returns Public library page. */
+/** Show the pack upload, and the curated shelves when they are on. @returns Public library page. */
 export function VocabLibraryPage() {
   // Shelves resolve in the active UI locale (Japanese by default); the seed data
   // falls back to Vietnamese for any string a locale has not authored.
   const ui = useLocale();
-  const groups = libraryGroups(ui);
+  const groups = LIBRARY_PACKS_AVAILABLE ? libraryGroups(ui) : [];
   return (
     <main className="vocabulary-shell vocab-library-shell">
       <header className="vocab-library-header">
@@ -34,7 +35,11 @@ export function VocabLibraryPage() {
             <LibraryIcon size={20} aria-hidden="true" />
             {t(ui, "library.title")}
           </h1>
-          <p className="vocab-library-subtitle">{t(ui, "library.subtitle")}</p>
+          <p className="vocab-library-subtitle">
+            {LIBRARY_PACKS_AVAILABLE
+              ? t(ui, "library.subtitle")
+              : t(ui, "library.subtitleUpload")}
+          </p>
         </div>
       </header>
 
