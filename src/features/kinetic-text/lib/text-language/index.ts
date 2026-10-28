@@ -28,6 +28,8 @@ export {
   getVietnameseWordLines,
 } from "./page-metrics";
 
+export { CLOSING_PUNCTUATION_CLASS, endsWithPunctuation } from "./closing-punctuation";
+
 export {
   MAX_MEASURED_SEGMENTS,
   getPunctuationPhraseEdges,
@@ -67,6 +69,7 @@ export {
   getDataEmphasisWordIndexes,
   getDataEmphasisWordSpans,
   getEmphasisPhraseKeysForLayout,
+  getEmphasizedRunLayoutPhraseKeys,
   getEmphasizedRunPhraseKeys,
 } from "./data-emphasis";
 

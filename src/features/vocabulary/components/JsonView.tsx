@@ -1,64 +1,133 @@
 /**
  * JSON for readers, not developers. `JsonView` draws parsed data as decorated tables:
- * an object is a field list with friendly Vietnamese labels, a list of objects is a grid
+ * an object is a field list with friendly localized labels, a list of objects is a grid
  * whose columns are their fields, short lists are chips, and each value type has its own
  * colour. `CodeView` is the fallback for text that does not parse: highlighted, numbered
  * lines with roomy spacing.
  *
  * Exports: JsonView, CodeView
- * Depends on: ../lib/word-joiner, vocabulary.css (.vocab-json*)
+ * Depends on: ../lib/word-joiner, ../lib/locale, ../lib/useLocale, vocabulary.css (.vocab-json*)
  */
 import { Fragment, useState, type ReactNode } from "react";
+import { localeCopy, type Locale } from "../lib/locale";
+import { useLocale } from "../lib/useLocale";
 import { encodeWordJoiners } from "../lib/word-joiner";
 
-const FIELD_LABELS: Record<string, string> = {
-  meta: "Thông tin gói",
-  name: "Tên gói",
-  revision: "Phiên bản",
-  words: "Danh sách từ",
-  id: "Mã",
-  word: "Từ",
-  level: "Cấp độ",
-  pos: "Từ loại",
-  ipa: "Phát âm",
-  kana: "Đọc katakana",
-  defVi: "Nghĩa",
-  leadVi: "Câu dẫn",
-  anticipateVi: "Gợi ý",
-  topic: "Chủ đề",
-  topics: "Chủ đề",
-  exams: "Kỳ thi",
-  style: "Phong cách",
-  usage: "Ví dụ",
-  en: "Câu gốc",
-  vi: "Bản dịch",
-  emphasis: "Nhấn mạnh",
-  usageEn: "Ví dụ (gốc)",
-  usageVi: "Ví dụ (dịch)",
-  emphasisVi: "Nhấn mạnh",
+const FIELD_LABELS: Partial<Record<Locale, Record<string, string>>> = {
+  vi: {
+    meta: "Thông tin gói",
+    name: "Tên gói",
+    revision: "Phiên bản",
+    words: "Danh sách từ",
+    id: "Mã",
+    word: "Từ",
+    level: "Cấp độ",
+    pos: "Từ loại",
+    ipa: "Phát âm",
+    defVi: "Nghĩa",
+    leadVi: "Câu dẫn",
+    anticipateVi: "Gợi ý",
+    topic: "Chủ đề",
+    topics: "Chủ đề",
+    exams: "Kỳ thi",
+    style: "Phong cách",
+    usage: "Ví dụ",
+    en: "Câu gốc",
+    vi: "Bản dịch",
+    emphasis: "Nhấn mạnh",
+    usageEn: "Ví dụ (gốc)",
+    usageVi: "Ví dụ (dịch)",
+    emphasisVi: "Nhấn mạnh",
+  },
+  ja: {
+    meta: "パック情報",
+    name: "パック名",
+    revision: "バージョン",
+    words: "単語リスト",
+    id: "ID",
+    word: "単語",
+    level: "レベル",
+    pos: "品詞",
+    ipa: "発音",
+    defVi: "意味",
+    leadVi: "導入文",
+    anticipateVi: "ヒント",
+    topic: "トピック",
+    topics: "トピック",
+    exams: "試験",
+    style: "スタイル",
+    usage: "例文",
+    en: "原文",
+    vi: "訳文",
+    emphasis: "強調",
+    usageEn: "例文（原文）",
+    usageVi: "例文（訳文）",
+    emphasisVi: "強調",
+  },
+  th: {
+    meta: "ข้อมูลชุดคำศัพท์",
+    name: "ชื่อชุดคำศัพท์",
+    revision: "รุ่น",
+    words: "รายการคำศัพท์",
+    id: "รหัส",
+    word: "คำศัพท์",
+    level: "ระดับ",
+    pos: "ชนิดของคำ",
+    ipa: "การออกเสียง",
+    defVi: "ความหมาย",
+    leadVi: "ประโยคนำ",
+    anticipateVi: "คำใบ้",
+    topic: "หัวข้อ",
+    topics: "หัวข้อ",
+    exams: "การสอบ",
+    style: "สไตล์",
+    usage: "ตัวอย่าง",
+    en: "ประโยคต้นฉบับ",
+    vi: "คำแปล",
+    emphasis: "คำเน้น",
+    usageEn: "ตัวอย่าง (ต้นฉบับ)",
+    usageVi: "ตัวอย่าง (คำแปล)",
+    emphasisVi: "คำเน้น",
+  },
+};
+
+const COPY: Partial<Record<
+  Locale,
+  {
+    empty: string;
+    yes: string;
+    no: string;
+    rowIndex: string;
+    showMore: (shown: string, total: string) => string;
+  }
+>> = {
+  vi: {
+    empty: "trống",
+    yes: "có",
+    no: "không",
+    rowIndex: "Số thứ tự",
+    showMore: (shown, total) => `Hiện thêm · ${shown} / ${total} mục`,
+  },
+  ja: {
+    empty: "空",
+    yes: "あり",
+    no: "なし",
+    rowIndex: "番号",
+    showMore: (shown, total) => `さらに表示 · ${shown} / ${total} 件`,
+  },
+  th: {
+    empty: "ว่าง",
+    yes: "มี",
+    no: "ไม่มี",
+    rowIndex: "ลำดับ",
+    showMore: (shown, total) => `แสดงเพิ่ม · ${shown} / ${total} รายการ`,
+  },
 };
 
 /** Slug-like fields keep their underscores; reader text shows joins as the reader sees them. */
-const LITERAL_KEYS = new Set([
-  "id",
-  "topic",
-  "topics",
-  "exams",
-  "level",
-  "pos",
-  "ipa",
-  "kana",
-  "style",
-]);
+const LITERAL_KEYS = new Set(["id", "topic", "topics", "exams", "level", "pos", "ipa", "style"]);
 const GRID_ROW_LIMIT = 300;
 const CHIP_LIMIT = 8;
-
-const JP_LEVEL_LABELS: Record<string, string> = {
-  JPRIM: "Tiểu học",
-  JSEC: "THCS",
-  JHIGH: "THPT",
-  JCOLL: "Đại học",
-};
 
 type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 
@@ -66,21 +135,21 @@ const isRecord = (v: Json): v is { [key: string]: Json } =>
   typeof v === "object" && v !== null && !Array.isArray(v);
 const isScalar = (v: Json) => v === null || typeof v !== "object";
 
-function FieldLabel({ name }: { name: string }) {
-  const japaneseLevel = JP_LEVEL_LABELS[name];
-  const label = FIELD_LABELS[name];
+function FieldLabel({ name, ui }: { name: string; ui: Locale }) {
+  const label = localeCopy(FIELD_LABELS, ui)[name] ?? localeCopy(FIELD_LABELS, "vi")[name];
   return (
     <span className="vocab-json-key">
-      {japaneseLevel ?? label ?? name}
-      {label && !japaneseLevel && <code>{name}</code>}
+      {label ?? name}
+      {label && <code>{name}</code>}
     </span>
   );
 }
 
-function Scalar({ value, field }: { value: Json; field?: string }) {
-  if (value === null) return <span className="vocab-json-null">trống</span>;
+function Scalar({ value, field, ui }: { value: Json; field?: string; ui: Locale }) {
+  const copy = localeCopy(COPY, ui);
+  if (value === null) return <span className="vocab-json-null">{copy.empty}</span>;
   if (typeof value === "boolean")
-    return <span className="vocab-json-bool">{value ? "có" : "không"}</span>;
+    return <span className="vocab-json-bool">{value ? copy.yes : copy.no}</span>;
   if (typeof value === "number") return <span className="vocab-json-num">{value}</span>;
   const text = String(value);
   if (!text) return <span className="vocab-json-null">—</span>;
@@ -88,27 +157,20 @@ function Scalar({ value, field }: { value: Json; field?: string }) {
     return <span className="vocab-json-slot">{text.slice(1, -1)}</span>;
   if (field === "word")
     return <strong className="vocab-json-word">{encodeWordJoiners(text)}</strong>;
-  if (JP_LEVEL_LABELS[text] || field === "level")
-    return <span className="vocab-json-level">{JP_LEVEL_LABELS[text] ?? text}</span>;
+  if (field === "level") return <span className="vocab-json-level">{text}</span>;
   if (field === "ipa") return <code className="vocab-json-ipa">{text}</code>;
-  if (field === "kana")
-    return (
-      <span className="vocab-json-kana" lang="ja">
-        {text}
-      </span>
-    );
   if (field && LITERAL_KEYS.has(field)) return <span className="vocab-json-slug">{text}</span>;
   return <span className="vocab-json-str">{encodeWordJoiners(text)}</span>;
 }
 
-function Chips({ items, field }: { items: Json[]; field?: string }) {
+function Chips({ items, field, ui }: { items: Json[]; field?: string; ui: Locale }) {
   const [all, setAll] = useState(false);
   const shown = all ? items : items.slice(0, CHIP_LIMIT);
   return (
     <ul className="vocab-json-chips">
       {shown.map((item, i) => (
         <li key={i}>
-          <Scalar value={item} field={field} />
+          <Scalar value={item} field={field} ui={ui} />
         </li>
       ))}
       {items.length > shown.length && (
@@ -126,20 +188,22 @@ function Fields({
   record,
   notes,
   depth,
+  ui,
 }: {
   record: { [key: string]: Json };
   notes?: Record<string, string>;
   depth: number;
+  ui: Locale;
 }) {
   return (
     <dl className="vocab-json-fields" data-depth={depth}>
       {Object.entries(record).map(([key, value]) => (
         <Fragment key={key}>
           <dt>
-            <FieldLabel name={key} />
+            <FieldLabel name={key} ui={ui} />
           </dt>
           <dd>
-            <Value value={value} field={key} depth={depth + 1} notes={notes} />
+            <Value value={value} field={key} depth={depth + 1} notes={notes} ui={ui} />
             {notes?.[key] && <p className="vocab-json-note">{notes[key]}</p>}
           </dd>
         </Fragment>
@@ -148,18 +212,27 @@ function Fields({
   );
 }
 
-function Grid({ rows, depth }: { rows: { [key: string]: Json }[]; depth: number }) {
+function Grid({
+  rows,
+  depth,
+  ui,
+}: {
+  rows: { [key: string]: Json }[];
+  depth: number;
+  ui: Locale;
+}) {
   const [limit, setLimit] = useState(GRID_ROW_LIMIT);
   const columns = [...new Set(rows.flatMap((row) => Object.keys(row)))];
+  const copy = localeCopy(COPY, ui);
   return (
     <div className="vocab-json-grid-wrap">
       <table className="vocab-json-grid">
         <thead>
           <tr>
-            <th aria-label="Số thứ tự" />
+            <th aria-label={copy.rowIndex} />
             {columns.map((c) => (
               <th key={c}>
-                <FieldLabel name={c} />
+                <FieldLabel name={c} ui={ui} />
               </th>
             ))}
           </tr>
@@ -170,7 +243,7 @@ function Grid({ rows, depth }: { rows: { [key: string]: Json }[]; depth: number 
               <td className="vocab-json-index">{i + 1}</td>
               {columns.map((c) => (
                 <td key={c} data-field={c}>
-                  {c in row ? <Value value={row[c]} field={c} depth={depth + 1} /> : null}
+                  {c in row ? <Value value={row[c]} field={c} depth={depth + 1} ui={ui} /> : null}
                 </td>
               ))}
             </tr>
@@ -183,7 +256,7 @@ function Grid({ rows, depth }: { rows: { [key: string]: Json }[]; depth: number 
           className="vocab-json-more"
           onClick={() => setLimit((n) => n + GRID_ROW_LIMIT)}
         >
-          Hiện thêm · {limit.toLocaleString()} / {rows.length.toLocaleString()} mục
+          {copy.showMore(limit.toLocaleString(), rows.length.toLocaleString())}
         </button>
       )}
     </div>
@@ -195,23 +268,25 @@ function Value({
   field,
   depth,
   notes,
+  ui,
 }: {
   value: Json;
   field?: string;
   depth: number;
   notes?: Record<string, string>;
+  ui: Locale;
 }): ReactNode {
-  if (isScalar(value)) return <Scalar value={value} field={field} />;
+  if (isScalar(value)) return <Scalar value={value} field={field} ui={ui} />;
   if (Array.isArray(value)) {
     if (!value.length) return <span className="vocab-json-null">—</span>;
-    if (value.every(isScalar)) return <Chips items={value} field={field} />;
+    if (value.every(isScalar)) return <Chips items={value} field={field} ui={ui} />;
     if (value.every(isRecord)) {
       return depth === 0 || (depth === 1 && value.length > 2) ? (
-        <Grid rows={value} depth={depth} />
+        <Grid rows={value} depth={depth} ui={ui} />
       ) : (
         <div className="vocab-json-stack">
           {value.map((item, i) => (
-            <Fields key={i} record={item} depth={depth} />
+            <Fields key={i} record={item} depth={depth} ui={ui} />
           ))}
         </div>
       );
@@ -220,13 +295,13 @@ function Value({
       <div className="vocab-json-stack">
         {value.map((item, i) => (
           <div key={i}>
-            <Value value={item} field={field} depth={depth + 1} />
+            <Value value={item} field={field} depth={depth + 1} ui={ui} />
           </div>
         ))}
       </div>
     );
   }
-  return <Fields record={value} notes={notes} depth={depth} />;
+  return <Fields record={value} notes={notes} depth={depth} ui={ui} />;
 }
 
 /**
@@ -234,9 +309,10 @@ function Value({
  * @param notes - optional per-field explanations shown under a value (keyed by field name)
  */
 export function JsonView({ value, notes }: { value: unknown; notes?: Record<string, string> }) {
+  const ui = useLocale();
   return (
     <div className="vocab-json">
-      <Value value={value as Json} depth={0} notes={notes} />
+      <Value value={value as Json} depth={0} notes={notes} ui={ui} />
     </div>
   );
 }

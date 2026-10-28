@@ -8,10 +8,11 @@
  * sections (native <details>), so the brief, the word-list slot and the sample come first.
  *
  * Exports: PackKitDoc
- * Depends on: ./JsonView
+ * Depends on: ./JsonView, ../lib/useLocale
  */
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { ChevronRight, Eye, EyeOff } from "lucide-react";
+import { useLocale } from "../lib/useLocale";
 import { CodeView, JsonView } from "./JsonView";
 
 const COLLAPSIBLE_TITLE = "Detailed rules";
@@ -153,6 +154,7 @@ function SectionView({ section, folded }: { section: Section; folded: boolean })
 
 /** The outer rules card: its title carries the rule count, and the eye opens every rule. */
 function RulesRoot({ section, children }: { section: Section; children: ReactNode }) {
+  const ui = useLocale();
   const ref = useRef<HTMLDetailsElement>(null);
   const [allOpen, setAllOpen] = useState(false);
   const count = countSections(section);
@@ -177,6 +179,18 @@ function RulesRoot({ section, children }: { section: Section; children: ReactNod
     setAllOpen(open);
   };
 
+  const toggleLabel = allOpen
+    ? ui === "ja"
+      ? "すべてのルールを折りたたむ"
+      : ui === "th"
+        ? "ยุบกฎทั้งหมด"
+        : "Thu gọn mọi quy tắc"
+    : ui === "ja"
+      ? "すべてのルールを開く"
+      : ui === "th"
+        ? "เปิดกฎทั้งหมด"
+        : "Mở tất cả quy tắc";
+
   return (
     <details ref={ref} className="vocab-doc-fold" data-depth={1}>
       <summary>
@@ -188,8 +202,8 @@ function RulesRoot({ section, children }: { section: Section; children: ReactNod
           type="button"
           className="vocab-doc-fold-all"
           aria-pressed={allOpen}
-          aria-label={allOpen ? "Thu gọn mọi quy tắc" : "Mở tất cả quy tắc"}
-          title={allOpen ? "Thu gọn mọi quy tắc" : "Mở tất cả quy tắc"}
+          aria-label={toggleLabel}
+          title={toggleLabel}
           onClick={toggleAll}
         >
           {allOpen ? <EyeOff size={17} /> : <Eye size={17} />}

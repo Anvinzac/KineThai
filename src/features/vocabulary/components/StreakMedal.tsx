@@ -11,32 +11,39 @@
  * card's accent) and the tier's own deep tone otherwise.
  *
  * Exports: StreakMedal
- * Depends on: React, ../lib/streak-tiers, vocabulary.css
+ * Depends on: React, ../lib/streak-tiers, ../lib/useLocale, vocabulary.css
  */
 
 import { useId, type ReactNode } from "react";
 import { streakTier, type StreakTier } from "../lib/streak-tiers";
+import { useLocale } from "../lib/useLocale";
 
 /**
  * @param days - The milestone: days for a streak, words for a word badge
  * @param className - Extra class for the caller's sizing and animation
  * @param value - What to print on the face; defaults to `days` (the celebration counts up)
  * @param tier - The metal; defaults to the streak tier for `days`
- * @param unit - The word under the number; "ngày" for a streak, "từ" for a word badge
+ * @param unit - The word under the number; "ngày" / "日" for a streak, "từ" / "語" for a word badge
+ * @param count - How many times a repeatable badge has been earned, pinned to the coin's
+ *   top-right as a small counter; absent for a badge earned once
  */
 export function StreakMedal({
   days,
   className,
   value = days,
   tier = streakTier(days),
-  unit = "ngày",
+  unit,
+  count,
 }: {
   days: number;
   className?: string;
   value?: ReactNode;
   tier?: StreakTier;
   unit?: string;
+  count?: number;
 }) {
+  const ui = useLocale();
+  const displayUnit = unit ?? (ui === "ja" ? "日" : ui === "th" ? "วัน" : "ngày");
   const uid = useId().replace(/:/g, "");
   const face = `mf-${uid}`;
   const rim = `mr-${uid}`;
@@ -97,8 +104,9 @@ export function StreakMedal({
       <div className="vocab-medal-shine" />
       <div className="vocab-medal-face" data-digits={String(days).length}>
         <strong>{value}</strong>
-        <span>{unit}</span>
+        <span>{displayUnit}</span>
       </div>
+      {count !== undefined && <span className="vocab-medal-count">×{count}</span>}
     </div>
   );
 }

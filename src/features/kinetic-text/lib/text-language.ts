@@ -6,14 +6,17 @@
  */
 
 export {
+  CLOSING_PUNCTUATION_CLASS,
   DEFAULT_TEXT_PAGE_WORD_LIMIT,
   VIETNAMESE_TEXT_PAGE_WORD_LIMIT,
+  endsWithPunctuation,
   expandEmphasisToBoundPhrases,
   getBoundPhraseEmphasisSeed,
   getBoundPhraseStartIndex,
   getDataEmphasisWordIndexes,
   getDataEmphasisWordSpans,
   getEmphasisPhraseKeysForLayout,
+  getEmphasizedRunLayoutPhraseKeys,
   getEmphasizedRunPhraseKeys,
   getHanCharBudgetForLine,
   getHanLayoutMetrics,

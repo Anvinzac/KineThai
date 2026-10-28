@@ -302,6 +302,19 @@ const THEME_LABELS_TH: Record<string, string> = {
   "ink-bamboo": "หมึกไผ่",
   "lotus-gold": "บัวทอง",
   "indigo-porcelain": "ครามกระเบื้อง",
+  "douyin-neon": "นีออนโต่วอิน",
+  "guochao-red": "แดงกั๋วเฉา",
+  "neon-night": "ค่ำคืนนีออน",
+  "jade-mist": "หมอกหยก",
+  "ink-gold": "หมึกทอง",
+  "ink-landscape": "ภาพหมึกพู่กัน",
+  "celadon-blue": "เขียวศิลาดล",
+  "cinnabar-gold": "ชาดทอง",
+  "porcelain-blue": "ครามเครื่องเคลือบ",
+  "plum-blossom": "ดอกเหมย",
+  "spring-crimson": "แดงวสันต์",
+  "hongbao-gold": "อั่งเปาทอง",
+  "lantern-paper-cut": "โคมกระดาษตัด",
 };
 
 const THEME_LABELS_JA: Record<string, string> = {
@@ -331,6 +344,19 @@ const THEME_LABELS_JA: Record<string, string> = {
   "ink-bamboo": "墨と竹",
   "lotus-gold": "蓮と金",
   "indigo-porcelain": "藍の磁器",
+  "douyin-neon": "Douyin ネオン",
+  "guochao-red": "国潮レッド",
+  "neon-night": "ネオンナイト",
+  "jade-mist": "翡翠の霞",
+  "ink-gold": "墨と金",
+  "ink-landscape": "山水画",
+  "celadon-blue": "青磁ブルー",
+  "cinnabar-gold": "辰砂と金",
+  "porcelain-blue": "青花磁器",
+  "plum-blossom": "梅花",
+  "spring-crimson": "春節クリムゾン",
+  "hongbao-gold": "紅包ゴールド",
+  "lantern-paper-cut": "切り絵ランタン",
 };
 
 /** Locale → label set. Stub locales fall back to Vietnamese via the helpers below. */

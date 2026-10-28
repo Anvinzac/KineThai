@@ -14,6 +14,7 @@ import { VOCAB_LINE_SPACING_SCALE } from "../lib/presets";
 import { FilledUsage, MarkedText } from "./MarkedText";
 import { RevealBurst } from "./RevealBurst";
 import { ShareChallengeButton } from "./ShareChallengeButton";
+import { WordGrammar } from "./WordGrammar";
 import { WordPronunciation } from "./WordPronunciation";
 
 /** Horizontal travel of a clue page as it arrives and leaves, in px. */
@@ -132,6 +133,7 @@ export function VocabularyStage({
   revealY,
   timeScale = 1,
   textBudget,
+  onGrammarHold,
 }: {
   stage: LearningStage;
   word: VocabularyWord;
@@ -168,6 +170,8 @@ export function VocabularyStage({
    * With them, a Vietnamese clue is broken into lines from the real width of its words.
    */
   textBudget?: React.ComponentProps<typeof WordSequenceText>["measuredLayout"];
+  /** The reader opened (true) or closed (false) the answer's grammar section by hand. */
+  onGrammarHold?: (held: boolean) => void;
 }) {
   const locale = useLocale();
   const details = useRef<HTMLDivElement>(null);
@@ -266,19 +270,23 @@ export function VocabularyStage({
             reducedMotion ? { duration: 0 } : { ...SPRING.gentle, delay: DETAILS_DELAY_SECONDS }
           }
         >
-          {/* The text scrolls in here, not on the panel itself, so the share badge
-              below can hang off the panel's bottom edge: a child of a scroll
-              container is clipped by it and could never straddle the border.
-              `details` follows the scroller, because its one job is resetting
-              scrollTop when the word changes. */}
+          {/* The text scrolls in here, not on the panel itself, so the share leaf
+              seated in the panel's corner stays put instead of scrolling away with
+              the definition. `details` follows the scroller, because its one job is
+              resetting scrollTop when the word changes. */}
           <div className="vocab-reveal-scroll" ref={details}>
             <WordPronunciation word={word} showPos />
-            <p lang={locale}>
+            {/* The gloss, not the definition. `defVi` is written to work as a CLUE
+                before the answer is known — a sentence describing the word without
+                naming it — and that is the wrong register once the reader can see the
+                word: they want the equivalent, not a description. Decks authored before
+                `meaningVi` existed fall back to the sentence they do have. */}
+            <p className="vocab-meaning" lang={locale}>
               <MarkedText
                 text={
                   locale === "ja" && word.meaningJP
                     ? word.meaningJP
-                    : resolveClue(word, "def", locale)
+                    : word.meaningVi || resolveClue(word, "def", locale)
                 }
               />
             </p>
@@ -289,6 +297,13 @@ export function VocabularyStage({
                 </p>
               </div>
             ))}
+            {word.grammar && (
+              <WordGrammar
+                grammar={word.grammar}
+                reducedMotion={reducedMotion}
+                onHold={onGrammarHold}
+              />
+            )}
           </div>
           <ShareChallengeButton code={word.shareCode} />
         </motion.div>

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ChallengePage } from "@/features/vocabulary/components/ChallengePage";
 import { getSiteLocale } from "@/features/vocabulary/api/site-locale.functions";
 import { sitePageHead } from "@/features/vocabulary/lib/target-language";
-import { DEFAULT_LOCALE } from "@/features/vocabulary/lib/locale";
+import { toLocale } from "@/features/vocabulary/lib/locale";
 import { t } from "@/features/vocabulary/lib/ui-copy";
 
 export const Route = createFileRoute("/w/$code")({
@@ -14,7 +14,9 @@ export const Route = createFileRoute("/w/$code")({
   // the guess before the receiver even taps.
   head: ({ loaderData }) => {
     const target = loaderData?.locale;
-    const ui = target && target !== "en" ? target : DEFAULT_LOCALE;
+    // The address names the answer deck (TargetLocale); the UI copy is keyed by Locale, so
+    // coerce — a deck with no matching UI language (en/fr/de/es) falls back to the default.
+    const ui = toLocale(target);
     return sitePageHead(target, t(ui, "share.title"), t(ui, "challenge.headBody"));
   },
   component: ChallengePage,

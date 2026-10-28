@@ -1,5 +1,6 @@
 /** WordCrawler validation and normalized catalog contract. Exports: schemas/types, normalizeDeck. Depends on: zod, ja-text. */
 import { z } from "zod";
+import { GRAMMAR_KEYS, deckGrammarFields, foldGrammar, grammarSchema } from "./grammar";
 import { parseJapaneseMarkup, stripJapaneseMarks } from "./ja-text";
 import type { TargetLocale } from "./target-language";
 
@@ -75,9 +76,10 @@ const wordSchema = z.object({
     .trim()
     .min(1)
     .max(64)
-    // An English headword (2+ chars, letters with inner ' or -) or a Chinese one
-    // (one or more Han characters) for a locale deck served on its own domain.
-    .regex(/^(?:(?=.{2})[a-zA-Z]+(?:['’-][a-zA-Z]+)*|\p{Script=Han}+)$/u),
+    // A headword in any deck language: Unicode letters (so German äöüß, French
+    // accents, Spanish ñ all pass) with inner ', - or spaces for multi-word entries
+    // ("sich vorstellen"), or one or more Han characters for the Chinese deck.
+    .regex(/^(?:(?=.{2})\p{L}+(?:['’ -]\p{L}+)*|\p{Script=Han}+)$/u),
   /**
    * The short handle used to share this word as a challenge (`/w/K7F`). Assigned
    * once by scripts/assign-share-codes.ts and then permanent: codes escape into
@@ -91,6 +93,18 @@ const wordSchema = z.object({
     .toUpperCase()
     .regex(/^[0-9A-HJKMNP-TV-Z]{3}$/)
     .optional(),
+  /**
+   * The short gloss — what the word MEANS, in a word or two ("tò mò", "kiên nhẫn").
+   *
+   * This is what the reveal panel shows. `defVi` is a full sentence written to work as a
+   * CLUE before the answer is known, which is the wrong register once the reader has the
+   * word in front of them: they want the equivalent, not a description of it.
+   *
+   * Optional because decks authored before the field existed do not carry it, and the
+   * panel falls back to `defVi` for those. check:meanings is what requires every
+   * PUBLISHED English word to have one — same arrangement as shareCode above.
+   */
+  meaningVi: optionalText(120),
   defVi: z.string().trim().min(2).max(400),
   leadVi: optionalText(240),
   anticipateVi: optionalText(180),
@@ -141,13 +155,22 @@ const wordSchema = z.object({
     .max(5)
     .optional()
     .default([]),
+  /**
+   * The word's grammar in its own language (plural, conjugation, governed case,
+   * counter, the beginner trap…), behind the meaning panel's grammar section. A
+   * generated deck writes these fields flat on the card; normalizeDeck folds them in
+   * here with every null dropped (lib/grammar.ts). Absent for a word with none.
+   */
+  grammar: grammarSchema.optional(),
 });
+/** A word as a deck writes it: the grammar fields may sit flat on the card. */
+const deckWordSchema = wordSchema.extend(deckGrammarFields);
 const deckSchema = z.object({
   meta: z
     .object({ name: optionalText(160) })
     .passthrough()
     .optional(),
-  words: z.array(wordSchema).min(1, "The deck must contain at least one word").max(100_000),
+  words: z.array(deckWordSchema).min(1, "The deck must contain at least one word").max(100_000),
 });
 export type VocabularyWord = z.infer<typeof wordSchema>;
 export type VocabularyLevel = (typeof LEVELS)[number];
@@ -510,11 +533,19 @@ export function normalizeDeck(input: unknown): Omit<Catalog, "revision"> {
   const ids = new Set<string>();
   const targets = new Set<string>();
   const errors: string[] = [];
-  const words = parsed.data.words.map((entry, index) => {
-    const word = entry.word.normalize("NFC").toLowerCase().replaceAll("’", "'");
+  const words = parsed.data.words.map((deckEntry, index) => {
+    const entry = Object.fromEntries(
+      Object.entries(deckEntry).filter(([key]) => !(GRAMMAR_KEYS as string[]).includes(key)),
+    ) as VocabularyWord;
+    const grammar = foldGrammar(deckEntry);
+    // The headword keeps the case it was written in: a German noun is capitalised
+    // (der Kollege), and every answer check already compares without case. Duplicates
+    // are still caught case-insensitively.
+    const word = entry.word.normalize("NFC").replaceAll("’", "'");
     const id = entry.id.toLowerCase();
+    const target = word.toLowerCase();
     if (ids.has(id)) errors.push(`words.${index}.id: Duplicate ID ${id}`);
-    if (targets.has(word)) errors.push(`words.${index}.word: Duplicate word ${word}`);
+    if (targets.has(target)) errors.push(`words.${index}.word: Duplicate word ${word}`);
     if (answerPattern(word).test(entry.anticipateVi)) {
       errors.push(`words.${index}.anticipateVi: Contains the English answer`);
     }
@@ -534,7 +565,7 @@ export function normalizeDeck(input: unknown): Omit<Catalog, "revision"> {
       }
     }
     ids.add(id);
-    targets.add(word);
+    targets.add(target);
     // The multi-valued axis is canonical. A deck carrying only the legacy single
     // `topic` is lifted into it, and `topic` is always restated as the first entry so
     // the two can never disagree.
@@ -552,6 +583,7 @@ export function normalizeDeck(input: unknown): Omit<Catalog, "revision"> {
       // The answer panel is prose, not a kinetic page: store it already in display
       // form, so a kanji-only gloss with a join mark can never leak that mark.
       meaningJP: entry.meaningJP ? stripJapaneseMarks(entry.meaningJP) || undefined : undefined,
+      grammar,
     };
   });
   if (errors.length) throw new Error(errors.join("\n"));

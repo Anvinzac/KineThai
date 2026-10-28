@@ -19,7 +19,7 @@
  * frame (or hidden, for confetti and sparks), so the static picture is still complete; a
  * reader who turned animations off still earned the milestone and should still see it.
  *
- * It dismisses on "Tiếp tục", Escape, a tap anywhere once armed, or on its own after
+ * It dismisses on "Tiếp tục" / "続ける", Escape, a tap anywhere once armed, or on its own after
  * STREAK_CELEBRATION_MS — the feed is often running hands-free, and a reader who has put
  * the phone down should come back to words, not a modal. The auto-close length is passed
  * into CSS as a custom property for the countdown bar, so the bar and the timer cannot
@@ -29,15 +29,23 @@
  * metal, the unit on the medal and the words, and keeps every bit of the choreography.
  *
  * Exports: StreakCelebration, STREAK_CELEBRATION_MS, CelebrationBadge
- * Depends on: React, ./StreakMedal, ../lib/streak-tiers, vocabulary.css
+ * Depends on: React, ./StreakMedal, ../lib/streak-tiers, ../lib/useLocale, vocabulary.css
  */
 
 import { useCallback, useEffect, useId, useRef, useState, type CSSProperties } from "react";
-import { STREAK_TIER_LABEL, streakBlurb, streakTier, type StreakTier } from "../lib/streak-tiers";
+import { streakBlurb, streakTier, streakTierLabel, type StreakTier } from "../lib/streak-tiers";
+import { useLocale } from "../lib/useLocale";
 import { StreakMedal } from "./StreakMedal";
 
 /** What a non-streak milestone shows in place of the streak's metal, unit and words. */
-export type CelebrationBadge = { tier: StreakTier; unit: string; title: string; blurb: string };
+export type CelebrationBadge = {
+  tier: StreakTier;
+  unit: string;
+  title: string;
+  blurb: string;
+  /** A repeatable badge's count, shown on the medal's corner. */
+  count?: number;
+};
 
 /** How long the celebration holds the screen before closing on its own. */
 export const STREAK_CELEBRATION_MS = 7000;
@@ -112,6 +120,7 @@ export function StreakCelebration({
   onDone: () => void;
   badge?: CelebrationBadge;
 }) {
+  const ui = useLocale();
   const tier = badge?.tier ?? streakTier(days);
   const uid = useId().replace(/:/g, "");
   const [leaving, setLeaving] = useState(false);
@@ -128,51 +137,63 @@ export function StreakCelebration({
 
   useEffect(() => () => window.clearTimeout(leaveTimer.current), []);
 
-  // Auto-close after STREAK_CELEBRATION_MS.
   useEffect(() => {
-    const id = window.setTimeout(leave, STREAK_CELEBRATION_MS);
-    return () => window.clearTimeout(id);
+    const timer = window.setTimeout(leave, STREAK_CELEBRATION_MS);
+    return () => window.clearTimeout(timer);
   }, [leave]);
 
-  // Escape closes immediately; focus moves to the dialog so a keyboard reader is inside it.
   useEffect(() => {
+    // Focus the dialog itself rather than the button: a programmatic focus on the button
+    // paints its keyboard ring before the reader has touched a key.
     root.current?.focus({ preventScroll: true });
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        leave();
-      }
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") leave();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [leave]);
 
-  // Count the face up from 0 to `days` as the medal settles.
+  // A short buzz on phones that have one. Not motion, so reduced motion keeps it.
+  useEffect(() => {
+    try {
+      navigator.vibrate?.([24, 60, 36, 60, 70]);
+    } catch {
+      // Some embedded browsers throw instead of ignoring it.
+    }
+  }, []);
+
   useEffect(() => {
     if (reducedMotion) {
       setShown(days);
       return;
     }
     let frame = 0;
-    const delay = window.setTimeout(() => {
-      const start = performance.now();
-      const step = (now: number) => {
-        const t = Math.min(1, (now - start) / COUNT_MS);
-        const eased = 1 - (1 - t) ** 3;
-        setShown(Math.max(1, Math.round(eased * days)));
-        if (t < 1) frame = requestAnimationFrame(step);
-      };
-      frame = requestAnimationFrame(step);
-    }, COUNT_DELAY_MS);
-    return () => {
-      window.clearTimeout(delay);
-      cancelAnimationFrame(frame);
+    const start = performance.now() + COUNT_DELAY_MS;
+    const tick = (now: number) => {
+      const t = Math.min(1, Math.max(0, (now - start) / COUNT_MS));
+      setShown(Math.round(days * (1 - Math.pow(1 - t, 3))));
+      if (t < 1) frame = requestAnimationFrame(tick);
     };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
   }, [days, reducedMotion]);
+
+  const tapAway = () => {
+    if (Date.now() - mountedAt.current >= ARM_MS) leave();
+  };
+
+  const defaultTitle =
+    ui === "ja"
+      ? `${days}日連続達成！`
+      : ui === "th"
+        ? `ต่อเนื่อง ${days} วันติด!`
+        : `Chuỗi ${days} ngày liên tiếp!`;
+  const continueLabel = ui === "ja" ? "続ける" : ui === "th" ? "ไปต่อ" : "Tiếp tục";
 
   return (
     <div
       ref={root}
+      tabIndex={-1}
       className="vocab-streak-flash"
       data-tier={tier}
       data-leaving={leaving || undefined}
@@ -180,26 +201,22 @@ export function StreakCelebration({
       aria-modal="true"
       aria-labelledby={`${uid}-title`}
       aria-describedby={`${uid}-blurb`}
-      tabIndex={-1}
-      style={{ "--celebration-ms": `${STREAK_CELEBRATION_MS}ms` } as CSSProperties}
-      onClick={() => {
-        if (Date.now() - mountedAt.current >= ARM_MS) leave();
-      }}
+      onClick={tapAway}
+      style={{ "--vocab-streak-dur": `${STREAK_CELEBRATION_MS}ms` } as CSSProperties}
     >
-      {/* Falling confetti across the whole screen. */}
       <div className="vocab-streak-flash-confetti" aria-hidden="true">
-        {CONFETTI.map((p, i) => (
+        {CONFETTI.map((piece, i) => (
           <i
             key={i}
-            data-shape={p.shape}
-            data-hue={p.hue}
+            data-shape={piece.shape}
+            data-hue={piece.hue}
             style={
               {
-                "--x": `${p.x}%`,
-                "--delay": `${p.delay}ms`,
-                "--dur": `${p.dur}ms`,
-                "--sway": `${p.sway}px`,
-                "--spin": `${p.spin}deg`,
+                left: `${piece.x}%`,
+                "--d": `${piece.delay}ms`,
+                "--t": `${piece.dur}ms`,
+                "--sway": `${piece.sway}px`,
+                "--spin": `${piece.spin}deg`,
               } as CSSProperties
             }
           />
@@ -210,24 +227,22 @@ export function StreakCelebration({
         <div className="vocab-streak-flash-stage" aria-hidden="true">
           <div className="vocab-streak-flash-rays" />
           <div className="vocab-streak-flash-glow" />
-          <div className="vocab-streak-flash-ring" />
-          <div className="vocab-streak-flash-ring" data-second="" />
-
-          {SPARKS.map((s, i) => (
+          <div className="vocab-streak-flash-shock" />
+          <div className="vocab-streak-flash-shock" data-late />
+          {SPARKS.map((spark, i) => (
             <span
               key={i}
               className="vocab-streak-flash-spark"
-              data-hue={s.hue}
+              data-hue={spark.hue}
               style={
                 {
-                  "--angle": `${s.angle}deg`,
-                  "--dist": s.dist,
-                  "--size": `${s.size}px`,
+                  "--a": `${spark.angle}deg`,
+                  "--dist": spark.dist,
+                  "--s": `${spark.size}px`,
                 } as CSSProperties
               }
             />
           ))}
-
           {TWINKLES.map(([left, top, size, delay], i) => (
             <span
               key={i}
@@ -236,9 +251,9 @@ export function StreakCelebration({
                 {
                   left: `${left}%`,
                   top: `${top}%`,
-                  width: `${size}px`,
-                  height: `${size}px`,
-                  "--delay": `${delay}ms`,
+                  width: size,
+                  height: size,
+                  "--d": `${delay}ms`,
                 } as CSSProperties
               }
             >
@@ -252,33 +267,33 @@ export function StreakCelebration({
               value={shown}
               tier={tier}
               unit={badge?.unit}
+              count={badge?.count}
               className="vocab-streak-flash-medal"
             />
           </div>
         </div>
 
         <div className="vocab-streak-flash-copy">
-          <span className="vocab-streak-flash-tier">{STREAK_TIER_LABEL[tier]}</span>
+          <span className="vocab-streak-flash-tier">{streakTierLabel(tier, ui)}</span>
           <h2 className="vocab-streak-flash-title" id={`${uid}-title`}>
-            {badge?.title ?? `Chuỗi ${days} ngày liên tiếp!`}
+            {badge?.title ?? defaultTitle}
           </h2>
           <p className="vocab-streak-flash-caption" id={`${uid}-blurb`}>
-            {badge?.blurb ?? streakBlurb(days)}
+            {badge?.blurb ?? streakBlurb(days, ui)}
           </p>
           <button
             type="button"
-            className="vocab-streak-flash-cta"
-            onClick={(e) => {
-              e.stopPropagation();
+            className="vocab-streak-flash-go"
+            onClick={(event) => {
+              event.stopPropagation();
               leave();
             }}
           >
-            Tiếp tục
+            {continueLabel}
+            <span className="vocab-streak-flash-timer" aria-hidden="true" />
           </button>
         </div>
       </div>
-
-      <div className="vocab-streak-flash-timer" aria-hidden="true" />
     </div>
   );
 }

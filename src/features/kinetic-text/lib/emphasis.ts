@@ -7,6 +7,20 @@
 
 import { getStableNumber } from "./stable-hash";
 
+/**
+ * How much larger an emphasised word is drawn than the text around it.
+ *
+ * Applied via `font-size` rather than `transform: scale`, so the extra width occupies
+ * real layout space and an enlarged word cannot overlap its neighbours. It is declared
+ * on the GLYPH span alone — never on a box that also carries spacing — or every `em`
+ * length on that box (a margin, an effect's padding, an underline's thickness) would
+ * silently come out this much longer than it was written.
+ *
+ * One definition on purpose: the feed and the preview each used to carry their own
+ * literal, 1.12 and 1.08, which is the same design idea written twice and drifted.
+ */
+export const EMPHASIS_FONT_SCALE = 1.12;
+
 export const EMPHASIS_VARIANTS = [
   "color",
   "sweep",
@@ -44,6 +58,26 @@ export const NON_LUMINOUS_EMPHASIS_VARIANTS = [
 ] as const;
 
 export type EmphasisVariant = (typeof EMPHASIS_VARIANTS)[number];
+
+/**
+ * Effects drawn by stroking the glyph's own contours (-webkit-text-stroke).
+ */
+export const GLYPH_STROKE_EMPHASIS_VARIANTS: readonly EmphasisVariant[] = ["outline"];
+
+/** A Han character — the one script whose glyphs are a single unified shape. */
+const HAN_GLYPH = /\p{Script=Han}/u;
+const HAN_GLYPHS = /\p{Script=Han}/gu;
+const ANY_LETTER = /\p{L}/u;
+
+/**
+ * Whether text may be drawn with a contour-stroking effect in pure-Han contexts.
+ * @param text - the text the effect would be drawn on
+ * @returns true when every letter in it is Han
+ * @pure true
+ */
+export function isGlyphStrokeSafeText(text: string): boolean {
+  return HAN_GLYPH.test(text) && !ANY_LETTER.test(text.replace(HAN_GLYPHS, ""));
+}
 
 /**
  * Pick a stable emphasis visual variant for a word/phrase anchor.
