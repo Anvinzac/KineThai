@@ -44,6 +44,7 @@ import { hasReportedWord } from "../lib/reported-words";
 import { sceneSkipLimiter } from "../lib/skip-limiter";
 import { getSpellingDurationMs, pickSpellingVariant } from "../lib/spelling";
 import { getStrokeSpellingDurationMs, isHanAnswer } from "../lib/hanzi";
+import { prefetchHanziStrokes } from "../lib/hanzi-strokes";
 import {
   REACTIONS_EVENT,
   REACTIONS_KEY,
@@ -62,6 +63,7 @@ import { EmojiBurst } from "./EmojiBurst";
 import { SpellingAnimation } from "./SpellingAnimation";
 import { VocabularyStage } from "./VocabularyStage";
 import { WordReportButton, WordReportPanel } from "./WordReportControl";
+import { feedLog } from "../lib/feed-log";
 
 /**
  * The CJK stroke coda is lazy: Hanzi Writer plus the vendored stroke dataset load only
@@ -263,11 +265,14 @@ export function VocabularyCard({
         : getSpellingDurationMs(entry.word.word, spellingVariant, reducedMotion),
     [isHan, entry.word.word, spellingVariant, reducedMotion],
   );
-  // Warm the lazy stroke chunk as soon as a Han card mounts, so the coda never waits on a
-  // dynamic import mid-animation; the clue pages give it ample time to arrive.
+  // Warm the lazy stroke chunk and this answer's stroke files as soon as a Han card mounts,
+  // so the coda never waits on a dynamic import or a fetch mid-animation; the clue pages
+  // give both ample time to arrive.
   useEffect(() => {
-    if (isHan) void import("./HanziStrokeSpelling");
-  }, [isHan]);
+    if (!isHan) return;
+    void import("./HanziStrokeSpelling");
+    prefetchHanziStrokes(entry.word.word);
+  }, [isHan, entry.word.word]);
   const revealPage = stages.length - 1;
   const pageCount = stages.length + 1;
   /** Progress-bar keys: one per clue stage plus the trailing spelling coda. */
@@ -275,11 +280,25 @@ export function VocabularyCard({
   const cardRef = useRef<HTMLElement>(null);
   const actionBarRef = useRef<HTMLDivElement>(null);
   const emojiStripRef = useRef<HTMLDivElement>(null);
-  const [{ width, height }, setSize] = useState({ width: 390, height: 844 });
+  // `chromeSide` is --vocab-chrome-side read back off the card. The text is fitted to the
+  // BAND, which that variable has already narrowed; fitting it to the card instead sizes it
+  // for room it does not have, and a long answer word then runs out past the inset that was
+  // added to keep it clear of a platform's crop.
+  const [{ width, height, chromeSide }, setSize] = useState({
+    width: 390,
+    height: 844,
+    chromeSide: 0,
+  });
   useLayoutEffect(() => {
     const element = cardRef.current;
     if (!element) return;
-    const measure = () => setSize({ width: element.clientWidth, height: element.clientHeight });
+    const measure = () =>
+      setSize({
+        width: element.clientWidth,
+        height: element.clientHeight,
+        chromeSide:
+          Number.parseFloat(getComputedStyle(element).getPropertyValue("--vocab-chrome-side")) || 0,
+      });
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(element);
@@ -317,6 +336,8 @@ export function VocabularyCard({
   // While the report panel is open the card holds still: the reader is describing
   // THIS page, and the stream must not move on underneath them.
   const [reportOpen, setReportOpen] = useState(false);
+  /** The reader opened the answer's grammar section by hand; playback waits for them. */
+  const [grammarHeld, setGrammarHeld] = useState(false);
   // Visual feedback for the side zones of the three-zone tap: briefly washes the
   // tapped side (left = rewind, right = fast-forward) for 350ms.
   const [tapZone, setTapZone] = useState<"left" | "right" | null>(null);
@@ -402,7 +423,9 @@ export function VocabularyCard({
     count: pageCount,
     active,
     current,
-    autoplay: presentation.autoplay && !reportOpen,
+    // The report sheet and a hand-opened grammar section both hold the card where it is
+    // without touching the reader's autoplay setting.
+    autoplay: presentation.autoplay && !reportOpen && !grammarHeld,
     reducedMotion,
     durations: pageDurations,
     canAdvance,
@@ -484,6 +507,64 @@ export function VocabularyCard({
           // middle of the card, matching the static `theme.paint` on idle cards.
           blendOklch,
         );
+  // Diagnostic log (dev builds only, see lib/feed-log): what this card showed while it was
+  // the word on screen, how long it stayed, and each page it turned to.
+  const loggedPage = useRef({ page: playback.page, stage: "" });
+  loggedPage.current = { page: playback.page, stage: isSpelling ? "spelling" : stage.id };
+  const backdropKind = sceneTheme
+    ? "scene"
+    : patternTheme
+      ? "pattern"
+      : sliding
+        ? "strip"
+        : "static";
+  useEffect(() => {
+    if (!current || exportLayout) return;
+    const shownAt = performance.now();
+    // Logged a tick late: development mounts every effect twice, and an arrival that is
+    // cancelled before it is logged must not leave a phantom 0ms "word … leave" pair in
+    // the log — those would read as exactly the flashes the log exists to find.
+    let logged = false;
+    const arrive = window.setTimeout(() => {
+      logged = true;
+      feedLog("word", {
+        word: entry.word.word,
+        id: entry.occurrenceId,
+        level: entry.word.level ?? null,
+        theme: theme.id,
+        tone: theme.tone,
+        backdrop: backdropKind,
+        pages: pageCount,
+      });
+    }, 0);
+    return () => {
+      window.clearTimeout(arrive);
+      if (!logged) return;
+      feedLog("leave", {
+        word: entry.word.word,
+        shownMs: Math.round(performance.now() - shownAt),
+        lastPage: loggedPage.current.page,
+        lastStage: loggedPage.current.stage,
+      });
+    };
+    // Once per spell on screen; the details are read as they were when it arrived.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, entry.occurrenceId]);
+  const lastLoggedPage = useRef("");
+  useEffect(() => {
+    if (!current || exportLayout) return;
+    // Development runs effects twice; the same page turn is logged once.
+    const key = `${entry.occurrenceId}:${playback.replay}:${playback.page}`;
+    if (lastLoggedPage.current === key) return;
+    lastLoggedPage.current = key;
+    feedLog("page", {
+      word: entry.word.word,
+      page: playback.page,
+      stage: loggedPage.current.stage,
+      replay: playback.replay,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, playback.page, playback.replay]);
   // Only the single active card animates the sweeping transition backdrop. Inactive
   // neighbours keep a static gradient, so a transient active-index flip can never make
   // every visible background strobe at once.
@@ -517,7 +598,9 @@ export function VocabularyCard({
   // of the band; it is derived from the same geometry the stylesheet lays out, which is
   // also where the celebration burst is aimed.
   const revealY = wideCard ? getWideRevealY(height, twoColumn) : PORTRAIT_REVEAL_Y;
-  const textWidth = exportBox?.textWidth ?? width;
+  // The export frame carries its own safe box; everywhere else the text lives inside the
+  // band, so the side inset comes off both edges before anything is fitted to it.
+  const textWidth = exportBox?.textWidth ?? Math.max(1, width - 2 * chromeSide);
   // The answer shares the card with its meaning panel now, so it is fitted to its own
   // column instead of the whole width — otherwise it is sized for space it does not have.
   const revealCanvasWidth = twoColumn ? Math.round(textWidth * WIDE_WORD_COLUMN) : textWidth;
@@ -968,6 +1051,7 @@ export function VocabularyCard({
           textBudget={textBudget}
           revealY={revealY}
           timeScale={paceFactor}
+          onGrammarHold={exportLayout ? undefined : setGrammarHeld}
         />
       )}
       {isRevealed && (

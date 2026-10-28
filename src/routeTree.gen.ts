@@ -37,11 +37,13 @@ import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminVocabularyRouteImport } from './routes/admin/vocabulary'
 import { Route as AdminWordingsRouteImport } from './routes/admin/wordings'
 import { Route as FeedIndexRouteImport } from './routes/feed/index'
+import { Route as FeedAboutRouteImport } from './routes/feed/about'
 import { Route as FeedLibraryRouteImport } from './routes/feed/library'
 import { Route as FeedSavedRouteImport } from './routes/feed/saved'
 import { Route as WCodeRouteImport } from './routes/w.$code'
 import { Route as AuthenticatedPPostIdRouteImport } from './routes/_authenticated/p.$postId'
 import { Route as AuthenticatedUUsernameRouteImport } from './routes/_authenticated/u.$username'
+import { Route as ApiDevFeedLogRouteImport } from './routes/api/dev/feed-log'
 import { Route as ApiPublicEngagementRouteImport } from './routes/api/public/engagement'
 import { Route as ApiPublicTelemetryRouteImport } from './routes/api/public/telemetry'
 import { Route as ApiPublicVocabularyRouteImport } from './routes/api/public/vocabulary'
@@ -189,6 +191,11 @@ const FeedIndexRoute = FeedIndexRouteImport.update({
   path: '/feed/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedAboutRoute = FeedAboutRouteImport.update({
+  id: '/feed/about',
+  path: '/feed/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FeedLibraryRoute = FeedLibraryRouteImport.update({
   id: '/feed/library',
   path: '/feed/library',
@@ -213,6 +220,11 @@ const AuthenticatedUUsernameRoute = AuthenticatedUUsernameRouteImport.update({
   id: '/u/$username',
   path: '/u/$username',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiDevFeedLogRoute = ApiDevFeedLogRouteImport.update({
+  id: '/api/dev/feed-log',
+  path: '/api/dev/feed-log',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicEngagementRoute = ApiPublicEngagementRouteImport.update({
   id: '/api/public/engagement',
@@ -267,6 +279,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
   '/admin/wordings': typeof AdminWordingsRoute
+  '/feed/about': typeof FeedAboutRoute
   '/feed/library': typeof FeedLibraryRoute
   '/feed/saved': typeof FeedSavedRoute
   '/w/$code': typeof WCodeRoute
@@ -274,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/feed/': typeof FeedIndexRoute
   '/p/$postId': typeof AuthenticatedPPostIdRoute
   '/u/$username': typeof AuthenticatedUUsernameRoute
+  '/api/dev/feed-log': typeof ApiDevFeedLogRoute
   '/api/public/engagement': typeof ApiPublicEngagementRoute
   '/api/public/telemetry': typeof ApiPublicTelemetryRoute
   '/api/public/vocabulary': typeof ApiPublicVocabularyRoute
@@ -305,6 +319,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
   '/admin/wordings': typeof AdminWordingsRoute
+  '/feed/about': typeof FeedAboutRoute
   '/feed/library': typeof FeedLibraryRoute
   '/feed/saved': typeof FeedSavedRoute
   '/w/$code': typeof WCodeRoute
@@ -312,6 +327,7 @@ export interface FileRoutesByTo {
   '/feed': typeof FeedIndexRoute
   '/p/$postId': typeof AuthenticatedPPostIdRoute
   '/u/$username': typeof AuthenticatedUUsernameRoute
+  '/api/dev/feed-log': typeof ApiDevFeedLogRoute
   '/api/public/engagement': typeof ApiPublicEngagementRoute
   '/api/public/telemetry': typeof ApiPublicTelemetryRoute
   '/api/public/vocabulary': typeof ApiPublicVocabularyRoute
@@ -346,6 +362,7 @@ export interface FileRoutesById {
   '/admin/users': typeof AdminUsersRoute
   '/admin/vocabulary': typeof AdminVocabularyRoute
   '/admin/wordings': typeof AdminWordingsRoute
+  '/feed/about': typeof FeedAboutRoute
   '/feed/library': typeof FeedLibraryRoute
   '/feed/saved': typeof FeedSavedRoute
   '/w/$code': typeof WCodeRoute
@@ -353,6 +370,7 @@ export interface FileRoutesById {
   '/feed/': typeof FeedIndexRoute
   '/_authenticated/p/$postId': typeof AuthenticatedPPostIdRoute
   '/_authenticated/u/$username': typeof AuthenticatedUUsernameRoute
+  '/api/dev/feed-log': typeof ApiDevFeedLogRoute
   '/api/public/engagement': typeof ApiPublicEngagementRoute
   '/api/public/telemetry': typeof ApiPublicTelemetryRoute
   '/api/public/vocabulary': typeof ApiPublicVocabularyRoute
@@ -387,6 +405,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/vocabulary'
     | '/admin/wordings'
+    | '/feed/about'
     | '/feed/library'
     | '/feed/saved'
     | '/w/$code'
@@ -394,6 +413,7 @@ export interface FileRouteTypes {
     | '/feed/'
     | '/p/$postId'
     | '/u/$username'
+    | '/api/dev/feed-log'
     | '/api/public/engagement'
     | '/api/public/telemetry'
     | '/api/public/vocabulary'
@@ -425,6 +445,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/vocabulary'
     | '/admin/wordings'
+    | '/feed/about'
     | '/feed/library'
     | '/feed/saved'
     | '/w/$code'
@@ -432,6 +453,7 @@ export interface FileRouteTypes {
     | '/feed'
     | '/p/$postId'
     | '/u/$username'
+    | '/api/dev/feed-log'
     | '/api/public/engagement'
     | '/api/public/telemetry'
     | '/api/public/vocabulary'
@@ -465,6 +487,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/vocabulary'
     | '/admin/wordings'
+    | '/feed/about'
     | '/feed/library'
     | '/feed/saved'
     | '/w/$code'
@@ -472,6 +495,7 @@ export interface FileRouteTypes {
     | '/feed/'
     | '/_authenticated/p/$postId'
     | '/_authenticated/u/$username'
+    | '/api/dev/feed-log'
     | '/api/public/engagement'
     | '/api/public/telemetry'
     | '/api/public/vocabulary'
@@ -486,10 +510,12 @@ export interface RootRouteChildren {
   AdminAccessDeniedRoute: typeof AdminAccessDeniedRoute
   AuthRoute: typeof AuthRoute
   StoreRoute: typeof StoreRoute
+  FeedAboutRoute: typeof FeedAboutRoute
   FeedLibraryRoute: typeof FeedLibraryRoute
   FeedSavedRoute: typeof FeedSavedRoute
   WCodeRoute: typeof WCodeRoute
   FeedIndexRoute: typeof FeedIndexRoute
+  ApiDevFeedLogRoute: typeof ApiDevFeedLogRoute
   ApiPublicEngagementRoute: typeof ApiPublicEngagementRoute
   ApiPublicTelemetryRoute: typeof ApiPublicTelemetryRoute
   ApiPublicVocabularyRoute: typeof ApiPublicVocabularyRoute
@@ -695,6 +721,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeedIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feed/about': {
+      id: '/feed/about'
+      path: '/feed/about'
+      fullPath: '/feed/about'
+      preLoaderRoute: typeof FeedAboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/feed/library': {
       id: '/feed/library'
       path: '/feed/library'
@@ -729,6 +762,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/u/$username'
       preLoaderRoute: typeof AuthenticatedUUsernameRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/dev/feed-log': {
+      id: '/api/dev/feed-log'
+      path: '/api/dev/feed-log'
+      fullPath: '/api/dev/feed-log'
+      preLoaderRoute: typeof ApiDevFeedLogRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/engagement': {
       id: '/api/public/engagement'
@@ -840,10 +880,12 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAccessDeniedRoute: AdminAccessDeniedRoute,
   AuthRoute: AuthRoute,
   StoreRoute: StoreRoute,
+  FeedAboutRoute: FeedAboutRoute,
   FeedLibraryRoute: FeedLibraryRoute,
   FeedSavedRoute: FeedSavedRoute,
   WCodeRoute: WCodeRoute,
   FeedIndexRoute: FeedIndexRoute,
+  ApiDevFeedLogRoute: ApiDevFeedLogRoute,
   ApiPublicEngagementRoute: ApiPublicEngagementRoute,
   ApiPublicTelemetryRoute: ApiPublicTelemetryRoute,
   ApiPublicVocabularyRoute: ApiPublicVocabularyRoute,

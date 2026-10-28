@@ -62,6 +62,15 @@ const jaPacks = sorted(
   import.meta.glob<{ default: Catalog }>("../data/ja/*.json", { eager: true }),
   { inferCefrFromPath: true },
 );
+const frPacks = sorted(
+  import.meta.glob<{ default: Catalog }>("../data/fr/*.json", { eager: true }),
+);
+const dePacks = sorted(
+  import.meta.glob<{ default: Catalog }>("../data/de/*.json", { eager: true }),
+);
+const esPacks = sorted(
+  import.meta.glob<{ default: Catalog }>("../data/es/*.json", { eager: true }),
+);
 
 /** Katakana readings keyed by lowercase English headword. */
 const KANA_READINGS = kanaReadings as Record<string, string>;
@@ -95,6 +104,9 @@ const sources: Record<Exclude<TargetLocale, "en">, Catalog[]> = {
   zh: zhPacks,
   ko: koPacks,
   ja: jaPacks,
+  fr: frPacks,
+  de: dePacks,
+  es: esPacks,
 };
 
 /** @param locale Answer language. @returns That language's catalog, or English when none exists. */

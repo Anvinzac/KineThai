@@ -131,6 +131,23 @@ export function countJoinedUnits(text: string): number {
   return stripWordJoiners(text).split(/\s+/).filter(Boolean).length;
 }
 
+/** The grammar notes written in Vietnamese; every other grammar value is target-language. */
+function encodeGrammar(grammar: VocabularyWord["grammar"]): VocabularyWord["grammar"] {
+  if (!grammar) return grammar;
+  const tipVi = grammar.tipVi && encodeWordJoiners(grammar.tipVi);
+  const serEstar = grammar.serEstar && encodeWordJoiners(grammar.serEstar);
+  const collocations = grammar.collocations?.map((item) =>
+    item.vi && encodeWordJoiners(item.vi) !== item.vi
+      ? { ...item, vi: encodeWordJoiners(item.vi) }
+      : item,
+  );
+  const changed =
+    tipVi !== grammar.tipVi ||
+    serEstar !== grammar.serEstar ||
+    !!collocations?.some((item, index) => item !== grammar.collocations![index]);
+  return changed ? { ...grammar, tipVi, serEstar, collocations } : grammar;
+}
+
 function encodeWord(word: VocabularyWord): VocabularyWord {
   const usage = word.usage.map((example) => {
     const en = encodeWordJoiners(example.en);
@@ -142,25 +159,38 @@ function encodeWord(word: VocabularyWord): VocabularyWord {
   // stored plain.
   const emphasis = word.emphasis?.map(stripWordJoiners);
   const emphasisChanged = !!emphasis?.some((phrase, index) => phrase !== word.emphasis![index]);
+  // A gloss is usually one compound word and so is where a join matters most: "tò_mò"
+  // must reach a reader as one unbreakable token, never wrapped across two lines.
+  //
+  // Guarded rather than passed straight in: this runs on decks CAST to Catalog, not
+  // parsed through the schema (catalog-source.ts), so a deck authored without the field
+  // really does arrive undefined here. Left undefined rather than coerced to "", so the
+  // word keeps the shape it was written with.
+  const meaningVi = word.meaningVi ? encodeWordJoiners(word.meaningVi) : word.meaningVi;
   const defVi = encodeWordJoiners(word.defVi);
   const leadVi = encodeWordJoiners(word.leadVi);
   const anticipateVi = encodeWordJoiners(word.anticipateVi);
+  const grammar = encodeGrammar(word.grammar);
   if (
+    meaningVi === word.meaningVi &&
     defVi === word.defVi &&
     leadVi === word.leadVi &&
     anticipateVi === word.anticipateVi &&
     !usageChanged &&
-    !emphasisChanged
+    !emphasisChanged &&
+    grammar === word.grammar
   ) {
     return word;
   }
   return {
     ...word,
+    meaningVi,
     defVi,
     leadVi,
     anticipateVi,
     usage: usageChanged ? usage : word.usage,
     emphasis: emphasisChanged ? emphasis : word.emphasis,
+    grammar,
   };
 }
 

@@ -7,7 +7,7 @@
  *
  * Exports: PackPreviewDialog
  * Depends on: @tanstack/react-table, @tanstack/react-virtual, ./FullscreenSheet, ./JsonView,
- *   ../lib/custom-pack, ../lib/word-joiner, ../lib/schema
+ *   ../lib/custom-pack, ../lib/word-joiner, ../lib/schema, ../lib/locale, ../lib/useLocale
  */
 import { useMemo, useRef, useState } from "react";
 import {
@@ -21,10 +21,12 @@ import {
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { ArrowDown, ArrowUp, ChevronsUpDown, FileJson, Play, Search } from "lucide-react";
-import { parseCustomPack, type CustomPack } from "../lib/custom-pack";
+import { localizeCustomPackError, parseCustomPack, type CustomPack } from "../lib/custom-pack";
+import { localeCopy, type Locale } from "../lib/locale";
+import { resolveClue } from "../lib/clues";
+import { useLocale } from "../lib/useLocale";
 import { withWordJoiners } from "../lib/word-joiner";
-import { LEVELS, isJapaneseLevel, type VocabularyWord } from "../lib/schema";
-import { t } from "../lib/ui-copy";
+import { LEVELS, type VocabularyWord } from "../lib/schema";
 import { FullscreenSheet } from "./FullscreenSheet";
 import { CodeView, JsonView } from "./JsonView";
 
@@ -37,91 +39,152 @@ const levelRank = (level?: string) => {
   return i < 0 ? LEVELS.length : i;
 };
 
-const JP_LEVEL_KEYS = {
-  JPRIM: "japanese.JPRIM",
-  JSEC: "japanese.JSEC",
-  JHIGH: "japanese.JHIGH",
-  JCOLL: "japanese.JCOLL",
-} as const;
+const COPY: Partial<Record<
+  Locale,
+  {
+    wordCol: string;
+    levelCol: string;
+    defCol: string;
+    topicsCol: string;
+    usageCol: string;
+    moreExamples: (n: number) => string;
+    searchPlaceholder: string;
+    searchAria: string;
+    noMatches: (query: string) => string;
+    defaultImportLabel: string;
+    invalidPack: string;
+    wordsCount: (count: string) => string;
+    viewTypeAria: string;
+    tableTab: string;
+    jsonTab: string;
+  }
+>> = {
+  vi: {
+    wordCol: "Từ",
+    levelCol: "Cấp độ",
+    defCol: "Nghĩa",
+    topicsCol: "Chủ đề",
+    usageCol: "Ví dụ",
+    moreExamples: (n) => `+${n} ví dụ`,
+    searchPlaceholder: "Tìm từ, nghĩa, chủ đề…",
+    searchAria: "Tìm trong gói",
+    noMatches: (q) => `Không có từ nào khớp “${q}”.`,
+    defaultImportLabel: "Nhập gói này",
+    invalidPack: "Gói không hợp lệ.",
+    wordsCount: (c) => `${c} từ`,
+    viewTypeAria: "Kiểu xem",
+    tableTab: "Bảng từ",
+    jsonTab: "Dữ liệu gốc",
+  },
+  ja: {
+    wordCol: "単語",
+    levelCol: "レベル",
+    defCol: "意味",
+    topicsCol: "トピック",
+    usageCol: "例文",
+    moreExamples: (n) => `他 ${n} 件`,
+    searchPlaceholder: "単語・意味・トピックを検索…",
+    searchAria: "パック内を検索",
+    noMatches: (q) => `「${q}」に一致する単語はありません。`,
+    defaultImportLabel: "このパックを取り込む",
+    invalidPack: "無効なパックです。",
+    wordsCount: (c) => `${c} 語`,
+    viewTypeAria: "表示形式",
+    tableTab: "単語表",
+    jsonTab: "元データ",
+  },
+  th: {
+    wordCol: "คำศัพท์",
+    levelCol: "ระดับ",
+    defCol: "ความหมาย",
+    topicsCol: "หัวข้อ",
+    usageCol: "ตัวอย่าง",
+    moreExamples: (n) => `+${n} ตัวอย่าง`,
+    searchPlaceholder: "ค้นหาคำ ความหมาย หัวข้อ…",
+    searchAria: "ค้นหาในชุดคำศัพท์",
+    noMatches: (q) => `ไม่พบคำที่ตรงกับ “${q}”`,
+    defaultImportLabel: "นำเข้าชุดนี้",
+    invalidPack: "ชุดคำศัพท์ไม่ถูกต้อง",
+    wordsCount: (c) => `${c} คำ`,
+    viewTypeAria: "รูปแบบการดู",
+    tableTab: "ตารางคำศัพท์",
+    jsonTab: "ข้อมูลต้นฉบับ",
+  },
+};
 
-const COLUMNS: ColumnDef<Row>[] = [
-  {
-    id: "n",
-    header: "#",
-    accessorKey: "n",
-    enableGlobalFilter: false,
-    cell: ({ getValue }) => <span className="vocab-preview-n">{getValue<number>()}</span>,
-  },
-  {
-    id: "word",
-    header: "Từ",
-    accessorFn: (w) => `${w.word} ${w.ipa ?? ""} ${w.kana ?? ""}`,
-    sortingFn: (a, b) => a.original.word.localeCompare(b.original.word),
-    cell: ({ row: { original: w } }) => (
-      <div className="vocab-preview-word">
-        <strong>{w.word}</strong>
-        {(w.ipa || w.pos) && (
-          <span>
-            {w.ipa && <code>{w.ipa}</code>}
-            {w.kana && (
-              <span className="vocab-preview-kana" lang="ja">
-                {w.kana}
-              </span>
-            )}
-            {w.pos && <em>{w.pos}</em>}
-          </span>
-        )}
-      </div>
-    ),
-  },
-  {
-    id: "level",
-    header: "Cấp độ",
-    accessorFn: (w) => w.level ?? "",
-    sortingFn: (a, b) => levelRank(a.original.level) - levelRank(b.original.level),
-    cell: ({ row: { original: w } }) =>
-      w.level ? (
-        <span className="vocab-preview-level">
-          {isJapaneseLevel(w.level) ? t("vi", JP_LEVEL_KEYS[w.level]) : w.level}
-        </span>
-      ) : null,
-  },
-  {
-    id: "def",
-    header: "Nghĩa",
-    accessorKey: "defVi",
-    cell: ({ getValue }) => <p className="vocab-preview-def">{getValue<string>()}</p>,
-  },
-  {
-    id: "topics",
-    header: "Chủ đề",
-    accessorFn: (w) => (w.topics?.length ? w.topics : [w.topic]).filter(Boolean).join(" "),
-    enableSorting: false,
-    cell: ({ row: { original: w } }) => (
-      <ul className="vocab-preview-tags">
-        {(w.topics?.length ? w.topics : [w.topic]).filter(Boolean).map((t) => (
-          <li key={t}>{t}</li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    id: "usage",
-    header: "Ví dụ",
-    accessorFn: (w) => w.usage.map((u) => `${u.en} ${u.vi}`).join(" "),
-    enableSorting: false,
-    cell: ({ row: { original: w } }) =>
-      w.usage[0] ? (
-        <div className="vocab-preview-usage">
-          <p>{w.usage[0].en}</p>
-          {w.usage[0].vi && <p>{w.usage[0].vi}</p>}
-          {w.usage.length > 1 && <span>+{w.usage.length - 1} ví dụ</span>}
+function makeColumns(ui: Locale): ColumnDef<Row>[] {
+  const copy = localeCopy(COPY, ui);
+  return [
+    {
+      id: "n",
+      header: "#",
+      accessorKey: "n",
+      enableGlobalFilter: false,
+      cell: ({ getValue }) => <span className="vocab-preview-n">{getValue<number>()}</span>,
+    },
+    {
+      id: "word",
+      header: copy.wordCol,
+      accessorFn: (w) => `${w.word} ${w.ipa ?? ""}`,
+      sortingFn: (a, b) => a.original.word.localeCompare(b.original.word),
+      cell: ({ row: { original: w } }) => (
+        <div className="vocab-preview-word">
+          <strong>{w.word}</strong>
+          {(w.ipa || w.pos) && (
+            <span>
+              {w.ipa && <code>{w.ipa}</code>}
+              {w.pos && <em>{w.pos}</em>}
+            </span>
+          )}
         </div>
-      ) : null,
-  },
-];
+      ),
+    },
+    {
+      id: "level",
+      header: copy.levelCol,
+      accessorFn: (w) => w.level ?? "",
+      sortingFn: (a, b) => levelRank(a.original.level) - levelRank(b.original.level),
+      cell: ({ row: { original: w } }) =>
+        w.level ? <span className="vocab-preview-level">{w.level}</span> : null,
+    },
+    {
+      id: "def",
+      header: copy.defCol,
+      accessorFn: (w) => resolveClue(w, "def", ui),
+      cell: ({ getValue }) => <p className="vocab-preview-def">{getValue<string>()}</p>,
+    },
+    {
+      id: "topics",
+      header: copy.topicsCol,
+      accessorFn: (w) => (w.topics?.length ? w.topics : [w.topic]).filter(Boolean).join(" "),
+      enableSorting: false,
+      cell: ({ row: { original: w } }) => (
+        <ul className="vocab-preview-tags">
+          {(w.topics?.length ? w.topics : [w.topic]).filter(Boolean).map((t) => (
+            <li key={t}>{t}</li>
+          ))}
+        </ul>
+      ),
+    },
+    {
+      id: "usage",
+      header: copy.usageCol,
+      accessorFn: (w) => w.usage.map((u) => `${u.en} ${u.vi}`).join(" "),
+      enableSorting: false,
+      cell: ({ row: { original: w } }) =>
+        w.usage[0] ? (
+          <div className="vocab-preview-usage">
+            <p>{w.usage[0].en}</p>
+            {w.usage[0].vi && <p>{w.usage[0].vi}</p>}
+            {w.usage.length > 1 && <span>{copy.moreExamples(w.usage.length - 1)}</span>}
+          </div>
+        ) : null,
+    },
+  ];
+}
 
-function WordTable({ pack }: { pack: CustomPack }) {
+function WordTable({ pack, ui }: { pack: CustomPack; ui: Locale }) {
+  const copy = localeCopy(COPY, ui);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [query, setQuery] = useState("");
@@ -129,9 +192,10 @@ function WordTable({ pack }: { pack: CustomPack }) {
     () => withWordJoiners(pack.catalog).words.map((w, i) => ({ ...w, n: i + 1 })),
     [pack],
   );
+  const columns = useMemo(() => makeColumns(ui), [ui]);
   const table = useReactTable({
     data,
-    columns: COLUMNS,
+    columns,
     state: { sorting, globalFilter: query },
     onSortingChange: setSorting,
     onGlobalFilterChange: setQuery,
@@ -154,10 +218,10 @@ function WordTable({ pack }: { pack: CustomPack }) {
         <Search size={15} aria-hidden="true" />
         <input
           type="search"
-          placeholder="Tìm từ, nghĩa, chủ đề…"
+          placeholder={copy.searchPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          aria-label="Tìm trong gói"
+          aria-label={copy.searchAria}
         />
         {query && (
           <span className="vocab-preview-hits">
@@ -219,7 +283,7 @@ function WordTable({ pack }: { pack: CustomPack }) {
               );
             })}
           </div>
-          {!rows.length && <p className="vocab-preview-empty">Không có từ nào khớp “{query}”.</p>}
+          {!rows.length && <p className="vocab-preview-empty">{copy.noMatches(query)}</p>}
         </div>
       </div>
     </>
@@ -231,19 +295,27 @@ export function PackPreviewDialog({
   open,
   onOpenChange,
   onImport,
+  importLabel,
 }: {
   file: { name: string; text: string };
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onImport: () => void;
+  /** The footer button's words: importing a picked file, or playing a pack already kept. */
+  importLabel?: string;
 }) {
+  const ui = useLocale();
+  const copy = localeCopy(COPY, ui);
   const parsed = useMemo(() => {
     try {
       return { pack: parseCustomPack(file.text, file.name), error: null };
     } catch (e) {
-      return { pack: null, error: e instanceof Error ? e.message : "Gói không hợp lệ." };
+      return {
+        pack: null,
+        error: e instanceof Error ? localizeCustomPackError(e.message, ui) : copy.invalidPack,
+      };
     }
-  }, [file]);
+  }, [file, ui, copy.invalidPack]);
   const raw = useMemo(() => {
     try {
       return { json: JSON.parse(file.text) as unknown };
@@ -262,7 +334,7 @@ export function PackPreviewDialog({
       subtitle={
         parsed.pack
           ? [
-              `${parsed.pack.catalog.count.toLocaleString()} từ`,
+              copy.wordsCount(parsed.pack.catalog.count.toLocaleString()),
               parsed.pack.catalog.levels.join(" · "),
               file.name,
             ]
@@ -273,7 +345,7 @@ export function PackPreviewDialog({
       footer={
         parsed.pack && (
           <button type="button" className="vocab-import-btn" onClick={onImport}>
-            <Play size={15} aria-hidden="true" /> Nhập gói này
+            <Play size={15} aria-hidden="true" /> {importLabel ?? copy.defaultImportLabel}
           </button>
         )
       }
@@ -283,11 +355,15 @@ export function PackPreviewDialog({
           {parsed.error.split("\n").slice(0, 4).join("\n")}
         </p>
       ) : (
-        <div className="vocab-import-tabs vocab-preview-tabs" role="tablist" aria-label="Kiểu xem">
+        <div
+          className="vocab-import-tabs vocab-preview-tabs"
+          role="tablist"
+          aria-label={copy.viewTypeAria}
+        >
           {(
             [
-              ["table", "Bảng từ"],
-              ["json", "Dữ liệu gốc"],
+              ["table", copy.tableTab],
+              ["json", copy.jsonTab],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -304,7 +380,7 @@ export function PackPreviewDialog({
         </div>
       )}
       {parsed.pack && view === "table" ? (
-        <WordTable pack={parsed.pack} />
+        <WordTable pack={parsed.pack} ui={ui} />
       ) : (
         <div className="vocab-preview-raw">
           {raw ? <JsonView value={raw.json} /> : <CodeView text={file.text.slice(0, RAW_LIMIT)} />}

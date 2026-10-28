@@ -84,13 +84,6 @@ export const CEFR_TRACKS: readonly DifficultyTrack[] = [
     levels: ["A2", "B1"],
   },
   {
-    id: "doc-hieu",
-    label: "đọc hiểu",
-    hint: "Đọc báo và đọc truyện",
-    emoji: "🍃",
-    levels: ["B1", "B2"],
-  },
-  {
     id: "giao-tiep",
     label: "giao tiếp",
     hint: "Nói chuyện tự nhiên hơn",
@@ -98,18 +91,18 @@ export const CEFR_TRACKS: readonly DifficultyTrack[] = [
     levels: ["A1", "A2", "B1"],
   },
   {
+    id: "doc-hieu",
+    label: "đọc hiểu",
+    hint: "Đọc báo và đọc truyện",
+    emoji: "🍃",
+    levels: ["B1", "B2"],
+  },
+  {
     id: "chuyen-sau",
     label: "chuyên sâu",
     hint: "Sắc thái và cách dùng",
     emoji: "🌳",
     levels: ["B2"],
-  },
-  {
-    id: "nang-cao",
-    label: "nâng cao",
-    hint: "Từ trừu tượng hơn",
-    emoji: "⚡",
-    levels: ["B2", "C1"],
   },
   {
     id: "viet-lach",
@@ -124,6 +117,13 @@ export const CEFR_TRACKS: readonly DifficultyTrack[] = [
     hint: "Tiếng Anh học thuật",
     emoji: "🚀",
     levels: ["B1", "B2", "C1"],
+  },
+  {
+    id: "nang-cao",
+    label: "nâng cao",
+    hint: "Từ trừu tượng hơn",
+    emoji: "⚡",
+    levels: ["B2", "C1"],
   },
   {
     id: "van-chuong",
@@ -160,13 +160,6 @@ export const HSK_TRACKS: readonly DifficultyTrack[] = [
     levels: ["HSK2", "HSK3"],
   },
   {
-    id: "doc-hieu",
-    label: "đọc hiểu",
-    hint: "Đọc báo và đọc truyện",
-    emoji: "🍃",
-    levels: ["HSK3", "HSK4"],
-  },
-  {
     id: "giao-tiep",
     label: "giao tiếp",
     hint: "Nói chuyện tự nhiên hơn",
@@ -174,18 +167,18 @@ export const HSK_TRACKS: readonly DifficultyTrack[] = [
     levels: ["HSK1", "HSK2", "HSK3"],
   },
   {
+    id: "doc-hieu",
+    label: "đọc hiểu",
+    hint: "Đọc báo và đọc truyện",
+    emoji: "🍃",
+    levels: ["HSK3", "HSK4"],
+  },
+  {
     id: "chuyen-sau",
     label: "chuyên sâu",
     hint: "Sắc thái và cách dùng",
     emoji: "🌳",
     levels: ["HSK4"],
-  },
-  {
-    id: "nang-cao",
-    label: "cao cấp",
-    hint: "Từ trừu tượng hơn",
-    emoji: "",
-    levels: ["HSK4", "HSK5"],
   },
   {
     id: "viet-lach",
@@ -202,6 +195,13 @@ export const HSK_TRACKS: readonly DifficultyTrack[] = [
     levels: ["HSK3", "HSK4", "HSK5"],
   },
   {
+    id: "nang-cao",
+    label: "cao cấp",
+    hint: "Từ trừu tượng hơn",
+    emoji: "",
+    levels: ["HSK4", "HSK5"],
+  },
+  {
     id: "van-chuong",
     label: "văn chương",
     hint: "Ngôn từ đẹp và hiếm",
@@ -210,17 +210,14 @@ export const HSK_TRACKS: readonly DifficultyTrack[] = [
   },
 ];
 
-/** Track ids shared by CEFR and HSK sets. */
+/** Track ids shared by both sets (same id appears in CEFR_TRACKS and HSK_TRACKS). */
 const SHARED_TRACK_IDS = CEFR_TRACKS.map((track) => track.id);
-
-/** All track ids across all locales. */
-const ALL_TRACKS = [...CEFR_TRACKS, ...HSK_TRACKS];
 
 /** Default export for consumers that don't branch by locale (the English UI). */
 export const DIFFICULTY_TRACKS: readonly DifficultyTrack[] = CEFR_TRACKS;
 
 /** Every track id, for request validation. */
-export const DIFFICULTY_IDS = ALL_TRACKS.map((track) => track.id);
+export const DIFFICULTY_IDS = SHARED_TRACK_IDS;
 
 /**
  * Resolve the locale-appropriate difficulty tracks.

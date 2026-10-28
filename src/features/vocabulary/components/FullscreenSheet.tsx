@@ -4,11 +4,13 @@
  * the screen, and an optional footer action.
  *
  * Exports: FullscreenSheet
- * Depends on: @radix-ui/react-dialog, vocabulary.css (.vocab-preview*)
+ * Depends on: @radix-ui/react-dialog, ../lib/ui-copy, ../lib/useLocale, vocabulary.css (.vocab-preview*)
  */
 import type { ReactNode } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { t } from "../lib/ui-copy";
+import { useLocale } from "../lib/useLocale";
 
 export function FullscreenSheet({
   open,
@@ -27,6 +29,7 @@ export function FullscreenSheet({
   footer?: ReactNode;
   children: ReactNode;
 }) {
+  const ui = useLocale();
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -37,7 +40,7 @@ export function FullscreenSheet({
               <Dialog.Title>{title}</Dialog.Title>
               {subtitle && <p>{subtitle}</p>}
             </div>
-            <Dialog.Close className="vocab-preview-close" aria-label="Đóng">
+            <Dialog.Close className="vocab-preview-close" aria-label={t(ui, "common.close")}>
               <X size={18} />
             </Dialog.Close>
           </header>

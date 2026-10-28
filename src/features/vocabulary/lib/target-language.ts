@@ -6,7 +6,7 @@
  *
  * Exports: DEFAULT_TARGET, TargetLocale, resolveTarget, siteTitle, siteBrand, sitePageHead
  */
-export type TargetLocale = "en" | "zh" | "ko" | "ja";
+export type TargetLocale = "en" | "zh" | "ko" | "ja" | "fr" | "de" | "es";
 
 /** The deck served when nothing on the address names another language. */
 export const DEFAULT_TARGET: TargetLocale = "ja";
@@ -19,6 +19,9 @@ const SUBDOMAINS: Record<string, TargetLocale> = {
   // Punycode forms of hàn / nhật, in case those IDN addresses are attached.
   "xn--hn-ula": "ko",
   "xn--nht-xpa": "ja",
+  phap: "fr",
+  duc: "de",
+  tbn: "es",
 };
 
 /** @param host Host header or location.host (may carry a port). @returns The deck locale. */
@@ -34,6 +37,9 @@ const TITLES: Record<TargetLocale, string> = {
   zh: "hoa.chayLá",
   ko: "hàn.chayLá",
   ja: "nhật.chayLá",
+  fr: "pháp.chayLá",
+  de: "đức.chayLá",
+  es: "tbn.chayLá",
 };
 
 /** @param locale Deck locale. @returns Page title for that address. */

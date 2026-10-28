@@ -957,7 +957,7 @@
   z-index: 5;
 }
 /* The feed is a tap surface: long-pressing a card or a panel must not select text. */
-.vocabulary-shell:not(.vocab-saved-shell, .vocab-library-shell) {
+.vocabulary-shell:not(.vocab-saved-shell, .vocab-library-shell, .vocab-info-shell) {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
@@ -1479,6 +1479,139 @@
 .vocab-difficulty-count {
   animation: vocab-count-pop 540ms var(--ease-spring) both;
 }
+/* The picker's two pages — the built-in deck's levels, and the reader's own packs — side
+   by side on one track that slides by a transform: a swipe drags it and it settles on the
+   nearer page. Each page keeps its own vertical scroll; the track leaves vertical drags to
+   it (touch-action: pan-y) and takes only the sideways ones. */
+/* The foot's left control, where the library link was: "+" to add a JSON pack (it opens
+   the library), then the two pages as a segmented pair — the built-in deck by its
+   library icon, and "Từ thêm", the reader's own packs. Same height as "Xong" on the
+   right, so the foot stays one even row. */
+.vocab-difficulty-switch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vocab-difficulty-switch-add {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px dashed color-mix(in srgb, var(--pop-accent) 55%, #ffffff40);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--shell-surface) 55%, transparent);
+  color: var(--shell-text);
+  transition:
+    background var(--dur-move) var(--ease-out),
+    border-color var(--dur-move) var(--ease-out);
+}
+.vocab-difficulty-switch-add:hover {
+  border-style: solid;
+  background: color-mix(in srgb, var(--pop-accent) 20%, transparent);
+}
+.vocab-difficulty-switch-tabs {
+  display: flex;
+  padding: 3px;
+  border: 1px solid color-mix(in srgb, var(--pop-accent) 30%, #ffffff33);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--shell-surface) 55%, transparent);
+}
+.vocab-difficulty-switch-tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 34px;
+  height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--shell-text-mute);
+  font-family: "Inter", sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--dur-move, 220ms) var(--ease-out, ease-out),
+    color var(--dur-move, 220ms) var(--ease-out, ease-out);
+}
+.vocab-difficulty-switch-tabs button[aria-selected="true"] {
+  background: var(--shell-text);
+  color: var(--shell-on-text);
+}
+.vocab-difficulty-switch-tabs button span {
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--pop-accent);
+  color: var(--pop-accent-ink);
+  font-size: 10.5px;
+  line-height: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.vocab-difficulty-pager {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.vocab-difficulty-track {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  touch-action: pan-y;
+  transition: transform var(--dur-move, 220ms) var(--ease-out, ease-out);
+}
+.vocab-difficulty-track[data-dragging],
+.vocab-difficulty-track[data-instant] {
+  transition: none;
+}
+.vocab-difficulty-page {
+  flex: 0 0 100%;
+  min-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Each page scrolls, so it is where the browser decides who owns a touch. Left at auto
+     it claims a sideways pan too (and cancels the pointer the track is following); pan-y
+     keeps vertical scrolling native and hands sideways drags to the track. */
+  touch-action: pan-y;
+}
+.vocab-pack-picks {
+  /* Room to scroll the last row up above the floating Library bar, like the levels. */
+  padding: 0 0 64px;
+}
+.vocab-pack-picks ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* A pack row wears the level rows' grid and highlight; only the button reset is new. */
+.vocab-pack-pick {
+  width: 100%;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+.vocab-pack-pick:hover {
+  background: var(--shell-hover);
+}
+.vocab-pack-pick-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vocab-pack-picks .vocab-difficulty-option-label {
+  min-width: 0;
+}
 /* Floating confirm bar: a gradient fade so the last rows read through it as they
    scroll beneath, with the bar itself click-transparent except on its buttons. */
 .vocab-difficulty-foot {
@@ -1502,6 +1635,7 @@
 .vocab-difficulty-foot > * {
   pointer-events: auto;
 }
+/* The foot's left corner before the reader has any packs: the plain library link. */
 .vocab-difficulty-library {
   display: inline-flex;
   align-items: center;
@@ -1884,6 +2018,15 @@
 .vocab-memory-stats > div[data-today] dd {
   color: var(--vocab-accent);
 }
+/* Nothing seen in that window: the cell steps back to grey, accent and all. */
+.vocab-memory-stats > div[data-empty] {
+  border-color: var(--shell-line);
+  background: none;
+  opacity: 0.45;
+}
+.vocab-memory-stats > div[data-empty] dd {
+  color: var(--shell-text-mute);
+}
 .vocab-memory-clear {
   align-self: flex-start;
   min-height: 44px;
@@ -2207,6 +2350,166 @@
   margin-top: 18px;
   border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
   padding-top: 14px;
+}
+
+/* ── "Nâng cao": the word's grammar (WordGrammar.tsx) ─────────────────────
+   The foot of the meaning panel. Closed, it is one quiet row — a small-caps title and
+   the names of what it holds — so the gloss stays the thing the panel is about. Open,
+   it is a two-column definition list: the term in the word's own language with its
+   Vietnamese gloss under it, then the value. Rows are `display: contents`, so every
+   label shares one column width however many rows there are. */
+.vocab-grammar {
+  margin-top: 16px;
+  border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+}
+.vocab-grammar-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.74em;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--vocab-ink) 72%, transparent);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.vocab-grammar-toggle:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--vocab-ink) 60%, transparent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.vocab-grammar-title {
+  flex: none;
+  font-weight: 700;
+  font-size: 0.9em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.vocab-grammar-hint {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.72;
+  transition: opacity var(--dur-quick, 0.15s) ease-out;
+}
+.vocab-grammar[data-open] .vocab-grammar-hint {
+  opacity: 0;
+}
+.vocab-grammar-chevron {
+  flex: none;
+  transition: transform var(--dur-move, 0.25s) var(--ease-spring, ease-out);
+}
+.vocab-grammar[data-open] .vocab-grammar-chevron {
+  transform: rotate(180deg);
+}
+.vocab-grammar-body {
+  overflow: hidden;
+}
+.vocab-grammar-list {
+  display: grid;
+  grid-template-columns: minmax(5.5em, max-content) minmax(0, 1fr);
+  column-gap: 14px;
+  row-gap: 11px;
+  margin: 2px 0 4px;
+  font-size: 0.8em;
+  line-height: 1.38;
+  word-break: normal;
+}
+.vocab-grammar-row {
+  display: contents;
+}
+.vocab-grammar-list dt,
+.vocab-grammar-list dd {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.vocab-grammar-list dt {
+  font-weight: 600;
+  color: color-mix(in srgb, var(--vocab-ink) 70%, transparent);
+}
+.vocab-grammar-list dd {
+  margin: 0;
+  font-weight: 600;
+}
+/* Every gloss — under a term, under a value — is the same quiet second voice. */
+.vocab-grammar small {
+  font-size: 0.8em;
+  font-weight: 450;
+  line-height: 1.3;
+  opacity: 0.72;
+}
+.vocab-grammar-forms {
+  width: 100%;
+  border-collapse: collapse;
+}
+.vocab-grammar-forms tr + tr > * {
+  border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+}
+.vocab-grammar-forms th,
+.vocab-grammar-forms td {
+  padding: 4px 0;
+  vertical-align: top;
+  text-align: left;
+}
+.vocab-grammar-forms th {
+  padding-right: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--vocab-ink) 70%, transparent);
+}
+.vocab-grammar-forms th > * {
+  display: block;
+}
+.vocab-grammar-forms td {
+  font-weight: 600;
+}
+.vocab-grammar-pairs {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vocab-grammar-pairs li {
+  display: flex;
+  flex-direction: column;
+}
+/* The trap note closes the section across both columns, on a faint wash of the ink so
+   it reads as an aside rather than one more row. */
+.vocab-grammar-tip {
+  grid-column: 1 / -1;
+  margin-top: 2px;
+  padding: 9px 12px 10px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--vocab-ink) 9%, transparent);
+  font-weight: 500;
+}
+.vocab-grammar-tip-label {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 2px;
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.vocab-grammar-tip-label small {
+  text-transform: none;
+  letter-spacing: 0;
+}
+/* A video export shows the word, not a control nobody can tap. */
+.vocab-card[data-export] .vocab-grammar {
+  display: none;
 }
 .vocab-translation {
   font-family: "Inter", sans-serif;
@@ -4769,6 +5072,13 @@
 .vocab-stroke-char svg {
   display: block;
 }
+/* Stroke file unavailable: the answer still shows, as plain characters in the accent.
+   The component sizes the glyph to the box the drawing would have taken. */
+.vocab-stroke-char[data-plain] {
+  line-height: 1;
+  color: var(--vocab-accent);
+  font-weight: 700;
+}
 /* ── Prose inside the meaning panel ───────────────────────────────────────────
    Deck emphasis becomes an accent underline (the text stays the audited ink, so its
    contrast is untouched) and the answer filled into the example becomes an accent
@@ -5511,7 +5821,15 @@
      it from the row instead of hardcoding it is what keeps the panel out of the toolbar
      once the chrome is compressed against a short screen's bottom edge. */
   max-height: calc(100% - var(--vocab-chrome-inset) - var(--vocab-chrome-bar) - 102px);
-  overflow-y: auto;
+  /* A column: heading and note on top, the reasons in the middle — the one part that
+     scrolls when there are more than fit — and the send button at the foot as an
+     ordinary item. It used to be position: sticky inside a panel that scrolled as a
+     whole, and a sticky element inside a container that is being transformed (the
+     entrance below) is painted unreliably: WebKit draws it off its place and corrects it
+     after, which reads as the button landing and then dropping. */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   padding: 16px;
   border: 1px solid var(--shell-line-strong);
   border-radius: 22px;
@@ -5520,7 +5838,13 @@
   box-shadow: 0 20px 60px #000a;
   font-family: "Inter", sans-serif;
   transform-origin: bottom left;
-  animation: vocab-report-in var(--dur-move) var(--ease-spring) both;
+  /* Settles without overshoot. With the shared spring curve the panel grew past its size
+     and shrank back, which lifted everything in it ~1.5px above its place and then let
+     it sink — on the big send button, a visible bounce. */
+  animation: vocab-report-in var(--dur-move) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.vocab-report-panel > * {
+  flex: none;
 }
 @keyframes vocab-report-in {
   from {
@@ -5597,6 +5921,13 @@
   gap: 8px;
   margin-top: 14px;
 }
+/* The scrolling middle of the panel's column (see .vocab-report-panel). */
+.vocab-report-panel > .vocab-report-reasons {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
 .vocab-report-reason {
   min-height: 42px;
   padding: 0 15px;
@@ -5624,6 +5955,20 @@
   background: var(--shell-text);
   color: var(--shell-on-text);
 }
+/* "Nhạy cảm" and "Không ổn" say a card should perhaps not be shown at all, not that it has
+   a mistake: a soft red sets them apart from the rest, and a full red when picked. */
+.vocab-report-reason[data-severe] {
+  border-color: color-mix(in srgb, #f87171 55%, transparent);
+  color: color-mix(in srgb, #fca5a5 80%, var(--shell-text));
+}
+.vocab-report-reason[data-severe]:hover {
+  background: color-mix(in srgb, #ef4444 14%, transparent);
+}
+.vocab-report-reason[data-severe][aria-pressed="true"] {
+  border-color: #ef4444;
+  background: #ef4444;
+  color: #fff;
+}
 .vocab-report-error {
   margin-top: 12px;
   font-size: 13px;
@@ -5641,13 +5986,8 @@
   transition: transform var(--dur-move) var(--ease-spring);
 }
 /* On a short or narrow card the reasons wrap into more rows than the panel can show
-   at once. The send button then stays pinned to the panel's foot while the reasons
-   scroll behind it, so it is never out of sight, and the reasons tighten up. */
-.vocab-report-send {
-  position: sticky;
-  bottom: 0;
-  box-shadow: 0 0 0 16px var(--shell-surface);
-}
+   at once. They scroll in their own area while the send button keeps its place at the
+   panel's foot, so it is never out of sight, and the reasons tighten up. */
 @media (max-width: 360px), (max-height: 700px) {
   .vocab-report-reasons {
     gap: 6px;
@@ -6372,62 +6712,6 @@
   border-color: color-mix(in oklab, var(--shell-text) 38%, transparent);
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--shell-text) 8%, transparent);
 }
-.vocab-import-file {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0 4px 0 6px;
-  background: color-mix(in oklab, var(--shell-text) 4%, transparent);
-}
-.vocab-import-file-name {
-  display: inline-flex;
-  flex: 1;
-  min-width: 0;
-  align-items: center;
-  gap: 7px;
-  height: 30px;
-  padding: 0 8px;
-  border: none;
-  border-radius: 7px;
-  background: transparent;
-  color: var(--shell-text);
-  font-size: 13px;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.18s ease;
-}
-.vocab-import-file-name > span {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.vocab-import-file-name > svg:last-child {
-  color: color-mix(in oklab, var(--shell-text) 45%, transparent);
-}
-.vocab-import-file-name:hover {
-  background: color-mix(in oklab, var(--shell-text) 8%, transparent);
-}
-.vocab-import-file-clear {
-  display: grid;
-  flex: none;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 999px;
-  background: transparent;
-  color: color-mix(in oklab, var(--shell-text) 60%, transparent);
-  cursor: pointer;
-  transition:
-    background 0.18s ease,
-    color 0.18s ease;
-}
-.vocab-import-file-clear:hover {
-  background: color-mix(in oklab, var(--shell-text) 10%, transparent);
-  color: var(--shell-text);
-}
 .vocab-import-btn {
   display: inline-flex;
   align-items: center;
@@ -6466,21 +6750,6 @@
   cursor: default;
   transform: none;
 }
-.vocab-import-active {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  border: 1px solid color-mix(in oklab, var(--shell-text) 10%, transparent);
-  border-radius: 10px;
-  background: color-mix(in oklab, var(--shell-text) 4%, transparent);
-  color: var(--shell-text);
-  font-size: 12.5px;
-}
-.vocab-import-active > span {
-  flex: 1 1 100%;
-}
 .vocab-import-error {
   margin: 0;
   color: var(--destructive, #f87171);
@@ -6516,6 +6785,236 @@
 .vocab-import-tab.on {
   background: color-mix(in oklab, var(--shell-text) 12%, transparent);
   color: var(--shell-text);
+}
+/* "Thử gói mẫu": the shipped sample packs, one tap each, loaded through the link path. */
+.vocab-import-samples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+  font-size: 12px;
+  color: color-mix(in oklab, var(--shell-text) 55%, transparent);
+}
+.vocab-import-samples > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 2px;
+}
+.vocab-import-sample {
+  height: 28px;
+  padding: 0 11px;
+  border: 1px dashed color-mix(in oklab, var(--shell-text) 22%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--shell-text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.vocab-import-sample:hover {
+  background: color-mix(in oklab, var(--shell-text) 8%, transparent);
+}
+.vocab-import-sample:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+/* Imported packs, right under the import row: one card per pack. */
+.vocab-pack-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.vocab-pack-list-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--shell-text) 55%, transparent);
+}
+.vocab-pack-list > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vocab-pack-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid color-mix(in oklab, var(--shell-text) 12%, transparent);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--shell-text) 4%, transparent);
+  scroll-margin: 16px;
+}
+.vocab-pack-card[data-active] {
+  border-color: color-mix(in oklab, var(--vocab-accent, #6ee7a0) 60%, transparent);
+  background: color-mix(in oklab, var(--vocab-accent, #6ee7a0) 8%, transparent);
+}
+/* Just added: a brief glow, so the eye finds where the pack landed. */
+.vocab-pack-card[data-fresh] {
+  animation: vocab-pack-card-in 1.6s var(--ease-out, ease-out) both;
+}
+@keyframes vocab-pack-card-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--shell-text) 0%, transparent);
+  }
+  20% {
+    opacity: 1;
+    transform: none;
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--shell-text) 22%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--shell-text) 0%, transparent);
+  }
+}
+.vocab-pack-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.vocab-pack-card-head > svg {
+  flex: none;
+  color: color-mix(in oklab, var(--shell-text) 55%, transparent);
+}
+.vocab-pack-card-head h3 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vocab-pack-card-badge {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--vocab-accent, #6ee7a0);
+  color: #0a0014;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+.vocab-pack-card-badge[data-fresh] {
+  background: color-mix(in oklab, var(--shell-text) 14%, transparent);
+  color: var(--shell-text);
+}
+.vocab-pack-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: -4px 0 0;
+  font-size: 12px;
+  color: color-mix(in oklab, var(--shell-text) 58%, transparent);
+}
+.vocab-pack-card-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vocab-pack-card-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vocab-pack-card-levels li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px 2px 3px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--shell-text) 7%, transparent);
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.vocab-pack-card-levels li span {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--shell-text) 14%, transparent);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+/* The peek: the first few words with their meaning, a glance before playing. */
+.vocab-pack-card-peek {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vocab-pack-card-peek li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: color-mix(in oklab, var(--shell-text) 5%, transparent);
+}
+.vocab-pack-card-peek strong {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.vocab-pack-card-peek li > span {
+  overflow: hidden;
+  font-size: 12px;
+  color: color-mix(in oklab, var(--shell-text) 60%, transparent);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vocab-pack-card-peek .vocab-pack-card-more {
+  justify-content: center;
+  padding: 0;
+  background: none;
+}
+.vocab-pack-card-more button {
+  height: 100%;
+  min-height: 40px;
+  border: 1px dashed color-mix(in oklab, var(--shell-text) 20%, transparent);
+  border-radius: 9px;
+  background: transparent;
+  color: color-mix(in oklab, var(--shell-text) 70%, transparent);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.vocab-pack-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vocab-pack-card-actions .vocab-import-btn {
+  height: 34px;
+  padding: 0 12px;
+}
+.vocab-pack-card-delete {
+  margin-left: auto;
+}
+.vocab-pack-card-delete[data-confirming] {
+  border-color: #f87171;
+  background: color-mix(in oklab, #ef4444 18%, transparent);
+  color: #fecaca;
 }
 .vocab-import-generate {
   display: flex;
@@ -7359,20 +7858,14 @@
     border-radius: 11px;
     font-size: 16px;
   }
-  .vocab-import-file-name {
-    height: 36px;
-    font-size: 14px;
-  }
-  .vocab-import-file-clear {
-    width: 36px;
-    height: 36px;
-  }
   .vocab-import-tab {
     height: 38px;
     font-size: 13.5px;
   }
-  .vocab-import-active > .vocab-import-btn {
-    flex: 1 1 0;
+  /* Card buttons stay a step smaller than the import row's, so four fit on a phone. */
+  .vocab-pack-card-actions .vocab-import-btn {
+    height: 40px;
+    font-size: 13px;
   }
   .vocab-preview-tabs {
     align-self: stretch;
@@ -7455,7 +7948,9 @@
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklab, var(--shell-text) 25%, transparent) transparent;
 }
+/* Announces the playing pack for a few seconds (VocabularyFeedPage times it), then fades. */
 .vocab-custom-pack-chip {
+  animation: vocab-pack-chip-in 260ms var(--ease-out, ease-out) both;
   position: fixed;
   top: max(58px, calc(env(safe-area-inset-top) + 50px));
   left: 50%;
@@ -7479,6 +7974,22 @@
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.vocab-custom-pack-chip[data-closing] {
+  pointer-events: none;
+  animation: vocab-pack-chip-out 320ms var(--ease-in, ease-in) forwards;
+}
+@keyframes vocab-pack-chip-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px);
+  }
+}
+@keyframes vocab-pack-chip-out {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -8px);
+  }
 }
 .vocab-custom-pack-chip button {
   border: 0;
@@ -7729,6 +8240,69 @@
   .vocab-share-button {
     transition: none;
   }
+}
+/* TEMPORARY — the quiet share tab. Same seat and the same corner geometry as above,
+   but the face is the panel's own glass rather than the accent: a faint wash of the
+   panel's ink, the panel's hairline along the two drawn edges, and a muted label that
+   only comes up to full ink on hover. Delete this block to bring back the accent tab. */
+.vocab-reveal-details {
+  --vocab-share-h: 32px;
+}
+.vocab-share-dock {
+  padding: 6px 0 0 6px;
+}
+.vocab-share-button {
+  padding: 0 12px 0 11px;
+  color: color-mix(in srgb, var(--vocab-ink) 62%, transparent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  transition:
+    transform var(--dur-move) var(--ease-spring),
+    color var(--dur-quick) var(--ease-out);
+}
+.vocab-share-face {
+  gap: 5px;
+}
+.vocab-share-face svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.85;
+}
+.vocab-share-face-bg {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--vocab-ink) 9%, transparent),
+    color-mix(in srgb, var(--vocab-ink) 5%, transparent)
+  );
+  /* The panel's own border, drawn only on the top and left — the other two edges run
+     off into the panel's border, as before. A real 1px border on the panel's OUTER
+     radius, not inset shadows on the inner one: that makes the top-left arc the same
+     ring as the panel's bottom-right arc (outer 20, inner 19) in the same tone, so the
+     pair reads as one shape. The offset-inset hairline plus a top highlight it used to
+     be drew a bright line that thinned out down the left side, so the top-left looked
+     tighter than the bottom-right even though both radii measured the same. */
+  border: solid color-mix(in srgb, var(--vocab-ink) 14%, transparent);
+  border-width: 1px 0 0 1px;
+  border-radius: var(--vocab-reveal-radius) 0 0 0;
+  box-shadow: none;
+}
+.vocab-share-button:hover {
+  color: var(--vocab-ink);
+}
+.vocab-share-button:hover .vocab-share-face-bg {
+  filter: none;
+  background: color-mix(in srgb, var(--vocab-ink) 13%, transparent);
+}
+.vocab-share-button:focus-visible .vocab-share-face-bg {
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--vocab-ink) 70%, transparent);
+}
+/* Confirmed: the label takes the accent, the glass stays glass. */
+.vocab-share-button[data-done] {
+  color: var(--vocab-accent);
+}
+.vocab-share-button[data-done] .vocab-share-face-bg {
+  background: color-mix(in srgb, var(--vocab-accent) 12%, transparent);
 }
 
 /* ── Export frame route ──────────────────────────────────────────────────────
@@ -9388,6 +9962,37 @@ body:has(.vocab-intro) .vocab-resume {
   text-transform: uppercase;
   opacity: 0.68;
 }
+/* A repeatable badge's count: a small enamel pill pinned where the coin's rim meets its
+   top-right diagonal (45 deg on the r=80 circle), struck in the coin's own deepest tone
+   and edged in its highlight so it reads as part of the medal, not a sticker on it. */
+.vocab-medal-count {
+  position: absolute;
+  left: 80%;
+  top: 17%;
+  transform: translate(-50%, -50%);
+  min-width: 1.9em;
+  padding: 0.2em 0.42em 0.22em;
+  box-sizing: border-box;
+  border: max(1.5px, 1.2cqw) solid var(--m-hi);
+  border-radius: 999px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--m-deep) 78%, var(--m-mid)),
+    var(--m-deep)
+  );
+  box-shadow:
+    0 max(1px, 1cqw) max(3px, 3cqw) #00000059,
+    inset 0 1px 0 #ffffff40;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-size: max(10px, 11cqw);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+}
 
 /* ── The milestones tab in the saved drawer ──
    A grid of earned medals, newest first. Static: no gesture, no animation — the drawer
@@ -9590,4 +10195,225 @@ body:has(.vocab-intro) .vocab-resume {
   line-height: 1.55;
   color: var(--shell-text-mute);
   text-wrap: balance;
+}
+
+/* ── App info: the Settings sheet's top row and the page it opens ── */
+/* The row leads the sheet, so it sits beside the gear's notch. It is drawn bare — no
+   fill, no border — straight on the sheet; the whole row (chevron included) stops short
+   of the notch, which reaches about one corner width in. */
+.vocab-options > .vocab-info-row:first-child {
+  padding-right: 0;
+  margin-right: calc(var(--vocab-corner) - 4px);
+}
+.vocab-info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  margin-bottom: 4px;
+  color: var(--shell-text);
+  transition:
+    opacity var(--dur-quick) var(--ease-out),
+    transform var(--dur-move) var(--ease-spring);
+}
+.vocab-info-row:hover {
+  opacity: 0.85;
+}
+.vocab-info-row:active {
+  transform: scale(0.97);
+  transition-duration: var(--dur-press);
+}
+.vocab-info-row-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--mint) 22%, transparent);
+  font-size: 18px;
+}
+.vocab-info-row-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.vocab-info-row-text strong {
+  font-size: 14px;
+  font-weight: 800;
+}
+/* Three tags that wrap between each other, never inside one: on a narrow phone the row
+   is too short for all three on a line, and an ellipsis would cut the last one off. */
+.vocab-info-row-text small {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px 8px;
+  color: var(--shell-text-mute);
+  font-size: 11px;
+}
+.vocab-info-row-text small > span {
+  white-space: nowrap;
+}
+.vocab-info-row > svg {
+  flex: none;
+  color: var(--shell-text-mute);
+}
+
+.vocab-info-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+.vocab-info-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: 20px 16px calc(32px + env(safe-area-inset-bottom));
+}
+/* On a section, a line (which then overrides its section) or the badge. */
+.vocab-info-shell [data-tone="citrus"] {
+  --info-tone: var(--citrus);
+}
+.vocab-info-shell [data-tone="mint"] {
+  --info-tone: var(--mint);
+}
+.vocab-info-shell [data-tone="cyber"] {
+  --info-tone: var(--cyber);
+}
+.vocab-info-shell [data-tone="magenta"] {
+  --info-tone: var(--magenta);
+}
+.vocab-info-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 0;
+  text-align: center;
+}
+.vocab-info-hero-leaf {
+  font-size: 40px;
+  line-height: 1;
+}
+.vocab-info-hero-brand {
+  margin: 0;
+  color: var(--shell-text);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+.vocab-info-badge {
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--info-tone) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--info-tone) 45%, transparent);
+  color: var(--info-tone);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.vocab-info-langs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.vocab-info-langs li {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--shell-hover);
+  color: var(--shell-text-soft);
+  font-size: 12px;
+  font-weight: 600;
+}
+.vocab-info-langs li[data-current] {
+  background: var(--mint);
+  color: var(--shell-on-text);
+}
+.vocab-info-section {
+  padding: 16px 16px 6px;
+  border-radius: 20px;
+  background: var(--shell-surface);
+  border: 1px solid var(--shell-line);
+  border-top: 3px solid color-mix(in srgb, var(--info-tone) 70%, transparent);
+}
+/* The quick-info lines: straight on the page under the app name, no card around them. */
+.vocab-info-section[data-plain] {
+  padding: 0 2px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+.vocab-info-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+  color: var(--shell-text);
+  font-size: 17px;
+  font-weight: 800;
+}
+.vocab-info-title-emoji {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--info-tone) 20%, transparent);
+  font-size: 18px;
+}
+/* One sentence per row: the emoji in its own column, the sentence beside it. */
+.vocab-info-lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vocab-info-lines li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: start;
+  gap: 8px;
+  padding: 10px 0;
+  color: var(--shell-text-soft);
+  font-size: 15px;
+  line-height: 1.5;
+  animation: vocab-info-line-in var(--dur-move) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+.vocab-info-lines li + li {
+  border-top: 1px solid var(--shell-line);
+}
+.vocab-info-emoji {
+  font-size: 19px;
+  line-height: 1.2;
+  text-align: center;
+}
+.vocab-info-hl {
+  color: var(--info-tone);
+  font-weight: 800;
+  /* A highlight is a word or two; splitting "thử | nghiệm" over a line break would cut
+     the very phrase the colour is there to point at. */
+  white-space: nowrap;
+}
+.vocab-info-thanks {
+  margin: 4px 0 0;
+  color: var(--shell-text-mute);
+  font-size: 14px;
+  text-align: center;
+}
+@keyframes vocab-info-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }

@@ -10,7 +10,7 @@
  * Adding a language later is DATA-ONLY: populate `localized.<code>` / `glosses.<code>`
  * on each word and add a label set in `i18n.ts`. No rendering code changes.
  *
- * Exports: Locale, SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_NAMES, isLocale, toLocale
+ * Exports: Locale, SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_NAMES, localeCopy, isLocale, toLocale
  * Depends on: none (leaf module)
  */
 
@@ -62,4 +62,18 @@ export function isLocale(value: string): value is Locale {
 /** Coerce an arbitrary string to a locale, falling back to the default. */
 export function toLocale(value: string | null | undefined): Locale {
   return value && isLocale(value) ? value : DEFAULT_LOCALE;
+}
+
+/**
+ * Resolve a per-locale copy table. Component tables ship only the translated locales
+ * (vi/ja/th today), so they are `Partial<Record<Locale, T>>` and must never be indexed
+ * bare: an untranslized locale (zh/ko/fil) falls back to the Vietnamese data base, then
+ * the Japanese default — the same order `ui-copy.t` uses — so a reader always sees copy.
+ */
+export function localeCopy<T>(table: Partial<Record<Locale, T>>, ui: Locale): T {
+  const hit = table[ui] ?? table[BASE_LOCALE] ?? table[DEFAULT_LOCALE];
+  if (hit === undefined) {
+    throw new Error("localeCopy: table is missing both its base and default entries");
+  }
+  return hit;
 }

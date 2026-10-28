@@ -8,14 +8,17 @@
 export { KineticText } from "./components/KineticText";
 
 export {
+  CLOSING_PUNCTUATION_CLASS,
   DEFAULT_TEXT_PAGE_WORD_LIMIT,
   VIETNAMESE_TEXT_PAGE_WORD_LIMIT,
+  endsWithPunctuation,
   expandEmphasisToBoundPhrases,
   getBoundPhraseEmphasisSeed,
   getBoundPhraseStartIndex,
   getDataEmphasisWordIndexes,
   getDataEmphasisWordSpans,
   getEmphasisPhraseKeysForLayout,
+  getEmphasizedRunLayoutPhraseKeys,
   getEmphasizedRunPhraseKeys,
   getHanCharBudgetForLine,
   getHanLayoutMetrics,
@@ -64,7 +67,9 @@ export {
 export type { KineticTextLayoutMode } from "./lib/layout";
 export { getLoopAnimation, TEMPO_LOOP_SECONDS } from "./lib/loop";
 export {
+  EMPHASIS_FONT_SCALE,
   EMPHASIS_VARIANTS,
+  GLYPH_STROKE_EMPHASIS_VARIANTS,
   NON_LUMINOUS_EMPHASIS_VARIANTS,
   getAuraColor,
   getEmphasisInnerAnimation,
@@ -72,6 +77,7 @@ export {
   getEmphasisVariant,
   getRunEmphasisStyle,
   isDimEmphasisColor,
+  isGlyphStrokeSafeText,
   isJapaneseWord,
   isWhiteLikeColor,
   restrictOutlineToJapanese,

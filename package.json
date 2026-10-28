@@ -9,6 +9,8 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
+    "test": "vitest run --dir src",
+    "test:watch": "vitest --dir src",
     "typecheck": "tsc --noEmit",
     "vocab:import": "npx tsx scripts/import-vocabulary.ts",
     "check:gradients": "node scripts/check-canvas-gradients.ts",
